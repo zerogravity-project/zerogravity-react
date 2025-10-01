@@ -1,0 +1,254 @@
+@import url('https://use.typekit.net/nrd4ucj.css');
+
+@import 'tailwindcss';
+@import '@radix-ui/themes/styles.css';
+
+@theme {
+  /* ZeroGravity Brand Colors */
+  --color-black-900: #222222;
+  --color-white-900: #ffffff;
+  --color-gray-700: #4e5968;
+  --color-lightgray-300: #d3d3d3;
+  --color-lightgray-200: #e1e1e1;
+  --color-lightgray-100: #f8f8f8;
+  --color-red-900: #ff3b30;
+  --color-orange-900: #ff2e00;
+  --color-darkorange-900: #c42300;
+  --color-lightgray-background: #f8f8f8;
+  --color-gray-background: #dbdddc;
+  --color-kakao: #fee500;
+
+  /* Opacity Colors */
+  --color-black-opacity-50: rgba(0, 0, 0, 0.5);
+  --color-black-opacity-20: rgba(34, 34, 34, 0.2);
+  --color-white-opacity-50: rgba(255, 255, 255, 0.5);
+  --color-white-opacity-30: rgba(255, 255, 255, 0.3);
+  --color-gray-opacity-50: rgba(78, 89, 104, 0.5);
+  --color-gray-opacity-30: rgba(78, 89, 104, 0.3);
+  --color-gray-opacity-10: rgba(78, 89, 104, 0.1);
+  --color-red-opacity-50: rgba(255, 59, 48, 0.5);
+  --color-red-opacity-10: rgba(255, 59, 48, 0.1);
+  --color-orange-opacity-10: rgba(255, 46, 0, 0.1);
+
+  /* Font Sizes */
+  --text-title-xxl: 48px;
+  --text-title-xl: 36px;
+  --text-title-l: 28px;
+  --text-title-m: 24px;
+  --text-title-s: 22px;
+  --text-title-xs: 18px;
+  --text-title-mobile: 17px;
+  --text-content-m: 15px;
+  --text-content-s: 13px;
+  --text-content-xs: 12px;
+  --text-btn-m: 16px;
+  --text-btn-s: 14px;
+
+  /* Spacing - Padding */
+  --spacing-xxxs: 0.25rem;
+  --spacing-xxs: 0.375rem;
+  --spacing-xs: 0.5rem;
+  --spacing-s: 0.75rem;
+  --spacing-m: 1rem;
+  --spacing-l: 1.125rem;
+  --spacing-xl: 1.5rem;
+  --spacing-xxl: 2.25rem;
+  --spacing-xxxl: 3rem;
+  --spacing-btn: 0.9rem;
+  --spacing-mobile-base: 1.25rem;
+
+  /* Border Radius */
+  --radius-full: 7rem;
+  --radius-l: 1rem;
+  --radius-m: 0.75rem;
+  --radius-s: 0.5rem;
+  --radius-xs: 0.25rem;
+
+  /* Layout Sizes */
+  --spacing-sidebar-width: 16rem;
+  --spacing-topnav-height: 3.5rem;
+
+  --font-pretendard: 'Pretendard', sans-serif;
+}
+
+/* Global Styles */
+body,
+button {
+  /* 기본 폰트 Pretendard 지정 */
+  font-family: 'helvetica-neue-lt-pro', sans-serif;
+}
+/* 
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
+} */
+
+.radix-themes {
+  --default-font-family: 'helvetica-neue-lt-pro', sans-serif;
+  --heading-font-family: 'helvetica-neue-lt-pro', sans-serif;
+  --code-font-family: 'helvetica-neue-lt-pro', sans-serif;
+  --strong-font-family: 'helvetica-neue-lt-pro', sans-serif;
+  --em-font-family: 'helvetica-neue-lt-pro', sans-serif;
+  --quote-font-family: 'helvetica-neue-lt-pro', sans-serif;
+}
+
+:root,
+.light,
+.light-theme {
+  --red-1: #fffcfb;
+  --red-2: #fff8f6;
+  --red-3: #ffeae5;
+  --red-4: #ffd9ce;
+  --red-5: #ffc9bb;
+  --red-6: #ffb7a7;
+  --red-7: #ffa18e;
+  --red-8: #fb846e;
+  --red-9: #ff2e00;
+  --red-10: #f10e00;
+  --red-11: #e20000;
+  --red-12: #632014;
+
+  --red-a1: #ff400004;
+  --red-a2: #ff390009;
+  --red-a3: #ff32001a;
+  --red-a4: #ff3a0031;
+  --red-a5: #ff350044;
+  --red-a6: #ff2f0058;
+  --red-a7: #ff2b0071;
+  --red-a8: #f8270091;
+  --red-a9: #ff2e00;
+  --red-a10: #f10e00;
+  --red-a11: #e20000;
+  --red-a12: #560d00eb;
+
+  --red-contrast: #fff;
+  --red-surface: #fff6f4cc;
+  --red-indicator: #ff2e00;
+  --red-track: #ff2e00;
+}
+
+@supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    :root,
+    .light,
+    .light-theme {
+      --red-1: oklch(99.4% 0.0039 32.01);
+      --red-2: oklch(98.4% 0.009 32.01);
+      --red-3: oklch(95.4% 0.0277 32.01);
+      --red-4: oklch(92.6% 0.0593 32.01);
+      --red-5: oklch(89.2% 0.0788 32.01);
+      --red-6: oklch(85.2% 0.0968 32.01);
+      --red-7: oklch(80.3% 0.1185 32.01);
+      --red-8: oklch(74.1% 0.1487 32.01);
+      --red-9: oklch(64.3% 0.2437 32.01);
+      --red-10: oklch(60.3% 0.2456 32.01);
+      --red-11: oklch(56.7% 0.2437 32.01);
+      --red-12: oklch(34.6% 0.1004 32.01);
+
+      --red-a1: color(display-p3 0.7569 0.2667 0.0235 / 0.016);
+      --red-a2: color(display-p3 0.8941 0.2392 0.0235 / 0.036);
+      --red-a3: color(display-p3 0.8431 0.2078 0.0118 / 0.099);
+      --red-a4: color(display-p3 0.8745 0.2196 0.0039 / 0.185);
+      --red-a5: color(display-p3 0.8824 0.2157 0.0039 / 0.259);
+      --red-a6: color(display-p3 0.8745 0.1922 0.0039 / 0.334);
+      --red-a7: color(display-p3 0.8824 0.1765 0.0039 / 0.428);
+      --red-a8: color(display-p3 0.8549 0.1608 0 / 0.546);
+      --red-a9: color(display-p3 0.9098 0.1451 0 / 0.851);
+      --red-a10: color(display-p3 0.8471 0.0824 0 / 0.871);
+      --red-a11: color(display-p3 0.7882 0.0627 0 / 0.883);
+      --red-a12: color(display-p3 0.2863 0.051 0 / 0.902);
+
+      --red-contrast: #fff;
+      --red-surface: color(display-p3 0.9961 0.9647 0.9569 / 0.8);
+      --red-indicator: oklch(64.3% 0.2437 32.01);
+      --red-track: oklch(64.3% 0.2437 32.01);
+    }
+  }
+}
+
+/* 기본 아이콘 설정 */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+
+/* Scrollbar 숨기기 mixin */
+.hide-scrollbar {
+  /* 파이어폭스 브라우저 */
+  scrollbar-width: none;
+
+  /* 인터넷 익스플로러와 엣지 */
+  -ms-overflow-style: none;
+
+  /* 웹킷 기반 브라우저(크롬, 사파리, 새 엣지 등) */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Three.js Scene Styles */
+.display-scene {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* Footer Styles */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 20px var(--spacing-xxl);
+  z-index: 5;
+}
+
+.footer-menu {
+  display: flex;
+}
+
+.footer-item {
+  padding: 0 var(--spacing-m);
+  border-right: 1px solid var(--color-lightgray-300);
+}
+
+.footer-item:first-child {
+  padding-left: 0;
+}
+
+.footer-item:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+
+.copyright {
+  color: var(--color-gray-opacity-50);
+  font-size: var(--text-content-s);
+  padding: var(--spacing-xxxs);
+  font-family: 'helvetica-neue-lt-pro', sans-serif;
+}
+
+@media (max-width: 576px) {
+  .footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 30px;
+  }
+}
