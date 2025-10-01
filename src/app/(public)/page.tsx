@@ -1,7 +1,25 @@
+'use client';
+
+import { Clock, Footer, MainDisplayScene } from '../_components/ui';
+
 export default function Home() {
+  const handleSceneLoad = () => {
+    // eslint-disable-next-line no-console
+    console.log('3D Scene loaded successfully!');
+  };
+
   return (
-    <div className="mx-auto max-w-md space-y-4 p-8">
-      <h1 className="mb-8 text-2xl font-bold">메인 페이지</h1>
-    </div>
+    <>
+      {/* 3D Background Scene */}
+      <MainDisplayScene onLoad={handleSceneLoad} />
+
+      {/* Main Content */}
+      <div className="relative space-y-4 p-8">
+        <Clock />
+      </div>
+
+      {/* Footer */}
+      <Footer />
+    </>
   );
 }
