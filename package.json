@@ -38,6 +38,7 @@
     "install": "^0.13.0",
     "leva": "^0.10.0",
     "lucide-react": "^0.544.0",
+    "motion": "^12.23.22",
     "next": "15.5.0",
     "next-auth": "4",
     "r3f-perf": "^7.2.3",
