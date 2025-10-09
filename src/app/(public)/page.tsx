@@ -14,9 +14,7 @@ export default function Home() {
       <MainDisplayScene onLoad={handleSceneLoad} />
 
       {/* Main Content */}
-      <div className="relative space-y-4 p-8">
-        <Clock />
-      </div>
+      <Clock />
 
       {/* Footer */}
       <Footer />
