@@ -14,9 +14,9 @@ interface MainDisplaySceneProps {
   className?: string;
 }
 
-// 메인 씬 컴포넌트
+// Main Display Scene Component
 export default function MainDisplayScene({ onLoad, className }: MainDisplaySceneProps) {
-  // 환경, 카메라, 성능 모니터링 설정 GUI
+  // Environment, Camera, Performance Monitoring GUI
   const {
     environmentIntensity,
     cameraPosition,
@@ -35,7 +35,7 @@ export default function MainDisplayScene({ onLoad, className }: MainDisplayScene
     environmentRotationZ: { value: 0, min: -Math.PI, max: Math.PI },
   });
 
-  // 모델 무중력 애니메이션 설정 GUI
+  // Model Floating Animation Settings GUI
   const { floatSpeed, floatRotationIntensity, floatFloatIntensity, floatFloatingRange } = useControls('Float', {
     floatSpeed: { value: 5, min: 1, max: 10 },
     floatRotationIntensity: { value: 1, min: 1, max: 10 },
@@ -57,8 +57,8 @@ export default function MainDisplayScene({ onLoad, className }: MainDisplayScene
             preserveDrawingBuffer: false,
             logarithmicDepthBuffer: false,
           }}
-          dpr={[1, 1.5]} // 디바이스 픽셀 비율을 낮춰서 성능 향상
-          performance={{ min: 0.5 }} // 성능 모니터링
+          dpr={[1, 1.5]} // Lower device pixel ratio for performance improvement
+          performance={{ min: 0.5 }} // Performance monitoring
           shadows
         >
           {perfVisible && <Perf position="top-left" />}
@@ -87,11 +87,11 @@ export default function MainDisplayScene({ onLoad, className }: MainDisplayScene
             </Float>
           </Stage>
 
-          {/* 카메라 컨트롤 */}
+          {/* Camera Control */}
           {/* <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} autoRotate={false} target={[0, 1, 0]} /> */}
         </Canvas>
 
-        {/* Canvas 밖에 버튼을 렌더링 (Context를 통해 상태 공유) */}
+        {/* Render the button outside the canvas (share state through context) */}
         <FloatingButton />
       </div>
     </MouseEventProvider>

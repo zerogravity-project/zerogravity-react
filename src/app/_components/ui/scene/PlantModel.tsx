@@ -15,10 +15,10 @@ interface PlantModelProps {
   ref?: React.RefObject<THREE.Group>;
 }
 
-// GLTF 모델 컴포넌트
+// GLTF Model Component
 export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => {
   const router = useRouter();
-  // 모델 위치, 회전 설정 GUI
+  // Model Position, Rotation Settings GUI
   const { positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = useControls('PlantModel', {
     positionX: { value: 0, min: -10, max: 10 },
     positionY: { value: -0.08, min: -10, max: 10, step: 0.01 },
@@ -28,10 +28,10 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
     rotationZ: { value: 0, min: -Math.PI, max: Math.PI },
   });
 
-  // GLTF 모델 로드
+  // GLTF Model Load
   const { scene } = useGLTF('/models/potted-plant/potted_plant_04_4k.gltf');
 
-  // Context에서 상태 업데이트 함수 가져오기
+  // Get Context State Update Functions
   const {
     hovered,
     clickedForThreeSeconds,
@@ -41,59 +41,59 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
     setClickedForThreeSeconds,
     setProgress,
   } = useMouseEventState();
-  // 3D 모델과 마우스 호버 상태 연동
+  // 3D Model and Mouse Hover State Connection
   useCursor(hovered);
 
-  // 애니메이션을 위한 상태
+  // State for Animation
   const [targetY, setTargetY] = useState(positionY);
   const [currentY, setCurrentY] = useState(positionY);
   const [targetRotationY, setTargetRotationY] = useState(rotationY);
   const [currentRotationY, setCurrentRotationY] = useState(rotationY);
 
-  // 클릭 상태에 따른 목표 Y 위치 설정
+  // Set Target Y Position Based on Click State
   useEffect(() => {
     if (clickedForThreeSeconds) {
       setHovered(false);
       setTimeout(() => {
         router.push('/spaceout/main');
-        // 3초 이상 클릭되면 높이 올리기
+        // Increase Height if Clicked for 3 Seconds
         // setTargetY(positionY + 0.5);
         // setTargetRotationY(rotationY + Math.PI * 2);
       }, 1000);
     } else {
-      // 일반 클릭이나 클릭 해제시 원래 위치
+      // Original Position if Normal Click or Click Release
       setTargetY(positionY);
       setTargetRotationY(rotationY);
     }
   }, [setHovered, positionY, rotationY, clickedForThreeSeconds, router]);
 
-  // 부드러운 애니메이션
+  // Smooth Animation
   useFrame((_, delta) => {
-    const lerpFactor = 0.5 * delta; // 애니메이션 속도 조절
+    const lerpFactor = 0.5 * delta; // Animation Speed Adjustment
     const newY = THREE.MathUtils.lerp(currentY, targetY, lerpFactor);
     const newRotationY = THREE.MathUtils.lerp(currentRotationY, targetRotationY, lerpFactor);
     setCurrentY(newY);
     setCurrentRotationY(newRotationY);
 
-    // 진행률 계산 (클릭 중일 때만)
+    // Calculate Progress (Only When Clicked)
     if (pointerDownTimeRef.current) {
       const elapsed = Date.now() - pointerDownTimeRef.current;
-      const progressPercent = Math.min(elapsed / 3000, 1); // 3초 = 100%
+      const progressPercent = Math.min(elapsed / 3000, 1); // 3 Seconds = 100%
       setProgress(progressPercent);
 
-      // 3초 도달 시
+      // 3 Seconds Reached
       if (progressPercent >= 1 && !clickedForThreeSeconds) {
         setClickedForThreeSeconds(true);
       }
     }
   });
 
-  // 타이머 ID를 저장할 ref
+  // Ref to Save Timer ID
   const timeoutRef = useRef<number | null>(null);
   const pointerDownTimeRef = useRef<number | null>(null);
 
   /**
-   * 마우스 이벤트 핸들러
+   * Mouse Event Handler
    */
   const onPointerOver = (event: any) => {
     setHovered(true);
@@ -104,15 +104,15 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
 
   const onPointerMove = (event: any) => {
     if (!hovered) {
-      setHovered(true); // Float 때문에 끊기는 호버 상태 강제 유지
+      setHovered(true); // Force Keep Hovered State Due to Float
     }
-    setDomCoords({ x: event.clientX, y: event.clientY }); // DOM 좌표 실시간 업데이트
+    setDomCoords({ x: event.clientX, y: event.clientY }); // DOM Coordinates Update in Real Time
 
     event.stopPropagation();
   };
 
   const onPointerOut = (event: any) => {
-    // Out 이벤트는 100ms 딜레이 후 처리
+    // Out Event is Processed After 100ms Delay
     if (timeoutRef.current !== null) {
       clearTimeout(timeoutRef.current);
     }
@@ -120,7 +120,7 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
     timeoutRef.current = window.setTimeout(() => {
       setHovered(false);
       timeoutRef.current = null;
-    }, 100); // 100ms 동안은 마우스가 잠깐 벗어나도 호버 상태 유지
+    }, 100); // Hovered State is Maintained for 100ms
 
     event.stopPropagation();
   };
@@ -129,7 +129,7 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
     e.stopPropagation();
     setClicked(true);
 
-    // 클릭 시작 시간 기록
+    // Record Click Start Time
     pointerDownTimeRef.current = Date.now();
     setProgress(0);
   };
@@ -138,7 +138,7 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
     e.stopPropagation();
     setClicked(false);
 
-    // 클릭 시간 리셋
+    // Reset Click Time
     pointerDownTimeRef.current = null;
     setProgress(0);
   };

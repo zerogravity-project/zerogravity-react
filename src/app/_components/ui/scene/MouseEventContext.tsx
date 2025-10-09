@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useMemo, useState } from 'react';
 
-// 1. Context의 데이터 구조 정의
+// 1. Context Data Structure Definition
 interface MouseEventContextType {
   hovered: boolean;
   clicked: boolean;
@@ -16,10 +16,10 @@ interface MouseEventContextType {
   setProgress: (progress: number) => void;
 }
 
-// 2. Context 생성 및 초기값 설정
+// 2. Context Creation and Initial Value Setting
 const MouseEventContext = createContext<MouseEventContextType | undefined>(undefined);
 
-// 3. Provider 컴포넌트
+// 3. Provider Component
 export function MouseEventProvider({ children }: { children: React.ReactNode }) {
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -27,7 +27,7 @@ export function MouseEventProvider({ children }: { children: React.ReactNode }) 
   const [clickedForThreeSeconds, setClickedForThreeSeconds] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  // 함수를 useMemo/useCallback으로 감싸 성능 최적화
+  // Wrap functions in useMemo/useCallback for performance optimization
   const contextValue = useMemo(
     () => ({
       hovered,
@@ -47,7 +47,7 @@ export function MouseEventProvider({ children }: { children: React.ReactNode }) 
   return <MouseEventContext.Provider value={contextValue}>{children}</MouseEventContext.Provider>;
 }
 
-// 4. Custom Hook (편의를 위해)
+// 4. Custom Hook (for convenience)
 export function useMouseEventState() {
   const context = useContext(MouseEventContext);
   if (context === undefined) {
