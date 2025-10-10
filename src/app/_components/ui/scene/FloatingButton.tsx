@@ -5,13 +5,13 @@ import { useRef } from 'react';
 
 import { useMouseEventState } from './MouseEventContext';
 
-// 캔버스 외부에 렌더링될 버튼 컴포넌트
+// Button Component Rendered Outside the Canvas
 export function FloatingButton() {
   const { hovered, clicked, domCoords, progress } = useMouseEventState();
   const { x, y } = domCoords;
   const buttonRef = useRef<HTMLDivElement>(null);
 
-  // 고정된 버튼 크기 사용 (밀림 방지)
+  // Fixed button size to prevent overlap
   const buttonSize = { width: 100, height: 48 };
 
   return (
@@ -19,8 +19,8 @@ export function FloatingButton() {
       ref={buttonRef}
       style={{
         position: 'fixed',
-        left: x - buttonSize.width / 2, // 실제 버튼 너비의 절반
-        top: y - buttonSize.height / 2, // 실제 버튼 높이의 절반
+        left: x - buttonSize.width / 2, // Actual button width half
+        top: y - buttonSize.height / 2, // Actual button height half
         zIndex: 9999,
         pointerEvents: 'none',
         width: 'fit-content',
@@ -39,7 +39,7 @@ export function FloatingButton() {
         },
       }}
     >
-      {/* Progress 배경 컨테이너 (4px 큰 영역) */}
+      {/* Progress Background Container (4px larger area) */}
       <div
         style={{
           position: 'relative',
@@ -51,7 +51,7 @@ export function FloatingButton() {
           padding: '3px',
         }}
       >
-        {/* 버튼 */}
+        {/* Button */}
         <div
           style={{
             width: '100%',

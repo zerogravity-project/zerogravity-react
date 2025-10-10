@@ -88,7 +88,7 @@ export default function TopNavigation({ background }: TopNavigationProps) {
 
         {/* Hamburger Menu */}
         <RadixButton size="2" variant="outline" radius="small" color="gray" className="!pr-1 !pl-1 sm:!hidden">
-          <Icon color="tomato">menu</Icon>
+          <Icon color="blue">menu</Icon>
         </RadixButton>
       </div>
     </NavigationMenu.Root>
