@@ -4,25 +4,32 @@ import { Canvas } from '@react-three/fiber';
 import { Suspense, useLayoutEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
-import { EMOTION_STEPS } from './Emotion.type';
 import { EmotionPlanet } from './EmotionPlanet';
+import { EmotionPlanetGlow } from './EmotionPlanetGlow';
+import { EmotionPlanetLoading } from './EmotionPlanetLoading';
 
 interface EmotionPlanetSceneProps {
   emotionId: number;
   width?: number | '100%';
   height?: number | '100%';
+  isFreeze?: boolean;
   isGlow?: boolean;
   isSparkles?: boolean;
+  isResize?: boolean;
   className?: string;
+  onSceneLoaded?: () => void;
 }
 
 export default function EmotionPlanetScene({
   emotionId,
   width,
   height,
+  isFreeze = false,
   isGlow = true,
   isSparkles = true,
+  isResize = true,
   className,
+  onSceneLoaded,
 }: EmotionPlanetSceneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [squareSize, setSquareSize] = useState<number | null>(null);
@@ -31,12 +38,17 @@ export default function EmotionPlanetScene({
   const resolvedWidth = width || squareSize || '100%';
   const resolvedHeight = height || squareSize || '100%';
 
+  const handleLoaded = () => {
+    setIsLoaded(true);
+    onSceneLoaded?.();
+  };
+
   useLayoutEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    if (typeof width === 'number' || typeof height === 'number') return;
 
     const update = () => {
+      if (!isResize) return;
       const rect = el.getBoundingClientRect();
       setSquareSize(Math.min(rect.width, rect.height));
     };
@@ -45,16 +57,36 @@ export default function EmotionPlanetScene({
     ro.observe(el);
     update();
     return () => ro.disconnect();
-  }, [width, height]);
+  }, [width, height, isFreeze, isResize]);
+
+  // Calculate display sizes
+  const getDisplaySize = (dimension: number | string, isFull: boolean) => {
+    if (isFull) {
+      return squareSize ? `${squareSize}px` : '100%';
+    }
+    return typeof dimension === 'number' ? dimension : dimension;
+  };
+
+  const getLoadingSize = (dimension: number | string, isFull: boolean, scale = 0.85) => {
+    if (isFull) {
+      return squareSize ? `${squareSize * scale}px` : `${scale * 100}%`;
+    }
+    return typeof dimension === 'number' ? dimension * scale : dimension;
+  };
+
+  const displayWidth = getDisplaySize(resolvedWidth, resolvedWidth === '100%');
+  const displayHeight = getDisplaySize(resolvedHeight, resolvedHeight === '100%');
+  const loadingWidth = getLoadingSize(resolvedWidth, resolvedWidth === '100%');
+  const loadingHeight = getLoadingSize(resolvedHeight, resolvedHeight === '100%');
 
   return (
-    <div ref={containerRef} className={`relative h-full w-full ${className || ''}`}>
+    <div ref={containerRef} className={`relative h-full w-full ${className || ''}`} style={{ width, height }}>
+      {/* 3D Canvas */}
       <div className="absolute inset-0 grid h-full w-full place-items-center">
         <Canvas
-          style={{
-            width: resolvedWidth,
-            height: resolvedHeight,
-          }}
+          frameloop={isFreeze ? 'never' : 'always'}
+          resize={{ offsetSize: true }}
+          style={{ width: resolvedWidth, height: resolvedHeight }}
           shadows
           camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
           gl={{ alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
@@ -65,24 +97,18 @@ export default function EmotionPlanetScene({
           }}
         >
           <Suspense fallback={null}>
-            <EmotionPlanet onLoaded={() => setIsLoaded(true)} emotionId={emotionId} isSparkles={isSparkles} />
+            <EmotionPlanet onLoaded={handleLoaded} emotionId={emotionId} isSparkles={isSparkles} />
           </Suspense>
         </Canvas>
       </div>
 
-      {/* Glow Overlay - Display only after loading is complete */}
-      {isLoaded && isGlow && (
-        <div className="pointer-events-none absolute inset-0 grid place-items-center" style={{ zIndex: -1 }}>
-          <div
-            className="translate-z-0 rounded-[9999px] blur-[22px]"
-            style={{
-              width: resolvedWidth === '100%' ? (squareSize ? `${squareSize}px` : '100%') : resolvedWidth,
-              height: resolvedHeight === '100%' ? (squareSize ? `${squareSize}px` : '100%') : resolvedHeight,
-              background: `radial-gradient(circle, var(--${EMOTION_STEPS[emotionId].color}-a9) 0%, var(--${EMOTION_STEPS[emotionId].color}-a5) 40%, var(--${EMOTION_STEPS[emotionId].color}-a3) 65%, var(--${EMOTION_STEPS[emotionId].color}-a1) 70%)`,
-            }}
-          />
-        </div>
+      {/* Glow Effect */}
+      {isGlow && (
+        <EmotionPlanetGlow emotionId={emotionId} isVisible={isLoaded} width={displayWidth} height={displayHeight} />
       )}
+
+      {/* Loading Indicator */}
+      <EmotionPlanetLoading emotionId={emotionId} isVisible={!isLoaded} width={loadingWidth} height={loadingHeight} />
     </div>
   );
 }
