@@ -1,11 +1,33 @@
 'use client';
 
 import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
-import { useControls } from 'leva';
 import { useEffect } from 'react';
 
 import { EMOTION_STEPS } from './Emotion.type';
 import { WobbleMesh } from './WobbleMesh';
+
+/**
+ * Default Light Properties
+ */
+const DEFAULT_LIGHT_PROPS = {
+  color: '#ffffff',
+  intensity: 5,
+  position: [0.25, 2, -2.25],
+  castShadow: true,
+  shadowMapSize: [1024, 1024],
+  shadowCameraFar: 15,
+  shadowNormalBias: 0.05,
+};
+
+/**
+ * Default Sparkles Properties
+ */
+const DEFAULT_SPARKLES_PROPS = {
+  count: 50,
+  scale: 7,
+  size: 6,
+  speed: 0.4,
+};
 
 interface EmotionPlanetProps {
   emotionId: number;
@@ -14,10 +36,6 @@ interface EmotionPlanetProps {
 }
 
 export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true }: EmotionPlanetProps) {
-  const { lightColor } = useControls('Light', {
-    lightColor: { value: '#ffffff' },
-  });
-
   useEffect(() => {
     // When Suspense is resolved, this component will be mounted, so send the loading complete signal
     onLoaded();
@@ -29,13 +47,13 @@ export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true }: Emotio
       <Environment files="/environment-maps/urban_alley_01_1k.hdr" />
       {/* Directional Light */}
       <directionalLight
-        color={lightColor}
-        intensity={5}
-        position={[0.25, 2, -2.25]}
+        color={DEFAULT_LIGHT_PROPS.color}
+        intensity={DEFAULT_LIGHT_PROPS.intensity}
+        position={DEFAULT_LIGHT_PROPS.position as [number, number, number]}
         castShadow
-        shadow-mapSize={[1024, 1024]}
-        shadow-camera-far={15}
-        shadow-normalBias={0.05}
+        shadow-mapSize={DEFAULT_LIGHT_PROPS.shadowMapSize}
+        shadow-camera-far={DEFAULT_LIGHT_PROPS.shadowCameraFar}
+        shadow-normalBias={DEFAULT_LIGHT_PROPS.shadowNormalBias}
       />
       {/* Wobble Mesh */}
       <WobbleMesh
@@ -49,7 +67,14 @@ export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true }: Emotio
         colorA={EMOTION_STEPS[emotionId].style.planet.colorA}
         colorB={EMOTION_STEPS[emotionId].style.planet.colorB}
       />
-      {isSparkles && <Sparkles count={50} scale={7} size={6} speed={0.4} />}
+      {isSparkles && (
+        <Sparkles
+          count={DEFAULT_SPARKLES_PROPS.count}
+          scale={DEFAULT_SPARKLES_PROPS.scale}
+          size={DEFAULT_SPARKLES_PROPS.size}
+          speed={DEFAULT_SPARKLES_PROPS.speed}
+        />
+      )}
       {/* Controller */}
       <OrbitControls enablePan={false} enableZoom={false} makeDefault enableDamping />
     </>

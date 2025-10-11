@@ -1,7 +1,7 @@
 import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
 import { Slider } from '@/app/_components/ui/slider';
 
-import { useEmotionRecordContext } from '../_contexts/EmotionRecordContext';
+import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 export default function EmotionSlider() {
   const { setEmotionId, emotionSliderValue, setEmotionSliderValue, emotionValueToStepIndex } =
@@ -15,7 +15,7 @@ export default function EmotionSlider() {
   };
 
   return (
-    <div className="mb-20 flex w-full max-w-[450px] flex-col items-center px-5 sm:px-0">
+    <div className="mobile:px-0 mb-20 flex w-full max-w-[480px] flex-col items-center px-5">
       <Slider
         value={emotionSliderValue}
         onValueChange={setEmotionSliderValue}

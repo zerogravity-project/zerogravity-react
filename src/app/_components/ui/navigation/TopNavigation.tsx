@@ -28,9 +28,10 @@ import { LogoSvg } from '../others';
 
 interface TopNavigationProps {
   background?: boolean;
+  className?: string;
 }
 
-export default function TopNavigation({ background }: TopNavigationProps) {
+export default function TopNavigation({ background, className }: TopNavigationProps) {
   const { data: session, status } = useSession();
   const { dateData } = useDateTime();
 
@@ -42,7 +43,8 @@ export default function TopNavigation({ background }: TopNavigationProps) {
     <NavigationMenu.Root
       className={cn(
         'h-topnav-height relative z-10 flex w-full flex-1 items-center justify-between px-6 sm:px-8',
-        background && 'border-b border-[var(--gray-3)] bg-white'
+        background && 'border-b border-[var(--gray-3)] bg-white',
+        className
       )}
     >
       <div className="flex items-center gap-4">
@@ -63,7 +65,7 @@ export default function TopNavigation({ background }: TopNavigationProps) {
         </NavigationMenu.List> */}
       </div>
 
-      {/* 날짜 표시 */}
+      {/* Date */}
       <div className="flex items-center gap-16">
         <div className="hidden h-8 items-center justify-center overflow-hidden sm:flex">
           <span className="text-sm leading-[0.9] text-[var(--gray-a10)]">
