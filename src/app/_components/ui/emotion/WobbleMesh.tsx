@@ -2,7 +2,6 @@
 'use client';
 
 import { useFrame } from '@react-three/fiber';
-import { useControls } from 'leva';
 import { useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import CustomShaderMaterial from 'three-custom-shader-material';
@@ -12,6 +11,18 @@ import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 import simplexNoise4d from './shaders/includes/simplexNoise4d.glsl';
 import wobbleFragmentShader from './shaders/wobble/fragment.glsl';
 import wobbleVertexShader from './shaders/wobble/vertex.glsl';
+
+/**
+ * Default Material Properties
+ */
+const DEFAULT_MATERIAL_PROPS = {
+  transmission: 0,
+  ior: 1.3,
+  thickness: 1.5,
+  iridescence: 0,
+  iridescenceIOR: 1.3,
+  iridescenceThicknessRange: [120, 800],
+};
 
 interface WobbleMeshProps {
   positionFrequency: number;
@@ -38,18 +49,6 @@ export function WobbleMesh({
 }: WobbleMeshProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshPhysicalMaterial | null>(null);
-
-  // Leva controls for debugging (Material properties)
-  const materialControls = useControls('Material', {
-    metalness: { value: metalness, min: 0, max: 1, step: 0.001 },
-    roughness: { value: roughness, min: 0, max: 1, step: 0.001 },
-    transmission: { value: 0, min: 0, max: 1, step: 0.001 },
-    ior: { value: 1.3, min: 0, max: 10, step: 0.001 },
-    thickness: { value: 1.5, min: 0, max: 10, step: 0.001 },
-    iridescence: { value: 0, min: 0, max: 1, step: 0.001 },
-    iridescenceIOR: { value: 1.3, min: 0, max: 2.5, step: 0.001 },
-    iridescenceThicknessRange: { value: [120, 800], min: 0, max: 1000, step: 0.001 },
-  });
 
   // Create shader uniforms once (stable object reference for GPU)
   const uniforms = useMemo(
@@ -141,13 +140,13 @@ export function WobbleMesh({
         uniforms={uniforms}
         metalness={metalness}
         roughness={roughness}
-        transmission={materialControls.transmission}
-        ior={materialControls.ior}
-        thickness={materialControls.thickness}
+        transmission={DEFAULT_MATERIAL_PROPS.transmission}
+        ior={DEFAULT_MATERIAL_PROPS.ior}
+        thickness={DEFAULT_MATERIAL_PROPS.thickness}
         transparent={true}
-        iridescence={materialControls.iridescence}
-        iridescenceIOR={materialControls.iridescenceIOR}
-        iridescenceThicknessRange={materialControls.iridescenceThicknessRange}
+        iridescence={DEFAULT_MATERIAL_PROPS.iridescence}
+        iridescenceIOR={DEFAULT_MATERIAL_PROPS.iridescenceIOR}
+        iridescenceThicknessRange={DEFAULT_MATERIAL_PROPS.iridescenceThicknessRange as [number, number]}
       />
       {/* Custom depth material for shadows (reflects wobble deformation) */}
       <primitive

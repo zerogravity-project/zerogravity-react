@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="bg-lightgray-background text-black-900 min-h-screen">
+      <body className="bg-lightgray-background text-black-900">
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

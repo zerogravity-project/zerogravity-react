@@ -69,6 +69,8 @@
   --spacing-topnav-height: 3.5rem;
 
   --font-pretendard: 'Pretendard', sans-serif;
+
+  --breakpoint-mobile: 480px;
 }
 
 /* Global Styles */
