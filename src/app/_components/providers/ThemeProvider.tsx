@@ -9,13 +9,11 @@ interface ThemeProviderProps {
 }
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {
-  // route.pathname 에 따라서 다른 테마 적용
   const pathname = usePathname();
-
-  const isDarkMode = pathname.includes('record');
+  const isMainPage = pathname === '/';
 
   return (
-    <Theme grayColor="slate" accentColor="blue" appearance={isDarkMode ? 'dark' : 'light'}>
+    <Theme grayColor="slate" accentColor="blue" appearance={isMainPage ? 'light' : 'dark'}>
       {children}
     </Theme>
   );

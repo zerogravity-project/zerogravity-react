@@ -34,6 +34,7 @@ interface EmotionRecordContextType {
   diaryEntry: string;
   emotionValueToStepIndex: number;
   recordType: RecordType;
+  date: string | null; // YYYY-MM-DD format
 
   // Step navigation
   currentStep: RecordStep;
@@ -48,7 +49,6 @@ interface EmotionRecordContextType {
   setEmotionSliderValue: (emotionSliderValue: number[]) => void;
   setEmotionReason: (emotionReason: string[]) => void;
   setDiaryEntry: (diaryEntry: string) => void;
-  setRecordType: (recordType: RecordType) => void;
 }
 
 export const EmotionRecordContext = createContext<EmotionRecordContextType | undefined>(undefined);
@@ -60,7 +60,13 @@ const defaultValues = {
   diaryEntry: '',
 };
 
-export const EmotionRecordProvider = ({ children }: { children: React.ReactNode }) => {
+interface EmotionRecordProviderProps {
+  children: React.ReactNode;
+  recordType: RecordType;
+  date: string | null;
+}
+
+export const EmotionRecordProvider = ({ children, recordType, date }: EmotionRecordProviderProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -69,7 +75,6 @@ export const EmotionRecordProvider = ({ children }: { children: React.ReactNode 
   const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(defaultValues.emotionSliderValue);
   const [emotionReason, setEmotionReason] = useState<string[]>(defaultValues.emotionReason);
   const [diaryEntry, setDiaryEntry] = useState<string>(defaultValues.diaryEntry);
-  const [recordType, setRecordType] = useState<RecordType>('daily'); // Default: Daily
 
   // Track if steps were completed
   const [completedSteps, setCompletedSteps] = useState<Set<RecordStep>>(new Set());
@@ -89,6 +94,18 @@ export const EmotionRecordProvider = ({ children }: { children: React.ReactNode 
   useEffect(() => {
     setEmotionSliderValue([EMOTION_STEPS[emotionId].sliderValue]);
   }, [emotionId]);
+
+  // Build URL with date param
+  const buildUrl = useCallback(
+    (step: RecordStep) => {
+      const baseUrl = `/record/${recordType}`;
+      const params = new URLSearchParams();
+      if (date) params.set('date', date);
+      params.set('step', step);
+      return `${baseUrl}?${params.toString()}`;
+    },
+    [recordType, date]
+  );
 
   // Helper: Check if all previous steps are completed
   const arePrerequisitesComplete = useCallback(
@@ -122,19 +139,19 @@ export const EmotionRecordProvider = ({ children }: { children: React.ReactNode 
     if (!arePrerequisitesComplete(stepFromUrl)) {
       const firstIncomplete = getFirstIncompleteStep();
       if (stepFromUrl !== firstIncomplete) {
-        router.replace(`/record?step=${firstIncomplete}`, { scroll: false });
+        router.replace(buildUrl(firstIncomplete), { scroll: false });
         setCurrentStep(firstIncomplete);
       }
     }
-  }, [searchParams, arePrerequisitesComplete, getFirstIncompleteStep, router]);
+  }, [searchParams, arePrerequisitesComplete, getFirstIncompleteStep, router, buildUrl]);
 
   // Step navigation
   const goToStep = useCallback(
     (step: RecordStep) => {
       setCurrentStep(step);
-      router.replace(`/record?step=${step}`, { scroll: false });
+      router.replace(buildUrl(step), { scroll: false });
     },
-    [router]
+    [router, buildUrl]
   );
 
   const nextStep = useCallback(() => {
@@ -192,6 +209,7 @@ export const EmotionRecordProvider = ({ children }: { children: React.ReactNode 
         diaryEntry,
         emotionValueToStepIndex,
         recordType,
+        date,
         currentStep,
         goToStep,
         nextStep,
@@ -202,7 +220,6 @@ export const EmotionRecordProvider = ({ children }: { children: React.ReactNode 
         setEmotionSliderValue,
         setEmotionReason,
         setDiaryEntry,
-        setRecordType,
       }}
     >
       {children}

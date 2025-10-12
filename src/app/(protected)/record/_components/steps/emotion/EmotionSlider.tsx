@@ -1,3 +1,5 @@
+import { Text } from '@radix-ui/themes';
+
 import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
 import { Slider } from '@/app/_components/ui/slider';
 
@@ -15,7 +17,7 @@ export default function EmotionSlider() {
   };
 
   return (
-    <div className="mobile:px-0 mb-20 flex w-full max-w-[480px] flex-col items-center px-5">
+    <div className="mobile:px-0 mb-15 flex w-full max-w-[480px] flex-col items-center gap-3 px-5">
       <Slider
         value={emotionSliderValue}
         onValueChange={setEmotionSliderValue}
@@ -28,6 +30,14 @@ export default function EmotionSlider() {
         }}
         onValueCommit={handleValueCommit}
       />
+      <div className="flex w-full items-center justify-between px-2">
+        <Text color="gray" size="1">
+          Negative
+        </Text>
+        <Text color="gray" size="1">
+          Positive
+        </Text>
+      </div>
     </div>
   );
 }

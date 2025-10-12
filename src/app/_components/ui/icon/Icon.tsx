@@ -1,5 +1,5 @@
+import { cn } from '@/app/_utils/styleUtils';
 import { Color } from '@/app/style/type';
-import { cn } from '@/lib/utils';
 
 interface IconProps {
   children: React.ReactNode;
