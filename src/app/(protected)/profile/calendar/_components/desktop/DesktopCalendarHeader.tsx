@@ -5,7 +5,7 @@ import { Button, DropdownMenu, Heading } from '@radix-ui/themes';
 import Icon from '@/app/_components/ui/icon/Icon';
 import { getTodayString } from '@/app/_utils/dateTimeUtils';
 
-import { useCalendar } from '../_contexts/CalendarContext';
+import { useCalendar } from '../../_contexts/CalendarContext';
 
 export default function DesktopCalendarHeader() {
   const { goToNextMonth, goToPreviousMonth, goToToday, getMonthName, getYear } = useCalendar();

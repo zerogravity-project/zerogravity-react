@@ -17,12 +17,11 @@ import { Color } from '@/app/style/type';
 import { LogoSvg } from '../others';
 
 interface TopNavigationProps {
-  background?: boolean;
   className?: string;
   border?: boolean;
 }
 
-export default function TopNavigation({ background, className, border }: TopNavigationProps) {
+export default function TopNavigation({ className, border }: TopNavigationProps) {
   const { data: session, status } = useSession();
   const now = useClock();
   const dateData = now ? getDateStringData(now) : null;
@@ -34,8 +33,7 @@ export default function TopNavigation({ background, className, border }: TopNavi
   return (
     <NavigationMenu.Root
       className={cn(
-        'h-topnav-height relative z-10 flex w-full flex-1 items-center justify-between px-6 sm:px-8',
-        background && 'border-b border-[var(--gray-3)] bg-white',
+        'h-topnav-height relative z-10 flex w-full flex-1 items-center justify-between px-5 sm:px-8',
         border && 'border-b border-[var(--gray-3)]',
         className
       )}

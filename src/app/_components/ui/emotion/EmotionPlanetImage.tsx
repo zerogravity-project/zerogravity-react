@@ -36,7 +36,7 @@ export default function EmotionPlanetImage({
   return (
     <motion.div
       ref={containerRef}
-      className={cn('relative flex items-center justify-center', fill && 'h-full w-full')}
+      className={cn('relative flex flex-shrink-0 items-center justify-center', fill && 'h-full w-full')}
       style={{ width, height }}
       initial={{ opacity: 0 }}
       animate={{ opacity: isLoaded ? 1 : 0 }}

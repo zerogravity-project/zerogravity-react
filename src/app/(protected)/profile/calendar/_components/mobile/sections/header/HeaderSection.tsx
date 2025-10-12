@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import Icon from '@/app/_components/ui/icon/Icon';
 import { cn } from '@/app/_utils/styleUtils';
 
-import { EMOTION_STEPS } from '../../../../../_components/ui/emotion/Emotion.type';
-import { useCalendar } from '../_contexts/CalendarContext';
-import { DAYS_OF_WEEK } from '../_utils/constants';
-import { getWeekDates } from '../_utils/dateUtils';
+import { EMOTION_STEPS } from '../../../../../../../_components/ui/emotion/Emotion.type';
+import { useCalendar } from '../../../../_contexts/CalendarContext';
+import { DAYS_OF_WEEK } from '../../../../_utils/constants';
+import { getWeekDates } from '../../../../_utils/dateUtils';
 
-export default function MobileCalendarHeader() {
+export default function HeaderSection() {
   const randomEmotionIds = useMemo(() => {
     return Array.from({ length: 3 }, () => ({
       momentId: Math.floor(Math.random() * 3),
@@ -24,7 +24,7 @@ export default function MobileCalendarHeader() {
   const weekDates = getWeekDates(currentDate);
 
   return (
-    <div className="mb-6 flex w-full flex-col items-center">
+    <section className="mb-6 flex w-full flex-col items-center px-5 pt-6">
       <div className="mb-4 flex w-full items-center justify-between">
         <Heading size="6" weight="bold">
           {monthName}
@@ -71,28 +71,23 @@ export default function MobileCalendarHeader() {
           const isTodayDate = isToday(date);
           const isSelectedDate = isSelected(date);
           return (
-            <button
-              key={index}
-              onClick={() => setSelectedDate(date)}
-              className={cn(
-                `text-md relative flex h-9 w-9 items-center justify-center rounded-[9999px]`,
-                isTodayDate
-                  ? 'bg-[var(--accent-a9)] text-white'
-                  : isSelectedDate
-                    ? 'bg-[var(--accent-a3)] text-[var(--accent-9)]'
-                    : 'text-[var(--gray-7)] hover:bg-[var(--gray-a3)]'
-              )}
-            >
-              {date.getDate()}
-
+            <div key={index} className="relative flex items-center justify-center">
+              <Button
+                onClick={() => setSelectedDate(date)}
+                variant={isSelectedDate ? 'solid' : isTodayDate ? 'soft' : randomEmotionIds[0] ? 'ghost' : 'ghost'}
+                color={randomEmotionIds[0] ? EMOTION_STEPS[randomEmotionIds[0].emotionId].color : undefined}
+                className={cn(`!h-9 !w-9 !rounded-[9999px]`)}
+              >
+                {date.getDate()}
+              </Button>
               <div
                 style={{ backgroundColor: `var(--${EMOTION_STEPS[randomEmotionIds[0].emotionId].color}-a9)` }}
                 className="absolute -bottom-3 h-1 w-1 rounded-[9999px]"
               />
-            </button>
+            </div>
           );
         })}
       </div>
-    </div>
+    </section>
   );
 }
