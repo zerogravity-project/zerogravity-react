@@ -3,7 +3,7 @@
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as React from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/_utils/styleUtils';
 
 interface SliderColorTokens {
   range?: string; // e.g. 'var(--green-9)'

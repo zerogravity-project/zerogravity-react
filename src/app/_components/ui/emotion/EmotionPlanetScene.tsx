@@ -1,12 +1,15 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useLayoutEffect, useRef, useState } from 'react';
+import { Suspense, useState } from 'react';
 import * as THREE from 'three';
 
+import { useSquareResize } from '@/app/_hooks/useSquareResize';
+import { cn } from '@/app/_utils/styleUtils';
+
+import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
+import { EmotionPlanetLoading } from './decorations/EmotionPlanetLoading';
 import { EmotionPlanet } from './EmotionPlanet';
-import { EmotionPlanetGlow } from './EmotionPlanetGlow';
-import { EmotionPlanetLoading } from './EmotionPlanetLoading';
 
 interface EmotionPlanetSceneProps {
   emotionId: number;
@@ -31,8 +34,7 @@ export default function EmotionPlanetScene({
   className,
   onSceneLoaded,
 }: EmotionPlanetSceneProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [squareSize, setSquareSize] = useState<number | null>(null);
+  const { ref: containerRef, squareSize } = useSquareResize({ isResize });
   const [isLoaded, setIsLoaded] = useState(false);
 
   const resolvedWidth = width || squareSize || '100%';
@@ -42,22 +44,6 @@ export default function EmotionPlanetScene({
     setIsLoaded(true);
     onSceneLoaded?.();
   };
-
-  useLayoutEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const update = () => {
-      if (!isResize) return;
-      const rect = el.getBoundingClientRect();
-      setSquareSize(Math.min(rect.width, rect.height));
-    };
-
-    const ro = new ResizeObserver(update);
-    ro.observe(el);
-    update();
-    return () => ro.disconnect();
-  }, [width, height, isFreeze, isResize]);
 
   // Calculate display sizes
   const getDisplaySize = (dimension: number | string, isFull: boolean) => {
@@ -69,7 +55,7 @@ export default function EmotionPlanetScene({
 
   const getLoadingSize = (dimension: number | string, isFull: boolean, scale = 0.85) => {
     if (isFull) {
-      return squareSize ? `${squareSize * scale}px` : `${scale * 100}%`;
+      return squareSize ? `${squareSize * scale}px` : undefined;
     }
     return typeof dimension === 'number' ? dimension * scale : dimension;
   };
@@ -80,7 +66,11 @@ export default function EmotionPlanetScene({
   const loadingHeight = getLoadingSize(resolvedHeight, resolvedHeight === '100%');
 
   return (
-    <div ref={containerRef} className={`relative h-full w-full ${className || ''}`} style={{ width, height }}>
+    <div
+      ref={containerRef}
+      className={cn('relative h-full w-full', !width && !height && 'aspect-square', className)}
+      style={{ width, height }}
+    >
       {/* 3D Canvas */}
       <div className="absolute inset-0 grid h-full w-full place-items-center">
         <Canvas

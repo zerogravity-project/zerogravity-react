@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Link as RadixLink, Text } from '@radix-ui/themes';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/_utils/styleUtils';
 
 interface FooterMenuItem {
   text: string;
