@@ -3,8 +3,8 @@
 import { Text } from '@radix-ui/themes';
 import { useEffect, useState } from 'react';
 
-import { useCalendar } from '../_contexts/CalendarContext';
-import { DAYS_OF_WEEK } from '../_utils/constants';
+import { useCalendar } from '../../_contexts/CalendarContext';
+import { DAYS_OF_WEEK } from '../../_utils/constants';
 
 import DesktopCalendarCell from './DesktopCalendarCell';
 import DesktopCalendarHeader from './DesktopCalendarHeader';

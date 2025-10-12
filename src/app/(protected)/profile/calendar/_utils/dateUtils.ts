@@ -63,3 +63,10 @@ export function getWeekDates(date: Date): Date[] {
   }
   return weekDates;
 }
+
+export function formatTime(date: Date) {
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+}

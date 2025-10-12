@@ -16,7 +16,7 @@ interface MonthDaysInfo {
 interface CalendarContextType {
   // Current state
   currentDate: Date;
-  selectedDate: Date | null;
+  selectedDate: Date;
   today: Date;
 
   // Navigation
@@ -25,7 +25,7 @@ interface CalendarContextType {
   goToNextWeek: () => void;
   goToPreviousWeek: () => void;
   goToToday: () => void;
-  setSelectedDate: (date: Date | null) => void;
+  setSelectedDate: (date: Date) => void;
 
   // Helper functions
   isToday: (date: Date) => boolean;
@@ -41,13 +41,13 @@ const CalendarContext = createContext<CalendarContextType | undefined>(undefined
 
 interface CalendarProviderProps {
   children: React.ReactNode;
-  initialDate?: Date;
 }
 
-export function CalendarProvider({ children, initialDate }: CalendarProviderProps) {
-  const [currentDate, setCurrentDate] = useState(initialDate || new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const today = useMemo(() => new Date(), []);
+export function CalendarProvider({ children }: CalendarProviderProps) {
+  const today = new Date();
+
+  const [currentDate, setCurrentDate] = useState<Date>(today);
+  const [selectedDate, setSelectedDate] = useState<Date>(today);
 
   // Navigation functions
   const goToNextMonth = useCallback(() => {
@@ -83,21 +83,18 @@ export function CalendarProvider({ children, initialDate }: CalendarProviderProp
   }, []);
 
   const goToToday = useCallback(() => {
-    setCurrentDate(new Date());
-    setSelectedDate(new Date());
+    setCurrentDate(today);
+    setSelectedDate(today);
   }, []);
 
   // Helper functions
-  const isToday = useCallback(
-    (date: Date) => {
-      return isSameDay(date, today);
-    },
-    [today]
-  );
+  const isToday = useCallback((date: Date) => {
+    return isSameDay(date, today);
+  }, []);
 
   const isSelected = useCallback(
     (date: Date) => {
-      return selectedDate ? isSameDay(date, selectedDate) : false;
+      return isSameDay(date, selectedDate);
     },
     [selectedDate]
   );
