@@ -31,6 +31,7 @@ interface CalendarContextType {
   isToday: (date: Date) => boolean;
   isSelected: (date: Date) => boolean;
   getMonthName: () => string;
+  getSelectedMonthName: () => string;
   getYear: () => number;
   getMonth: () => number;
   getWeekInfo: () => { month: number; weekOfMonth: number };
@@ -106,6 +107,10 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
   const getYear = useCallback(() => currentDate.getFullYear(), [currentDate]);
   const getMonth = useCallback(() => currentDate.getMonth(), [currentDate]);
 
+  const getSelectedMonthName = useCallback(() => {
+    return MONTH_NAMES[selectedDate.getMonth()];
+  }, [selectedDate]);
+
   const getWeekInfo = useCallback(() => {
     const month = currentDate.getMonth() + 1;
     const weekOfMonth = getWeekOfMonth(currentDate);
@@ -140,6 +145,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
       isToday,
       isSelected,
       getMonthName,
+      getSelectedMonthName,
       getYear,
       getMonth,
       getWeekInfo,
@@ -157,6 +163,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
       isToday,
       isSelected,
       getMonthName,
+      getSelectedMonthName,
       getYear,
       getMonth,
       getWeekInfo,

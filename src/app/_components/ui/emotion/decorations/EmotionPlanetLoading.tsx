@@ -9,12 +9,19 @@ interface EmotionPlanetLoadingProps {
   isVisible: boolean;
   width?: number | string;
   height?: number | string;
+  isShowText?: boolean;
 }
 
 const CIRCLE_RADIUS = 45;
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS; // ≈ 283
 
-export function EmotionPlanetLoading({ emotionId, isVisible, width, height }: EmotionPlanetLoadingProps) {
+export function EmotionPlanetLoading({
+  emotionId,
+  isVisible,
+  width,
+  height,
+  isShowText = true,
+}: EmotionPlanetLoadingProps) {
   return (
     <AnimatePresence>
       {isVisible && (
@@ -56,18 +63,20 @@ export function EmotionPlanetLoading({ emotionId, isVisible, width, height }: Em
                 }}
               />
               {/* Loading text */}
-              <text
-                x="50"
-                y="50"
-                transform="rotate(90, 50, 50)"
-                textAnchor="middle"
-                dominantBaseline="central"
-                fill={`var(--${EMOTION_STEPS[emotionId].color}-a9)`}
-                fontSize="6"
-                fontWeight="500"
-              >
-                Launching
-              </text>
+              {isShowText && (
+                <text
+                  x="50"
+                  y="50"
+                  transform="rotate(90, 50, 50)"
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fill={`var(--${EMOTION_STEPS[emotionId].color}-a9)`}
+                  fontSize="6"
+                  fontWeight="500"
+                >
+                  Launching
+                </text>
+              )}
             </svg>
           </div>
         </motion.div>

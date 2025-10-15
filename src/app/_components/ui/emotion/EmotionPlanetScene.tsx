@@ -21,6 +21,7 @@ interface EmotionPlanetSceneProps {
   isResize?: boolean;
   className?: string;
   onSceneLoaded?: () => void;
+  isLoadingShowText?: boolean;
 }
 
 export default function EmotionPlanetScene({
@@ -33,6 +34,7 @@ export default function EmotionPlanetScene({
   isResize = true,
   className,
   onSceneLoaded,
+  isLoadingShowText = true,
 }: EmotionPlanetSceneProps) {
   const { ref: containerRef, squareSize } = useSquareResize({ isResize });
   const [isLoaded, setIsLoaded] = useState(false);
@@ -98,7 +100,13 @@ export default function EmotionPlanetScene({
       )}
 
       {/* Loading Indicator */}
-      <EmotionPlanetLoading emotionId={emotionId} isVisible={!isLoaded} width={loadingWidth} height={loadingHeight} />
+      <EmotionPlanetLoading
+        emotionId={emotionId}
+        isVisible={!isLoaded}
+        width={loadingWidth}
+        height={loadingHeight}
+        isShowText={isLoadingShowText}
+      />
     </div>
   );
 }

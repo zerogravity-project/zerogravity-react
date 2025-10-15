@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
  * - Returns current Date object that updates every frame (RAF)
  * - Use with formatting utils (getTimeStringData, getDateStringData) where needed
  */
-export const useClock = () => {
+export function useClock() {
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -26,4 +26,4 @@ export const useClock = () => {
   }, []);
 
   return now;
-};
+}

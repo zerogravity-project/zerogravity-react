@@ -56,7 +56,7 @@ export default function DailyEmotionSection() {
           </Text>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             {REASON_LISTS.map(reason => (
-              <Badge key={reason} color="gray" radius="full" variant="soft">
+              <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
                 {reason}
               </Badge>
             ))}

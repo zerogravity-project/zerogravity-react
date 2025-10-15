@@ -3,7 +3,7 @@ import { Color } from '@/app/style/type';
 
 interface IconProps {
   children: React.ReactNode;
-  size?: string;
+  size?: number;
   color?: Color;
   className?: string;
 }
