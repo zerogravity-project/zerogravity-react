@@ -14,10 +14,17 @@ interface EmotionPlanetNullProps {
   emotionId: number;
   width?: number | '100%';
   height?: number | '100%';
+  isShowText?: boolean;
   className?: string;
 }
 
-export default function EmotionPlanetNull({ emotionId, width, height, className }: EmotionPlanetNullProps) {
+export default function EmotionPlanetNull({
+  emotionId,
+  width,
+  height,
+  isShowText = true,
+  className,
+}: EmotionPlanetNullProps) {
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: true });
 
   const resolvedWidth = width || squareSize || '100%';
@@ -55,7 +62,6 @@ export default function EmotionPlanetNull({ emotionId, width, height, className 
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
         className="pointer-events-none absolute inset-0 grid place-items-center"
         style={{ zIndex: 1 }}
@@ -72,17 +78,19 @@ export default function EmotionPlanetNull({ emotionId, width, height, className 
               strokeWidth="1"
             />
             {/* Loading text */}
-            <text
-              x="50"
-              y="50"
-              textAnchor="middle"
-              dominantBaseline="central"
-              fill="var(--gray-a5)"
-              fontSize="6"
-              fontWeight="500"
-            >
-              No Emotion
-            </text>
+            {isShowText && (
+              <text
+                x="50"
+                y="50"
+                textAnchor="middle"
+                dominantBaseline="central"
+                fill="var(--gray-a5)"
+                fontSize="6"
+                fontWeight="500"
+              >
+                No Emotion
+              </text>
+            )}
           </svg>
         </div>
       </motion.div>

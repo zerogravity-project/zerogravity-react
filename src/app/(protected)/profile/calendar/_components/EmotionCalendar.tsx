@@ -10,15 +10,5 @@ import MobileCalendar from './mobile/MobileCalendar';
 export default function Calendar() {
   const isMobile = useIsMobile();
 
-  return (
-    <CalendarProvider>
-      {isMobile ? (
-        <MobileCalendar />
-      ) : (
-        <div className="h-full w-full bg-[var(--background-dark)] p-3">
-          <DesktopCalendar />
-        </div>
-      )}
-    </CalendarProvider>
-  );
+  return <CalendarProvider>{isMobile ? <MobileCalendar /> : <DesktopCalendar />}</CalendarProvider>;
 }

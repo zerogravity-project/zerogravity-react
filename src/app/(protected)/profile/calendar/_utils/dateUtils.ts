@@ -1,3 +1,5 @@
+import { MONTH_NAMES } from './constants';
+
 /**
  * Get information about a specific month
  */
@@ -64,9 +66,21 @@ export function getWeekDates(date: Date): Date[] {
   return weekDates;
 }
 
+/**
+ * Format the time of a date
+ */
 export function formatTime(date: Date) {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   const ampm = hours >= 12 ? 'PM' : 'AM';
   return `${hours}:${minutes.toString().padStart(2, '0')} ${ampm}`;
+}
+
+/**
+ * Get the name of the month of a date
+ * @param date
+ * @returns
+ */
+export function getMonthName(date: Date) {
+  return MONTH_NAMES[date.getMonth()];
 }

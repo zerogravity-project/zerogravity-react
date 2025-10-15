@@ -4,11 +4,12 @@ import Link from 'next/link';
 
 import { Badge, Button, Heading, Text } from '@radix-ui/themes';
 import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 
 import { TopAppBar } from '@/app/_components/ui/appbar';
 import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
 import EmotionPlanetImage from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useScroll } from '@/app/_hooks/useScroll';
 import { formatDateString } from '@/app/_utils/dateTimeUtils';
 
 import { useCalendar } from '../../../_contexts/CalendarContext';
@@ -21,44 +22,16 @@ interface EmotionDetailDrawerProps {
 }
 
 export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDrawerProps) {
-  const { selectedDate } = useCalendar();
-  const selectedDateString = formatDateString(selectedDate);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const [showShadow, setShowShadow] = useState(false);
 
-  // Prevent background scroll when drawer is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+  const { selectedDate } = useCalendar();
+  const { isScrolling } = useScroll({
+    scrollRef,
+    enable: isOpen,
+    enablePreventBackgroundScroll: isOpen,
+  });
 
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  // Detect scroll to show shadow
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const scrollElement = scrollRef.current;
-    if (!scrollElement) return;
-
-    const handleScroll = () => {
-      setShowShadow(scrollElement.scrollTop > 0);
-    };
-
-    // Check initial scroll position
-    handleScroll();
-
-    scrollElement.addEventListener('scroll', handleScroll);
-    return () => {
-      scrollElement.removeEventListener('scroll', handleScroll);
-      setShowShadow(false); // Reset shadow when drawer closes
-    };
-  }, [isOpen]);
+  const selectedDateString = formatDateString(selectedDate);
 
   return (
     <AnimatePresence>
@@ -97,7 +70,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
                   </Text>
                   <div className="flex w-full flex-wrap justify-center gap-2 px-6">
                     {REASON_LISTS.map(reason => (
-                      <Badge key={reason} color="gray" radius="full" variant="soft">
+                      <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
                         {reason}
                       </Badge>
                     ))}
@@ -110,7 +83,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
                 {/* Daily Note Header - Fixed */}
                 <div
                   className={`z-1 flex w-full items-center justify-between bg-[var(--gray-1)] px-5 pt-6 pb-4 transition-shadow duration-200 ${
-                    showShadow && 'shadow-2xl'
+                    isScrolling && 'shadow-2xl'
                   }`}
                 >
                   <Heading as="h2" size="4" weight="medium">
@@ -124,7 +97,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
                 </div>
 
                 {/* Text Area - Scrollable only */}
-                <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 pb-8" style={{ minHeight: 0 }}>
+                <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 pb-8">
                   <Text>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
                     consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing

@@ -1,6 +1,6 @@
 'use client';
 
-import { useClock } from '@/app/_hooks/useClock';
+import { useClock } from '@/app/(public)/_hooks/useClock';
 import { getTimeStringData } from '@/app/_utils/dateTimeUtils';
 import { cn } from '@/app/_utils/styleUtils';
 

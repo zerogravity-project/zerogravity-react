@@ -5,7 +5,7 @@ import { Button, DropdownMenu, Heading } from '@radix-ui/themes';
 import Icon from '@/app/_components/ui/icon/Icon';
 import { getTodayString } from '@/app/_utils/dateTimeUtils';
 
-import { useCalendar } from '../../_contexts/CalendarContext';
+import { useCalendar } from '../../../_contexts/CalendarContext';
 
 export default function DesktopCalendarHeader() {
   const { goToNextMonth, goToPreviousMonth, goToToday, getMonthName, getYear } = useCalendar();
@@ -18,26 +18,37 @@ export default function DesktopCalendarHeader() {
     <div className="mb-5 flex shrink-0 flex-row items-center justify-between gap-2">
       <div className="flex items-center gap-2">
         <div className="flex items-center">
+          {/* Previous Month Button */}
           <Button
             size="2"
             variant="surface"
             color="gray"
             onClick={goToPreviousMonth}
-            className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
+            className="!h-7 !w-7 !cursor-pointer !rounded-r-none !border-r-0"
           >
-            <Icon>chevron_left</Icon>
+            <Icon size={20}>chevron_left</Icon>
           </Button>
+
+          {/* Next Month Button */}
           <Button
             size="2"
             variant="surface"
             color="gray"
             onClick={goToNextMonth}
-            className="!w-8 !cursor-pointer !rounded-l-none"
+            className="!h-7 !w-7 !cursor-pointer !rounded-l-none"
           >
-            <Icon>chevron_right</Icon>
+            <Icon size={20}>chevron_right</Icon>
           </Button>
         </div>
-        <Button size="2" variant="surface" color="gray" onClick={goToToday} className="!cursor-pointer">
+
+        {/* Today Button */}
+        <Button
+          size="2"
+          variant="surface"
+          color="gray"
+          onClick={goToToday}
+          className="!h-7 !cursor-pointer !px-[10px] !text-[13px]"
+        >
           Today
         </Button>
       </div>
@@ -46,21 +57,22 @@ export default function DesktopCalendarHeader() {
         {monthName}, {year}
       </Heading>
 
+      {/* Add Daily Emotion Button */}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button size="2" onClick={goToToday} className="!cursor-pointer !gap-[6px] !pl-[8px]">
-            <Icon>add</Icon>
+          <Button size="2" onClick={goToToday} className="!h-7 !cursor-pointer !gap-[3px] !pr-[10px] !pl-[6px]">
+            <Icon size={18}>add</Icon>
             Today
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <Link href={`/record/daily?date=${today}`}>
-            <DropdownMenu.Item color="gray" className="!cursor-pointer">
+            <DropdownMenu.Item color="gray" className="!cursor-pointer !text-[13px]">
               Add Daily Emotion
             </DropdownMenu.Item>
           </Link>
           <Link href={`/record/moment?date=${today}`}>
-            <DropdownMenu.Item color="gray" className="!cursor-pointer">
+            <DropdownMenu.Item color="gray" className="!cursor-pointer !text-[13px]">
               Add Moment Emotion
             </DropdownMenu.Item>
           </Link>

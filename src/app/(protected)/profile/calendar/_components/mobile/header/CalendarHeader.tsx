@@ -4,12 +4,12 @@ import { useMemo } from 'react';
 import Icon from '@/app/_components/ui/icon/Icon';
 import { cn } from '@/app/_utils/styleUtils';
 
-import { EMOTION_STEPS } from '../../../../../../../_components/ui/emotion/Emotion.type';
-import { useCalendar } from '../../../../_contexts/CalendarContext';
-import { DAYS_OF_WEEK } from '../../../../_utils/constants';
-import { getWeekDates } from '../../../../_utils/dateUtils';
+import { EMOTION_STEPS } from '../../../../../../_components/ui/emotion/Emotion.type';
+import { useCalendar } from '../../../_contexts/CalendarContext';
+import { DAYS_OF_WEEK } from '../../../_utils/constants';
+import { getWeekDates } from '../../../_utils/dateUtils';
 
-export default function HeaderSection() {
+export default function CalendarHeader() {
   const randomEmotionIds = useMemo(() => {
     return Array.from({ length: 3 }, () => ({
       momentId: Math.floor(Math.random() * 3),

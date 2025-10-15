@@ -8,8 +8,8 @@ import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Button, Link as RadixLink } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 
+import { useClock } from '@/app/(public)/_hooks/useClock';
 import Icon from '@/app/_components/ui/icon/Icon';
-import { useClock } from '@/app/_hooks/useClock';
 import { getDateStringData } from '@/app/_utils/dateTimeUtils';
 import { cn } from '@/app/_utils/styleUtils';
 import { Color } from '@/app/style/type';
@@ -33,7 +33,7 @@ export default function TopNavigation({ className, border }: TopNavigationProps)
   return (
     <NavigationMenu.Root
       className={cn(
-        'h-topnav-height relative z-10 flex w-full flex-1 items-center justify-between px-5 sm:px-8',
+        'h-topnav-height relative z-1000 flex w-full flex-1 items-center justify-between px-5 sm:px-8',
         border && 'border-b border-[var(--gray-3)]',
         className
       )}
