@@ -2,7 +2,7 @@ import Calendar from '@/app/(protected)/profile/calendar/_components/EmotionCale
 
 export default function ProfileCalendarPage() {
   return (
-    <div className="flex w-[100dvw] sm:h-[calc(100dvh-var(--spacing-topnav-height))]">
+    <div className="flex h-full w-full flex-1">
       <Calendar />
     </div>
   );

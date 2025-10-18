@@ -29,9 +29,9 @@ export function EmotionPlanetLoading({
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className="absolute inset-0 z-1000 grid place-items-center"
+          className="absolute inset-0 z-10 grid place-items-center"
         >
-          <div className="relative z-1000" style={{ width: width, height: height }}>
+          <div className="relative" style={{ width: width, height: height }}>
             <svg className="h-full w-full -rotate-90" viewBox="0 0 100 100">
               {/* Background circle */}
               <circle

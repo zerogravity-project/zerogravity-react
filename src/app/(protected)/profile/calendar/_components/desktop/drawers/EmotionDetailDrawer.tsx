@@ -25,17 +25,17 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { selectedDate } = useCalendar();
-  const isLargeScreen = useIsLg();
+  const isOverLargeScreen = !useIsLg();
   const { isScrollable, isScrolling, isScrollAtBottom } = useScroll({
     scrollRef,
     enable: isOpen,
-    enablePreventBackgroundScroll: isOpen && !isLargeScreen,
+    enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
   const selectedDateString = formatDateString(selectedDate);
 
   // Animation variants based on screen size
-  const wrapperAnimation = isLargeScreen
+  const wrapperAnimation = isOverLargeScreen
     ? {
         initial: { width: 0 },
         animate: { width: 300 },
@@ -49,7 +49,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
         transition: { type: 'spring' as const, damping: 25, stiffness: 180 },
       };
 
-  const wrapperClassName = isLargeScreen
+  const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
     : 'top-topnav-height fixed right-0 z-9999 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
@@ -57,7 +57,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
     <AnimatePresence>
       {isOpen && (
         <motion.aside
-          layout={isLargeScreen}
+          layout={isOverLargeScreen}
           {...wrapperAnimation}
           className={wrapperClassName}
           role="dialog"

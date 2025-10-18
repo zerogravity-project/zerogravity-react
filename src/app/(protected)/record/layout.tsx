@@ -1,4 +1,4 @@
-import { TopNavigation } from '@/app/_components/ui';
+import { Navigation } from '@/app/_components/ui';
 
 export default function RootLayout({
   children,
@@ -7,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <TopNavigation className="mobile:flex hidden" />
+      <Navigation className="mobile:flex hidden" />
       {children}
     </>
   );

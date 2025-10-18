@@ -1,7 +1,7 @@
 'use client';
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 
 import { useSquareResize } from '@/app/_hooks/useSquareResize';
@@ -15,13 +15,17 @@ interface EmotionPlanetSceneProps {
   emotionId: number;
   width?: number | '100%';
   height?: number | '100%';
+
   isFreeze?: boolean;
   isGlow?: boolean;
   isSparkles?: boolean;
-  isResize?: boolean;
-  className?: string;
-  onSceneLoaded?: () => void;
   isLoadingShowText?: boolean;
+  isResize?: boolean;
+
+  delay?: number;
+  onSceneLoaded?: () => void;
+
+  className?: string;
 }
 
 export default function EmotionPlanetScene({
@@ -31,13 +35,15 @@ export default function EmotionPlanetScene({
   isFreeze = false,
   isGlow = true,
   isSparkles = true,
-  isResize = true,
-  className,
-  onSceneLoaded,
   isLoadingShowText = true,
+  isResize = true,
+  delay = 0,
+  onSceneLoaded,
+  className,
 }: EmotionPlanetSceneProps) {
-  const { ref: containerRef, squareSize } = useSquareResize({ isResize });
+  const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showCanvas, setShowCanvas] = useState(delay === 0);
 
   const resolvedWidth = width || squareSize || '100%';
   const resolvedHeight = height || squareSize || '100%';
@@ -67,6 +73,17 @@ export default function EmotionPlanetScene({
   const loadingWidth = getLoadingSize(resolvedWidth, resolvedWidth === '100%');
   const loadingHeight = getLoadingSize(resolvedHeight, resolvedHeight === '100%');
 
+  // Handle delay for canvas rendering
+  useEffect(() => {
+    if (delay > 0) {
+      const timer = setTimeout(() => {
+        setShowCanvas(true);
+      }, delay);
+
+      return () => clearTimeout(timer);
+    }
+  }, [delay]);
+
   return (
     <div
       ref={containerRef}
@@ -74,25 +91,27 @@ export default function EmotionPlanetScene({
       style={{ width, height }}
     >
       {/* 3D Canvas */}
-      <div className="absolute inset-0 grid h-full w-full place-items-center">
-        <Canvas
-          frameloop={isFreeze ? 'never' : 'always'}
-          resize={{ offsetSize: true }}
-          style={{ width: resolvedWidth, height: resolvedHeight }}
-          shadows
-          camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
-          gl={{ alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
-          dpr={[1, 2]}
-          onCreated={({ gl }) => {
-            gl.shadowMap.enabled = true;
-            gl.shadowMap.type = THREE.PCFSoftShadowMap;
-          }}
-        >
-          <Suspense fallback={null}>
-            <EmotionPlanet onLoaded={handleLoaded} emotionId={emotionId} isSparkles={isSparkles} />
-          </Suspense>
-        </Canvas>
-      </div>
+      {showCanvas && (
+        <div className="absolute inset-0 z-1 grid h-full w-full place-items-center">
+          <Canvas
+            frameloop={isFreeze ? 'never' : 'always'}
+            resize={{ offsetSize: true }}
+            style={{ width: resolvedWidth, height: resolvedHeight }}
+            shadows
+            camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
+            gl={{ alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
+            dpr={[1, 2]}
+            onCreated={({ gl }) => {
+              gl.shadowMap.enabled = true;
+              gl.shadowMap.type = THREE.PCFSoftShadowMap;
+            }}
+          >
+            <Suspense fallback={null}>
+              <EmotionPlanet onLoaded={handleLoaded} emotionId={emotionId} isSparkles={isSparkles} />
+            </Suspense>
+          </Canvas>
+        </div>
+      )}
 
       {/* Glow Effect */}
       {isGlow && (

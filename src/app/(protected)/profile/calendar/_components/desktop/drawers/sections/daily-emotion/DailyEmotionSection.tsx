@@ -1,9 +1,10 @@
-import { Badge, Text } from '@radix-ui/themes';
+import { Badge, Text, Theme } from '@radix-ui/themes';
 import { useMemo, useState } from 'react';
 
 import { EmotionPlanetScene } from '@/app/_components/ui/emotion';
 import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
 import EmotionPlanetNull from '@/app/_components/ui/emotion/EmotionPlanetNull';
+import { cn } from '@/app/_utils/styleUtils';
 
 import EmotionDetailDrawer from '../../EmotionDetailDrawer';
 
@@ -23,38 +24,44 @@ export default function DailyEmotionSection() {
   const emotionColor = emotionId ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[randomEmotionId].color;
 
   return (
-    <section className="flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pt-5 pb-6">
-      {/* Selected date daily emotion */}
+    <Theme appearance="dark">
+      <section
+        className={cn(
+          'flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pt-1',
+          emotionId ? 'pb-7' : 'pb-1'
+        )}
+      >
+        {/* Selected date daily emotion */}
+        {!emotionId && (
+          <>
+            <EmotionPlanetNull emotionId={randomEmotionId} width={240} height={240} isShowText={false} />
+          </>
+        )}
 
-      {!emotionId && (
-        <>
-          <EmotionPlanetNull emotionId={randomEmotionId} width={130} height={130} isShowText={false} />
-        </>
-      )}
+        {emotionId && (
+          <>
+            <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />
+            <Text color={emotionColor} size="7" weight="light">
+              {EMOTION_STEPS[emotionId].type}
+            </Text>
+            <div className="mt-3 flex flex-wrap justify-center gap-1.5">
+              {REASON_LISTS.map(reason => (
+                <Badge
+                  key={reason}
+                  color="gray"
+                  radius="full"
+                  variant="soft"
+                  className="!text-[11px] !leading-[14px] !font-normal"
+                >
+                  {reason}
+                </Badge>
+              ))}
+            </div>
+          </>
+        )}
 
-      {emotionId && (
-        <>
-          <EmotionPlanetScene emotionId={emotionId} width="100%" height={130} isLoadingShowText={false} />
-          <Text color={emotionColor} size="5">
-            {EMOTION_STEPS[emotionId].type}
-          </Text>
-          <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-            {REASON_LISTS.map(reason => (
-              <Badge
-                key={reason}
-                color="gray"
-                radius="full"
-                variant="soft"
-                className="!text-[11px] !leading-[14px] !font-normal"
-              >
-                {reason}
-              </Badge>
-            ))}
-          </div>
-        </>
-      )}
-
-      <EmotionDetailDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
-    </section>
+        <EmotionDetailDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      </section>
+    </Theme>
   );
 }
