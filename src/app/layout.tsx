@@ -4,6 +4,8 @@ import './style/globals.css';
 import type { Metadata } from 'next';
 
 import ClientProviders from './_components/providers/ClientProviders';
+import { ModalProvider } from './_components/ui/modal/_context/ModalContext';
+import { SettingModal } from './_components/ui/modal/SettingModal';
 
 export interface CustomIconDescriptorType extends IconDescriptor {
   precedence?: string;
@@ -30,8 +32,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="bg-lightgray-background text-black-900">
-        <ClientProviders>{children}</ClientProviders>
+      <body>
+        <ClientProviders>
+          <ModalProvider>
+            {children}
+            <SettingModal />
+          </ModalProvider>
+        </ClientProviders>
       </body>
     </html>
   );

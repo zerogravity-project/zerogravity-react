@@ -1,6 +1,9 @@
 'use client';
 
-import { Clock, Footer, MainDisplayScene } from '../_components/ui';
+import { Footer } from '../_components/ui';
+
+import Clock from './_components/clock/Clock';
+import MainDisplayScene from './_components/scene/MainDisplayScene';
 
 export default function Home() {
   const handleSceneLoad = () => {

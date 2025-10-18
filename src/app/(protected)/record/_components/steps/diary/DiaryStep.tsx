@@ -39,7 +39,7 @@ export default function DiaryStep() {
         </Text>
         <div className="mt-5 flex max-w-[480px] flex-wrap gap-2 px-5">
           {emotionReason.map(reason => (
-            <Badge key={reason} color="gray" radius="full" variant="soft">
+            <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
               {reason}
             </Badge>
           ))}

@@ -3,8 +3,9 @@
 import Link from 'next/link';
 
 import { Link as RadixLink, Text } from '@radix-ui/themes';
+import { Fragment } from 'react';
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/app/_utils/styleUtils';
 
 interface FooterMenuItem {
   text: string;
@@ -17,13 +18,13 @@ interface FooterBarProps {
   className?: string;
 }
 
-const menuList: FooterMenuItem[] = [
+export const FOOTER_MENU_LIST: FooterMenuItem[] = [
   {
-    text: '이용약관',
+    text: 'Terms of Service',
     linkPath: 'terms',
   },
   {
-    text: '개인정보보호방침',
+    text: 'Privacy Policy',
     linkPath: 'privacy-policy',
   },
 ];
@@ -37,25 +38,26 @@ export default function FooterBar({ className }: FooterBarProps) {
         className
       )}
     >
-      <ul className="flex">
-        {menuList.map((menu, index) => (
-          <li
-            key={index}
-            className={cn(
-              'border-r border-[var(--gray-a5)] px-4',
-              index === 0 && 'pl-0',
-              index === menuList.length - 1 && 'border-r-0 pr-0'
+      <ul className="flex items-center gap-2">
+        {FOOTER_MENU_LIST.map((menu, index) => (
+          <Fragment key={index}>
+            <li>
+              <RadixLink asChild color="gray" size="1">
+                <Link href={`/${menu.linkPath}`}>
+                  <span className="transition-opacity hover:opacity-80">{menu.text}</span>
+                </Link>
+              </RadixLink>
+            </li>
+
+            {index !== FOOTER_MENU_LIST.length - 1 && (
+              <div className="mt-[3px] h-[3px] w-[3px] flex-shrink-0 rounded-[9999px] bg-[var(--gray-11)]" />
             )}
-          >
-            <RadixLink asChild color="gray">
-              <Link href={`/${menu.linkPath}`}>
-                <span className="text-[12px] transition-opacity hover:opacity-80">{menu.text}</span>
-              </Link>
-            </RadixLink>
-          </li>
+          </Fragment>
         ))}
       </ul>
-      <Text className="px-1 text-[12px] text-[var(--gray-9)]">© Zero Gravity. All rights reserved.</Text>
+      <Text className="text-[var(--gray-9)]" weight="light" size="1">
+        © Zero Gravity. All rights reserved.
+      </Text>
     </footer>
   );
 }
