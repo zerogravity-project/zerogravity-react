@@ -1,0 +1,135 @@
+'use client';
+
+import Link from 'next/link';
+
+import { Badge, Button, Heading, Text } from '@radix-ui/themes';
+import { AnimatePresence, motion } from 'motion/react';
+import { useRef } from 'react';
+
+import { TopAppBar } from '@/app/_components/ui/appbar';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import EmotionPlanetImage from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useScroll } from '@/app/_hooks/useScroll';
+import { formatDateString } from '@/app/_utils/dateTimeUtils';
+
+import { useCalendar } from '../../../_contexts/CalendarContext';
+
+const REASON_LISTS = ['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Religion'];
+
+interface EmotionDetailDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDrawerProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const { selectedDate } = useCalendar();
+  const { isScrolling } = useScroll({
+    scrollRef,
+    enable: isOpen,
+    enablePreventBackgroundScroll: isOpen,
+  });
+
+  const selectedDateString = formatDateString(selectedDate);
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={onClose}
+            className="fixed inset-0 z-9998 bg-black/50"
+          />
+
+          {/* Drawer */}
+          <motion.aside
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 180 }}
+            role="dialog"
+            aria-modal="true"
+            className="fixed top-0 right-0 z-9999 h-[100dvh] w-[100dvw] bg-[var(--gray-1)]"
+          >
+            <div className="flex h-full flex-col">
+              {/* Header - Fixed */}
+              <TopAppBar text="Go Back" icon="arrow_back" onClick={onClose} border />
+
+              {/* Emotion Content - Fixed */}
+              <div className="flex w-full flex-col items-center gap-6 bg-[var(--background-dark)] pt-6 pb-9">
+                <EmotionPlanetImage emotionId={3} width={120} height={120} />
+                <div className="flex w-full flex-col items-center gap-3">
+                  <Text color={EMOTION_STEPS[3].color} className="!text-center" size="5">
+                    {EMOTION_STEPS[3].type}
+                  </Text>
+                  <div className="flex w-full flex-wrap justify-center gap-2 px-6">
+                    {REASON_LISTS.map(reason => (
+                      <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
+                        {reason}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Daily Note - Takes remaining space */}
+              <div className="flex flex-1 flex-col overflow-hidden border-t border-[var(--gray-3)]">
+                {/* Daily Note Header - Fixed */}
+                <div
+                  className={`z-1 flex w-full items-center justify-between bg-[var(--gray-1)] px-5 pt-6 pb-4 transition-shadow duration-200 ${
+                    isScrolling && 'shadow-2xl'
+                  }`}
+                >
+                  <Heading as="h2" size="4" weight="medium">
+                    Daily Note
+                  </Heading>
+                  <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
+                    <Button variant="soft" radius="full" className="!cursor-pointer">
+                      Edit
+                    </Button>
+                  </Link>
+                </div>
+
+                {/* Text Area - Scrollable only */}
+                <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 pb-8">
+                  <Text>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
+                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
+                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
+                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
+                  </Text>
+                </div>
+              </div>
+            </div>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}

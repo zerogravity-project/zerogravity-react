@@ -99,6 +99,20 @@ button {
 :root,
 .light,
 .light-theme {
+  --background-dark: #f0f0f3;
+  --text-default: #222222;
+}
+
+:root,
+.dark,
+.dark-theme {
+  --background-dark: #0b0b0c;
+  --text-default: #ffffff;
+}
+
+:root,
+.light,
+.light-theme {
   --red-1: #fffcfb;
   --red-2: #fff8f6;
   --red-3: #ffeae5;

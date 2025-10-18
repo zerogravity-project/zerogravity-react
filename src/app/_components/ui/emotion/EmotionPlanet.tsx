@@ -4,7 +4,7 @@ import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 import { useEffect } from 'react';
 
 import { EMOTION_STEPS } from './Emotion.type';
-import { WobbleMesh } from './WobbleMesh';
+import { WobbleMesh } from './objects/WobbleMesh';
 
 /**
  * Default Light Properties
