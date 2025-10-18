@@ -14,7 +14,10 @@ interface EmotionPlanetNullProps {
   emotionId: number;
   width?: number | '100%';
   height?: number | '100%';
+
   isShowText?: boolean;
+  isResize?: boolean;
+
   className?: string;
 }
 
@@ -23,9 +26,10 @@ export default function EmotionPlanetNull({
   width,
   height,
   isShowText = true,
+  isResize = true,
   className,
 }: EmotionPlanetNullProps) {
-  const { ref: containerRef, squareSize } = useSquareResize({ isResize: true });
+  const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
   const resolvedWidth = width || squareSize || '100%';
   const resolvedHeight = height || squareSize || '100%';
@@ -63,10 +67,9 @@ export default function EmotionPlanetNull({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="pointer-events-none absolute inset-0 grid place-items-center"
-        style={{ zIndex: 1 }}
+        className="pointer-events-none absolute inset-0 z-10 grid place-items-center"
       >
-        <div className="relative z-1000" style={{ width: nullWidth, height: nullHeight }}>
+        <div className="relative" style={{ width: nullWidth, height: nullHeight }}>
           <svg className="h-full w-full" viewBox="0 0 100 100">
             {/* Background circle */}
             <circle

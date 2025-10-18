@@ -24,7 +24,7 @@ export default function CalendarHeader() {
   const weekDates = getWeekDates(currentDate);
 
   return (
-    <section className="mb-6 flex w-full flex-col items-center px-5 pt-6">
+    <header className="mb-6 flex w-full flex-col items-center px-5 pt-6">
       <div className="mb-4 flex w-full items-center justify-between">
         <Heading size="6" weight="bold">
           {monthName}
@@ -88,6 +88,6 @@ export default function CalendarHeader() {
           );
         })}
       </div>
-    </section>
+    </header>
   );
 }

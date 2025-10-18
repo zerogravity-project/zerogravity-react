@@ -15,7 +15,7 @@ export default function DesktopCalendarHeader() {
   const today = getTodayString();
 
   return (
-    <div className="mb-5 flex shrink-0 flex-row items-center justify-between gap-2">
+    <header className="mb-5 flex shrink-0 flex-row items-center justify-between gap-2">
       <div className="flex items-center gap-2">
         <div className="flex items-center">
           {/* Previous Month Button */}
@@ -78,6 +78,6 @@ export default function DesktopCalendarHeader() {
           </Link>
         </DropdownMenu.Content>
       </DropdownMenu.Root>
-    </div>
+    </header>
   );
 }

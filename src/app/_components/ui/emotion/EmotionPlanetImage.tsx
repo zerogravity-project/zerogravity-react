@@ -15,8 +15,10 @@ interface EmotionPlanetImageProps {
   width?: number;
   height?: number;
   fill?: boolean;
+
   isGlow?: boolean;
   isResize?: boolean;
+
   className?: string;
 }
 
@@ -31,7 +33,7 @@ export default function EmotionPlanetImage({
   ...props
 }: EmotionPlanetImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
-  const { ref: containerRef, squareSize } = useSquareResize({ isResize });
+  const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
   return (
     <motion.div

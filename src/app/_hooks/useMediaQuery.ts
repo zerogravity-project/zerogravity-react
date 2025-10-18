@@ -42,12 +42,12 @@ export function useMediaQuery(query: string): boolean {
  * Common media query breakpoints (Tailwind CSS based)
  */
 export const MEDIA_QUERIES = {
-  mobile: '(max-width: 480px)',
-  sm: '(min-width: 640px)',
-  md: '(min-width: 768px)',
-  lg: '(min-width: 1024px)',
-  xl: '(min-width: 1280px)',
-  '2xl': '(min-width: 1536px)',
+  mobile: '(width < 480px)',
+  sm: '(width < 640px)',
+  md: '(width < 768px)',
+  lg: '(width < 1024px)',
+  xl: '(width < 1280px)',
+  '2xl': '(width < 1536px)',
 } as const;
 
 /**

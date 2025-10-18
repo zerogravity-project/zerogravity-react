@@ -10,7 +10,7 @@ interface SectionTitleProps {
 
 export default function SectionTitle({ title, linkText, href }: SectionTitleProps) {
   return (
-    <div className="flex w-full items-center justify-between border-t border-b border-[var(--gray-3)] bg-[var(--gray-2)] px-4 py-[5px]">
+    <div className="z-1 flex w-full items-center justify-between border-t border-b border-[var(--gray-3)] bg-[var(--gray-2)] px-4 py-[5px]">
       <Text className="!text-[13px] !leading-[17px]" color="gray">
         {title}
       </Text>

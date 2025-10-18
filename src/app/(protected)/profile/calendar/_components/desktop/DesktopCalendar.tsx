@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react';
 import { useCalendar } from '../../_contexts/CalendarContext';
 import { DAYS_OF_WEEK } from '../../_utils/constants';
 
+import DesktopCalendarCell from './cell/DesktopCalendarCell';
 import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';
-import DesktopCalendarCell from './elements/DesktopCalendarCell';
-import DesktopCalendarHeader from './elements/DesktopCalendarHeader';
+import DesktopCalendarHeader from './header/DesktopCalendarHeader';
 
 export default function DesktopCalendar() {
   const [mounted, setMounted] = useState(false);
@@ -65,7 +65,7 @@ export default function DesktopCalendar() {
           transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
           className="flex h-full flex-1 bg-[var(--background-dark)] p-3"
         >
-          <div className="flex h-full w-full flex-col overflow-hidden rounded-md border border-[var(--gray-3)] bg-[var(--gray-1)] p-3">
+          <div className="flex h-full w-full flex-col overflow-hidden rounded-[4px] border border-[var(--gray-3)] bg-[var(--gray-1)] p-3">
             {/* Header - Fixed height */}
             <DesktopCalendarHeader />
 

@@ -16,7 +16,7 @@ export default function DrawerHeader({ onClose }: DrawerHeaderProps) {
   const selectedYear = selectedDate.getFullYear();
 
   return (
-    <div className="relative flex w-full items-center p-4">
+    <header className="relative flex w-full items-center p-4">
       <Text size="3">
         {selectedMonthString} {selectedDateString}, {selectedYear}
       </Text>
@@ -28,6 +28,6 @@ export default function DrawerHeader({ onClose }: DrawerHeaderProps) {
       >
         <Icon size={20}>close</Icon>
       </button>
-    </div>
+    </header>
   );
 }
