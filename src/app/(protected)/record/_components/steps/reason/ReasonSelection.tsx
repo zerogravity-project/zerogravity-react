@@ -1,30 +1,8 @@
 import { Button } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_REASONS, EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
-
-const REASON_LISTS = [
-  'Health',
-  'Fitness',
-  'Self-care',
-  'Hobby',
-  'Identity',
-  'Religion',
-  'Community',
-  'Family',
-  'Friends',
-  'Partner',
-  'Romance',
-  'Money',
-  'Housework',
-  'Work',
-  'Education',
-  'Travel',
-  'Weather',
-  'Domestic Issues',
-  'Global Issues',
-];
 
 export default function ReasonSelection() {
   const { emotionValueToStepIndex, emotionReason, setEmotionReason } = useEmotionRecordContext();
@@ -40,7 +18,7 @@ export default function ReasonSelection() {
   return (
     <div className="max-mobile:px-5 flex w-full flex-1 flex-col items-center pt-10 pb-12">
       <div className="flex w-full max-w-[480px] flex-wrap gap-3">
-        {REASON_LISTS.map(reason => (
+        {EMOTION_REASONS.map(reason => (
           <Button
             key={reason}
             onClick={() => toggleReason(reason)}

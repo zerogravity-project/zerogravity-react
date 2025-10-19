@@ -3,7 +3,7 @@
 import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 import { useEffect } from 'react';
 
-import { EMOTION_STEPS } from './Emotion.type';
+import { EMOTION_STEPS } from './_constants/emotion.constants';
 import { WobbleMesh } from './objects/WobbleMesh';
 
 /**

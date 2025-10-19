@@ -4,7 +4,7 @@ import { Badge, Text } from '@radix-ui/themes';
 import { useMemo } from 'react';
 
 import { formatTime } from '@/app/(protected)/profile/calendar/_utils/dateUtils';
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import EmotionPlanetImage from '@/app/_components/ui/emotion/EmotionPlanetImage';
 
 const REASON_LISTS = ['Health', 'Fitness', 'Self-care'];
