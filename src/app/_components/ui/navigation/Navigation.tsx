@@ -47,7 +47,7 @@ export default function TopNavigation({ className, background, border }: TopNavi
   return (
     <NavigationMenu.Root
       className={cn(
-        'h-topnav-height relative z-1000 flex w-full flex-1 items-center justify-between px-5 sm:px-6',
+        'h-topnav-height relative z-[2000] flex w-full flex-1 items-center justify-between px-5 sm:px-6',
         background && `bg-[var(--gray-1)]`,
         border && 'border-b border-[var(--gray-3)]',
         className
