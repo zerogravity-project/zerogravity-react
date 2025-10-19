@@ -25,6 +25,8 @@ const DEFAULT_MATERIAL_PROPS = {
 };
 
 interface WobbleMeshProps {
+  radius?: number;
+  subdivisions?: number;
   positionFrequency: number;
   timeFrequency: number;
   warpPositionFrequency: number;
@@ -37,6 +39,8 @@ interface WobbleMeshProps {
 }
 
 export function WobbleMesh({
+  radius = 2.5,
+  subdivisions = 50,
   positionFrequency,
   timeFrequency,
   warpPositionFrequency,
@@ -75,11 +79,11 @@ export function WobbleMesh({
 
   // Geometry with computed tangents for shader
   const geometry = useMemo<THREE.BufferGeometry>(() => {
-    const base = new THREE.IcosahedronGeometry(2.5, 50);
+    const base = new THREE.IcosahedronGeometry(radius, subdivisions);
     const merged = mergeVertices(base) as THREE.BufferGeometry;
     merged.computeTangents();
     return merged;
-  }, []);
+  }, [radius, subdivisions]);
 
   // Target colors for smooth transitions (using refs to avoid creating new objects each frame)
   const targetColorA = useRef(new THREE.Color(colorA));

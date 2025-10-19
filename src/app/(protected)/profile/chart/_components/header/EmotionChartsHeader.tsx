@@ -24,14 +24,14 @@ export function EmotionChartsHeader() {
     return (
       <header className="flex flex-col">
         {/* Time Period Selection */}
-        <div className="mobile:px-0 mobile:pt-0 flex w-full items-center p-3">
+        <div className="mobile:px-0 mobile:pt-0 flex w-full items-center p-4">
           <SegmentedControl.Root
             value={timePeriod}
             onValueChange={setTimePeriod}
             variant="classic"
-            size="1"
+            size="2"
             radius="small"
-            className="!h-7 w-full !border !border-[var(--gray-6)]"
+            className="w-full !border !border-[var(--gray-6)]"
           >
             <SegmentedControl.Item value="week">Week</SegmentedControl.Item>
             <SegmentedControl.Item value="month">Month</SegmentedControl.Item>
@@ -39,8 +39,8 @@ export function EmotionChartsHeader() {
           </SegmentedControl.Root>
         </div>
 
-        <div className="mobile:px-0 mobile:pl-2 flex items-center justify-between pt-1 pr-3 pb-4 pl-5">
-          <Heading size="5" weight="medium" className="text-nowrap">
+        <div className="mobile:px-0 mobile:pl-2 flex items-center justify-between pt-1 pr-4 pb-5 pl-5">
+          <Heading size="6" weight="medium" className="text-nowrap">
             {getFormattedDateRange()}
           </Heading>
           <div className="flex items-center">
@@ -50,22 +50,20 @@ export function EmotionChartsHeader() {
               variant="surface"
               color="gray"
               onClick={goToPreviousPeriod}
-              className="!h-7 !w-7 !cursor-pointer !rounded-r-none !border-r-0"
               disabled={!canGoPrevious}
+              className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
             >
-              <Icon size={20}>chevron_left</Icon>
+              <Icon>chevron_left</Icon>
             </Button>
-
-            {/* Next Month Button */}
             <Button
               size="2"
               variant="surface"
               color="gray"
               onClick={goToNextPeriod}
-              className="!h-7 !w-7 !cursor-pointer !rounded-l-none"
               disabled={!canGoNext}
+              className="!w-8 !cursor-pointer !rounded-l-none"
             >
-              <Icon size={20}>chevron_right</Icon>
+              <Icon>chevron_right</Icon>
             </Button>
           </div>
         </div>
