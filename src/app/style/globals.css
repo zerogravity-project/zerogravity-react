@@ -88,6 +88,7 @@ button {
 } */
 
 .radix-themes {
+  --cursor-button: pointer;
   --default-font-family: 'helvetica-neue-lt-pro', sans-serif;
   --heading-font-family: 'helvetica-neue-lt-pro', sans-serif;
   --code-font-family: 'helvetica-neue-lt-pro', sans-serif;

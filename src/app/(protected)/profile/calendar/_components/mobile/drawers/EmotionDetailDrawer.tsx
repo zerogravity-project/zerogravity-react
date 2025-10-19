@@ -7,7 +7,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { useRef } from 'react';
 
 import { TopAppBar } from '@/app/_components/ui/appbar';
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import EmotionPlanetImage from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import { useScroll } from '@/app/_hooks/useScroll';
 import { formatDateString } from '@/app/_utils/dateTimeUtils';

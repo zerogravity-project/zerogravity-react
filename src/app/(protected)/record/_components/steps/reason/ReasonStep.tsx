@@ -2,7 +2,7 @@
 
 import { Button, Heading, Text } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import EmotionPlanetImage from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import { Icon } from '@/app/_components/ui/icon';
 

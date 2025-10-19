@@ -1,6 +1,6 @@
 import { TextArea } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 

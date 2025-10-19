@@ -2,7 +2,7 @@ import { Badge, Text, Theme } from '@radix-ui/themes';
 import { useMemo, useState } from 'react';
 
 import { EmotionPlanetScene } from '@/app/_components/ui/emotion';
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import EmotionPlanetNull from '@/app/_components/ui/emotion/EmotionPlanetNull';
 import { cn } from '@/app/_utils/styleUtils';
 

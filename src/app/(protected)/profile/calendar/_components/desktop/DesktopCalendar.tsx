@@ -4,8 +4,8 @@ import { Text } from '@radix-ui/themes';
 import { LayoutGroup, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 
+import { DAYS_OF_WEEK } from '../../_constants/calendar.constants';
 import { useCalendar } from '../../_contexts/CalendarContext';
-import { DAYS_OF_WEEK } from '../../_utils/constants';
 
 import DesktopCalendarCell from './cell/DesktopCalendarCell';
 import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 
 import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
