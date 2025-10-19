@@ -18,7 +18,7 @@ export default function MobileMenu({ isOpen, className }: MobileMenuProps) {
       {isOpen && (
         <motion.aside
           className={cn(
-            'top-topnav-height absolute left-0 z-1000 flex w-[100dvw] flex-col items-center justify-between overflow-hidden bg-[var(--gray-1)]',
+            'top-topnav-height absolute left-0 z-[2000] flex w-[100dvw] flex-col items-center justify-between overflow-hidden bg-[var(--gray-1)]',
             className
           )}
           initial={{ opacity: 0, height: 0 }}
