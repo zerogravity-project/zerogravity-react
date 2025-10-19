@@ -1,14 +1,15 @@
 'use client';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Link as RadixLink } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useClock } from '@/app/(public)/_hooks/useClock';
-import { useIsMobile } from '@/app/_hooks/useMediaQuery';
+import { useIsSm } from '@/app/_hooks/useMediaQuery';
 import { getDateStringData } from '@/app/_utils/dateTimeUtils';
 import { cn } from '@/app/_utils/styleUtils';
 
@@ -25,7 +26,9 @@ interface TopNavigationProps {
 
 export default function TopNavigation({ className, border }: TopNavigationProps) {
   const { data: session, status } = useSession();
-  const isMobile = useIsMobile();
+  const isSm = useIsSm();
+
+  const pathname = usePathname();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -36,10 +39,14 @@ export default function TopNavigation({ className, border }: TopNavigationProps)
   const userName = session?.user?.name ?? 'ZeroGravity User';
   const profileImage = session?.user?.image ?? undefined;
 
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
+
   return (
     <NavigationMenu.Root
       className={cn(
-        'h-topnav-height mobile:p-6 relative z-1000 flex w-full flex-1 items-center justify-between bg-[var(--gray-1)] px-5',
+        'h-topnav-height relative z-1000 flex w-full flex-1 items-center justify-between bg-[var(--gray-1)] px-5 sm:px-6',
         border && 'border-b border-[var(--gray-3)]',
         className
       )}
@@ -54,21 +61,20 @@ export default function TopNavigation({ className, border }: TopNavigationProps)
       </div>
 
       {/* Date */}
-      <div className="flex flex-shrink-0 items-center gap-16">
-        <div className="mobile:flex hidden h-8 items-center justify-center overflow-hidden">
-          <span className="text-sm leading-[0.9] text-[var(--gray-a10)]">
-            {dateData ? dateData.year : '0000'}年 · {dateData ? dateData.month : '00'}月 ·{' '}
-            {dateData ? dateData.day : '00'}日 · {dateData ? dateData.weekday : ''}
-          </span>
-        </div>
+      <div className="flex flex-shrink-0 items-center gap-12">
+        {dateData && (
+          <div className="hidden h-8 items-center justify-center overflow-hidden sm:flex">
+            <span className="text-sm leading-[0.9] text-[var(--gray-a10)]">
+              {dateData.year} · {dateData.month} · {dateData.day} · {dateData.weekday}
+            </span>
+          </div>
+        )}
 
         {/* Profile */}
         {!isAuthenticated && (
           <>
-            {!isMobile && (
-              <ProfileDropdown userName={userName} profileImage={profileImage} className="max-mobile:hidden" />
-            )}
-            {isMobile && (
+            {!isSm && <ProfileDropdown userName={userName} profileImage={profileImage} className="max-mobile:hidden" />}
+            {isSm && (
               <>
                 {/* Hamburger Menu */}
                 <button

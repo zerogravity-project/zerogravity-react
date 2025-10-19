@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 
-import { EMOTION_STEPS } from '../Emotion.type';
+import { EMOTION_STEPS } from '../_constants/emotion.constants';
 
 interface EmotionPlanetGlowProps {
   emotionId: number;

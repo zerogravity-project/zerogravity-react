@@ -7,7 +7,7 @@ import Icon from '@/app/_components/ui/icon/Icon';
 import { formatDateString } from '@/app/_utils/dateTimeUtils';
 
 import { EmotionPlanetScene } from '../../../../../../../_components/ui/emotion';
-import { EMOTION_STEPS } from '../../../../../../../_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '../../../../../../../_components/ui/emotion/_constants/emotion.constants';
 import EmotionPlanetNull from '../../../../../../../_components/ui/emotion/EmotionPlanetNull';
 import { useCalendar } from '../../../../_contexts/CalendarContext';
 import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';

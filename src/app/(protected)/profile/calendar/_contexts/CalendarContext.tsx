@@ -2,8 +2,10 @@
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
-import { MONTH_NAMES } from '../_utils/constants';
-import { getMonthInfo as getMonthInfoUtil, getWeekOfMonth, isSameDay } from '../_utils/dateUtils';
+import { isSameDay } from '@/app/_utils/dateTimeUtils';
+
+import { MONTH_NAMES } from '../_constants/calendar.constants';
+import { getMonthInfo as getMonthInfoUtil, getWeekOfMonth } from '../_utils/dateUtils';
 
 interface MonthDaysInfo {
   firstDayOfWeek: number;

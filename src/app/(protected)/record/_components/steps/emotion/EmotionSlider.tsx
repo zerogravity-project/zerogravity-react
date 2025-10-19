@@ -1,6 +1,6 @@
 import { Text } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import { Slider } from '@/app/_components/ui/slider';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';

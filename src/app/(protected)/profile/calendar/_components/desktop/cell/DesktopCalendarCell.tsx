@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import { cn } from '@/app/_utils/styleUtils';
 
 interface DesktopCalendarCellProps {

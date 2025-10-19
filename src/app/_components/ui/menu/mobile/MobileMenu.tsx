@@ -25,7 +25,7 @@ export default function MobileMenu({ isOpen, className }: MobileMenuProps) {
           animate={{ opacity: 1, height: 300 }}
           exit={{ opacity: 0, height: 0 }}
           transition={{
-            opacity: { duration: 0.3, ease: 'easeInOut' },
+            opacity: { duration: 0 },
             height: { duration: 0.3, ease: 'easeInOut' },
           }}
         >
