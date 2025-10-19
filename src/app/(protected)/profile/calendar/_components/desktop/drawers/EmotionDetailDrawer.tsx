@@ -51,7 +51,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
 
   const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'top-topnav-height fixed right-0 z-9999 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
+    : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
   return (
     <AnimatePresence>

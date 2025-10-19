@@ -21,6 +21,7 @@ interface EmotionPlanetSceneProps {
   isSparkles?: boolean;
   isLoadingShowText?: boolean;
   isResize?: boolean;
+  isLarge?: boolean;
 
   delay?: number;
   onSceneLoaded?: () => void;
@@ -37,6 +38,7 @@ export default function EmotionPlanetScene({
   isSparkles = true,
   isLoadingShowText = true,
   isResize = true,
+  isLarge = false,
   delay = 0,
   onSceneLoaded,
   className,
@@ -99,7 +101,15 @@ export default function EmotionPlanetScene({
             style={{ width: resolvedWidth, height: resolvedHeight }}
             shadows
             camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
-            gl={{ alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
+            gl={{
+              alpha: true,
+              toneMapping: THREE.ACESFilmicToneMapping,
+              toneMappingExposure: 1,
+              powerPreference: 'high-performance',
+              precision: 'highp', // 높은 정밀도
+              preserveDrawingBuffer: false,
+              logarithmicDepthBuffer: false,
+            }}
             dpr={[1, 2]}
             onCreated={({ gl }) => {
               gl.shadowMap.enabled = true;
@@ -107,7 +117,7 @@ export default function EmotionPlanetScene({
             }}
           >
             <Suspense fallback={null}>
-              <EmotionPlanet onLoaded={handleLoaded} emotionId={emotionId} isSparkles={isSparkles} />
+              <EmotionPlanet onLoaded={handleLoaded} emotionId={emotionId} isSparkles={isSparkles} isLarge={isLarge} />
             </Suspense>
           </Canvas>
         </div>
@@ -115,17 +125,25 @@ export default function EmotionPlanetScene({
 
       {/* Glow Effect */}
       {isGlow && (
-        <EmotionPlanetGlow emotionId={emotionId} isVisible={isLoaded} width={displayWidth} height={displayHeight} />
+        <EmotionPlanetGlow
+          emotionId={emotionId}
+          isVisible={isLoaded}
+          width={displayWidth}
+          height={displayHeight}
+          isLarge={isLarge}
+        />
       )}
 
       {/* Loading Indicator */}
-      <EmotionPlanetLoading
-        emotionId={emotionId}
-        isVisible={!isLoaded}
-        width={loadingWidth}
-        height={loadingHeight}
-        isShowText={isLoadingShowText}
-      />
+      {!isLarge && (
+        <EmotionPlanetLoading
+          emotionId={emotionId}
+          isVisible={!isLoaded}
+          width={loadingWidth}
+          height={loadingHeight}
+          isShowText={isLoadingShowText}
+        />
+      )}
     </div>
   );
 }

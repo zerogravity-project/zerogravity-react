@@ -13,7 +13,7 @@ export default function MomentEmotionSection() {
   const selectedDateString = formatDateString(selectedDate);
 
   return (
-    <section className="flex min-h-[320px] w-full flex-col items-center border-t border-[var(--gray-3)] px-5 pt-6 pb-8">
+    <section className="flex min-h-[320px] w-full flex-shrink-0 flex-col items-center border-t border-[var(--gray-3)] px-5 pt-6 pb-8">
       <div className="mb-4 flex w-full items-center justify-between">
         <Heading as="h2" size="4" weight="medium">
           Moment Emotion

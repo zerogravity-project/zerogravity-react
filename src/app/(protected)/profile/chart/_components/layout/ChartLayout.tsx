@@ -29,7 +29,7 @@ export function ChartLayout() {
 
   if (isMobile) {
     return (
-      <div className="flex h-full min-h-0 w-full min-w-0 flex-col gap-3">
+      <div className="flex h-full min-h-0 w-full min-w-0 flex-shrink-0 flex-col gap-3">
         <EmotionCountChart datasets={mockCountData} />
         <EmotionReasonsChart />
         <EmotionLevelChart datasets={mockLevelData} />

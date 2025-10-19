@@ -41,7 +41,7 @@ export default function DailyEmotionSection() {
         {emotionId && (
           <>
             <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />
-            <Text color={emotionColor} size="7" weight="light">
+            <Text color={emotionColor} size="7" weight="regular">
               {EMOTION_STEPS[emotionId].type}
             </Text>
             <div className="mt-3 flex flex-wrap justify-center gap-1.5">

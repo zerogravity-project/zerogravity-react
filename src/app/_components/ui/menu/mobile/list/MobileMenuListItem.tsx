@@ -28,8 +28,8 @@ export default function MobileMenuListItem({ href, label }: MobileMenuListItemPr
           className={cn(
             'flex w-full items-center gap-4 px-5 py-[18px] transition-colors',
             isActive
-              ? 'bg-transparent text-[var(--accent-9)] hover:bg-[var(--accent-a10)]'
-              : 'bg-transparent text-[var(--gray-9)] hover:bg-[var(--accent-a3)] hover:text-[var(--accent-9)]'
+              ? 'bg-transparent text-[var(--accent-9)]'
+              : 'cursor-pointer bg-transparent text-[var(--gray-9)] hover:bg-[var(--accent-a3)] hover:text-[var(--accent-9)]'
           )}
         >
           {/* <Icon size={24}>{icon}</Icon> */}

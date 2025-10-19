@@ -5,7 +5,12 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useRef } from 'react';
 
 import { DAYS_OF_WEEK } from '@/app/(protected)/profile/calendar/_constants/calendar.constants';
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
+import { useTheme } from '@/app/_components/providers/ThemeProvider';
+import {
+  EMOTION_COLORS_MAP,
+  EMOTION_COLORS_MAP_ALPHA,
+  EMOTION_STEPS,
+} from '@/app/_components/ui/emotion/_constants/emotion.constants';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
@@ -21,6 +26,7 @@ interface EmotionLevelChartProps {
 }
 
 export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
+  const { accentColor } = useTheme();
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
@@ -38,8 +44,8 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
     }
 
     const labels = [...DAYS_OF_WEEK];
-    const barColor = '#0077FF3A';
-    const lineColor = '#0090FF';
+    const barColor = EMOTION_COLORS_MAP_ALPHA[accentColor as keyof typeof EMOTION_COLORS_MAP_ALPHA];
+    const lineColor = EMOTION_COLORS_MAP[accentColor as keyof typeof EMOTION_COLORS_MAP];
     const averageLineColor = '#f59e0b';
 
     const chartData = {

@@ -29,13 +29,21 @@ const DEFAULT_SPARKLES_PROPS = {
   speed: 0.4,
 };
 
+const DEFAULT_LARGE_SPARKLES_PROPS = {
+  count: 50,
+  scale: 7,
+  size: 8,
+  speed: 0.05,
+};
+
 interface EmotionPlanetProps {
   emotionId: number;
   onLoaded: () => void;
   isSparkles?: boolean;
+  isLarge?: boolean;
 }
 
-export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true }: EmotionPlanetProps) {
+export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true, isLarge = false }: EmotionPlanetProps) {
   useEffect(() => {
     // When Suspense is resolved, this component will be mounted, so send the loading complete signal
     onLoaded();
@@ -57,6 +65,8 @@ export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true }: Emotio
       />
       {/* Wobble Mesh */}
       <WobbleMesh
+        radius={2.5}
+        subdivisions={isLarge ? 100 : 50}
         positionFrequency={EMOTION_STEPS[emotionId].style.planet.positionFrequency}
         timeFrequency={EMOTION_STEPS[emotionId].style.planet.timeFrequency}
         warpPositionFrequency={EMOTION_STEPS[emotionId].style.planet.warpPositionFrequency}
@@ -69,10 +79,10 @@ export function EmotionPlanet({ emotionId, onLoaded, isSparkles = true }: Emotio
       />
       {isSparkles && (
         <Sparkles
-          count={DEFAULT_SPARKLES_PROPS.count}
-          scale={DEFAULT_SPARKLES_PROPS.scale}
-          size={DEFAULT_SPARKLES_PROPS.size}
-          speed={DEFAULT_SPARKLES_PROPS.speed}
+          count={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.count : DEFAULT_SPARKLES_PROPS.count}
+          scale={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.scale : DEFAULT_SPARKLES_PROPS.scale}
+          size={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.size : DEFAULT_SPARKLES_PROPS.size}
+          speed={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.speed : DEFAULT_SPARKLES_PROPS.speed}
         />
       )}
       {/* Controller */}
