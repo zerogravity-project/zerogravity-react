@@ -7,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Navigation />
+      <Navigation className="fixed top-0" />
       {children}
     </>
   );

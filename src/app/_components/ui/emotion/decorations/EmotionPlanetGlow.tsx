@@ -2,6 +2,8 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 
+import { cn } from '@/app/_utils/styleUtils';
+
 import { EMOTION_STEPS } from '../_constants/emotion.constants';
 
 interface EmotionPlanetGlowProps {
@@ -9,9 +11,13 @@ interface EmotionPlanetGlowProps {
   isVisible: boolean;
   width?: number | string;
   height?: number | string;
+  isLarge?: boolean;
 }
 
-export function EmotionPlanetGlow({ emotionId, isVisible, width, height }: EmotionPlanetGlowProps) {
+export function EmotionPlanetGlow({ emotionId, isVisible, width, height, isLarge = false }: EmotionPlanetGlowProps) {
+  const resolvedWidth = isLarge && typeof width === 'number' ? width * 0.8 : width || '100%';
+  const resolvedHeight = isLarge && typeof height === 'number' ? height * 0.8 : height || '100%';
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -24,10 +30,10 @@ export function EmotionPlanetGlow({ emotionId, isVisible, width, height }: Emoti
           style={{ zIndex: 0 }}
         >
           <div
-            className="translate-z-0 rounded-[9999px] blur-[22px]"
+            className={cn('translate-z-0 rounded-[9999px] blur-[22px]')}
             style={{
-              width: width ?? '100%',
-              height: height ?? '100%',
+              width: resolvedWidth,
+              height: resolvedHeight,
               background: `radial-gradient(circle, var(--${EMOTION_STEPS[emotionId].color}-a9) 0%, var(--${EMOTION_STEPS[emotionId].color}-a5) 40%, var(--${EMOTION_STEPS[emotionId].color}-a3) 65%, var(--${EMOTION_STEPS[emotionId].color}-a1) 70%)`,
             }}
           />
