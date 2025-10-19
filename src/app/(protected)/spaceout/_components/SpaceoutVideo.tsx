@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
+import { Text } from '@radix-ui/themes';
 import { useEffect, useRef, useState } from 'react';
 
 import { getTodayString } from '@/app/_utils/dateTimeUtils';
@@ -64,7 +65,7 @@ export default function SpaceoutVideo({
 
   return (
     <div
-      className={cn('relative h-screen w-screen overflow-hidden', className)}
+      className={cn('relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]', className)}
       onClick={handleUserInteraction}
       onTouchStart={handleUserInteraction}
     >
@@ -86,17 +87,16 @@ export default function SpaceoutVideo({
         onError={onError}
       />
 
-      {/* Video progress indicator */}
-      <div className="absolute top-4 left-4 z-10 rounded bg-black/50 px-3 py-1 text-white">
-        {currentVideoIndex + 1} / {videos.length}
-      </div>
-
       {/* Sound activation guide */}
       {!isUserInteracted && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/30">
-          <div className="rounded-lg bg-black/70 px-6 py-4 text-center text-white">
-            <p className="mb-2 text-lg font-medium">Touch to enable sound</p>
-            <p className="text-sm text-gray-300">Click or tap the screen</p>
+          <div className="flex flex-col gap-1 rounded-lg bg-black/70 px-6 py-4 text-center text-white">
+            <Text size="3" weight="regular">
+              Touch to enable sound
+            </Text>
+            <Text size="2" weight="regular" color="gray">
+              Click or tap the screen
+            </Text>
           </div>
         </div>
       )}
