@@ -26,7 +26,7 @@ export default function CalendarHeader() {
   return (
     <header className="mb-6 flex w-full flex-col items-center px-5 pt-6">
       <div className="mb-4 flex w-full items-center justify-between">
-        <Heading size="6" weight="bold">
+        <Heading size="6" weight="medium">
           {monthName}
         </Heading>
         <div className="flex items-center gap-2">
@@ -73,17 +73,18 @@ export default function CalendarHeader() {
           return (
             <div key={index} className="relative flex items-center justify-center">
               <Button
+                size="3"
                 onClick={() => setSelectedDate(date)}
                 variant={isSelectedDate ? 'solid' : isTodayDate ? 'soft' : randomEmotionIds[0] ? 'ghost' : 'ghost'}
                 color={randomEmotionIds[0] ? EMOTION_STEPS[randomEmotionIds[0].emotionId].color : undefined}
-                className={cn(`!h-9 !w-9 !rounded-[9999px]`)}
+                className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`)}
               >
                 {date.getDate()}
               </Button>
-              <div
+              {/* <div
                 style={{ backgroundColor: `var(--${EMOTION_STEPS[randomEmotionIds[0].emotionId].color}-a9)` }}
                 className="absolute -bottom-3 h-1 w-1 rounded-[9999px]"
-              />
+              /> */}
             </div>
           );
         })}
