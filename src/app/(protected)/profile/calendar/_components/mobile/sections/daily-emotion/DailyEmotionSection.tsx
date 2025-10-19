@@ -41,8 +41,8 @@ export default function DailyEmotionSection() {
             href={`/record/daily?date=${selectedDateString}`}
             className="z-1 mt-6 flex w-full flex-col items-center"
           >
-            <Button color={emotionColor} variant="solid" size="4" className="!w-full !gap-[6px]">
-              <Icon>add</Icon> Add Daily Emotion
+            <Button color={emotionColor} variant="solid" size="4" className="!w-full !gap-[6px] !font-normal">
+              <Icon size={20}>add</Icon> Add Daily Emotion
             </Button>
           </Link>
         </>
@@ -61,8 +61,14 @@ export default function DailyEmotionSection() {
               </Badge>
             ))}
           </div>
-          <Button color="gray" variant="soft" size="4" className="!mt-6 !w-full" onClick={() => setIsDrawerOpen(true)}>
-            See Detail <Icon>arrow_forward</Icon>
+          <Button
+            color="gray"
+            variant="soft"
+            size="4"
+            className="!mt-6 !w-full !font-normal"
+            onClick={() => setIsDrawerOpen(true)}
+          >
+            See Detail <Icon size={20}>arrow_forward</Icon>
           </Button>
         </>
       )}

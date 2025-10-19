@@ -21,10 +21,11 @@ import ProfileDropdown from './profile/ProfileDropdown';
 
 interface TopNavigationProps {
   className?: string;
+  background?: boolean;
   border?: boolean;
 }
 
-export default function TopNavigation({ className, border }: TopNavigationProps) {
+export default function TopNavigation({ className, background, border }: TopNavigationProps) {
   const { data: session, status } = useSession();
   const isSm = useIsSm();
 
@@ -46,7 +47,8 @@ export default function TopNavigation({ className, border }: TopNavigationProps)
   return (
     <NavigationMenu.Root
       className={cn(
-        'h-topnav-height relative z-1000 flex w-full flex-1 items-center justify-between bg-[var(--gray-1)] px-5 sm:px-6',
+        'h-topnav-height relative z-1000 flex w-full flex-1 items-center justify-between px-5 sm:px-6',
+        background && `bg-[var(--gray-1)]`,
         border && 'border-b border-[var(--gray-3)]',
         className
       )}
