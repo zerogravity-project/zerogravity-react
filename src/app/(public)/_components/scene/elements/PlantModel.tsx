@@ -21,7 +21,7 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
   // Model Position, Rotation Settings GUI
   const { positionX, positionY, positionZ, rotationX, rotationY, rotationZ } = useControls('PlantModel', {
     positionX: { value: 0, min: -10, max: 10 },
-    positionY: { value: -0.08, min: -10, max: 10, step: 0.01 },
+    positionY: { value: -0.1, min: -10, max: 10, step: 0.01 },
     positionZ: { value: 0, min: -10, max: 10 },
     rotationX: { value: 0.2, min: -Math.PI, max: Math.PI },
     rotationY: { value: 1.7, min: -Math.PI, max: Math.PI },
@@ -29,12 +29,16 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
   });
 
   // GLTF Model Load
-  const { scene } = useGLTF('/models/potted-plant/potted_plant_04_4k.gltf');
+  const { scene } = useGLTF('/models/apple/food_apple_01_4k.gltf');
 
   // Get Context State Update Functions
   const {
     hovered,
     clickedForThreeSeconds,
+    animationStarted,
+    animationCompleted,
+    setAnimationStarted,
+    setAnimationCompleted,
     setHovered,
     setClicked,
     setDomCoords,
@@ -49,31 +53,56 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
   const [currentY, setCurrentY] = useState(positionY);
   const [targetRotationY, setTargetRotationY] = useState(rotationY);
   const [currentRotationY, setCurrentRotationY] = useState(rotationY);
+  const [targetRotationX, setTargetRotationX] = useState(rotationX);
+  const [currentRotationX, setCurrentRotationX] = useState(rotationX);
+  // const [hasNavigated, setHasNavigated] = useState(false);
+  // const [animationStarted, setAnimationStarted] = useState(false);
 
   // Set Target Y Position Based on Click State
   useEffect(() => {
     if (clickedForThreeSeconds) {
       setHovered(false);
       setTimeout(() => {
-        router.push('/spaceout/main');
+        setTargetY(-0.02);
+        setTargetRotationY(rotationY + Math.PI * 2);
+        setTargetRotationX(0);
+        setAnimationStarted(true);
         // Increase Height if Clicked for 3 Seconds
-        // setTargetY(positionY + 0.5);
-        // setTargetRotationY(rotationY + Math.PI * 2);
       }, 1000);
     } else {
       // Original Position if Normal Click or Click Release
       setTargetY(positionY);
       setTargetRotationY(rotationY);
+      setAnimationStarted(false);
     }
-  }, [setHovered, positionY, rotationY, clickedForThreeSeconds, router]);
+  }, [
+    setHovered,
+    positionY,
+    rotationY,
+    clickedForThreeSeconds,
+    router,
+    setTargetY,
+    setTargetRotationY,
+    setTargetRotationX,
+    setAnimationStarted,
+  ]);
 
   // Smooth Animation
-  useFrame((_, delta) => {
-    const lerpFactor = 0.5 * delta; // Animation Speed Adjustment
-    const newY = THREE.MathUtils.lerp(currentY, targetY, lerpFactor);
-    const newRotationY = THREE.MathUtils.lerp(currentRotationY, targetRotationY, lerpFactor);
+  useFrame(() => {
+    const positionLerpFactor = 0.01; // Animation Speed Adjustment (slower)
+    const rotationYLerpFactor = 0.02; // Slower rotation
+    const rotationXLerpFactor = 0.004; // Slower rotation
+    const newY = THREE.MathUtils.lerp(currentY, targetY, positionLerpFactor);
+    const newRotationY = THREE.MathUtils.lerp(currentRotationY, targetRotationY, rotationYLerpFactor);
+    const newRotationX = THREE.MathUtils.lerp(currentRotationX, targetRotationX, rotationXLerpFactor);
     setCurrentY(newY);
     setCurrentRotationY(newRotationY);
+    setCurrentRotationX(newRotationX);
+
+    // Check if lerp animation is complete and navigate
+    if (animationStarted && Math.abs(newRotationY - targetRotationY) < 6 && !animationCompleted) {
+      setAnimationCompleted(true);
+    }
 
     // Calculate Progress (Only When Clicked)
     if (pointerDownTimeRef.current) {
@@ -143,25 +172,47 @@ export const PlantModel = forwardRef<THREE.Group, PlantModelProps>(({}, ref) => 
     setProgress(0);
   };
 
+  const onTouchStart = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onPointerDown(e);
+  };
+
+  const onTouchMove = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onPointerMove(e);
+  };
+
+  const onTouchEnd = (e: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onPointerUp(e);
+  };
+
   useEffect(() => {
-    if (hovered) {
+    if (!animationCompleted && !hovered) {
       document.body.style.cursor = 'none';
     } else {
       document.body.style.cursor = 'auto';
     }
-  }, [hovered]);
+  }, [hovered, animationCompleted]);
 
   return (
     <primitive
       ref={ref}
       object={scene}
       position={[positionX, currentY, positionZ]}
-      rotation={[rotationX, currentRotationY, rotationZ]}
+      rotation={[currentRotationX, currentRotationY, rotationZ]}
+      scale={[2, 2, 2]}
       onPointerOver={onPointerOver}
       onPointerMove={onPointerMove}
       onPointerOut={onPointerOut}
       onPointerDown={onPointerDown}
       onPointerUp={onPointerUp}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
       receiveShadow
       castShadow
     />

@@ -7,12 +7,16 @@ interface MouseEventContextType {
   hovered: boolean;
   clicked: boolean;
   clickedForThreeSeconds: boolean;
-  progress: number;
+  animationStarted: boolean;
+  animationCompleted: boolean;
   domCoords: { x: number; y: number };
+  progress: number;
   setHovered: (isHovered: boolean) => void;
-  setDomCoords: (coords: { x: number; y: number }) => void;
   setClicked: (isClicked: boolean) => void;
   setClickedForThreeSeconds: (isClickedForThreeSeconds: boolean) => void;
+  setAnimationStarted: (isAnimationStarted: boolean) => void;
+  setAnimationCompleted: (isAnimationCompleted: boolean) => void;
+  setDomCoords: (coords: { x: number; y: number }) => void;
   setProgress: (progress: number) => void;
 }
 
@@ -24,8 +28,10 @@ export function MouseEventProvider({ children }: { children: React.ReactNode }) 
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [domCoords, setDomCoords] = useState({ x: 0, y: 0 });
-  const [clickedForThreeSeconds, setClickedForThreeSeconds] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [clickedForThreeSeconds, setClickedForThreeSeconds] = useState(false);
+  const [animationStarted, setAnimationStarted] = useState(false);
+  const [animationCompleted, setAnimationCompleted] = useState(false);
 
   // Wrap functions in useMemo/useCallback for performance optimization
   const contextValue = useMemo(
@@ -33,6 +39,8 @@ export function MouseEventProvider({ children }: { children: React.ReactNode }) 
       hovered,
       clicked,
       clickedForThreeSeconds,
+      animationStarted,
+      animationCompleted,
       progress,
       domCoords,
       setHovered,
@@ -40,8 +48,10 @@ export function MouseEventProvider({ children }: { children: React.ReactNode }) 
       setDomCoords,
       setClickedForThreeSeconds,
       setProgress,
+      setAnimationStarted,
+      setAnimationCompleted,
     }),
-    [hovered, clicked, clickedForThreeSeconds, progress, domCoords]
+    [hovered, clicked, clickedForThreeSeconds, animationStarted, animationCompleted, progress, domCoords]
   );
 
   return <MouseEventContext.Provider value={contextValue}>{children}</MouseEventContext.Provider>;

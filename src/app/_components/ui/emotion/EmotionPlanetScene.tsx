@@ -99,7 +99,15 @@ export default function EmotionPlanetScene({
             style={{ width: resolvedWidth, height: resolvedHeight }}
             shadows
             camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
-            gl={{ alpha: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
+            gl={{
+              alpha: true,
+              toneMapping: THREE.ACESFilmicToneMapping,
+              toneMappingExposure: 1,
+              powerPreference: 'high-performance',
+              precision: 'highp', // 높은 정밀도
+              preserveDrawingBuffer: false,
+              logarithmicDepthBuffer: false,
+            }}
             dpr={[1, 2]}
             onCreated={({ gl }) => {
               gl.shadowMap.enabled = true;
