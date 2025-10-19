@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { addDays, format, startOfWeek } from 'date-fns';
 
 /**
  * Get today's date in YYYY-MM-DD format
@@ -18,13 +18,13 @@ export function formatDateString(date: Date): string {
  * Get a date string data
  */
 export function getDateStringData(date: Date) {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const weekday = date.toLocaleDateString('ja-JP', { weekday: 'long' });
+  const year = format(date, 'yyyy');
+  const month = format(date, 'MMMM'); // Full month name in English
+  const day = format(date, 'dd');
+  const weekday = format(date, 'EEEE'); // Full weekday name in English
 
   return {
-    year: year.toString(),
+    year: year,
     month: month,
     day: day,
     weekday: weekday,
@@ -44,4 +44,27 @@ export function getTimeStringData(date: Date) {
     minutes: minutes.toString().padStart(2, '0'),
     seconds: seconds.toString().padStart(2, '0'),
   };
+}
+
+/**
+ * Check if two dates are the same day
+ */
+export function isSameDay(date1: Date, date2: Date): boolean {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
+
+/**
+ * Get dates for a week containing the given date
+ */
+export function getWeekDates(date: Date): Date[] {
+  const start = startOfWeek(date, { weekStartsOn: 0 }); // Sunday start
+  const weekDates = [];
+  for (let i = 0; i < 7; i++) {
+    weekDates.push(addDays(start, i));
+  }
+  return weekDates;
 }

@@ -1,4 +1,4 @@
-import { MONTH_NAMES } from './constants';
+import { MONTH_NAMES } from '../_constants/calendar.constants';
 
 /**
  * Get information about a specific month
@@ -35,35 +35,6 @@ export function getWeekOfMonth(date: Date) {
   const firstDayOfWeek = firstDayOfMonth.getDay();
   const dayOfMonth = date.getDate();
   return Math.ceil((dayOfMonth + firstDayOfWeek) / 7);
-}
-
-/**
- * Check if two dates are the same day
- */
-export function isSameDay(date1: Date, date2: Date) {
-  return (
-    date1.getFullYear() === date2.getFullYear() &&
-    date1.getMonth() === date2.getMonth() &&
-    date1.getDate() === date2.getDate()
-  );
-}
-
-/**
- * Get dates for a week containing the given date
- */
-export function getWeekDates(date: Date): Date[] {
-  const startOfWeek = new Date(date);
-  const day = startOfWeek.getDay();
-  const diff = startOfWeek.getDate() - day;
-  startOfWeek.setDate(diff);
-
-  const weekDates = [];
-  for (let i = 0; i < 7; i++) {
-    const currentDate = new Date(startOfWeek);
-    currentDate.setDate(startOfWeek.getDate() + i);
-    weekDates.push(currentDate);
-  }
-  return weekDates;
 }
 
 /**

@@ -2,12 +2,12 @@ import { Button, Heading, Text } from '@radix-ui/themes';
 import { useMemo } from 'react';
 
 import Icon from '@/app/_components/ui/icon/Icon';
+import { getWeekDates } from '@/app/_utils/dateTimeUtils';
 import { cn } from '@/app/_utils/styleUtils';
 
-import { EMOTION_STEPS } from '../../../../../../_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '../../../../../../_components/ui/emotion/_constants/emotion.constants';
+import { DAYS_OF_WEEK } from '../../../_constants/calendar.constants';
 import { useCalendar } from '../../../_contexts/CalendarContext';
-import { DAYS_OF_WEEK } from '../../../_utils/constants';
-import { getWeekDates } from '../../../_utils/dateUtils';
 
 export default function CalendarHeader() {
   const randomEmotionIds = useMemo(() => {

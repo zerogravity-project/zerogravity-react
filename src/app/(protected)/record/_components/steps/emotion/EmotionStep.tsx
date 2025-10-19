@@ -3,7 +3,7 @@
 import { Button, Heading, Text } from '@radix-ui/themes';
 
 import { EmotionPlanetScene } from '@/app/_components/ui/emotion';
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import { Icon } from '@/app/_components/ui/icon';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';

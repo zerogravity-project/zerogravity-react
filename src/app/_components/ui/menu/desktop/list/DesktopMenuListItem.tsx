@@ -33,14 +33,14 @@ export default function DesktopMenuListItem({ href, icon, label }: DesktopMenuLi
       <Link href={href}>
         <button
           className={cn(
-            'flex w-full items-center gap-4 rounded-md p-2 transition-colors',
+            'flex w-full cursor-pointer items-center gap-4 rounded-md p-2 transition-colors',
             isActive
               ? 'bg-[var(--accent-a9)] text-[var(--text-default)] hover:bg-[var(--accent-a10)]'
               : 'bg-transparent text-[var(--gray-9)] hover:bg-[var(--accent-a3)] hover:text-[var(--accent-9)]'
           )}
         >
           <Icon size={20}>{icon}</Icon>
-          <Text size="2" weight={isActive ? 'regular' : 'light'}>
+          <Text size="2" weight={isActive ? 'medium' : 'regular'}>
             {label}
           </Text>
         </button>

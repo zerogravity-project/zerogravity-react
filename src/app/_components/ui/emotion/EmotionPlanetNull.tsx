@@ -5,8 +5,8 @@ import { motion } from 'motion/react';
 import { useSquareResize } from '@/app/_hooks/useSquareResize';
 import { cn } from '@/app/_utils/styleUtils';
 
+import { EMOTION_STEPS } from './_constants/emotion.constants';
 import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
-import { EMOTION_STEPS } from './Emotion.type';
 
 const CIRCLE_RADIUS = 45;
 

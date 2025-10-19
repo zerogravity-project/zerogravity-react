@@ -3,7 +3,7 @@
 import { Badge, Text } from '@radix-ui/themes';
 import { useMemo } from 'react';
 
-import { EMOTION_STEPS } from '@/app/_components/ui/emotion/Emotion.type';
+import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
 import EmotionPlanetImage from '@/app/_components/ui/emotion/EmotionPlanetImage';
 
 import { formatTime } from '../../../../_utils/dateUtils';
