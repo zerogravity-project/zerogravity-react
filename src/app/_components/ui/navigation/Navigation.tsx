@@ -73,7 +73,7 @@ export default function TopNavigation({ className, background, border }: TopNavi
         )}
 
         {/* Profile */}
-        {!isAuthenticated && (
+        {isAuthenticated && (
           <>
             {!isSm && <ProfileDropdown userName={userName} profileImage={profileImage} className="max-mobile:hidden" />}
             {isSm && (
@@ -92,7 +92,7 @@ export default function TopNavigation({ className, background, border }: TopNavi
             )}
           </>
         )}
-        {isAuthenticated && (
+        {!isAuthenticated && (
           <>
             <RadixLink asChild>
               <Link href="/login">

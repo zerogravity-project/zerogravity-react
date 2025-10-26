@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 
+import { MENU_ITEMS } from '@/app/_components/ui/menu/_constants/menu.constants';
 import { cn } from '@/app/_utils/styleUtils';
-import { MENU_ITEMS } from '@/lib/navigation/constants';
 
 import MobileMenuHeader from './header/MobileMenuHeader';
 import MobileMenuList from './list/MobileMenuList';

@@ -1,9 +1,9 @@
 'use client';
 
-import { SessionProvider } from 'next-auth/react';
+import { ModalProvider } from '../ui/modal/_contexts/ModalContext';
 
-import { ModalProvider } from '../ui/modal/_context/ModalContext';
-
+import NextAuthSessionProvider from './NextAuthSessionProvider';
+import TanstackQueryProvider from './TanstackQueryProvider';
 import ThemeProvider from './ThemeProvider';
 
 interface ClientProvidersProps {
@@ -12,12 +12,14 @@ interface ClientProvidersProps {
 
 export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
-    <SessionProvider>
-      <ThemeProvider>
-        <ModalProvider>
-          <main className="relative w-full">{children}</main>
-        </ModalProvider>
-      </ThemeProvider>
-    </SessionProvider>
+    <NextAuthSessionProvider>
+      <TanstackQueryProvider>
+        <ThemeProvider>
+          <ModalProvider>
+            <main className="relative w-full">{children}</main>
+          </ModalProvider>
+        </ThemeProvider>
+      </TanstackQueryProvider>
+    </NextAuthSessionProvider>
   );
 }

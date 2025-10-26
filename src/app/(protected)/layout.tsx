@@ -1,14 +1,19 @@
-// import { redirect } from 'next/navigation';
-// import { getServerSession } from 'next-auth';
-import { ReactNode } from 'react';
-// import { authOptions } from '@/lib/auth';
+import { redirect } from 'next/navigation';
 
-// 임시: 인증 우회 (개발용)
+import { ReactNode } from 'react';
+
+import { auth } from '../../lib/auth';
+
+/**
+ * Protected layout with Auth.js v5
+ * Redirects to login if user is not authenticated
+ */
 export default async function ProtectedLayout({ children }: { children: ReactNode }) {
-  // const session = await getServerSession(authOptions);
-  // if (!session) {
-  //   redirect('/login');
-  // }
+  const session = await auth();
+
+  if (!session) {
+    redirect('/login');
+  }
 
   return <>{children}</>;
 }
