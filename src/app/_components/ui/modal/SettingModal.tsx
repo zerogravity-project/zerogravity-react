@@ -1,18 +1,20 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
+
 import { Button, Separator, Text, TextField } from '@radix-ui/themes';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 import { useIsMobile } from '@/app/_hooks/useMediaQuery';
 
 import { Icon } from '../icon';
 
-import { useModal } from './_context/ModalContext';
+import { useModal } from './_contexts/ModalContext';
 import { Modal } from './Modal';
 
 export function SettingModal() {
+  const pathname = usePathname();
   const { closeModal } = useModal();
-
   const { data: session } = useSession();
   const user = session?.user;
   const displayName = user?.name ?? 'ZeroGravity User';
@@ -38,7 +40,16 @@ export function SettingModal() {
 
         {/* Account Actions Section */}
         <SettingSection title="Account">
-          <SettingAction label="Logout" buttonText="Logout" variant="soft" color="gray" />
+          <SettingAction
+            label="Logout"
+            buttonText="Logout"
+            variant="soft"
+            color="gray"
+            onClick={() => {
+              signOut({ callbackUrl: `/login?callbackUrl=${encodeURIComponent(pathname)}` });
+              closeModal();
+            }}
+          />
           <SettingAction label="Delete Account" buttonText="Delete" variant="soft" color="red" />
         </SettingSection>
       </div>

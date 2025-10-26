@@ -1,4 +1,4 @@
-import { EmotionStep } from '../_types/emotion.type';
+import { EmotionStep } from '../_types/emotion.types';
 
 export const EMOTION_KEYS = [
   'very_negative',

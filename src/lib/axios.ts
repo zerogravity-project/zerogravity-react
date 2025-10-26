@@ -1,25 +1,30 @@
 import axios from 'axios';
+import type { Session } from 'next-auth';
 import { getSession, signOut } from 'next-auth/react';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const axiosInstance = axios.create({
-  baseURL: `${API_BASE_URL}/api-zerogravity`,
+  baseURL: `${API_BASE_URL}`,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// 요청 인터셉터
+/**
+ * Request interceptor
+ * Add backend JWT to Authorization header
+ */
 axiosInstance.interceptors.request.use(
   async config => {
-    // NextAuth 세션에서 토큰 가져오기 (필요시)
     const session = await getSession();
-    if (session?.accessToken) {
-      // 필요하다면 Authorization 헤더에 토큰 추가
-      // config.headers.Authorization = `Bearer ${session.accessToken}`
+
+    // Add backend JWT if available
+    if ((session as Session & { backendJwt?: string }).backendJwt) {
+      config.headers.Authorization = `Bearer ${(session as Session & { backendJwt?: string }).backendJwt}`;
     }
+
     return config;
   },
   error => {
@@ -27,18 +32,22 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// 응답 인터셉터
+/**
+ * Response interceptor
+ * Handle 401 errors and redirect to login
+ */
 axiosInstance.interceptors.response.use(
   response => {
     return response;
   },
   async error => {
+    // Handle authentication errors
     if (error.response?.status === 401) {
-      // eslint-disable-next-line no-console
-      console.log('인증 에러가 발생했습니다.');
-      // NextAuth 세션 무효화 및 로그인 페이지로 리다이렉트
+      console.error('[Axios] Unauthorized - signing out');
+      // Invalidate session and redirect to login page
       await signOut({ callbackUrl: '/login' });
     }
+
     return Promise.reject(error);
   }
 );

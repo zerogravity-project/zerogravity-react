@@ -1,6 +1,6 @@
 import { usePathname } from 'next/navigation';
 
-import { MenuItem } from '@/lib/navigation/types';
+import { MenuItem } from '@/app/_components/ui/menu/_types/menu.types';
 
 import MobileMenuListItem from './MobileMenuListItem';
 

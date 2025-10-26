@@ -1,13 +1,15 @@
-'use client';
-
-import { Button, Text } from '@radix-ui/themes';
+import { Text } from '@radix-ui/themes';
 
 import { LogoSvg } from '@/app/_components/ui';
-import { useIsMobile } from '@/app/_hooks/useMediaQuery';
 
+import LoginButtons from './_components/LoginButtons';
+
+/**
+ * Login page
+ * Implemented as Next.js 15 Server Component
+ * Login buttons separated into Client Component for interaction handling
+ */
 export default function LoginPage() {
-  const isMobile = useIsMobile();
-
   return (
     <section className="pt-topnav-height flex h-[100dvh] w-[100dvw] items-center justify-center bg-[var(--background-dark)]">
       <div className="flex h-full w-full items-center justify-center px-5">
@@ -18,14 +20,7 @@ export default function LoginPage() {
               Meditate and record your emotions
             </Text>
           </div>
-          <div className="flex flex-col gap-4">
-            <Button color="amber" size={isMobile ? '4' : '3'} variant="soft">
-              Login With Kakao
-            </Button>
-            <Button color="blue" size={isMobile ? '4' : '3'} variant="soft">
-              Login With Google
-            </Button>
-          </div>
+          <LoginButtons />
         </div>
       </div>
     </section>
