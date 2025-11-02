@@ -4,8 +4,8 @@ import { Link as RadixLink, Text } from '@radix-ui/themes';
 
 interface SectionTitleProps {
   title: string;
-  linkText: string;
-  href: string;
+  linkText?: string;
+  href?: string;
 }
 
 export default function SectionTitle({ title, linkText, href }: SectionTitleProps) {
@@ -15,9 +15,11 @@ export default function SectionTitle({ title, linkText, href }: SectionTitleProp
         {title}
       </Text>
 
-      <RadixLink asChild className="!text-[13px] !leading-[17px]">
-        <Link href={href}>{linkText}</Link>
-      </RadixLink>
+      {href && linkText && (
+        <RadixLink asChild className="!text-[13px] !leading-[17px]">
+          <Link href={href}>{linkText}</Link>
+        </RadixLink>
+      )}
     </div>
   );
 }

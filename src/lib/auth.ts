@@ -54,12 +54,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }),
           });
 
-          if (response.ok) {
-            const data = await response.json();
-            token.backendJwt = data.token; // Backend JWT (contains userId)
+          if (!response.ok) {
+            console.error('Backend verification failed');
           }
+          // JWT is already set in cookie - no additional processing needed
         } catch (error) {
-          console.error('[JWT Callback] Backend verification failed:', error);
+          console.error('[JWT Callback] Error:', error);
         }
       }
 
@@ -77,7 +77,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     session: async ({ session, token }: any) => {
-      session.backendJwt = token.backendJwt;
       session.accessToken = token.accessToken;
       session.provider = token.provider;
       return session;
