@@ -9,7 +9,7 @@ import { useTheme } from '@/app/_components/providers/ThemeProvider';
 import { Footer } from '@/app/_components/ui';
 import { EmotionPlanetScene } from '@/app/_components/ui/emotion';
 import { EMOTION_COLORS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
-import { EmotionColor } from '@/app/_components/ui/emotion/_types/emotion.type';
+import { EmotionColor } from '@/app/_components/ui/emotion/_types/emotion.types';
 import { Icon } from '@/app/_components/ui/icon';
 import PageLoading from '@/app/_components/ui/loading/PageLoading';
 import { useIsLg } from '@/app/_hooks/useMediaQuery';

@@ -1,25 +1,38 @@
-// 임시로 빈 미들웨어 (인증 비활성화)
-export default function middleware() {
-  // 인증 없이 모든 페이지 접근 허용
-}
+import type { NextRequest } from 'next/server';
 
-// 원래 인증 미들웨어 (나중에 활성화할 때 주석 해제)
-// import { withAuth } from 'next-auth/middleware';
+import { auth } from './lib/auth';
 
-// export default withAuth(
-//   function middleware() {
-//     // Additional middleware logic can be added here when needed.
-//   },
-//   {
-//     callbacks: {
-//       authorized: ({ token }) => !!token,
-//     },
-//     pages: {
-//       signIn: '/login',
-//     },
-//   }
-// );
+/**
+ * Auth.js v5 Middleware
+ * Protects routes and redirects to login with callbackUrl
+ */
+export default auth((req: NextRequest & { auth: any }) => {
+  const isLoggedIn = !!req.auth;
+  const isLoginPage = req.nextUrl.pathname === '/login';
 
-// export const config = {
-//   matcher: ['/spaceout/:path*', '/record/:path*', '/profile/:path*'],
-// };
+  // If not logged in and trying to access protected route
+  if (!isLoggedIn && !isLoginPage) {
+    const loginUrl = new URL('/login', req.nextUrl.origin);
+    // Add the original path as callbackUrl
+    loginUrl.searchParams.set('callbackUrl', req.nextUrl.pathname);
+    return Response.redirect(loginUrl);
+  }
+
+  // If logged in and trying to access login page, redirect to callbackUrl or home
+  if (isLoggedIn && isLoginPage) {
+    const callbackUrl = req.nextUrl.searchParams.get('callbackUrl') || '/';
+    return Response.redirect(new URL(callbackUrl, req.nextUrl.origin));
+  }
+});
+
+/**
+ * Configure which routes to protect
+ */
+export const config = {
+  matcher: [
+    '/login', // Include login page to redirect logged-in users
+    '/spaceout/:path*', // Spaceout (meditation/relaxation) pages
+    '/record/:path*', // Emotion recording pages
+    '/profile/:path*', // Profile pages
+  ],
+};

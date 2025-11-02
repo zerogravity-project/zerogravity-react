@@ -6,19 +6,28 @@ import { EmotionCountChart } from '../charts/EmotionCountChart';
 import { EmotionLevelChart } from '../charts/EmotionLevelChart';
 import { EmotionReasonsChart } from '../charts/EmotionReasonsChart';
 
-// Mock data for charts
+// Mock data for charts - Week view
 const mockCountData = [
   {
-    label: 'Emotion Type',
-    data: [3, 2, 6, 1, 5, 2, 0],
-    backgroundColor: '#3b82f6',
+    label: 'Emotion Count',
+    data: [
+      { x: 0.5, y: 3 }, // Mon 12:00
+      { x: 0.78, y: 5 }, // Mon 18:45
+      { x: 1.38, y: 2 }, // Tue 09:00
+      { x: 2.25, y: 4 }, // Wed 06:00
+      { x: 3.5, y: 6 }, // Thu 12:00
+      { x: 4.1, y: 3 }, // Fri 02:24
+      { x: 5.67, y: 5 }, // Sat 16:00
+      { x: 6.25, y: 4 }, // Sun 06:00
+    ],
+    backgroundColor: '#8E4EC6',
   },
 ];
 
 const mockLevelData = [
   {
     label: 'Emotion Level',
-    data: [1, 4, 6, 3, 4, 5, 6],
+    data: [2.5, 3.8, 4.2, 3.5, 4.8, 3.2, 4.5],
     backgroundColor: '#10b981',
   },
 ];

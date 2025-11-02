@@ -1,5 +1,5 @@
 import { EMOTION_STEPS } from '@/app/_components/ui/emotion/_constants/emotion.constants';
-import { EmotionStep } from '@/app/_components/ui/emotion/_types/emotion.type';
+import { EmotionStep } from '@/app/_components/ui/emotion/_types/emotion.types';
 
 /**
  * Convert a value to a step index

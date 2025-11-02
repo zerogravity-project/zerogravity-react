@@ -2,7 +2,7 @@
 
 import { Dialog } from '@radix-ui/themes';
 
-import { useModal } from './_context/ModalContext';
+import { useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
 
 interface ModalProps {

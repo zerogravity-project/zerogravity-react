@@ -5,8 +5,8 @@ import { usePathname } from 'next/navigation';
 
 import { Avatar, Button, DropdownMenu, Text } from '@radix-ui/themes';
 
+import { MENU_ITEMS } from '@/app/_components/ui/menu/_constants/menu.constants';
 import { cn } from '@/app/_utils/styleUtils';
-import { MENU_ITEMS } from '@/lib/navigation/constants';
 
 import { Icon } from '../../icon';
 

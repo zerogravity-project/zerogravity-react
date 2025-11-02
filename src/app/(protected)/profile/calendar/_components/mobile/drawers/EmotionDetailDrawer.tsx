@@ -59,7 +59,19 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
           >
             <div className="flex h-full flex-col">
               {/* Header - Fixed */}
-              <TopAppBar text="Go Back" icon="arrow_back" onClick={onClose} border />
+              <TopAppBar
+                text="Go Back"
+                icon="arrow_back"
+                onClick={onClose}
+                border
+                rightContent={
+                  <Link href={`/record/daily?date=${selectedDateString}`}>
+                    <Button variant="soft" radius="full" className="!cursor-pointer">
+                      Edit
+                    </Button>
+                  </Link>
+                }
+              />
 
               {/* Emotion Content - Fixed */}
               <div className="flex w-full flex-col items-center gap-6 bg-[var(--background-dark)] pt-6 pb-9">

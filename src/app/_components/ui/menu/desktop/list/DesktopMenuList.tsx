@@ -1,4 +1,4 @@
-import { MenuItem } from '@/lib/navigation/types';
+import { MenuItem } from '@/app/_components/ui/menu/_types/menu.types';
 
 import DesktopMenuListItem from './DesktopMenuListItem';
 
