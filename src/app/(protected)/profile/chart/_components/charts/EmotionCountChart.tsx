@@ -12,7 +12,7 @@ import { EmotionChartContainer } from './common/EmotionChartContainer';
 interface EmotionCountChartProps {
   datasets: Array<{
     label: string;
-    data: number[];
+    data: Array<{ x: number; y: number }>;
     backgroundColor: string;
   }>;
 }
@@ -23,7 +23,7 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
 
   const valueToLabel = (value: number) => {
     const labels = EMOTION_STEPS.map(step => step.type);
-    return labels[value] || '';
+    return labels[Math.round(value) - 1] || '';
   };
 
   useEffect(() => {
@@ -35,7 +35,6 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
     }
 
     const chartData = {
-      labels: [...DAYS_OF_WEEK],
       datasets: datasets.map(dataset => ({
         ...dataset,
         backgroundColor: dataset.backgroundColor,
@@ -54,9 +53,15 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
           grid: {
             color: '#212225',
           },
-          type: 'category' as const,
-          labels: [...DAYS_OF_WEEK],
+          type: 'linear' as const,
+          min: 0,
+          max: 7,
           ticks: {
+            stepSize: 1,
+            callback: (value: string | number) => {
+              const index = Number(value);
+              return index >= 0 && index < DAYS_OF_WEEK.length ? DAYS_OF_WEEK[index] : '';
+            },
             font: {
               size: 11,
             },
@@ -70,7 +75,7 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
             callback: (tickValue: string | number) => valueToLabel(Number(tickValue)),
             stepSize: 1,
             min: 1,
-            max: 8,
+            max: 7,
             font: {
               size: 11,
             },
@@ -86,7 +91,10 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
           callbacks: {
             title: () => '',
             label: (tooltipItem: any) => {
-              return `Emotion Type: ${tooltipItem.raw.y}`;
+              const dayIndex = Math.floor(tooltipItem.parsed.x);
+              const dayName = DAYS_OF_WEEK[dayIndex] || 'Unknown';
+              const emotionLabel = valueToLabel(tooltipItem.parsed.y);
+              return `${dayName} - ${emotionLabel}`;
             },
           },
         },

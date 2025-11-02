@@ -84,7 +84,7 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
               <DailyNoteSection />
 
               {/* Moment Emotion */}
-              <SectionTitle title="Moment Emotion" linkText="Edit" href={`/record/moment?date=${selectedDateString}`} />
+              <SectionTitle title="Moment Emotion" />
               <MomentEmotionSection />
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
