@@ -1,0 +1,77 @@
+{
+  "name": "@zerogravity/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/components/ui/clock/index.js",
+  "types": "./dist/components/ui/clock/index.d.ts",
+  "exports": {
+    "./components/ui/clock": {
+      "types": "./dist/components/ui/clock/index.d.ts",
+      "import": "./dist/components/ui/clock/index.js"
+    },
+    "./components/ui/emotion": {
+      "types": "./dist/components/ui/emotion/index.d.ts",
+      "import": "./dist/components/ui/emotion/index.js"
+    },
+    "./components/ui/footer": {
+      "types": "./dist/components/ui/footer/index.d.ts",
+      "import": "./dist/components/ui/footer/index.js"
+    },
+    "./components/ui/icon": {
+      "types": "./dist/components/ui/icon/index.d.ts",
+      "import": "./dist/components/ui/icon/index.js"
+    },
+    "./components/ui/logo": {
+      "types": "./dist/components/ui/logo/index.d.ts",
+      "import": "./dist/components/ui/logo/index.js"
+    },
+    "./components/ui/loading": {
+      "types": "./dist/components/ui/loading/index.d.ts",
+      "import": "./dist/components/ui/loading/index.js"
+    },
+    "./components/providers": {
+      "types": "./dist/components/providers/index.d.ts",
+      "import": "./dist/components/providers/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    },
+    "./styles": "./styles/globals.css"
+  },
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "tsc && vite build --watch"
+  },
+  "peerDependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "three": "^0.180.0",
+    "@react-three/fiber": "^9.3.0",
+    "@react-three/drei": "^10.7.6",
+    "@radix-ui/themes": "^3.2.1",
+    "motion": "^12.23.22",
+    "tailwindcss": "^4.1.8",
+    "three-custom-shader-material": "^6.3.7"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1",
+    "lodash": "^4.17.21",
+    "date-fns": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.11",
+    "@types/three": "^0.180.0",
+    "@types/lodash": "^4.17.20",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5",
+    "vite": "^6.0.11",
+    "vite-plugin-glsl": "^1.3.0"
+  }
+}
