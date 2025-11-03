@@ -15,6 +15,7 @@
     "lint:web": "pnpm --filter web lint",
     "lint:extension": "pnpm --filter extension lint",
     "lint:all": "pnpm -r lint",
+    "lint:fix": "eslint . --ext ts,tsx,js,jsx --fix",
     "format": "prettier --write \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:check": "prettier --check \"packages/**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "type-check:shared": "pnpm --filter shared type-check",
