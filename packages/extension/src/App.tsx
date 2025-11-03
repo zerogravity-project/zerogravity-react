@@ -21,7 +21,7 @@ function App() {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const handleSpaceoutClick = () => {
-    window.location.href = 'https://zerogravity.app/spaceout';
+    window.location.href = `${import.meta.env.VITE_WEB_APP_URL as string}/spaceout`;
   };
 
   return (

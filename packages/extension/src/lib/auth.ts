@@ -23,11 +23,24 @@ export interface SessionData {
 }
 
 /**
+ * Check if Chrome Extension API is available
+ */
+function isChromeExtension(): boolean {
+  return typeof chrome !== 'undefined' && chrome.cookies !== undefined;
+}
+
+/**
  * Get NextAuth session cookie from Chrome cookie store
  * Tries both HTTP and HTTPS cookie names
  */
 export async function getSessionCookie(): Promise<string | null> {
   try {
+    // Check if Chrome Extension API is available
+    if (!isChromeExtension()) {
+      console.warn('[Auth] Chrome Extension API not available. Skipping cookie check.');
+      return null;
+    }
+
     const url = new URL(WEB_APP_URL);
     const isHttps = url.protocol === 'https:';
 
