@@ -1,10 +1,12 @@
 'use client';
 
+import { type ComponentProps, type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
+
 import { Theme } from '@radix-ui/themes';
-import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+
 import { EMOTION_COLORS } from '../ui/emotion/constants/emotion.constants';
 
-type AccentColor = NonNullable<React.ComponentProps<typeof Theme>['accentColor']>;
+type AccentColor = NonNullable<ComponentProps<typeof Theme>['accentColor']>;
 
 interface ThemeContextValue {
   accentColor: AccentColor;
@@ -14,7 +16,7 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 interface ThemeProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {

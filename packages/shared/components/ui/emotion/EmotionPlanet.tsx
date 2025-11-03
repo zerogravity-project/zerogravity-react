@@ -1,7 +1,8 @@
 'use client';
 
-import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 import { useEffect } from 'react';
+
+import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 
 import { EMOTION_STEPS } from './constants/emotion.constants';
 import { WobbleMesh } from './objects/WobbleMesh';

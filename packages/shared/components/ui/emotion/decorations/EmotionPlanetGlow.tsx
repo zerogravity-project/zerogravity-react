@@ -3,7 +3,6 @@
 import { AnimatePresence, motion } from 'motion/react';
 
 import { cn } from '../../../../utils/styleUtils';
-
 import { EMOTION_STEPS } from '../constants/emotion.constants';
 
 interface EmotionPlanetGlowProps {

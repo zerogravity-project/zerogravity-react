@@ -1,8 +1,8 @@
 'use client';
 
+import { useClock } from '../../../hooks/useClock';
 import { getTimeStringData } from '../../../utils/dateTimeUtils';
 import { cn } from '../../../utils/styleUtils';
-import { useClock } from '../../../hooks/useClock';
 
 interface ClockProps {
   className?: string;

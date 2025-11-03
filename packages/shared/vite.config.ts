@@ -1,6 +1,7 @@
-import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 
@@ -10,14 +11,7 @@ export default defineConfig({
   plugins: [
     react(),
     glsl({
-      include: [
-        '**/*.glsl',
-        '**/*.wgsl',
-        '**/*.vert',
-        '**/*.frag',
-        '**/*.vs',
-        '**/*.fs',
-      ],
+      include: ['**/*.glsl', '**/*.wgsl', '**/*.vert', '**/*.frag', '**/*.vs', '**/*.fs'],
       exclude: undefined,
       warnDuplicatedImports: true,
       defaultExtension: 'glsl',
@@ -34,7 +28,7 @@ export default defineConfig({
         'components/ui/icon/index': path.resolve(__dirname, 'components/ui/icon/index.ts'),
         'components/ui/logo/index': path.resolve(__dirname, 'components/ui/logo/index.ts'),
         'components/ui/loading/index': path.resolve(__dirname, 'components/ui/loading/index.ts'),
-        'components/providers/index': path.resolve(__dirname, 'components/providers/index.ts'), 
+        'components/providers/index': path.resolve(__dirname, 'components/providers/index.ts'),
         'hooks/index': path.resolve(__dirname, 'hooks/index.ts'),
         'utils/index': path.resolve(__dirname, 'utils/index.ts'),
       },

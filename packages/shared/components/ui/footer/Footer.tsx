@@ -1,7 +1,8 @@
 'use client';
 
-import { Link as RadixLink, Text } from '@radix-ui/themes';
 import { Fragment } from 'react';
+
+import { Link as RadixLink, Text } from '@radix-ui/themes';
 
 import { cn } from '../../../utils/styleUtils';
 

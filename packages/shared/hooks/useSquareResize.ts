@@ -1,5 +1,6 @@
-import throttle from 'lodash/throttle';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+
+import throttle from 'lodash/throttle';
 
 interface UseSquareResizeOptions {
   isResize?: boolean;

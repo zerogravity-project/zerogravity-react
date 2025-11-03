@@ -46,7 +46,10 @@
   },
   "scripts": {
     "build": "tsc && vite build",
-    "dev": "tsc && vite build --watch"
+    "dev": "tsc && vite build --watch",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css}\"",
+    "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
     "react": "^19.1.1",
@@ -72,6 +75,6 @@
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5",
     "vite": "^6.0.11",
-    "vite-plugin-glsl": "^1.3.0"
+    "vite-plugin-glsl": "^1.5.4"
   }
 }

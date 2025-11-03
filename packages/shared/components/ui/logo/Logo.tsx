@@ -1,4 +1,3 @@
-
 const TEXT_COLOR = 'var(--gray-9)';
 const SYMBOL_COLOR = 'var(--accent-9)';
 
@@ -135,4 +134,4 @@ export function Logo({ version = 'v1', width = 142, className = '' }: LogoProps)
       />
     </svg>
   );
-};
+}
