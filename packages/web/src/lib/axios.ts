@@ -14,7 +14,7 @@ const axiosInstance = axios.create({
 
 /**
  * Request interceptor
- * Add backend JWT to Authorization header
+ * Add backend JWT to Authorization header and X-Timezone header
  */
 axiosInstance.interceptors.request.use(
   async config => {
@@ -25,6 +25,10 @@ axiosInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${(session as Session & { backendJwt?: string }).backendJwt}`;
     }
 
+    // Add X-Timezone header with user's timezone
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    config.headers['X-Timezone'] = timezone;
+
     return config;
   },
   error => {
@@ -34,7 +38,7 @@ axiosInstance.interceptors.request.use(
 
 /**
  * Response interceptor
- * Handle 401 errors and redirect to login
+ * Handle 401 errors and redirect to login (client-side only)
  */
 axiosInstance.interceptors.response.use(
   response => {
@@ -43,9 +47,12 @@ axiosInstance.interceptors.response.use(
   async error => {
     // Handle authentication errors
     if (error.response?.status === 401) {
+      // eslint-disable-next-line no-console
       console.error('[Axios] Unauthorized - signing out');
-      // Invalidate session and redirect to login page
-      await signOut({ callbackUrl: '/login' });
+      // Only redirect on client-side (SSR compatibility)
+      if (typeof window !== 'undefined') {
+        await signOut({ callbackUrl: '/login' });
+      }
     }
 
     return Promise.reject(error);
