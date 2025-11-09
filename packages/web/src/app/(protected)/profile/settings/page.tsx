@@ -2,17 +2,59 @@
 
 import { usePathname } from 'next/navigation';
 
-import { Button, Separator, Text, TextField } from '@radix-ui/themes';
+import { Button, Dialog, Flex, Link, Separator, Switch, Text, TextField } from '@radix-ui/themes';
 import { signOut, useSession } from 'next-auth/react';
+import { useState } from 'react';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
+
+import { useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
 export default function ProfileSettingsPage() {
   const pathname = usePathname();
   const { data: session } = useSession();
+  const { data: userProfile } = useUserProfileQuery();
   const user = session?.user;
   const displayName = user?.name ?? 'ZeroGravity User';
   const email = user?.email ?? 'example@example.com';
+
+  const [showAIWarning, setShowAIWarning] = useState(false);
+
+  const updateConsentMutation = useUpdateConsentMutation({
+    onSuccess: () => {
+      setShowAIWarning(false);
+    },
+    onError: error => {
+      console.error('[Settings] Failed to update consent:', error);
+      alert('Failed to update consent. Please try again.');
+    },
+  });
+
+  const consents = userProfile?.consents || user?.consents;
+
+  const handleAIConsentToggle = (checked: boolean) => {
+    if (!checked) {
+      // Show warning when disabling AI consent
+      setShowAIWarning(true);
+    } else {
+      // Enable AI consent immediately
+      updateConsentMutation.mutate({
+        termsAgreed: true,
+        privacyAgreed: true,
+        sensitiveDataConsent: true,
+        aiAnalysisConsent: true,
+      });
+    }
+  };
+
+  const confirmAIConsentDisable = () => {
+    updateConsentMutation.mutate({
+      termsAgreed: true,
+      privacyAgreed: true,
+      sensitiveDataConsent: true,
+      aiAnalysisConsent: false,
+    });
+  };
 
   return (
     <div className="flex h-full w-full flex-1 flex-col gap-7 p-6 md:p-8">
@@ -20,6 +62,39 @@ export default function ProfileSettingsPage() {
       <SettingSection title="Profile">
         <SettingField label="Display Name" value={displayName} />
         <SettingField label="Email" value={email} type="email" />
+      </SettingSection>
+
+      {/* Privacy & Consent Section */}
+      <SettingSection title="Privacy & Consent">
+        <ConsentToggle
+          label="Terms of Service"
+          description="Required to use ZeroGravity"
+          checked={consents?.termsAgreed ?? false}
+          disabled
+          viewLink="/terms/service"
+        />
+        <ConsentToggle
+          label="Privacy Policy"
+          description="Required to use ZeroGravity"
+          checked={consents?.privacyAgreed ?? false}
+          disabled
+          viewLink="/terms/privacy"
+        />
+        <ConsentToggle
+          label="Sensitive Data Processing"
+          description="Required for emotion tracking"
+          checked={consents?.sensitiveDataConsent ?? false}
+          disabled
+          viewLink="/terms/sensitive-data"
+        />
+        <ConsentToggle
+          label="AI-Powered Analysis"
+          description="Optional: Get personalized insights from AI"
+          checked={consents?.aiAnalysisConsent ?? false}
+          disabled={updateConsentMutation.isPending}
+          onCheckedChange={handleAIConsentToggle}
+          viewLink="/terms/ai-analysis"
+        />
       </SettingSection>
 
       {/* Account Actions Section */}
@@ -35,6 +110,37 @@ export default function ProfileSettingsPage() {
         />
         <SettingAction label="Delete Account" buttonText="Delete" variant="soft" color="red" />
       </SettingSection>
+
+      {/* AI Consent Warning Dialog */}
+      <Dialog.Root open={showAIWarning} onOpenChange={setShowAIWarning}>
+        <Dialog.Content maxWidth="450px">
+          <Dialog.Title>Disable AI-Powered Analysis?</Dialog.Title>
+          <Dialog.Description size="2" mb="4">
+            <Flex direction="column" gap="3">
+              <Text>
+                Disabling AI analysis will stop sending your emotion data to Google Gemini AI for future insights.
+              </Text>
+              <Text weight="bold" color="amber">
+                Important: Previously sent data cannot be retrieved or deleted from AI systems. You can still view
+                previously generated insights stored in our database.
+              </Text>
+            </Flex>
+          </Dialog.Description>
+
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </Dialog.Close>
+            <Dialog.Close>
+              <Button variant="solid" color="red" onClick={confirmAIConsentDisable}>
+                Disable AI Analysis
+              </Button>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
     </div>
   );
 }
@@ -99,6 +205,46 @@ function SettingField({ label, value, type = 'text', readOnly = true }: SettingF
         type={type}
       />
     </label>
+  );
+}
+
+// ConsentToggle Component
+interface ConsentToggleProps {
+  label: string;
+  description: string;
+  checked: boolean;
+  disabled?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+  viewLink: string;
+}
+
+function ConsentToggle({
+  label,
+  description,
+  checked,
+  disabled = false,
+  onCheckedChange,
+  viewLink,
+}: ConsentToggleProps) {
+  const isMobile = useIsMobile();
+
+  return (
+    <Flex direction="column" gap="2">
+      <Flex justify="between" align="center">
+        <Flex direction="column" gap="1" style={{ flex: 1 }}>
+          <Text size={isMobile ? '3' : '2'} weight="medium">
+            {label}
+          </Text>
+          <Text size={isMobile ? '2' : '1'} color="gray">
+            {description}
+          </Text>
+        </Flex>
+        <Switch checked={checked} disabled={disabled} onCheckedChange={onCheckedChange} size="2" />
+      </Flex>
+      <Link href={viewLink} target="_blank" size={isMobile ? '2' : '1'} color="blue">
+        View Details
+      </Link>
+    </Flex>
   );
 }
 
