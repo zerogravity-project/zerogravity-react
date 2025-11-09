@@ -1,8 +1,5 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 echo "🔍 TypeScript compilation check..."
-pnpm tsc --noEmit
+pnpm type-check:all
 
 echo "🧹 Code formatting and linting..."
 pnpm lint-staged

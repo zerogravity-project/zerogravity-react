@@ -1,1 +1,9 @@
-commitlint.config.cjs 
+node_modules
+dist
+.next
+build
+coverage
+*.config.js
+*.config.ts
+*.config.cjs
+*.config.mjs
