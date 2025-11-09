@@ -47,7 +47,6 @@ axiosInstance.interceptors.response.use(
   async error => {
     // Handle authentication errors
     if (error.response?.status === 401) {
-      // eslint-disable-next-line no-console
       console.error('[Axios] Unauthorized - signing out');
       // Only redirect on client-side (SSR compatibility)
       if (typeof window !== 'undefined') {
