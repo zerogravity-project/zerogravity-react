@@ -4,6 +4,7 @@
  */
 
 import { Box, Container, Flex, Heading, Text } from '@radix-ui/themes';
+
 import { Logo } from '@zerogravity/shared/components/ui/logo';
 
 interface TermsLayoutProps {
@@ -24,7 +25,8 @@ export function TermsLayout({ title, lastUpdated, children }: TermsLayoutProps) 
               {title}
             </Heading>
             <Text size="2" color="gray">
-              Last Updated: {new Date(lastUpdated).toLocaleDateString('en-US', {
+              Last Updated:{' '}
+              {new Date(lastUpdated).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric',

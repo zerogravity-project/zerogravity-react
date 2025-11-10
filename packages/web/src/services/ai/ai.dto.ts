@@ -71,9 +71,7 @@ export function isValidPredictionRequest(request: EmotionPredictionRequest): boo
   // At least one field (emotionId or emotionReasons) must be null/missing
   const hasEmotionId = request.emotionId !== null && request.emotionId !== undefined;
   const hasReasons =
-    request.emotionReasons !== null &&
-    request.emotionReasons !== undefined &&
-    request.emotionReasons.length > 0;
+    request.emotionReasons !== null && request.emotionReasons !== undefined && request.emotionReasons.length > 0;
 
   // Both provided = invalid (nothing to predict)
   if (hasEmotionId && hasReasons) {
