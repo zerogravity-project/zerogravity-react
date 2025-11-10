@@ -38,7 +38,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
      * Handle token refresh when access token expires
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    jwt: async ({ token, account, user }: any) => {
+    jwt: async ({ token, account, user, trigger, session }: any) => {
+      // Handle session update (when updateSession() is called from client)
+      if (trigger === 'update' && session?.user?.consents) {
+        console.log('[JWT Callback] Updating consents from client:', session.user.consents);
+        token.consents = session.user.consents;
+        return token;
+      }
+
       // Initial sign-in: call backend to verify/create user and get backend JWT
       if (account && user) {
         try {
