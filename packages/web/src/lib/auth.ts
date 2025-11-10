@@ -57,7 +57,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (response.ok) {
             const data = await response.json();
-            // Store isNewUser flag and consent data
+            console.log('[JWT Callback] Backend response:', data);
+            // Store isNewUser flag and consent data from ApiResponse wrapper
             token.isNewUser = data.data.isNewUser;
             token.consents = data.data.consents;
           } else {

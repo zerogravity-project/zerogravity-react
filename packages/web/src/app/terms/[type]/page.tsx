@@ -4,16 +4,17 @@
  */
 
 import { notFound } from 'next/navigation';
-import { TermsLayout } from './_components/TermsLayout';
-import { ServiceTermsContent } from './_components/ServiceTermsContent';
+
+import { AIAnalysisContent } from './_components/AIAnalysisContent';
 import { PrivacyPolicyContent } from './_components/PrivacyPolicyContent';
 import { SensitiveDataContent } from './_components/SensitiveDataContent';
-import { AIAnalysisContent } from './_components/AIAnalysisContent';
+import { ServiceTermsContent } from './_components/ServiceTermsContent';
+import { TermsLayout } from './_components/TermsLayout';
 
 interface TermsPageProps {
-  params: {
+  params: Promise<{
     type: string;
-  };
+  }>;
 }
 
 // Valid term types
@@ -40,8 +41,8 @@ const TERM_METADATA: Record<TermType, { title: string; lastUpdated: string }> = 
   },
 };
 
-export default function TermsPage({ params }: TermsPageProps) {
-  const { type } = params;
+export default async function TermsPage({ params }: TermsPageProps) {
+  const { type } = await params;
 
   // Validate term type
   if (!VALID_TERM_TYPES.includes(type as TermType)) {
@@ -76,7 +77,7 @@ export default function TermsPage({ params }: TermsPageProps) {
 
 // Generate static params for all term types
 export function generateStaticParams() {
-  return VALID_TERM_TYPES.map((type) => ({
+  return VALID_TERM_TYPES.map(type => ({
     type,
   }));
 }
