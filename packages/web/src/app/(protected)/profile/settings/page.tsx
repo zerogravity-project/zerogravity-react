@@ -8,10 +8,7 @@ import { useState } from 'react';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
-import { AIAnalysisContent } from '@/app/terms/[type]/_components/AIAnalysisContent';
-import { PrivacyPolicyContent } from '@/app/terms/[type]/_components/PrivacyPolicyContent';
-import { SensitiveDataContent } from '@/app/terms/[type]/_components/SensitiveDataContent';
-import { ServiceTermsContent } from '@/app/terms/[type]/_components/ServiceTermsContent';
+import { TermsModal } from '@/app/_components/ui/modal/TermsModal';
 import { useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
 export default function ProfileSettingsPage() {
@@ -24,7 +21,9 @@ export default function ProfileSettingsPage() {
 
   const [showAIWarning, setShowAIWarning] = useState(false);
   const [termsModalOpen, setTermsModalOpen] = useState(false);
-  const [activeTermsType, setActiveTermsType] = useState<string>('');
+  const [activeTermsType, setActiveTermsType] = useState<'service' | 'privacy' | 'sensitive-data' | 'ai-analysis' | ''>(
+    ''
+  );
 
   const updateConsentMutation = useUpdateConsentMutation({
     onSuccess: () => {
@@ -62,9 +61,14 @@ export default function ProfileSettingsPage() {
     });
   };
 
-  const openTermsModal = (type: string) => {
+  const openTermsModal = (type: 'service' | 'privacy' | 'sensitive-data' | 'ai-analysis') => {
     setActiveTermsType(type);
     setTermsModalOpen(true);
+  };
+
+  const closeTermsModal = () => {
+    setTermsModalOpen(false);
+    setActiveTermsType('');
   };
 
   return (
@@ -153,31 +157,8 @@ export default function ProfileSettingsPage() {
         </Dialog.Content>
       </Dialog.Root>
 
-      {/* Terms & Policies Dialog */}
-      <Dialog.Root open={termsModalOpen} onOpenChange={setTermsModalOpen}>
-        <Dialog.Content maxWidth="600px" style={{ maxHeight: '80vh', overflow: 'auto' }}>
-          <Dialog.Title>
-            {activeTermsType === 'service' && 'Terms of Service'}
-            {activeTermsType === 'privacy' && 'Privacy Policy'}
-            {activeTermsType === 'sensitive-data' && 'Sensitive Data Processing'}
-            {activeTermsType === 'ai-analysis' && 'AI-Powered Analysis'}
-          </Dialog.Title>
-          <Dialog.Description size="2" mb="4">
-            {activeTermsType === 'service' && <ServiceTermsContent />}
-            {activeTermsType === 'privacy' && <PrivacyPolicyContent />}
-            {activeTermsType === 'sensitive-data' && <SensitiveDataContent />}
-            {activeTermsType === 'ai-analysis' && <AIAnalysisContent />}
-          </Dialog.Description>
-
-          <Flex gap="3" mt="4" justify="end">
-            <Dialog.Close>
-              <Button variant="soft" color="gray">
-                Close
-              </Button>
-            </Dialog.Close>
-          </Flex>
-        </Dialog.Content>
-      </Dialog.Root>
+      {/* Terms & Policies Modal */}
+      <TermsModal isOpen={termsModalOpen} onClose={closeTermsModal} type={activeTermsType} />
     </div>
   );
 }
