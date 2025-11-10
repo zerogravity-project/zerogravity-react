@@ -7,7 +7,8 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Checkbox, Button, Flex, Text, Link, Box, Callout } from '@radix-ui/themes';
+import { Box, Button, Callout, Checkbox, Flex, Link, Text } from '@radix-ui/themes';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import { Logo } from '@zerogravity/shared/components/ui/logo';
@@ -17,6 +18,7 @@ import { useUpdateConsentMutation } from '@/services/user/user.query';
 
 export default function ConsentPage() {
   const router = useRouter();
+  const { update: updateSession } = useSession();
   const [consents, setConsents] = useState<UpdateConsentRequest>({
     termsAgreed: false,
     privacyAgreed: false,
@@ -24,8 +26,14 @@ export default function ConsentPage() {
     aiAnalysisConsent: false,
   });
 
-  const updateConsentMutation = useUpdateConsentMutation({
-    onSuccess: () => {
+  const { mutate: updateConsent, isPending: isUpdatingConsent } = useUpdateConsentMutation({
+    onSuccess: async data => {
+      // Update NextAuth session with new consent data
+      await updateSession({
+        user: {
+          consents: data.data.consents,
+        },
+      });
       router.push('/');
     },
     onError: error => {
@@ -41,7 +49,7 @@ export default function ConsentPage() {
       return;
     }
 
-    updateConsentMutation.mutate(consents);
+    updateConsent(consents);
   };
 
   const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
@@ -197,11 +205,11 @@ export default function ConsentPage() {
         <Flex direction="column" gap="3">
           <Button
             size="3"
-            disabled={!allRequiredConsentsChecked || updateConsentMutation.isPending}
+            disabled={!allRequiredConsentsChecked || isUpdatingConsent}
             onClick={handleSubmit}
             style={{ width: '100%' }}
           >
-            {updateConsentMutation.isPending ? 'Saving...' : 'Accept and Continue'}
+            {isUpdatingConsent ? 'Saving...' : 'Accept and Continue'}
           </Button>
           <Text size="2" color="gray" style={{ textAlign: 'center' }}>
             <Text color="red">*</Text> Required to use ZeroGravity
