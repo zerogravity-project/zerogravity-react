@@ -68,12 +68,7 @@ export interface ChartReasonResponse {
  * GET /chart/count
  * Emotion count statistics for scatter chart
  */
-export type EmotionType =
-  | 'HIGH_POSITIVE'
-  | 'MID_POSITIVE'
-  | 'NEUTRAL'
-  | 'MID_NEGATIVE'
-  | 'HIGH_NEGATIVE';
+export type EmotionType = 'HIGH_POSITIVE' | 'MID_POSITIVE' | 'NEUTRAL' | 'MID_NEGATIVE' | 'HIGH_NEGATIVE';
 
 export interface ChartCountDataPoint {
   label: string; // Period label (SUN/MON, 1/2, JAN/FEB)
@@ -128,19 +123,7 @@ export type MonthLabel =
   | '30'
   | '31';
 
-export type YearLabel =
-  | 'JAN'
-  | 'FEB'
-  | 'MAR'
-  | 'APR'
-  | 'MAY'
-  | 'JUN'
-  | 'JUL'
-  | 'AUG'
-  | 'SEP'
-  | 'OCT'
-  | 'NOV'
-  | 'DEC';
+export type YearLabel = 'JAN' | 'FEB' | 'MAR' | 'APR' | 'MAY' | 'JUN' | 'JUL' | 'AUG' | 'SEP' | 'OCT' | 'NOV' | 'DEC';
 
 /**
  * All predefined emotion reasons

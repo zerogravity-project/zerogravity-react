@@ -2,10 +2,10 @@
 
 import { Dialog, Button, Flex } from '@radix-ui/themes';
 
-import { AIAnalysisContent } from '@/app/terms/[type]/_components/AIAnalysisContent';
-import { PrivacyPolicyContent } from '@/app/terms/[type]/_components/PrivacyPolicyContent';
-import { SensitiveDataContent } from '@/app/terms/[type]/_components/SensitiveDataContent';
-import { ServiceTermsContent } from '@/app/terms/[type]/_components/ServiceTermsContent';
+import { AIAnalysisContent } from '@/app/(public)/terms/[type]/_components/AIAnalysisContent';
+import { PrivacyPolicyContent } from '@/app/(public)/terms/[type]/_components/PrivacyPolicyContent';
+import { SensitiveDataContent } from '@/app/(public)/terms/[type]/_components/SensitiveDataContent';
+import { ServiceTermsContent } from '@/app/(public)/terms/[type]/_components/ServiceTermsContent';
 
 interface TermsModalProps {
   isOpen: boolean;
