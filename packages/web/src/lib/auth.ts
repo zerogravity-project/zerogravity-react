@@ -34,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     /**
      * Store account information from OAuth provider and verify with backend
      * On initial sign-in, call backend /auth/verify to get backend JWT
+     * Store isNewUser flag and consent data in token
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jwt: async ({ token, account, user }: any) => {
@@ -46,7 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              provider: account.provider,
+              provider: account.provider.toUpperCase(),
               providerId: account.providerAccountId,
               email: user.email,
               name: user.name,
@@ -54,11 +55,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             }),
           });
 
-          if (!response.ok) {
+          if (response.ok) {
+            const data = await response.json();
+            // Store isNewUser flag and consent data
+            token.isNewUser = data.data.isNewUser;
+            token.consents = data.data.consents;
+          } else {
+            // eslint-disable-next-line no-console
             console.error('Backend verification failed');
           }
-          // JWT is already set in cookie - no additional processing needed
         } catch (error) {
+          // eslint-disable-next-line no-console
           console.error('[JWT Callback] Error:', error);
         }
       }
@@ -74,11 +81,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     /**
      * Transform JWT into client-accessible session
+     * Include consent data and isNewUser flag
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     session: async ({ session, token }: any) => {
       session.accessToken = token.accessToken;
       session.provider = token.provider;
+      session.user.isNewUser = token.isNewUser;
+      session.user.consents = token.consents;
       return session;
     },
   },
