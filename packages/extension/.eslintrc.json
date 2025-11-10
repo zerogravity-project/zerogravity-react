@@ -1,0 +1,12 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "env": {
+    "webextensions": true
+  },
+  "globals": {
+    "chrome": "readonly"
+  },
+  "rules": {
+    "no-console": "warn"
+  }
+}
