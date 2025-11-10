@@ -1,60 +1,88 @@
 'use client';
 
-import { type ComponentProps, type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { type ReactNode, createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 import { Theme } from '@radix-ui/themes';
 
 import { EMOTION_COLORS } from '../ui/emotion/constants/emotion.constants';
-
-type AccentColor = NonNullable<ComponentProps<typeof Theme>['accentColor']>;
+import { type EmotionColor } from '../ui/emotion/types/emotion.types';
 
 interface ThemeContextValue {
-  accentColor: AccentColor;
-  setAccentColor: (color: AccentColor) => void;
+  accentColor: EmotionColor;
+  setAccentColor: (color: EmotionColor) => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 interface ThemeProviderProps {
   children: ReactNode;
+  getColor?: () => Promise<EmotionColor | null>;
+  setColor?: (color: EmotionColor) => void;
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
+// Cookie helper functions
+function getCookie(name: string): string | null {
+  if (typeof document === 'undefined') return null;
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+  return null;
+}
+
+function setCookie(name: string, value: string, maxAge: number = 86400) {
+  if (typeof document === 'undefined') return;
+  document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
+}
+
+export function ThemeProvider({ children, getColor, setColor }: ThemeProviderProps) {
   // Use a stable default for SSR/first client render to avoid hydration mismatch
-  const [accentColor, setAccentColor] = useState<AccentColor>('green');
+  const [accentColor, setAccentColor] = useState<EmotionColor>('green');
   const [mounted, setMounted] = useState(false);
 
-  // Randomize on client after hydration (no persistence)
+  // Load theme from cookie on mount
   useEffect(() => {
-    setMounted(true);
-    try {
-      const stored = typeof window !== 'undefined' ? window.sessionStorage.getItem('accentColor') : null;
-      if (stored) {
-        setAccentColor(stored as AccentColor);
-        return;
-      }
-      const random = EMOTION_COLORS[Math.floor(Math.random() * EMOTION_COLORS.length)] as AccentColor;
-      setAccentColor(random);
-      if (typeof window !== 'undefined') {
-        window.sessionStorage.setItem('accentColor', random);
-      }
-    } catch {
-      const fallback = EMOTION_COLORS[Math.floor(Math.random() * EMOTION_COLORS.length)] as AccentColor;
-      setAccentColor(fallback);
-    }
-  }, []);
+    async function loadTheme() {
+      setMounted(true);
+      try {
+        // Use custom getter if provided (for Extension), otherwise use document.cookie
+        const stored = getColor ? await getColor() : getCookie('accentColor');
 
-  // Persist changes during the session
+        if (stored && (EMOTION_COLORS as readonly string[]).includes(stored)) {
+          setAccentColor(stored as EmotionColor);
+          return;
+        }
+        const random = EMOTION_COLORS[Math.floor(Math.random() * EMOTION_COLORS.length)];
+        setAccentColor(random);
+
+        // Use custom setter if provided, otherwise use document.cookie
+        if (setColor) {
+          setColor(random);
+        } else {
+          setCookie('accentColor', random);
+        }
+      } catch {
+        const fallback = EMOTION_COLORS[Math.floor(Math.random() * EMOTION_COLORS.length)];
+        setAccentColor(fallback);
+      }
+    }
+
+    loadTheme();
+  }, [getColor, setColor]);
+
+  // Persist changes to cookie
   useEffect(() => {
     if (!mounted) return;
     try {
-      if (typeof window !== 'undefined') {
-        window.sessionStorage.setItem('accentColor', accentColor);
+      // Use custom setter if provided, otherwise use document.cookie
+      if (setColor) {
+        setColor(accentColor);
+      } else {
+        setCookie('accentColor', accentColor);
       }
     } catch {
       // ignore
     }
-  }, [accentColor, mounted]);
+  }, [accentColor, mounted, setColor]);
 
   const value = useMemo(() => ({ accentColor, setAccentColor }), [accentColor]);
 

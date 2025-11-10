@@ -1,4 +1,4 @@
-import { MenuItem } from '@/app/_components/ui/menu/_types/menu.types';
+import { MenuItem } from '@zerogravity/shared/components/ui/navigation';
 
 import { DesktopMenuListItem } from './DesktopMenuListItem';
 

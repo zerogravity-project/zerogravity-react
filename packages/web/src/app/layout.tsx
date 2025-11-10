@@ -5,7 +5,6 @@ import type { Metadata } from 'next';
 
 import ClientProviders from './_components/providers/ClientProviders';
 import { ModalProvider } from './_components/ui/modal/_contexts/ModalContext';
-import { SettingModal } from './_components/ui/modal/SettingModal';
 
 export interface CustomIconDescriptorType extends IconDescriptor {
   precedence?: string;
@@ -34,10 +33,7 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <ClientProviders>
-          <ModalProvider>
-            {children}
-            <SettingModal />
-          </ModalProvider>
+          <ModalProvider>{children}</ModalProvider>
         </ClientProviders>
       </body>
     </html>

@@ -30,6 +30,10 @@
       "types": "./dist/components/ui/loading/index.d.ts",
       "import": "./dist/components/ui/loading/index.js"
     },
+    "./components/ui/navigation": {
+      "types": "./dist/components/ui/navigation/index.d.ts",
+      "import": "./dist/components/ui/navigation/index.js"
+    },
     "./components/providers": {
       "types": "./dist/components/providers/index.d.ts",
       "import": "./dist/components/providers/index.js"
@@ -52,26 +56,28 @@
     "type-check": "tsc --noEmit"
   },
   "peerDependencies": {
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/themes": "^3.2.1",
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.3.0",
+    "motion": "^12.23.22",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "three": "^0.180.0",
-    "@react-three/fiber": "^9.3.0",
-    "@react-three/drei": "^10.7.6",
-    "@radix-ui/themes": "^3.2.1",
-    "motion": "^12.23.22",
     "tailwindcss": "^4.1.8",
+    "three": "^0.180.0",
     "three-custom-shader-material": "^6.3.7"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.3.1",
+    "date-fns": "^4.1.0",
     "lodash": "^4.17.21",
-    "date-fns": "^4.1.0"
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@types/lodash": "^4.17.20",
     "@types/react": "^19.1.11",
     "@types/three": "^0.180.0",
-    "@types/lodash": "^4.17.20",
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5",
     "vite": "^6.0.11",

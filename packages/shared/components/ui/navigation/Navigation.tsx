@@ -1,46 +1,65 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { ComponentType, useEffect, useState } from 'react';
 
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Link as RadixLink } from '@radix-ui/themes';
-import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { Logo } from '@zerogravity/shared/components/ui/logo';
 import { useClock, useIsSm } from '@zerogravity/shared/hooks';
 import { cn, getDateStringData } from '@zerogravity/shared/utils';
 
-import { ProfileDropdown } from '@/app/_components/ui/navigation/profile/ProfileDropdown';
-
-import { MobileMenu } from '../menu/mobile/MobileMenu';
+import { MENU_ITEMS } from './constants/navigation.constants';
+import { MenuDrawer } from './drawer/MenuDrawer';
+import { ProfileDropdown } from './dropdown/ProfileDropdown';
+import { LinkProps, MenuItem, NavigationUser } from './types/navigation.types';
 
 interface NavigationProps {
-  className?: string;
+  // Authentication
+  isAuthenticated: boolean;
+  user?: NavigationUser;
+
+  // Navigation
+  currentPath: string;
+  LinkComponent?: ComponentType<LinkProps>;
+  menuItems?: MenuItem[];
+
+  // Styling
   background?: boolean;
   border?: boolean;
+  className?: string;
 }
 
-export function Navigation({ className, background, border }: NavigationProps) {
-  const { data: session, status } = useSession();
+const DefaultLink = ({ href, children, className, ...props }: LinkProps) => (
+  <a {...props} href={href} className={className}>
+    {children}
+  </a>
+);
+
+export function Navigation({
+  isAuthenticated,
+  user,
+  currentPath,
+  LinkComponent = DefaultLink,
+  menuItems = MENU_ITEMS,
+  background,
+  border,
+  className,
+}: NavigationProps) {
   const isSm = useIsSm();
-
-  const pathname = usePathname();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const now = useClock();
   const dateData = now ? getDateStringData(now) : null;
 
-  const isAuthenticated = status === 'authenticated';
-  const userName = session?.user?.name ?? 'ZeroGravity User';
-  const profileImage = session?.user?.image ?? undefined;
+  const userName = user?.name ?? 'ZeroGravity User';
+  const profileImage = user?.image;
 
+  // Close menu when current path changes
   useEffect(() => {
     setIsMenuOpen(false);
-  }, [pathname]);
+  }, [currentPath]);
 
   return (
     <NavigationMenu.Root
@@ -54,9 +73,9 @@ export function Navigation({ className, background, border }: NavigationProps) {
       <div className="flex items-center gap-4">
         {/* Logo */}
         <RadixLink asChild>
-          <Link href="/">
+          <LinkComponent href="/">
             <Logo />
-          </Link>
+          </LinkComponent>
         </RadixLink>
       </div>
 
@@ -73,7 +92,15 @@ export function Navigation({ className, background, border }: NavigationProps) {
         {/* Profile */}
         {isAuthenticated && (
           <>
-            {!isSm && <ProfileDropdown userName={userName} profileImage={profileImage} className="max-mobile:hidden" />}
+            {!isSm && (
+              <ProfileDropdown
+                userName={userName}
+                profileImage={profileImage}
+                className="max-mobile:hidden"
+                menuItems={menuItems}
+                LinkComponent={LinkComponent}
+              />
+            )}
             {isSm && (
               <>
                 {/* Hamburger Menu */}
@@ -85,19 +112,23 @@ export function Navigation({ className, background, border }: NavigationProps) {
                 >
                   <Icon color="accent">{isMenuOpen ? 'close' : 'menu'}</Icon>
                 </button>
-                <MobileMenu isOpen={isMenuOpen} />
+                <MenuDrawer
+                  isOpen={isMenuOpen}
+                  user={user}
+                  currentPath={currentPath}
+                  menuItems={menuItems}
+                  LinkComponent={LinkComponent}
+                />
               </>
             )}
           </>
         )}
         {!isAuthenticated && (
-          <>
-            <RadixLink asChild>
-              <Link href="/login">
-                <div className="flex h-8 items-center justify-center text-sm">Login</div>
-              </Link>
-            </RadixLink>
-          </>
+          <RadixLink asChild>
+            <LinkComponent href="/login">
+              <div className="flex h-8 items-center justify-center text-sm">Login</div>
+            </LinkComponent>
+          </RadixLink>
         )}
       </div>
     </NavigationMenu.Root>

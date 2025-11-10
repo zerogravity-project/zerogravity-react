@@ -1,13 +1,17 @@
 'use client';
 
 import { Avatar, Text } from '@radix-ui/themes';
-import { useSession } from 'next-auth/react';
 
-export function MobileMenuHeader() {
-  const { data: session } = useSession();
-  const profileImage = session?.user?.image ?? undefined;
-  const displayName = session?.user?.name ?? 'ZeroGravity User';
-  const email = session?.user?.email;
+import { NavigationUser } from '../../types/navigation.types';
+
+interface MenuDrawerHeaderProps {
+  user?: NavigationUser;
+}
+
+export function MenuDrawerHeader({ user }: MenuDrawerHeaderProps) {
+  const profileImage = user?.image;
+  const displayName = user?.name ?? 'ZeroGravity User';
+  const email = user?.email;
 
   return (
     <header className="flex w-full items-center gap-5 border-b border-[var(--gray-3)] bg-[var(--gray-2)] px-5 py-6">

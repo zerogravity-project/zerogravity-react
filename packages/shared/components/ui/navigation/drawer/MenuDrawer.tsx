@@ -1,19 +1,24 @@
+import { ComponentType } from 'react';
+
 import { AnimatePresence, motion } from 'motion/react';
 
 import { cn } from '@zerogravity/shared/utils';
 
-import { MENU_ITEMS } from '@/app/_components/ui/menu/_constants/menu.constants';
+import { LinkProps, MenuItem, NavigationUser } from '../types/navigation.types';
 
-import { MobileMenuHeader } from './header/MobileMenuHeader';
-import { MobileMenuList } from './list/MobileMenuList';
+import { MenuDrawerHeader } from './header/MenuDrawerHeader';
+import { MenuList } from './list/MenuList';
 
-interface MobileMenuProps {
+interface MenuDrawerProps {
   isOpen: boolean;
+  user?: NavigationUser;
+  currentPath: string;
+  menuItems: MenuItem[];
+  LinkComponent: ComponentType<LinkProps>;
   className?: string;
 }
 
-export function MobileMenu({ isOpen, className }: MobileMenuProps) {
-  const menuItems = [...MENU_ITEMS.profile];
+export function MenuDrawer({ isOpen, user, currentPath, menuItems, LinkComponent, className }: MenuDrawerProps) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -30,8 +35,8 @@ export function MobileMenu({ isOpen, className }: MobileMenuProps) {
             height: { duration: 0.3, ease: 'easeInOut' },
           }}
         >
-          <MobileMenuHeader />
-          <MobileMenuList menuItems={menuItems} />
+          <MenuDrawerHeader user={user} />
+          <MenuList menuItems={menuItems} currentPath={currentPath} LinkComponent={LinkComponent} />
         </motion.aside>
       )}
     </AnimatePresence>

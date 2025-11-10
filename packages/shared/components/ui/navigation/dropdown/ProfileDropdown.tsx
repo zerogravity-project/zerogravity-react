@@ -1,24 +1,21 @@
-import { UrlObject } from 'url';
-
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { ComponentType } from 'react';
 
 import { Avatar, Button, DropdownMenu, Text } from '@radix-ui/themes';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { cn } from '@zerogravity/shared/utils';
 
-import { MENU_ITEMS } from '@/app/_components/ui/menu/_constants/menu.constants';
+import { LinkProps, MenuItem } from '../types/navigation.types';
 
 interface ProfileDropdownProps {
   userName: string;
   profileImage?: string;
+  menuItems: MenuItem[];
+  LinkComponent: ComponentType<LinkProps>;
   className?: string;
 }
 
-export function ProfileDropdown({ userName, profileImage, className }: ProfileDropdownProps) {
-  const pathname = usePathname();
-
+export function ProfileDropdown({ userName, profileImage, menuItems, LinkComponent, className }: ProfileDropdownProps) {
   return (
     <div className={cn('flex h-8 w-8 flex-shrink-0 items-center justify-center', className)}>
       <DropdownMenu.Root>
@@ -33,11 +30,26 @@ export function ProfileDropdown({ userName, profileImage, className }: ProfileDr
             <Text size="2">{userName}</Text>
           </div>
           <DropdownMenu.Separator />
-          {MENU_ITEMS.profile.map(item => (
-            <ProfileDropdownItem key={item.href} href={{ pathname: item.href }} icon={item.icon} label={item.label} />
+          {menuItems.slice(0, -1).map(item => (
+            <ProfileDropdownItem
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              LinkComponent={LinkComponent}
+            />
           ))}
           <DropdownMenu.Separator />
-          <ProfileDropdownItem href={{ pathname, hash: 'setting' }} label="Setting" icon="settings" className="!mb-1" />
+          {menuItems.slice(-1).map(item => (
+            <ProfileDropdownItem
+              key={item.href}
+              href={item.href}
+              icon={item.icon}
+              label={item.label}
+              className="!mb-1"
+              LinkComponent={LinkComponent}
+            />
+          ))}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </div>
@@ -46,20 +58,19 @@ export function ProfileDropdown({ userName, profileImage, className }: ProfileDr
 
 interface ProfileDropdownItemProps {
   label: string;
-  href: string | UrlObject;
+  href: string;
   icon?: string;
   onClick?: () => void;
   className?: string;
+  LinkComponent: React.ComponentType<LinkProps>;
 }
 
-function ProfileDropdownItem({ href, icon, label, onClick, className }: ProfileDropdownItemProps) {
-  const hasHash = typeof href === 'string' ? href.includes('#') : (href as UrlObject).hash;
-
+function ProfileDropdownItem({ href, icon, label, onClick, className, LinkComponent }: ProfileDropdownItemProps) {
   return (
-    <Link href={href} onClick={onClick} scroll={hasHash ? false : true}>
+    <LinkComponent href={href} onClick={onClick}>
       <DropdownMenu.Item className={cn('!cursor-pointer', className)}>
         <Icon size={20}>{icon}</Icon> {label}
       </DropdownMenu.Item>
-    </Link>
+    </LinkComponent>
   );
 }

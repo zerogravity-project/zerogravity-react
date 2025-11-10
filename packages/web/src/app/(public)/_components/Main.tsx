@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { Button } from '@radix-ui/themes';
@@ -55,7 +56,7 @@ export default function Main() {
       </div>
 
       {/* Footer */}
-      <Footer />
+      <Footer LinkComponent={Link} />
     </div>
   );
 }

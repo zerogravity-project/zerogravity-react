@@ -1,1 +1,3 @@
-export { Footer, FOOTER_MENU_LIST } from './Footer';
+export * from './constants';
+export { Footer } from './Footer';
+export * from './types';

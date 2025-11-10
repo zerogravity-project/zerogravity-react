@@ -1,4 +1,4 @@
-import { Navigation } from '@/app/_components/ui/navigation/Navigation';
+import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
 
 export default function RootLayout({
   children,
@@ -7,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <Navigation className="fixed top-0" />
+      <NavigationAdapter className="fixed top-0" />
       {children}
     </>
   );

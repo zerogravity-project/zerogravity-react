@@ -7,7 +7,7 @@ import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
 import { DesktopMenu } from '@/app/_components/ui/menu/desktop/DesktopMenu';
-import { Navigation } from '@/app/_components/ui/navigation/Navigation';
+import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
 import { useScroll } from '@/app/_hooks/useScroll';
 
 export default function RootLayout({
@@ -28,7 +28,7 @@ export default function RootLayout({
 
   return (
     <>
-      <Navigation border background className={cn('fixed top-0', isScrolling && 'shadow-2xl shadow-black')} />
+      <NavigationAdapter border background className={cn('fixed top-0', isScrolling && 'shadow-2xl shadow-black')} />
       <div ref={scrollRef} className="pt-topnav-height flex h-[100dvh] w-[100dvw] overflow-auto">
         {!isLg && (
           <div className="flex h-full w-[256px] flex-shrink-0">

@@ -1,34 +1,26 @@
 'use client';
 
-import { Fragment } from 'react';
+import { ComponentType, Fragment } from 'react';
 
 import { Link as RadixLink, Text } from '@radix-ui/themes';
 
 import { cn } from '../../../utils/styleUtils';
+import { LinkProps } from '../navigation/types/navigation.types';
 
-interface FooterMenuItem {
-  text: string;
-  linkPath: string;
-  defaultColor?: string;
-  activeColor?: string;
-}
+import { FOOTER_MENU_ITEMS } from './constants/footer.constants';
 
 interface FooterProps {
   className?: string;
+  LinkComponent?: ComponentType<LinkProps>;
 }
 
-export const FOOTER_MENU_LIST: FooterMenuItem[] = [
-  {
-    text: 'Terms of Service',
-    linkPath: 'terms',
-  },
-  {
-    text: 'Privacy Policy',
-    linkPath: 'privacy-policy',
-  },
-];
+const DefaultLink = ({ href, children, className, ...props }: LinkProps) => (
+  <a {...props} href={href} className={className}>
+    {children}
+  </a>
+);
 
-export function Footer({ className }: FooterProps) {
+export function Footer({ className, LinkComponent = DefaultLink }: FooterProps) {
   return (
     <footer
       className={cn(
@@ -38,17 +30,17 @@ export function Footer({ className }: FooterProps) {
       )}
     >
       <ul className="flex items-center gap-2">
-        {FOOTER_MENU_LIST.map((menu, index) => (
+        {FOOTER_MENU_ITEMS.map((menu, index) => (
           <Fragment key={index}>
             <li>
               <RadixLink asChild color="gray" size="1">
-                <a href={`/${menu.linkPath}`}>
+                <LinkComponent href={`/${menu.linkPath}`}>
                   <span className="text-[var(--gray-8)] transition-opacity hover:opacity-80">{menu.text}</span>
-                </a>
+                </LinkComponent>
               </RadixLink>
             </li>
 
-            {index !== FOOTER_MENU_LIST.length - 1 && (
+            {index !== FOOTER_MENU_ITEMS.length - 1 && (
               <div className="mt-[3px] h-[3px] w-[3px] flex-shrink-0 rounded-[9999px] bg-[var(--gray-8)]" />
             )}
           </Fragment>

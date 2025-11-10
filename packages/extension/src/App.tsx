@@ -11,12 +11,11 @@ import { PageLoading } from '@zerogravity/shared/components/ui/loading';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
-import { useAuth } from './hooks/useAuth';
+import { NavigationAdapter } from './components/navigation/NavigationAdapter';
 
 function App() {
   const { accentColor } = useTheme();
   const isLg = useIsLg();
-  const { isAuthenticated, user, isLoading } = useAuth();
 
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -28,11 +27,8 @@ function App() {
     <div className="pt-topnav-height relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
       <PageLoading isLoaded={isLoaded} />
 
-      {/* Auth Status Test Display */}
-      <div className="absolute top-4 right-4 z-10 rounded-lg bg-black/50 p-4 font-mono text-sm text-white backdrop-blur-sm">
-        <div>Auth Status: {isLoading ? 'Loading...' : isAuthenticated ? 'Logged in' : 'Not logged in'}</div>
-        {user && <div className="mt-1 text-xs">User: {user.name || user.email}</div>}
-      </div>
+      {/* Navigation */}
+      <NavigationAdapter className="fixed top-0" />
 
       <div className={cn('absolute inset-0 z-3 mt-44 flex w-full justify-center', isLg ? 'mt-44' : 'mt-48')}>
         <div className={cn(isLg ? 'h-[1200px] w-[1200px]' : 'h-[1500px] w-[1500px]')}>

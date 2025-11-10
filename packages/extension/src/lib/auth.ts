@@ -1,6 +1,6 @@
 /**
- * Authentication utilities for Chrome Extension
- * Uses Chrome Cookies API to read NextAuth session from web app
+ * Authentication and theme utilities for Chrome Extension
+ * Uses Chrome Cookies API to read NextAuth session and theme from web app
  */
 
 const WEB_APP_URL = import.meta.env.VITE_WEB_APP_URL || 'http://localhost:3000';
@@ -139,4 +139,28 @@ export async function getUserInfo(): Promise<{
     user: sessionData.user,
     sessionData,
   };
+}
+
+/**
+ * Get theme accent color from Chrome cookie store
+ * Returns the stored accent color or null if not found
+ */
+export async function getThemeCookie(): Promise<string | null> {
+  try {
+    // Check if Chrome Extension API is available
+    if (!isChromeExtension()) {
+      console.warn('[Theme] Chrome Extension API not available. Skipping cookie check.');
+      return null;
+    }
+
+    const cookie = await chrome.cookies.get({
+      url: WEB_APP_URL,
+      name: 'accentColor',
+    });
+
+    return cookie?.value || null;
+  } catch (error) {
+    console.error('[Theme] Error getting theme cookie:', error);
+    return null;
+  }
 }

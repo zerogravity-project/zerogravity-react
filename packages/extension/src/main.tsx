@@ -3,15 +3,14 @@ import { StrictMode } from 'react';
 
 import { createRoot } from 'react-dom/client';
 
-import { ThemeProvider } from '@zerogravity/shared/components/providers';
-
 import App from './App';
+import { ThemeProviderAdapter } from './components/providers/ThemeProviderAdapter';
 import './index.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ThemeProvider>
+    <ThemeProviderAdapter>
       <App />
-    </ThemeProvider>
+    </ThemeProviderAdapter>
   </StrictMode>
 );

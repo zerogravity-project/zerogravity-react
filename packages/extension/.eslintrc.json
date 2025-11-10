@@ -5,5 +5,8 @@
   },
   "globals": {
     "chrome": "readonly"
+  },
+  "rules": {
+    "no-console": "warn"
   }
 }

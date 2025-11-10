@@ -28,6 +28,7 @@ export default defineConfig({
         'components/ui/icon/index': path.resolve(__dirname, 'components/ui/icon/index.ts'),
         'components/ui/logo/index': path.resolve(__dirname, 'components/ui/logo/index.ts'),
         'components/ui/loading/index': path.resolve(__dirname, 'components/ui/loading/index.ts'),
+        'components/ui/navigation/index': path.resolve(__dirname, 'components/ui/navigation/index.ts'),
         'components/providers/index': path.resolve(__dirname, 'components/providers/index.ts'),
         'hooks/index': path.resolve(__dirname, 'hooks/index.ts'),
         'utils/index': path.resolve(__dirname, 'utils/index.ts'),
