@@ -26,7 +26,6 @@ export default function ConsentPage() {
       router.push('/');
     },
     onError: (error) => {
-      // eslint-disable-next-line no-console
       console.error('[Consent] Failed to update consent:', error);
       alert('Failed to save your consent preferences. Please try again.');
     },

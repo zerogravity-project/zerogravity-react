@@ -61,11 +61,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.isNewUser = data.data.isNewUser;
             token.consents = data.data.consents;
           } else {
-            // eslint-disable-next-line no-console
             console.error('Backend verification failed');
           }
         } catch (error) {
-          // eslint-disable-next-line no-console
           console.error('[JWT Callback] Error:', error);
         }
       }
