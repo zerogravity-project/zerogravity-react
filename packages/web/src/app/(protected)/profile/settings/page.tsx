@@ -2,12 +2,16 @@
 
 import { usePathname } from 'next/navigation';
 
-import { Button, Dialog, Flex, Link, Separator, Switch, Text, TextField } from '@radix-ui/themes';
+import { Button, Dialog, Flex, Separator, Switch, Text, TextField } from '@radix-ui/themes';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
+import { AIAnalysisContent } from '@/app/terms/[type]/_components/AIAnalysisContent';
+import { PrivacyPolicyContent } from '@/app/terms/[type]/_components/PrivacyPolicyContent';
+import { SensitiveDataContent } from '@/app/terms/[type]/_components/SensitiveDataContent';
+import { ServiceTermsContent } from '@/app/terms/[type]/_components/ServiceTermsContent';
 import { useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
 export default function ProfileSettingsPage() {
@@ -19,6 +23,8 @@ export default function ProfileSettingsPage() {
   const email = user?.email ?? 'example@example.com';
 
   const [showAIWarning, setShowAIWarning] = useState(false);
+  const [termsModalOpen, setTermsModalOpen] = useState(false);
+  const [activeTermsType, setActiveTermsType] = useState<string>('');
 
   const updateConsentMutation = useUpdateConsentMutation({
     onSuccess: () => {
@@ -56,6 +62,11 @@ export default function ProfileSettingsPage() {
     });
   };
 
+  const openTermsModal = (type: string) => {
+    setActiveTermsType(type);
+    setTermsModalOpen(true);
+  };
+
   return (
     <div className="flex h-full w-full flex-1 flex-col gap-7 p-6 md:p-8">
       {/* Profile Settings Section */}
@@ -71,21 +82,21 @@ export default function ProfileSettingsPage() {
           description="Required to use ZeroGravity"
           checked={consents?.termsAgreed ?? false}
           disabled
-          viewLink="/terms/service"
+          onViewDetails={() => openTermsModal('service')}
         />
         <ConsentToggle
           label="Privacy Policy"
           description="Required to use ZeroGravity"
           checked={consents?.privacyAgreed ?? false}
           disabled
-          viewLink="/terms/privacy"
+          onViewDetails={() => openTermsModal('privacy')}
         />
         <ConsentToggle
           label="Sensitive Data Processing"
           description="Required for emotion tracking"
           checked={consents?.sensitiveDataConsent ?? false}
           disabled
-          viewLink="/terms/sensitive-data"
+          onViewDetails={() => openTermsModal('sensitive-data')}
         />
         <ConsentToggle
           label="AI-Powered Analysis"
@@ -93,7 +104,7 @@ export default function ProfileSettingsPage() {
           checked={consents?.aiAnalysisConsent ?? false}
           disabled={updateConsentMutation.isPending}
           onCheckedChange={handleAIConsentToggle}
-          viewLink="/terms/ai-analysis"
+          onViewDetails={() => openTermsModal('ai-analysis')}
         />
       </SettingSection>
 
@@ -136,6 +147,32 @@ export default function ProfileSettingsPage() {
             <Dialog.Close>
               <Button variant="solid" color="red" onClick={confirmAIConsentDisable}>
                 Disable AI Analysis
+              </Button>
+            </Dialog.Close>
+          </Flex>
+        </Dialog.Content>
+      </Dialog.Root>
+
+      {/* Terms & Policies Dialog */}
+      <Dialog.Root open={termsModalOpen} onOpenChange={setTermsModalOpen}>
+        <Dialog.Content maxWidth="600px" style={{ maxHeight: '80vh', overflow: 'auto' }}>
+          <Dialog.Title>
+            {activeTermsType === 'service' && 'Terms of Service'}
+            {activeTermsType === 'privacy' && 'Privacy Policy'}
+            {activeTermsType === 'sensitive-data' && 'Sensitive Data Processing'}
+            {activeTermsType === 'ai-analysis' && 'AI-Powered Analysis'}
+          </Dialog.Title>
+          <Dialog.Description size="2" mb="4">
+            {activeTermsType === 'service' && <ServiceTermsContent />}
+            {activeTermsType === 'privacy' && <PrivacyPolicyContent />}
+            {activeTermsType === 'sensitive-data' && <SensitiveDataContent />}
+            {activeTermsType === 'ai-analysis' && <AIAnalysisContent />}
+          </Dialog.Description>
+
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close>
+              <Button variant="soft" color="gray">
+                Close
               </Button>
             </Dialog.Close>
           </Flex>
@@ -215,7 +252,7 @@ interface ConsentToggleProps {
   checked: boolean;
   disabled?: boolean;
   onCheckedChange?: (checked: boolean) => void;
-  viewLink: string;
+  onViewDetails: () => void;
 }
 
 function ConsentToggle({
@@ -224,7 +261,7 @@ function ConsentToggle({
   checked,
   disabled = false,
   onCheckedChange,
-  viewLink,
+  onViewDetails,
 }: ConsentToggleProps) {
   const isMobile = useIsMobile();
 
@@ -241,9 +278,14 @@ function ConsentToggle({
         </Flex>
         <Switch checked={checked} disabled={disabled} onCheckedChange={onCheckedChange} size="2" />
       </Flex>
-      <Link href={viewLink} target="_blank" size={isMobile ? '2' : '1'} color="blue">
+      <Text
+        size={isMobile ? '2' : '1'}
+        color="blue"
+        style={{ cursor: 'pointer', textDecoration: 'underline' }}
+        onClick={onViewDetails}
+      >
         View Details
-      </Link>
+      </Text>
     </Flex>
   );
 }
