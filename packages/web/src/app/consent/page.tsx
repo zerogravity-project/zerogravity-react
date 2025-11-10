@@ -5,12 +5,15 @@
 
 'use client';
 
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { Checkbox, Button, Flex, Text, Link, Box, Callout } from '@radix-ui/themes';
+import { useState } from 'react';
+
 import { Logo } from '@zerogravity/shared/components/ui/logo';
-import { useUpdateConsentMutation } from '@/services/user/user.query';
+
 import type { UpdateConsentRequest } from '@/services/user/user.dto';
+import { useUpdateConsentMutation } from '@/services/user/user.query';
 
 export default function ConsentPage() {
   const router = useRouter();
@@ -25,7 +28,7 @@ export default function ConsentPage() {
     onSuccess: () => {
       router.push('/');
     },
-    onError: (error) => {
+    onError: error => {
       console.error('[Consent] Failed to update consent:', error);
       alert('Failed to save your consent preferences. Please try again.');
     },
@@ -41,8 +44,7 @@ export default function ConsentPage() {
     updateConsentMutation.mutate(consents);
   };
 
-  const allRequiredConsentsChecked =
-    consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
+  const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
 
   return (
     <Flex
@@ -88,22 +90,14 @@ export default function ConsentPage() {
           <Flex gap="3" align="start">
             <Checkbox
               checked={consents.termsAgreed}
-              onCheckedChange={(checked) =>
-                setConsents({ ...consents, termsAgreed: checked === true })
-              }
+              onCheckedChange={checked => setConsents({ ...consents, termsAgreed: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
             <Flex direction="column" gap="1" style={{ flex: 1 }}>
               <Text size="3">
                 I agree to the{' '}
-                <Link
-                  href="/terms/service"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="blue"
-                  underline="hover"
-                >
+                <Link href="/terms/service" target="_blank" rel="noopener noreferrer" color="blue" underline="hover">
                   Terms of Service
                 </Link>{' '}
                 <Text color="red">*</Text>
@@ -115,22 +109,14 @@ export default function ConsentPage() {
           <Flex gap="3" align="start">
             <Checkbox
               checked={consents.privacyAgreed}
-              onCheckedChange={(checked) =>
-                setConsents({ ...consents, privacyAgreed: checked === true })
-              }
+              onCheckedChange={checked => setConsents({ ...consents, privacyAgreed: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
             <Flex direction="column" gap="1" style={{ flex: 1 }}>
               <Text size="3">
                 I agree to the{' '}
-                <Link
-                  href="/terms/privacy"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  color="blue"
-                  underline="hover"
-                >
+                <Link href="/terms/privacy" target="_blank" rel="noopener noreferrer" color="blue" underline="hover">
                   Privacy Policy
                 </Link>{' '}
                 <Text color="red">*</Text>
@@ -142,9 +128,7 @@ export default function ConsentPage() {
           <Flex gap="3" align="start">
             <Checkbox
               checked={consents.sensitiveDataConsent}
-              onCheckedChange={(checked) =>
-                setConsents({ ...consents, sensitiveDataConsent: checked === true })
-              }
+              onCheckedChange={checked => setConsents({ ...consents, sensitiveDataConsent: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
@@ -179,9 +163,7 @@ export default function ConsentPage() {
           <Flex gap="3" align="start">
             <Checkbox
               checked={consents.aiAnalysisConsent}
-              onCheckedChange={(checked) =>
-                setConsents({ ...consents, aiAnalysisConsent: checked === true })
-              }
+              onCheckedChange={checked => setConsents({ ...consents, aiAnalysisConsent: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
@@ -201,10 +183,9 @@ export default function ConsentPage() {
               <Callout.Root color="amber" size="1">
                 <Callout.Text>
                   <Text size="2">
-                    Your emotion data will be sent to Google Gemini AI for personalized insights.
-                    This data transmission is irreversible and cannot be deleted from AI systems.
-                    You can disable this feature later in Settings, but it will only stop future
-                    transmissions.
+                    Your emotion data will be sent to Google Gemini AI for personalized insights. This data transmission
+                    is irreversible and cannot be deleted from AI systems. You can disable this feature later in
+                    Settings, but it will only stop future transmissions.
                   </Text>
                 </Callout.Text>
               </Callout.Root>
