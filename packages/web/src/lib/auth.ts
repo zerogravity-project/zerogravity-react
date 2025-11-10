@@ -59,8 +59,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const data = await response.json();
             console.log('[JWT Callback] Backend response:', data);
             // Store isNewUser flag and consent data from ApiResponse wrapper
-            token.isNewUser = data.data.isNewUser;
+            // Note: Jackson serializes boolean isNewUser() getter as "newUser" in JSON
+            token.isNewUser = data.data.newUser;
             token.consents = data.data.consents;
+            // Store backend JWT for API authentication
+            token.backendJwt = data.data.jwtToken;
           } else {
             console.error('Backend verification failed');
           }
@@ -80,7 +83,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     /**
      * Transform JWT into client-accessible session
-     * Include consent data and isNewUser flag
+     * Include consent data, isNewUser flag, and backend JWT
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     session: async ({ session, token }: any) => {
@@ -88,6 +91,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.provider = token.provider;
       session.user.isNewUser = token.isNewUser;
       session.user.consents = token.consents;
+      session.backendJwt = token.backendJwt;
       return session;
     },
   },

@@ -20,6 +20,6 @@ export interface VerifyAuthRequest {
 export interface VerifyAuthResponse {
   success: boolean;
   message: string;
-  isNewUser: boolean;
+  newUser: boolean; // Jackson serializes boolean isNewUser() getter as "newUser"
   consents: ConsentData;
 }
