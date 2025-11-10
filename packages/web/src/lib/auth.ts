@@ -35,6 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
      * Store account information from OAuth provider and verify with backend
      * On initial sign-in, call backend /auth/verify to get backend JWT
      * Store isNewUser flag and consent data in token
+     * Handle token refresh when access token expires
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     jwt: async ({ token, account, user }: any) => {
@@ -62,8 +63,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // Note: Jackson serializes boolean isNewUser() getter as "newUser" in JSON
             token.isNewUser = data.data.newUser;
             token.consents = data.data.consents;
-            // Store backend JWT for API authentication
+            // Store backend JWT and refresh token
             token.backendJwt = data.data.jwtToken;
+            token.refreshToken = data.data.refreshToken;
+            // Set expiration time (15 minutes from now)
+            token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
           } else {
             console.error('Backend verification failed');
           }
@@ -78,12 +82,45 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.provider = account.provider;
       }
 
+      // Check if backend JWT is expired and refresh if needed
+      if (token.backendJwtExpiresAt && Date.now() > token.backendJwtExpiresAt) {
+        console.log('[JWT Callback] Backend JWT expired, refreshing...');
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              refreshToken: token.refreshToken,
+            }),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            console.log('[JWT Callback] Token refreshed successfully');
+            // Update with new tokens
+            token.backendJwt = data.data.accessToken;
+            token.refreshToken = data.data.refreshToken;
+            token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
+          } else {
+            console.error('[JWT Callback] Token refresh failed');
+            // Mark token as expired to trigger re-login
+            token.error = 'RefreshTokenExpired';
+          }
+        } catch (error) {
+          console.error('[JWT Callback] Token refresh error:', error);
+          token.error = 'RefreshTokenExpired';
+        }
+      }
+
       return token;
     },
 
     /**
      * Transform JWT into client-accessible session
      * Include consent data, isNewUser flag, and backend JWT
+     * Handle token refresh errors
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     session: async ({ session, token }: any) => {
@@ -92,6 +129,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.isNewUser = token.isNewUser;
       session.user.consents = token.consents;
       session.backendJwt = token.backendJwt;
+      session.refreshToken = token.refreshToken;
+
+      // Pass refresh error to client for handling
+      if (token.error) {
+        session.error = token.error;
+      }
+
       return session;
     },
   },
@@ -100,7 +144,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 1 hour - synchronized with backend JWT expiration
-    updateAge: 60 * 30, // 30 minutes - check and refresh session every 30 minutes
+    maxAge: 15 * 60, // 15 minutes - synchronized with backend JWT expiration
+    updateAge: 7 * 60, // 7 minutes - check and refresh session every 7 minutes
   },
 });

@@ -38,19 +38,75 @@ axiosInstance.interceptors.request.use(
 
 /**
  * Response interceptor
- * Handle 401 errors and redirect to login (client-side only)
+ * Handle 401 errors: try to refresh token, otherwise redirect to login
  */
 axiosInstance.interceptors.response.use(
   response => {
     return response;
   },
   async error => {
+    const originalRequest = error.config;
+
     // Handle authentication errors
-    if (error.response?.status === 401) {
-      console.error('[Axios] Unauthorized - signing out');
-      // Only redirect on client-side (SSR compatibility)
-      if (typeof window !== 'undefined') {
-        await signOut({ callbackUrl: '/login' });
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      console.log('[Axios] 401 Unauthorized - attempting token refresh');
+      originalRequest._retry = true;
+
+      try {
+        // Get current session to check for refresh token error
+        const session = await getSession();
+
+        // If session has RefreshTokenExpired error, force logout
+        if ((session as any)?.error === 'RefreshTokenExpired') {
+          console.error('[Axios] Refresh token expired - signing out');
+          if (typeof window !== 'undefined') {
+            await signOut({ callbackUrl: '/login' });
+          }
+          return Promise.reject(error);
+        }
+
+        // Try to refresh the token
+        const refreshToken = (session as any)?.refreshToken;
+        if (!refreshToken) {
+          console.error('[Axios] No refresh token available - signing out');
+          if (typeof window !== 'undefined') {
+            await signOut({ callbackUrl: '/login' });
+          }
+          return Promise.reject(error);
+        }
+
+        const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            refreshToken,
+          }),
+        });
+
+        if (refreshResponse.ok) {
+          const data = await refreshResponse.json();
+          console.log('[Axios] Token refreshed successfully, retrying original request');
+
+          // Update the Authorization header with new token
+          originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;
+
+          // Retry the original request with new token
+          return axiosInstance(originalRequest);
+        } else {
+          console.error('[Axios] Token refresh failed - signing out');
+          if (typeof window !== 'undefined') {
+            await signOut({ callbackUrl: '/login' });
+          }
+          return Promise.reject(error);
+        }
+      } catch (refreshError) {
+        console.error('[Axios] Token refresh error:', refreshError);
+        if (typeof window !== 'undefined') {
+          await signOut({ callbackUrl: '/login' });
+        }
+        return Promise.reject(error);
       }
     }
 
