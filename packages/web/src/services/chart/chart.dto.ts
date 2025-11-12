@@ -3,6 +3,8 @@
  * Request and response types for chart endpoints
  */
 
+import { EmotionReason, EmotionType } from '@zerogravity/shared/components/ui/emotion';
+
 /**
  * Chart period types
  */
@@ -20,60 +22,33 @@ export interface ChartQueryParams {
  * GET /chart/level
  * Emotion level statistics
  */
-export interface ChartLevelDataPoint {
+export interface ChartLevelData {
   label: string;
   value: number | null; // Emotion level 1-7, null if no data
 }
 
 export interface ChartLevelResponse {
-  data: ChartLevelDataPoint[];
+  data: ChartLevelData[];
   average: number | null; // Weighted average, null if no records
 }
 
-/**
- * GET /chart/reason
- * Emotion reason distribution statistics
- */
-export type EmotionReason =
-  | 'Health'
-  | 'Fitness'
-  | 'Self-care'
-  | 'Hobby'
-  | 'Identity'
-  | 'Religion'
-  | 'Community'
-  | 'Family'
-  | 'Friends'
-  | 'Partner'
-  | 'Romance'
-  | 'Money'
-  | 'Housework'
-  | 'Work'
-  | 'Education'
-  | 'Travel'
-  | 'Weather'
-  | 'Domestic Issues'
-  | 'Global Issues';
-
-export interface ChartReasonDataPoint {
+export interface ChartReasonData {
   label: EmotionReason;
   count: number; // Always present, 0 if no records
 }
 
 export interface ChartReasonResponse {
-  data: ChartReasonDataPoint[];
+  data: ChartReasonData[];
 }
 
 /**
  * GET /chart/count
  * Emotion count statistics for scatter chart
  */
-export type EmotionType = 'HIGH_POSITIVE' | 'MID_POSITIVE' | 'NEUTRAL' | 'MID_NEGATIVE' | 'HIGH_NEGATIVE';
-
-export interface ChartCountDataPoint {
+export interface ChartCountData {
   label: string; // Period label (SUN/MON, 1/2, JAN/FEB)
   position: number; // Decimal position for X-axis
-  emotionId: number; // Emotion ID (typically 1-7)
+  emotionId: number; // Emotion ID (typically 0-6)
   emotionType: EmotionType;
   timestamp: string; // ISO 8601 with timezone offset
   daily: number; // DAILY record count
@@ -82,70 +57,28 @@ export interface ChartCountDataPoint {
 }
 
 export interface ChartCountResponse {
-  data: ChartCountDataPoint[];
+  data: ChartCountData[];
 }
 
 /**
  * Period label types
  */
-export type WeekLabel = 'SUN' | 'MON' | 'TUE' | 'WED' | 'THU' | 'FRI' | 'SAT';
+export type WeekLabel = (typeof WEEK_LABELS)[number];
+export type YearLabel = (typeof YEAR_LABELS)[number];
 
-export type MonthLabel =
-  | '1'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8'
-  | '9'
-  | '10'
-  | '11'
-  | '12'
-  | '13'
-  | '14'
-  | '15'
-  | '16'
-  | '17'
-  | '18'
-  | '19'
-  | '20'
-  | '21'
-  | '22'
-  | '23'
-  | '24'
-  | '25'
-  | '26'
-  | '27'
-  | '28'
-  | '29'
-  | '30'
-  | '31';
-
-export type YearLabel = 'JAN' | 'FEB' | 'MAR' | 'APR' | 'MAY' | 'JUN' | 'JUL' | 'AUG' | 'SEP' | 'OCT' | 'NOV' | 'DEC';
-
-/**
- * All predefined emotion reasons
- */
-export const EMOTION_REASONS: readonly EmotionReason[] = [
-  'Health',
-  'Fitness',
-  'Self-care',
-  'Hobby',
-  'Identity',
-  'Religion',
-  'Community',
-  'Family',
-  'Friends',
-  'Partner',
-  'Romance',
-  'Money',
-  'Housework',
-  'Work',
-  'Education',
-  'Travel',
-  'Weather',
-  'Domestic Issues',
-  'Global Issues',
+export const WEEK_LABELS = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'] as const;
+export const YEAR_LABELS = [
+  'JAN',
+  'FEB',
+  'MAR',
+  'APR',
+  'MAY',
+  'JUN',
+  'JUL',
+  'AUG',
+  'SEP',
+  'OCT',
+  'NOV',
+  'DEC',
+  'JAN',
 ] as const;

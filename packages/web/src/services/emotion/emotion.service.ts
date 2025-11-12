@@ -3,8 +3,6 @@
  * API calls for emotion management (SSR/CSR compatible)
  */
 
-import axiosInstance from '@/lib/axios';
-import type { ApiResponse } from '@/types/api.types';
 import type {
   CreateEmotionRecordRequest,
   CreateEmotionRecordResponse,
@@ -12,6 +10,9 @@ import type {
   GetEmotionRecordsResponse,
   UpdateEmotionRecordRequest,
 } from './emotion.dto';
+
+import axiosInstance from '@/lib/axios';
+import type { ApiResponse } from '@/types/api.types';
 
 export const emotionService = {
   /**
@@ -29,9 +30,7 @@ export const emotionService = {
    * GET /emotions/records
    * Get emotion records with date range filter
    */
-  getEmotionRecords: async (
-    params: GetEmotionRecordsParams
-  ): Promise<ApiResponse<GetEmotionRecordsResponse>> => {
+  getEmotionRecords: async (params: GetEmotionRecordsParams): Promise<ApiResponse<GetEmotionRecordsResponse>> => {
     const { data } = await axiosInstance.get('/emotions/records', {
       params,
     });

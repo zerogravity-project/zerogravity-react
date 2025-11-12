@@ -38,6 +38,8 @@ export function Slider({
     [value, defaultValue, min, max]
   );
 
+  const [isFocused, setIsFocused] = React.useState(false);
+
   return (
     <SliderPrimitive.Root
       data-slot="slider"
@@ -65,17 +67,16 @@ export function Slider({
           data-slot="slider-thumb"
           key={index}
           className={cn(
-            'ring-offset-background block h-7.5 w-7.5 rounded-[9999px] border-[0.08px] border-[rgba(0,0,0,0.2)] bg-white transition-colors disabled:pointer-events-none disabled:opacity-50',
-            'shadow-[0px_6px_24px_0px_rgba(0,0,0,0.05)]',
-            'focus-visible:ring-2 focus-visible:ring-offset-3 focus-visible:outline-none'
+            'ring-offset-background block h-7.5 w-7.5 rounded-[9999px] border-[0.08px] border-[rgba(0,0,0,0.2)] bg-white transition-all disabled:pointer-events-none disabled:opacity-50',
+            'focus-visible:outline-none'
           )}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           style={{
-            // Tailwind ring utilities read these CSS variables
-            // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-            ...(colors?.ring ? ({ ['--tw-ring-color' as any]: colors.ring } as React.CSSProperties) : {}),
-            ...(colors?.ringOffset
-              ? ({ ['--tw-ring-offset-color' as any]: colors.ringOffset } as React.CSSProperties)
-              : {}),
+            boxShadow:
+              isFocused && colors?.ring && colors?.ringOffset
+                ? `0 0 0 3px ${colors.ringOffset}, 0 0 0 5px ${colors.ring}, 0px 6px 24px 0px rgba(0,0,0,0.05)`
+                : '0px 6px 24px 0px rgba(0,0,0,0.05)',
           }}
         />
       ))}

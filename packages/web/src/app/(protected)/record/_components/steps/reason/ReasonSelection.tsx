@@ -5,7 +5,11 @@ import { EMOTION_REASONS, EMOTION_STEPS } from '@zerogravity/shared/components/u
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 export default function ReasonSelection() {
-  const { emotionValueToStepIndex, emotionReason, setEmotionReason } = useEmotionRecordContext();
+  const {
+    emotionValueToStepIndex,
+    emotionReasons: emotionReason,
+    setEmotionReasons: setEmotionReason,
+  } = useEmotionRecordContext();
 
   const toggleReason = (reason: string) => {
     if (emotionReason.includes(reason)) {

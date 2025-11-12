@@ -7,15 +7,17 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { aiService } from './ai.service';
+
 import type {
-  GetPeriodAnalysisParams,
   AIAnalysisResponse,
+  DiarySummaryResponse,
   EmotionPredictionRequest,
   EmotionPredictionResponse,
   GetDiarySummaryParams,
-  DiarySummaryResponse,
+  GetPeriodAnalysisParams,
 } from './ai.dto';
+import { aiService } from './ai.service';
+
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 export const AI_QUERY_KEY = {

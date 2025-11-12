@@ -1,40 +1,47 @@
 import Link from 'next/link';
 
 import { Badge, Button, Text } from '@radix-ui/themes';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
-import { EMOTION_STEPS, EmotionPlanetNull, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
+import { useTheme } from '@zerogravity/shared/components/providers';
+import {
+  EMOTION_COLORS,
+  EMOTION_STEPS,
+  EmotionId,
+  EmotionPlanetNull,
+  EmotionPlanetScene,
+} from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { formatDateString } from '@zerogravity/shared/utils';
 
 import { useCalendar } from '../../../../_contexts/CalendarContext';
 import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';
 
-const REASON_LISTS = ['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Religion'];
+import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 
-export default function DailyEmotionSection() {
+interface DailyEmotionSectionProps {
+  emotionRecords?: EmotionRecordDetail;
+}
+
+export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSectionProps) {
+  const { selectedDate } = useCalendar();
+  const { accentColor } = useTheme();
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  const { selectedDate } = useCalendar();
   const selectedDateString = formatDateString(selectedDate);
-
-  const randomEmotionId = useMemo(() => {
-    return Math.floor(Math.random() * 7);
-  }, []);
-
-  const emotionId = useMemo(() => {
-    return Math.random() > 0.1 ? Math.floor(Math.random() * 7) : null;
-  }, []);
-
-  const emotionColor = emotionId ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[randomEmotionId].color;
+  const isEmpty = emotionRecords?.emotionId === undefined;
+  const accentEmotionId = EMOTION_COLORS.indexOf(accentColor);
+  const emotionId = emotionRecords?.emotionId ?? (accentEmotionId as EmotionId);
+  const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
   return (
     <section className="flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pb-9">
       {/* Selected date daily emotion */}
 
-      {!emotionId && (
+      {isEmpty && (
         <>
-          <EmotionPlanetNull emotionId={randomEmotionId} />
+          <EmotionPlanetNull emotionId={accentEmotionId} />
           <Link
             href={`/record/daily?date=${selectedDateString}`}
             className="z-1 mt-6 flex w-full flex-col items-center"
@@ -46,14 +53,14 @@ export default function DailyEmotionSection() {
         </>
       )}
 
-      {emotionId && (
+      {!isEmpty && (
         <>
           <EmotionPlanetScene emotionId={emotionId} />
           <Text color={emotionColor} className="!text-center !text-3xl transition-all duration-400">
             {EMOTION_STEPS[emotionId].type}
           </Text>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {REASON_LISTS.map(reason => (
+            {emotionRecords?.reasons?.map(reason => (
               <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
                 {reason}
               </Badge>
@@ -71,7 +78,15 @@ export default function DailyEmotionSection() {
         </>
       )}
 
-      <EmotionDetailDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+      {!isEmpty && (
+        <EmotionDetailDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          emotionId={emotionId}
+          reasons={emotionRecords?.reasons}
+          diaryEntry={emotionRecords?.diaryEntry ?? ''}
+        />
+      )}
     </section>
   );
 }

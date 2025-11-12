@@ -1,5 +1,6 @@
 'use client';
 
+import { format, startOfMonth, startOfWeek, startOfYear } from 'date-fns';
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 import { formatDateRange, navigatePeriod } from '../_utils/dateUtils';
@@ -10,6 +11,7 @@ interface ChartContextType {
   // Current state
   currentDate: Date;
   timePeriod: TimePeriod;
+  startDate: string;
 
   // Navigation
   goToNextPeriod: () => void;
@@ -37,6 +39,20 @@ export function ChartProvider({ children }: ChartProviderProps) {
   const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('week');
+
+  // Start date for the chart
+  const startDate = useMemo(() => {
+    switch (timePeriod) {
+      case 'week':
+        return format(startOfWeek(currentDate), 'yyyy-MM-dd');
+      case 'month':
+        return format(startOfMonth(currentDate), 'yyyy-MM-dd');
+      case 'year':
+        return format(startOfYear(currentDate), 'yyyy-MM-dd');
+      default:
+        return format(currentDate, 'yyyy-MM-dd');
+    }
+  }, [currentDate, timePeriod]);
 
   // Navigation state
   const canGoNext = useMemo(() => {
@@ -91,6 +107,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
     () => ({
       currentDate,
       timePeriod,
+      startDate,
       goToNextPeriod,
       goToPreviousPeriod,
       goToToday,
@@ -104,6 +121,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
     [
       currentDate,
       timePeriod,
+      startDate,
       goToNextPeriod,
       goToPreviousPeriod,
       goToToday,

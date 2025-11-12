@@ -7,12 +7,10 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
+
+import type { DeleteUserResponse, UpdateConsentRequest, UpdateConsentResponse } from './user.dto';
 import { userService } from './user.service';
-import type {
-  UpdateConsentRequest,
-  UpdateConsentResponse,
-  DeleteUserResponse,
-} from './user.dto';
+
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 export const USER_QUERY_KEY = {
@@ -44,7 +42,7 @@ export const useUpdateConsentMutation = (options: UseUpdateConsentMutationOption
 
   return useMutation({
     mutationFn: (params: UpdateConsentRequest) => userService.updateConsent(params),
-    onSuccess: (data) => {
+    onSuccess: data => {
       // Invalidate user profile query to refresh consent data
       queryClient.invalidateQueries({ queryKey: [USER_QUERY_KEY.PROFILE] });
       options.onSuccess?.(data);
