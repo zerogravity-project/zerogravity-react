@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 import { Box, Button, Callout, Checkbox, Flex, Link, Text } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Logo } from '@zerogravity/shared/components/ui/logo';
 
@@ -18,7 +18,6 @@ import { useUpdateConsentMutation } from '@/services/user/user.query';
 
 export default function ConsentPage() {
   const router = useRouter();
-  const { data: session } = useSession();
   const { update: updateSession } = useSession();
   const [consents, setConsents] = useState<UpdateConsentRequest>({
     termsAgreed: false,
@@ -55,9 +54,6 @@ export default function ConsentPage() {
 
   const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
 
-  useEffect(() => {
-    console.log('[Consent] Session changed:', session);
-  }, [session]);
   return (
     <Flex
       direction="column"

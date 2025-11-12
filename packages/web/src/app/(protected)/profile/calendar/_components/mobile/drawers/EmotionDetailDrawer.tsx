@@ -6,23 +6,30 @@ import { Badge, Button, Heading, Text } from '@radix-ui/themes';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef } from 'react';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
-import { formatDateString } from '@zerogravity/shared/utils';
+import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
+import { formatDateString, isSameDay } from '@zerogravity/shared/utils';
+
+import { useCalendar } from '../../../_contexts/CalendarContext';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import { useScroll } from '@/app/_hooks/useScroll';
 
-import { useCalendar } from '../../../_contexts/CalendarContext';
-
-const REASON_LISTS = ['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Religion'];
-
 interface EmotionDetailDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  emotionId: EmotionId;
+  reasons: EmotionReason[];
+  diaryEntry: string;
 }
 
-export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDrawerProps) {
+export default function EmotionDetailDrawer({
+  isOpen,
+  onClose,
+  emotionId,
+  reasons,
+  diaryEntry,
+}: EmotionDetailDrawerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { selectedDate } = useCalendar();
@@ -33,6 +40,8 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
   });
 
   const selectedDateString = formatDateString(selectedDate);
+  const isToday = isSameDay(selectedDate, new Date());
+  const isEmpty = emotionId === undefined;
 
   return (
     <AnimatePresence>
@@ -66,23 +75,25 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
                 onClick={onClose}
                 border
                 rightContent={
-                  <Link href={`/record/daily?date=${selectedDateString}`}>
-                    <Button variant="soft" radius="full" className="!cursor-pointer">
-                      Edit
-                    </Button>
-                  </Link>
+                  isToday ? (
+                    <Link href={`/record/daily?date=${selectedDateString}`}>
+                      <Button variant="soft" radius="full" className="!cursor-pointer">
+                        {!isEmpty ? 'Edit' : 'Add'}
+                      </Button>
+                    </Link>
+                  ) : undefined
                 }
               />
 
               {/* Emotion Content - Fixed */}
               <div className="flex w-full flex-col items-center gap-6 bg-[var(--background-dark)] pt-6 pb-9">
-                <EmotionPlanetImage emotionId={3} width={120} height={120} />
+                <EmotionPlanetImage emotionId={emotionId} width={120} height={120} />
                 <div className="flex w-full flex-col items-center gap-3">
-                  <Text color={EMOTION_STEPS[3].color} className="!text-center" size="5">
-                    {EMOTION_STEPS[3].type}
+                  <Text color={EMOTION_STEPS[emotionId].color} className="!text-center" size="5">
+                    {EMOTION_STEPS[emotionId].type}
                   </Text>
                   <div className="flex w-full flex-wrap justify-center gap-2 px-6">
-                    {REASON_LISTS.map(reason => (
+                    {reasons.map(reason => (
                       <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
                         {reason}
                       </Badge>
@@ -102,41 +113,18 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
                   <Heading as="h2" size="4" weight="medium">
                     Daily Note
                   </Heading>
-                  <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
-                    <Button variant="soft" radius="full" className="!cursor-pointer">
-                      Edit
-                    </Button>
-                  </Link>
+                  {isToday && !isEmpty && (
+                    <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
+                      <Button variant="soft" radius="full" className="!cursor-pointer">
+                        Edit
+                      </Button>
+                    </Link>
+                  )}
                 </div>
 
                 {/* Text Area - Scrollable only */}
                 <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 pb-8">
-                  <Text>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem
-                    ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing
-                    elit. Quisquam, quos. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.
-                  </Text>
+                  <Text>{diaryEntry}</Text>
                 </div>
               </div>
             </div>

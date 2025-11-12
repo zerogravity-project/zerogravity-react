@@ -7,13 +7,15 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { emotionService } from './emotion.service';
+
 import type {
   CreateEmotionRecordRequest,
   CreateEmotionRecordResponse,
   GetEmotionRecordsParams,
   UpdateEmotionRecordRequest,
 } from './emotion.dto';
+import { emotionService } from './emotion.service';
+
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 export const EMOTION_QUERY_KEY = {
@@ -24,7 +26,7 @@ export const EMOTION_QUERY_KEY = {
  * GET /emotions/records
  * Get emotion records query with date range
  */
-export const useEmotionRecordsQuery = (params: GetEmotionRecordsParams) => {
+export const useGetEmotionRecordsQuery = (params: GetEmotionRecordsParams) => {
   return useQuery({
     queryKey: [EMOTION_QUERY_KEY.RECORDS, params.startDateTime, params.endDateTime],
     queryFn: () => emotionService.getEmotionRecords(params),
@@ -40,14 +42,12 @@ interface UseCreateEmotionRecordMutationOptions {
   onError?: (error: AxiosError<ErrorResponse>) => void;
 }
 
-export const useCreateEmotionRecordMutation = (
-  options: UseCreateEmotionRecordMutationOptions = {}
-) => {
+export const useCreateEmotionRecordMutation = (options: UseCreateEmotionRecordMutationOptions = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (params: CreateEmotionRecordRequest) => emotionService.createEmotionRecord(params),
-    onSuccess: (data) => {
+    onSuccess: data => {
       // Invalidate emotion records query to refresh data
       queryClient.invalidateQueries({ queryKey: [EMOTION_QUERY_KEY.RECORDS] });
       options.onSuccess?.(data);
@@ -70,15 +70,13 @@ interface UpdateEmotionRecordMutationParams {
   data: UpdateEmotionRecordRequest;
 }
 
-export const useUpdateEmotionRecordMutation = (
-  options: UseUpdateEmotionRecordMutationOptions = {}
-) => {
+export const useUpdateEmotionRecordMutation = (options: UseUpdateEmotionRecordMutationOptions = {}) => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ emotionRecordId, data }: UpdateEmotionRecordMutationParams) =>
       emotionService.updateEmotionRecord(emotionRecordId, data),
-    onSuccess: (data) => {
+    onSuccess: data => {
       // Invalidate emotion records query to refresh data
       queryClient.invalidateQueries({ queryKey: [EMOTION_QUERY_KEY.RECORDS] });
       options.onSuccess?.(data);

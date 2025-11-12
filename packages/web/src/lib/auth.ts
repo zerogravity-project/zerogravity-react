@@ -6,6 +6,14 @@ import Kakao from 'next-auth/providers/kakao';
  * Auth.js v5 Configuration
  * Centralized authentication setup for Next.js 15 App Router
  */
+
+// Refresh lock to prevent concurrent refresh attempts
+let isRefreshing = false;
+let refreshPromise: Promise<any> | null = null;
+
+// Refresh JWT 5 minutes before expiration to avoid timing issues
+const REFRESH_BUFFER_MS = 5 * 60 * 1000; // 5 minutes
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({
@@ -89,32 +97,77 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.provider = account.provider;
       }
 
-      // Check if backend JWT is expired and refresh if needed
-      if (token.backendJwtExpiresAt && Date.now() > token.backendJwtExpiresAt) {
-        console.log('[JWT Callback] Backend JWT expired, refreshing...');
-        try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              refreshToken: token.refreshToken,
-            }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            console.log('[JWT Callback] Token refreshed successfully');
-            // Update with new tokens
-            token.backendJwt = data.data.accessToken;
-            token.refreshToken = data.data.refreshToken;
-            token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
-          } else {
-            console.error('[JWT Callback] Token refresh failed');
-            // Mark token as expired to trigger re-login
+      // Check if backend JWT is expired and refresh if needed (with 5-minute buffer)
+      if (token.backendJwtExpiresAt && Date.now() > token.backendJwtExpiresAt - REFRESH_BUFFER_MS) {
+        // If already refreshing, wait for the ongoing refresh to complete
+        if (isRefreshing && refreshPromise) {
+          console.log('[JWT Callback] Refresh already in progress, waiting...');
+          try {
+            const refreshedData = await refreshPromise;
+            token.backendJwt = refreshedData.accessToken;
+            token.refreshToken = refreshedData.refreshToken;
+            token.backendJwtExpiresAt = refreshedData.expiresAt;
+            return token;
+          } catch (error) {
+            console.error('[JWT Callback] Waiting for refresh failed:', error);
             token.error = 'RefreshTokenExpired';
+            return token;
           }
+        }
+
+        // Start new refresh
+        console.log('[JWT Callback] Backend JWT expired, refreshing...', {
+          currentRefreshToken: token.refreshToken,
+          expiresAt: new Date(token.backendJwtExpiresAt).toISOString(),
+        });
+
+        isRefreshing = true;
+        refreshPromise = (async () => {
+          try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                refreshToken: token.refreshToken,
+              }),
+            });
+
+            if (response.ok) {
+              const data = await response.json();
+              console.log('[JWT Callback] Token refreshed successfully', {
+                newAccessToken: data.data.accessToken?.substring(0, 20) + '...',
+                newRefreshToken: data.data.refreshToken,
+              });
+              return {
+                accessToken: data.data.accessToken,
+                refreshToken: data.data.refreshToken,
+                expiresAt: Date.now() + 15 * 60 * 1000,
+              };
+            } else {
+              const errorText = await response.text();
+              console.error('[JWT Callback] Token refresh failed:', {
+                status: response.status,
+                statusText: response.statusText,
+                body: errorText,
+              });
+              throw new Error('RefreshTokenExpired');
+            }
+          } catch (error) {
+            console.error('[JWT Callback] Token refresh error:', error);
+            throw error;
+          } finally {
+            isRefreshing = false;
+            refreshPromise = null;
+          }
+        })();
+
+        try {
+          const refreshedData = await refreshPromise;
+          token.backendJwt = refreshedData.accessToken;
+          token.refreshToken = refreshedData.refreshToken;
+          token.backendJwtExpiresAt = refreshedData.expiresAt;
         } catch (error) {
           console.error('[JWT Callback] Token refresh error:', error);
           token.error = 'RefreshTokenExpired';
@@ -151,7 +204,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   },
   session: {
     strategy: 'jwt',
-    maxAge: 15 * 60, // 15 minutes - synchronized with backend JWT expiration
-    updateAge: 7 * 60, // 7 minutes - check and refresh session every 7 minutes
+    maxAge: 30 * 24 * 60 * 60, // 30 days - session expires after 30 days
+    updateAge: 24 * 60 * 60, // 24 hours - session is refreshed every 24 hours
   },
 });

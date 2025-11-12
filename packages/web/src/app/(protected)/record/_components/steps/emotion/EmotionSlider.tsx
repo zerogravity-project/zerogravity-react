@@ -1,10 +1,10 @@
 import { Text } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
-
-import { Slider } from '@/app/_components/ui/slider/slider';
+import { EMOTION_STEPS, EmotionId } from '@zerogravity/shared/components/ui/emotion';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
+
+import { Slider } from '@/app/_components/ui/slider/slider';
 
 export default function EmotionSlider() {
   const { setEmotionId, emotionSliderValue, setEmotionSliderValue, emotionValueToStepIndex } =
@@ -14,7 +14,7 @@ export default function EmotionSlider() {
     if (emotionSliderValue[0] !== EMOTION_STEPS[emotionValueToStepIndex].sliderValue) {
       setEmotionSliderValue([EMOTION_STEPS[emotionValueToStepIndex].sliderValue]);
     }
-    setEmotionId(emotionValueToStepIndex);
+    setEmotionId(emotionValueToStepIndex as EmotionId);
   };
 
   return (

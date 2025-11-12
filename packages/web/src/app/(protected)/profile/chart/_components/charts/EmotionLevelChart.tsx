@@ -2,28 +2,26 @@
 
 import { Chart } from 'chart.js/auto';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { EMOTION_COLORS_MAP, EMOTION_COLORS_MAP_ALPHA, EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 
-import { DAYS_OF_WEEK } from '@/app/(protected)/profile/calendar/_constants/calendar.constants';
+import { useChart } from '../../_contexts/ChartContext';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
+
+import { useChartLevelQuery } from '@/services/chart/chart.query';
 
 // Register annotation plugin
 Chart.register(annotationPlugin);
 
-interface EmotionLevelChartProps {
-  datasets: Array<{
-    label: string;
-    data: number[];
-    backgroundColor: string;
-  }>;
-}
-
-export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
+export function EmotionLevelChart() {
   const { accentColor } = useTheme();
+  const { timePeriod, startDate } = useChart();
+
+  const { data: levelData } = useChartLevelQuery({ period: timePeriod, startDate });
+
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
@@ -32,26 +30,23 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
     return labels[value] || '';
   };
 
-  useEffect(() => {
-    if (!chartRef.current) return;
+  // 데이터 가공
+  const labels = useMemo(() => levelData?.data.map(item => item.label) || [], [levelData]);
+  const barColor = useMemo(
+    () => EMOTION_COLORS_MAP_ALPHA[accentColor as keyof typeof EMOTION_COLORS_MAP_ALPHA],
+    [accentColor]
+  );
+  const lineColor = useMemo(() => EMOTION_COLORS_MAP[accentColor as keyof typeof EMOTION_COLORS_MAP], [accentColor]);
+  const averageLineColor = '#f59e0b';
 
-    // Destroy existing chart
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
-
-    const labels = [...DAYS_OF_WEEK];
-    const barColor = EMOTION_COLORS_MAP_ALPHA[accentColor as keyof typeof EMOTION_COLORS_MAP_ALPHA];
-    const lineColor = EMOTION_COLORS_MAP[accentColor as keyof typeof EMOTION_COLORS_MAP];
-    const averageLineColor = '#f59e0b';
-
-    const chartData = {
+  const chartData = useMemo(
+    () => ({
       labels,
       datasets: [
         {
           type: 'bar' as const,
-          label: datasets[0].label,
-          data: datasets[0].data,
+          label: 'Emotion Level',
+          data: levelData?.data.map(item => item.value) || [],
           backgroundColor: barColor,
           borderColor: barColor,
           borderWidth: 1,
@@ -59,7 +54,7 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
         {
           type: 'line' as const,
           label: '',
-          data: datasets[0].data,
+          data: levelData?.data.map(item => item.value) || [],
           backgroundColor: lineColor,
           borderColor: lineColor,
           borderWidth: 1,
@@ -68,13 +63,13 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
           spanGaps: true, // Connect data points even with missing values
         },
       ],
-    };
+    }),
+    [labels, levelData, barColor, lineColor]
+  );
 
-    // Calculate average from non-zero data
-    const nonZeroData = datasets[0].data.filter(value => value !== 0);
-    const average = nonZeroData.length > 0 ? nonZeroData.reduce((a, b) => a + b, 0) / nonZeroData.length : 0;
-
-    const chartOptions = {
+  const chartOptions = useMemo(
+    () => ({
+      clip: false as const,
       responsive: true,
       maintainAspectRatio: false,
       scales: {
@@ -91,14 +86,16 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
           },
         },
         y: {
+          min: 0,
+          max: 6,
           grid: {
             color: '#212225',
           },
           ticks: {
             callback: (tickValue: string | number) => valueToLabel(Number(tickValue)),
             stepSize: 1,
-            min: 1,
-            max: 7,
+            autoSkip: false,
+            maxTicksLimit: 7,
             font: {
               size: 11,
             },
@@ -115,7 +112,7 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
             averageLine: {
               type: 'line' as const,
               scaleID: 'y',
-              value: average,
+              value: levelData?.average || 0,
               borderColor: averageLineColor,
               borderWidth: 1,
               borderDash: [5, 5],
@@ -135,7 +132,17 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
           },
         },
       },
-    };
+    }),
+    [labels, levelData]
+  );
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    // Destroy existing chart
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+    }
 
     chartInstanceRef.current = new Chart(chartRef.current, {
       type: 'bar',
@@ -149,7 +156,7 @@ export function EmotionLevelChart({ datasets }: EmotionLevelChartProps) {
         chartInstanceRef.current = null;
       }
     };
-  }, [datasets]);
+  }, [chartData, chartOptions]);
 
   return (
     <EmotionChartContainer title="Emotion Level Chart" className="max-mobile:h-[320px] max-mobile:pb-10">
