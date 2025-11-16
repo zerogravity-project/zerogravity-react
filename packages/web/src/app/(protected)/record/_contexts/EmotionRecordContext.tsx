@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
 
 import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
@@ -28,9 +28,9 @@ const FINAL_STEP: Record<RecordType, RecordStep> = {
 
 interface EmotionRecordContextType {
   // Record data
-  emotionId: number;
+  emotionId: EmotionId;
   emotionSliderValue: number[];
-  emotionReason: string[];
+  emotionReasons: EmotionReason[];
   diaryEntry: string;
   emotionValueToStepIndex: number;
   recordType: RecordType;
@@ -43,20 +43,21 @@ interface EmotionRecordContextType {
   prevStep: () => void;
   canGoNext: boolean;
   isFinalStep: boolean;
+  emotionRecordId?: string;
 
   // Setters
-  setEmotionId: (emotionId: number) => void;
+  setEmotionId: (emotionId: EmotionId) => void;
   setEmotionSliderValue: (emotionSliderValue: number[]) => void;
-  setEmotionReason: (emotionReason: string[]) => void;
+  setEmotionReasons: (emotionReason: EmotionReason[]) => void;
   setDiaryEntry: (diaryEntry: string) => void;
 }
 
 export const EmotionRecordContext = createContext<EmotionRecordContextType | undefined>(undefined);
 
 const defaultValues = {
-  emotionId: 3,
+  emotionId: 3 as EmotionId,
   emotionSliderValue: [EMOTION_STEPS[3].sliderValue],
-  emotionReason: [],
+  emotionReasons: [],
   diaryEntry: '',
 };
 
@@ -64,20 +65,39 @@ interface EmotionRecordProviderProps {
   children: React.ReactNode;
   recordType: RecordType;
   date: string | null;
+
+  emotionRecordId?: string;
+  initialDailyEmotionId?: EmotionId;
+  initialDailyEmotionReasons?: EmotionReason[];
+  initialDailyDiaryEntry?: string;
 }
 
-export const EmotionRecordProvider = ({ children, recordType, date }: EmotionRecordProviderProps) => {
+export const EmotionRecordProvider = ({
+  children,
+  recordType,
+  date,
+  emotionRecordId,
+  initialDailyEmotionId,
+  initialDailyEmotionReasons,
+  initialDailyDiaryEntry,
+}: EmotionRecordProviderProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Record data
-  const [emotionId, setEmotionId] = useState<number>(defaultValues.emotionId);
-  const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(defaultValues.emotionSliderValue);
-  const [emotionReason, setEmotionReason] = useState<string[]>(defaultValues.emotionReason);
-  const [diaryEntry, setDiaryEntry] = useState<string>(defaultValues.diaryEntry);
+  const [emotionId, setEmotionId] = useState<EmotionId>(initialDailyEmotionId ?? defaultValues.emotionId);
+  const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(
+    initialDailyEmotionId ? [EMOTION_STEPS[initialDailyEmotionId].sliderValue] : defaultValues.emotionSliderValue
+  );
+  const [emotionReasons, setEmotionReasons] = useState<EmotionReason[]>(
+    initialDailyEmotionReasons ?? defaultValues.emotionReasons
+  );
+  const [diaryEntry, setDiaryEntry] = useState<string>(initialDailyDiaryEntry ?? defaultValues.diaryEntry);
 
   // Track if steps were completed
-  const [completedSteps, setCompletedSteps] = useState<Set<RecordStep>>(new Set());
+  const [completedSteps, setCompletedSteps] = useState<Set<RecordStep>>(
+    initialDailyEmotionId ? new Set(['emotion', 'reason', 'diary']) : new Set()
+  );
 
   // Initialize step from URL
   const initialStep = (searchParams.get('step') as RecordStep) || 'emotion';
@@ -192,20 +212,20 @@ export const EmotionRecordProvider = ({ children, recordType, date }: EmotionRec
       case 'emotion':
         return emotionId !== null;
       case 'reason':
-        return emotionReason.length > 0;
+        return emotionReasons.length > 0;
       case 'diary':
         return true; // Always allow submission
       default:
         return false;
     }
-  }, [currentStep, emotionId, emotionReason.length]);
+  }, [currentStep, emotionId, emotionReasons.length]);
 
   return (
     <EmotionRecordContext.Provider
       value={{
         emotionId,
         emotionSliderValue,
-        emotionReason,
+        emotionReasons,
         diaryEntry,
         emotionValueToStepIndex,
         recordType,
@@ -216,9 +236,10 @@ export const EmotionRecordProvider = ({ children, recordType, date }: EmotionRec
         prevStep,
         canGoNext,
         isFinalStep,
+        emotionRecordId,
         setEmotionId,
         setEmotionSliderValue,
-        setEmotionReason,
+        setEmotionReasons,
         setDiaryEntry,
       }}
     >

@@ -8,7 +8,13 @@ import { useCalendar } from '../../../../_contexts/CalendarContext';
 
 import MomentEmotionList from './MomentEmotionList';
 
-export default function MomentEmotionSection() {
+import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
+
+interface MomentEmotionSectionProps {
+  emotionRecords?: EmotionRecordDetail[];
+}
+
+export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSectionProps) {
   const { selectedDate } = useCalendar();
   const selectedDateString = formatDateString(selectedDate);
 
@@ -26,12 +32,12 @@ export default function MomentEmotionSection() {
       </div>
 
       <ul className="flex w-full flex-col items-center">
-        {Array.from({ length: 3 }).map((_, index) => (
+        {emotionRecords?.map((record, index) => (
           <MomentEmotionList
             key={index}
-            emotionId={Math.floor(Math.random() * 7)}
-            time={new Date().toISOString()}
-            reasons={['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Religion']}
+            emotionId={record.emotionId}
+            time={record.createdAt}
+            reasons={record.reasons}
           />
         ))}
       </ul>

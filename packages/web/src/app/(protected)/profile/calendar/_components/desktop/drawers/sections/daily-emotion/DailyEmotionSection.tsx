@@ -1,49 +1,51 @@
 import { Badge, Text, Theme } from '@radix-ui/themes';
-import { useMemo, useState } from 'react';
 
-import { EmotionPlanetNull, EmotionPlanetScene, EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { useTheme } from '@zerogravity/shared/components/providers';
+import {
+  EMOTION_COLORS,
+  EMOTION_STEPS,
+  EmotionId,
+  EmotionPlanetNull,
+  EmotionPlanetScene,
+  EmotionReason,
+} from '@zerogravity/shared/components/ui/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
-import EmotionDetailDrawer from '../../EmotionDetailDrawer';
+interface DailyEmotionSectionProps {
+  emotionId?: EmotionId;
+  emotionReasons?: EmotionReason[];
+}
 
-const REASON_LISTS = ['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Religion'];
+export default function DailyEmotionSection({ emotionId, emotionReasons }: DailyEmotionSectionProps) {
+  const { accentColor } = useTheme();
 
-export default function DailyEmotionSection() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const randomEmotionId = useMemo(() => {
-    return Math.floor(Math.random() * 7);
-  }, []);
-
-  const emotionId = useMemo(() => {
-    return Math.random() > 0.1 ? Math.floor(Math.random() * 7) : null;
-  }, []);
-
-  const emotionColor = emotionId ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[randomEmotionId].color;
+  const isEmpty = emotionId === undefined;
+  const accentEmotionId = EMOTION_COLORS.indexOf(accentColor);
+  const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
   return (
     <Theme appearance="dark">
       <section
         className={cn(
           'flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pt-1',
-          emotionId ? 'pb-7' : 'pb-1'
+          !isEmpty ? 'pb-7' : 'pb-1'
         )}
       >
         {/* Selected date daily emotion */}
-        {!emotionId && (
+        {isEmpty && (
           <>
-            <EmotionPlanetNull emotionId={randomEmotionId} width={240} height={240} isShowText={false} />
+            <EmotionPlanetNull emotionId={accentEmotionId} width={240} height={240} isShowText={false} />
           </>
         )}
 
-        {emotionId && (
+        {!isEmpty && (
           <>
             <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />
             <Text color={emotionColor} size="7" weight="regular">
               {EMOTION_STEPS[emotionId].type}
             </Text>
             <div className="mt-3 flex flex-wrap justify-center gap-1.5">
-              {REASON_LISTS.map(reason => (
+              {emotionReasons?.map((reason: EmotionReason) => (
                 <Badge
                   key={reason}
                   color="gray"
@@ -57,8 +59,6 @@ export default function DailyEmotionSection() {
             </div>
           </>
         )}
-
-        <EmotionDetailDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
       </section>
     </Theme>
   );

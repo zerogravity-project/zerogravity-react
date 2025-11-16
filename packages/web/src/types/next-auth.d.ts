@@ -1,10 +1,30 @@
 import { DefaultSession } from 'next-auth';
 
 /**
+ * Consent data structure from backend
+ */
+export interface ConsentData {
+  termsAgreed: boolean;
+  termsAgreedAt?: string;
+  privacyAgreed: boolean;
+  privacyAgreedAt?: string;
+  sensitiveDataConsent: boolean;
+  sensitiveDataConsentAt?: string;
+  aiAnalysisConsent: boolean;
+  aiAnalysisConsentAt?: string;
+  consentVersion: string;
+}
+
+/**
  * Extend NextAuth Session type
- * Add accessToken, provider, backendJwt, and userId information
+ * Add accessToken, provider, backendJwt, userId, consent data, and new user flag
  */
 declare module 'next-auth' {
+  interface User {
+    isNewUser?: boolean;
+    consents?: ConsentData;
+  }
+
   interface Session extends DefaultSession {
     /**
      * Access token received from OAuth provider
@@ -22,12 +42,27 @@ declare module 'next-auth' {
      * Contains userId and other user info (obtained from JWT decode if needed)
      */
     backendJwt?: string;
+
+    user: {
+      id: string;
+      email: string;
+      name: string;
+      image?: string;
+      /**
+       * Flag indicating if user is newly created (needs consent)
+       */
+      isNewUser?: boolean;
+      /**
+       * User consent information
+       */
+      consents?: ConsentData;
+    };
   }
 }
 
 /**
  * Extend NextAuth JWT type
- * Store OAuth token information and backend JWT
+ * Store OAuth token information, backend JWT, consent data, and new user flag
  */
 declare module 'next-auth/jwt' {
   interface JWT {
@@ -46,5 +81,15 @@ declare module 'next-auth/jwt' {
      * Contains userId and other user info
      */
     backendJwt?: string;
+
+    /**
+     * Flag indicating if user is newly created
+     */
+    isNewUser?: boolean;
+
+    /**
+     * User consent information
+     */
+    consents?: ConsentData;
   }
 }
