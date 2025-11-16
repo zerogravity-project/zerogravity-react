@@ -1,5 +1,5 @@
 import { Button, Heading, Text } from '@radix-ui/themes';
-import { useMemo } from 'react';
+import { format, isAfter } from 'date-fns';
 
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -8,15 +8,14 @@ import { cn, getWeekDates } from '@zerogravity/shared/utils';
 import { DAYS_OF_WEEK } from '../../../_constants/calendar.constants';
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
-export default function CalendarHeader() {
-  const randomEmotionIds = useMemo(() => {
-    return Array.from({ length: 3 }, () => ({
-      momentId: Math.floor(Math.random() * 3),
-      emotionId: Math.floor(Math.random() * 7),
-    }));
-  }, []);
+import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
 
-  const { currentDate, setSelectedDate, goToNextWeek, goToPreviousWeek, goToToday, isToday, isSelected, getMonthName } =
+interface CalendarHeaderProps {
+  emotionRecords?: GetEmotionRecordsResponse;
+}
+
+export default function CalendarHeader({ emotionRecords }: CalendarHeaderProps) {
+  const { currentDate, setSelectedDate, goToNextWeek, goToPreviousWeek, goToToday, isSelected, getMonthName } =
     useCalendar();
 
   const monthName = getMonthName();
@@ -67,23 +66,26 @@ export default function CalendarHeader() {
 
       <div className="grid w-full grid-cols-7 place-items-center">
         {weekDates.map((date, index) => {
-          const isTodayDate = isToday(date);
+          // const isTodayDate = isToday(date);
+          const isAfterToday = isAfter(date, new Date());
           const isSelectedDate = isSelected(date);
+          const dailyEmotionId = emotionRecords?.daily.find(
+            record => format(record.createdAt, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+          )?.emotionId;
+          const isEmpty = dailyEmotionId === undefined;
+
           return (
             <div key={index} className="relative flex items-center justify-center">
               <Button
                 size="3"
                 onClick={() => setSelectedDate(date)}
-                variant={isSelectedDate ? 'solid' : isTodayDate ? 'soft' : randomEmotionIds[0] ? 'ghost' : 'ghost'}
-                color={randomEmotionIds[0] ? EMOTION_STEPS[randomEmotionIds[0].emotionId].color : undefined}
-                className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`)}
+                variant={!isEmpty ? (isSelectedDate ? 'solid' : 'soft') : 'soft'}
+                color={isEmpty ? (isSelectedDate ? undefined : 'gray') : EMOTION_STEPS[dailyEmotionId].color}
+                className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`, isEmpty && '!bg-transparent')}
+                disabled={isAfterToday}
               >
                 {date.getDate()}
               </Button>
-              {/* <div
-                style={{ backgroundColor: `var(--${EMOTION_STEPS[randomEmotionIds[0].emotionId].color}-a9)` }}
-                className="absolute -bottom-3 h-1 w-1 rounded-[9999px]"
-              /> */}
             </div>
           );
         })}

@@ -1,51 +1,100 @@
 'use client';
 
 import { Chart } from 'chart.js/auto';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import {
+  EMOTION_COLORS,
+  EMOTION_COLORS_MAP,
+  EMOTION_STEPS,
+  EMOTION_TYPES,
+} from '@zerogravity/shared/components/ui/emotion';
 
-import { DAYS_OF_WEEK } from '@/app/(protected)/profile/calendar/_constants/calendar.constants';
+import { useChart } from '../../_contexts/ChartContext';
+import { getChartConfig } from '../../_utils/chartUtils';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
-interface EmotionCountChartProps {
-  datasets: Array<{
-    label: string;
-    data: Array<{ x: number; y: number }>;
-    backgroundColor: string;
-  }>;
-}
+import { useChartCountQuery } from '@/services/chart/chart.query';
 
-export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
+// Mock data for charts - Week view
+// const mockCountData = [
+//   {
+//     label: 'Emotion Count',
+//     data: [
+//       { x: 0.5, y: 3 }, // Mon 12:00
+//       { x: 0.78, y: 5 }, // Mon 18:45
+//       { x: 1.38, y: 2 }, // Tue 09:00
+//       { x: 2.25, y: 4 }, // Wed 06:00
+//       { x: 3.5, y: 6 }, // Thu 12:00
+//       { x: 4.1, y: 3 }, // Fri 02:24
+//       { x: 5.67, y: 5 }, // Sat 16:00
+//       { x: 6.25, y: 4 }, // Sun 06:00
+//     ],
+//     backgroundColor: '#8E4EC6',
+//   },
+// ];
+
+export function EmotionCountChart() {
+  const { timePeriod, startDate } = useChart();
+
+  const { data: countData } = useChartCountQuery({ period: timePeriod, startDate });
+
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
-  const valueToLabel = (value: number) => {
+  const valueToLabel = useCallback((value: number) => {
     const labels = EMOTION_STEPS.map(step => step.type);
-    return labels[Math.round(value) - 1] || '';
-  };
+    return labels[value] || '';
+  }, []);
 
-  useEffect(() => {
-    if (!chartRef.current) return;
+  // emotionId별로 데이터 가공
+  const chartDatasets = useMemo(() => {
+    if (!countData?.data) return [];
 
-    // Destroy existing chart
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
+    const groupedByEmotionId = countData.data.reduce(
+      (acc, item) => {
+        const emotionId = item.emotionId;
+        if (!acc[emotionId]) {
+          acc[emotionId] = [];
+        }
+        acc[emotionId].push({
+          x: item.position,
+          y: item.emotionId,
+        });
+        return acc;
+      },
+      {} as Record<number, Array<{ x: number; y: number }>>
+    );
 
-    const chartData = {
-      datasets: datasets.map(dataset => ({
-        ...dataset,
-        backgroundColor: dataset.backgroundColor,
-        borderColor: dataset.backgroundColor,
+    return Object.entries(groupedByEmotionId).map(([emotionIdStr, points]) => {
+      const emotionId = Number(emotionIdStr);
+      const emotionType = EMOTION_TYPES[emotionId];
+      const colorKey = EMOTION_COLORS[emotionId];
+      const backgroundColor = EMOTION_COLORS_MAP[colorKey as keyof typeof EMOTION_COLORS_MAP];
+
+      return {
+        label: emotionType,
+        data: points,
+        backgroundColor,
+        borderColor: backgroundColor,
         borderWidth: 1,
         pointRadius: 4,
         pointHoverRadius: 6,
-      })),
-    };
+      };
+    });
+  }, [countData]);
 
-    const chartOptions = {
+  const chartData = useMemo(
+    () => ({
+      datasets: chartDatasets,
+    }),
+    [chartDatasets]
+  );
+
+  const chartOptions = useMemo(
+    () => ({
+      clip: false as const,
       responsive: true,
       maintainAspectRatio: false,
       scales: {
@@ -55,12 +104,14 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
           },
           type: 'linear' as const,
           min: 0,
-          max: 7,
+          max: getChartConfig(timePeriod, startDate)?.max || 0,
           ticks: {
             stepSize: 1,
             callback: (value: string | number) => {
               const index = Number(value);
-              return index >= 0 && index < DAYS_OF_WEEK.length ? DAYS_OF_WEEK[index] : '';
+              return index >= 0 && index <= (getChartConfig(timePeriod, startDate)?.max || 0)
+                ? getChartConfig(timePeriod, startDate)?.labels[index] || ''
+                : '';
             },
             font: {
               size: 11,
@@ -68,14 +119,16 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
           },
         },
         y: {
+          min: 0,
+          max: 6,
           grid: {
             color: '#212225',
           },
           ticks: {
             callback: (tickValue: string | number) => valueToLabel(Number(tickValue)),
             stepSize: 1,
-            min: 1,
-            max: 7,
+            autoSkip: false,
+            maxTicksLimit: 7,
             font: {
               size: 11,
             },
@@ -92,14 +145,23 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
             title: () => '',
             label: (tooltipItem: any) => {
               const dayIndex = Math.floor(tooltipItem.parsed.x);
-              const dayName = DAYS_OF_WEEK[dayIndex] || 'Unknown';
               const emotionLabel = valueToLabel(tooltipItem.parsed.y);
-              return `${dayName} - ${emotionLabel}`;
+              return `${getChartConfig(timePeriod, startDate)?.labels[dayIndex] || ''} - ${emotionLabel}`;
             },
           },
         },
       },
-    };
+    }),
+    [valueToLabel, timePeriod, startDate]
+  );
+
+  useEffect(() => {
+    if (!chartRef.current) return;
+
+    // Destroy existing chart
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+    }
 
     chartInstanceRef.current = new Chart(chartRef.current, {
       type: 'scatter',
@@ -113,7 +175,7 @@ export function EmotionCountChart({ datasets }: EmotionCountChartProps) {
         chartInstanceRef.current = null;
       }
     };
-  }, [datasets]);
+  }, [chartData, chartOptions]);
 
   return (
     <EmotionChartContainer title="Emotion Count Chart" className="max-mobile:h-[320px] sm:col-span-2">

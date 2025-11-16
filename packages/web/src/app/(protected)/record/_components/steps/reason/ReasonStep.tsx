@@ -1,22 +1,42 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import { Button, Heading, Text } from '@radix-ui/themes';
+import { isToday } from 'date-fns';
 
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
-
-import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 import ReasonSelection from './ReasonSelection';
 
+import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useCreateEmotionRecordMutation } from '@/services/emotion/emotion.query';
+
 export default function ReasonStep() {
-  const { emotionValueToStepIndex, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
+  const router = useRouter();
+  const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
+
+  const isTodayDate = date ? isToday(new Date(date)) : false;
+
+  const { mutate: createEmotionRecord, isPending: isCreatingEmotionRecord } = useCreateEmotionRecordMutation({
+    onSuccess: () => {
+      router.push('/profile/calendar');
+    },
+    onError: error => {
+      console.error('Failed to create emotion record:', error);
+    },
+  });
 
   const handleSubmit = () => {
-    // TODO: Submit form data
-    console.log('Form submitted!');
+    createEmotionRecord({
+      emotionId,
+      emotionRecordType: 'moment',
+      emotionReasons,
+      ...(!isTodayDate && date ? { recordDate: date } : {}),
+    });
   };
 
   return (
@@ -31,12 +51,12 @@ export default function ReasonStep() {
 
       {/* Emotion Visual */}
       <div className="mt-10 flex flex-col items-center justify-center">
-        <EmotionPlanetImage emotionId={emotionValueToStepIndex} width={100} height={100} />
+        <EmotionPlanetImage emotionId={emotionId} width={100} height={100} />
         <Text
-          color={EMOTION_STEPS[emotionValueToStepIndex].color}
+          color={EMOTION_STEPS[emotionId].color}
           className="mobile:!text-xl !text-center !text-lg !font-normal transition-all duration-400"
         >
-          {EMOTION_STEPS[emotionValueToStepIndex].type}
+          {EMOTION_STEPS[emotionId].type}
         </Text>
       </div>
 
@@ -49,7 +69,7 @@ export default function ReasonStep() {
           onClick={prevStep}
           variant="surface"
           className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
-          color={EMOTION_STEPS[emotionValueToStepIndex].color}
+          color={EMOTION_STEPS[emotionId].color}
           size="4"
           radius="none"
         >
@@ -58,11 +78,12 @@ export default function ReasonStep() {
         <div className="w-full">
           <Button
             onClick={isFinalStep ? handleSubmit : nextStep}
-            disabled={!canGoNext}
             className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
-            color={EMOTION_STEPS[emotionValueToStepIndex].color}
+            color={EMOTION_STEPS[emotionId].color}
             size="4"
             radius="none"
+            disabled={!canGoNext || isCreatingEmotionRecord}
+            loading={isCreatingEmotionRecord}
           >
             {isFinalStep ? 'Submit' : 'Next'}
             <Icon>{isFinalStep ? 'check' : 'arrow_forward'}</Icon>

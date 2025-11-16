@@ -1,8 +1,9 @@
 'use client';
 
 import { Text } from '@radix-ui/themes';
+import { endOfDay, endOfMonth, format, isAfter, startOfDay, startOfMonth } from 'date-fns';
 import { LayoutGroup, motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { DAYS_OF_WEEK } from '../../_constants/calendar.constants';
 import { useCalendar } from '../../_contexts/CalendarContext';
@@ -11,18 +12,31 @@ import DesktopCalendarCell from './cell/DesktopCalendarCell';
 import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';
 import DesktopCalendarHeader from './header/DesktopCalendarHeader';
 
-export default function DesktopCalendar() {
-  const [mounted, setMounted] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const { isToday: isTodayDate, getYear, getMonth, getMonthDaysInfo, setSelectedDate } = useCalendar();
+import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+export default function DesktopCalendar() {
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { isToday, getYear, getMonth, getMonthDaysInfo, selectedDate, setSelectedDate } = useCalendar();
 
   const year = getYear();
   const month = getMonth();
   const { daysInMonth, emptyCellsBefore: emptyBefore, emptyCellsAfter: emptyAfter } = getMonthDaysInfo();
+
+  const currentMonthDate = new Date(year, month);
+  const monthStart = startOfMonth(currentMonthDate);
+  const monthEnd = endOfMonth(currentMonthDate);
+  const selectedDateStart = startOfDay(selectedDate);
+  const selectedDateEnd = endOfDay(selectedDate);
+
+  const { data: currentMonthEmotionRecords } = useGetEmotionRecordsQuery({
+    startDateTime: format(monthStart, "yyyy-MM-dd'T'HH:mm:ss"),
+    endDateTime: format(monthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+  });
+
+  const { data: selectedDateEmotionRecords } = useGetEmotionRecordsQuery({
+    startDateTime: format(selectedDateStart, "yyyy-MM-dd'T'HH:mm:ss"),
+    endDateTime: format(selectedDateEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+  });
 
   // Empty cells for days before the first day of the month
   const emptyCellsBefore = Array.from({ length: emptyBefore }, (_, i) => (
@@ -33,8 +47,21 @@ export default function DesktopCalendar() {
   const dayCells = Array.from({ length: daysInMonth }, (_, i) => {
     const day = i + 1;
     const date = new Date(year, month, day);
-    const isCurrentDay = isTodayDate(date);
-    return <DesktopCalendarCell key={day} day={day} isToday={isCurrentDay} onClick={() => handleCellClick(date)} />;
+    const isAfterToday = isAfter(date, new Date());
+    const dailyEmotionId = currentMonthEmotionRecords?.data?.daily.find(
+      record => format(record.createdAt, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
+    )?.emotionId;
+
+    return (
+      <DesktopCalendarCell
+        key={day}
+        day={day}
+        isToday={isToday(date)}
+        isAfterToday={isAfterToday}
+        dailyEmotionId={dailyEmotionId}
+        onClick={() => handleCellClick(date)}
+      />
+    );
   });
 
   // Empty cells for days after the last day of the month
@@ -46,16 +73,6 @@ export default function DesktopCalendar() {
     setIsDrawerOpen(true);
     setSelectedDate(date);
   };
-
-  if (!mounted) {
-    return (
-      <div className="flex h-full w-full items-center justify-center rounded-lg p-4">
-        <Text size="2" color="gray">
-          Loading...
-        </Text>
-      </div>
-    );
-  }
 
   return (
     <LayoutGroup>
@@ -91,7 +108,14 @@ export default function DesktopCalendar() {
             </div>
           </div>
         </motion.div>
-        <EmotionDetailDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
+        <EmotionDetailDrawer
+          isOpen={isDrawerOpen}
+          onClose={() => setIsDrawerOpen(false)}
+          dailyEmotionId={selectedDateEmotionRecords?.data?.daily[0]?.emotionId}
+          dailyEmotionReasons={selectedDateEmotionRecords?.data?.daily[0]?.reasons}
+          diaryEntry={selectedDateEmotionRecords?.data?.daily[0]?.diaryEntry ?? ''}
+          momentEmotionRecords={selectedDateEmotionRecords?.data?.moment}
+        />
       </div>
     </LayoutGroup>
   );

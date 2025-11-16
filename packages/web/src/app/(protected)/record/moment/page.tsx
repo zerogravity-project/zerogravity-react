@@ -1,16 +1,18 @@
-'use client';
-
-import { useSearchParams } from 'next/navigation';
-
 import EmotionRecord from '../_components/EmotionRecord';
 import { EmotionRecordProvider } from '../_contexts/EmotionRecordContext';
 
-export default function MomentRecordPage() {
-  const searchParams = useSearchParams();
-  const date = searchParams.get('date'); // format: YYYY-MM-DD
+interface MomentRecordPageProps {
+  searchParams: Promise<{
+    date?: string; // format: YYYY-MM-DD
+  }>;
+}
+
+export default async function MomentRecordPage({ searchParams }: MomentRecordPageProps) {
+  const { date } = await searchParams;
+  const dateValue = date ?? null;
 
   return (
-    <EmotionRecordProvider recordType="moment" date={date}>
+    <EmotionRecordProvider recordType="moment" date={dateValue}>
       <section className="mobile:px-5 absolute inset-0 flex h-[100dvh] w-[100dvw] flex-col items-center overflow-y-auto pt-[96px]">
         <EmotionRecord />
       </section>

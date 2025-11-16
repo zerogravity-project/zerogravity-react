@@ -3,10 +3,9 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef } from 'react';
 
+import { EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
-import { formatDateString, cn } from '@zerogravity/shared/utils';
-
-import { useScroll } from '@/app/_hooks/useScroll';
+import { cn, formatDateString, isSameDay } from '@zerogravity/shared/utils';
 
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
@@ -16,12 +15,26 @@ import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import DailyNoteSection from './sections/daily-note/DailyNoteSection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
+import { useScroll } from '@/app/_hooks/useScroll';
+import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
+
 interface EmotionDetailDrawerProps {
   isOpen: boolean;
   onClose: () => void;
+  dailyEmotionId?: EmotionId;
+  dailyEmotionReasons?: EmotionReason[];
+  diaryEntry?: string;
+  momentEmotionRecords?: EmotionRecordDetail[];
 }
 
-export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDrawerProps) {
+export default function EmotionDetailDrawer({
+  isOpen,
+  onClose,
+  dailyEmotionId,
+  dailyEmotionReasons,
+  diaryEntry,
+  momentEmotionRecords,
+}: EmotionDetailDrawerProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { selectedDate } = useCalendar();
@@ -33,6 +46,8 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
   });
 
   const selectedDateString = formatDateString(selectedDate);
+  const isToday = isSameDay(selectedDate, new Date());
+  const isEmpty = dailyEmotionId === undefined;
 
   // Animation variants based on screen size
   const wrapperAnimation = isOverLargeScreen
@@ -72,20 +87,24 @@ export default function EmotionDetailDrawer({ isOpen, onClose }: EmotionDetailDr
             {/* Scrollable Content */}
             <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto">
               {/* Daily Emotion */}
-              <SectionTitle title="Daily Emotion" linkText="Edit" href={`/record/daily?date=${selectedDateString}`} />
-              <DailyEmotionSection />
+              <SectionTitle
+                title="Daily Emotion"
+                linkText={isToday && !isEmpty ? 'Edit' : 'Add'}
+                href={`/record/daily?date=${selectedDateString}`}
+              />
+              <DailyEmotionSection emotionId={dailyEmotionId} emotionReasons={dailyEmotionReasons} />
 
               {/* Daily Note */}
               <SectionTitle
                 title="Daily Note"
-                linkText="Edit"
-                href={`/record/daily?date=${selectedDateString}&step=diary`}
+                linkText={isToday && !isEmpty ? 'Edit' : 'Add'}
+                href={isToday && !isEmpty ? `/record/daily?date=${selectedDateString}&step=diary` : undefined}
               />
-              <DailyNoteSection />
+              <DailyNoteSection diaryEntry={diaryEntry} />
 
               {/* Moment Emotion */}
-              <SectionTitle title="Moment Emotion" />
-              <MomentEmotionSection />
+              <SectionTitle title="Moment Emotion" linkText="Add" href={`/record/moment?date=${selectedDateString}`} />
+              <MomentEmotionSection momentEmotionRecords={momentEmotionRecords} />
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
               {isScrollable && !isScrollAtBottom && (
