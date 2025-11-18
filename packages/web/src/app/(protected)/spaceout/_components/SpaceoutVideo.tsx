@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Text } from '@radix-ui/themes';
 import { useEffect, useRef, useState } from 'react';
 
-import { getTodayString, cn } from '@zerogravity/shared/utils';
+import { cn } from '@zerogravity/shared/utils';
 
 interface SpaceoutVideoProps {
   videos?: string[];
@@ -42,9 +42,8 @@ export default function SpaceoutVideo({
       // Move to next video
       setCurrentVideoIndex(prev => prev + 1);
     } else {
-      // All videos completed - navigate to record/daily page
-      const today = getTodayString();
-      router.replace(`/record/daily?date=${today}`);
+      // All videos completed - navigate to record selection page
+      router.replace('/record');
     }
   };
 
