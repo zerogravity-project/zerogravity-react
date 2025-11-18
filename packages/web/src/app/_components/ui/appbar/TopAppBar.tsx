@@ -11,14 +11,27 @@ interface TopAppBarProps {
   border?: boolean;
   onClick: () => void;
   rightContent?: ReactNode;
+  background?: boolean;
+  shadow?: boolean;
 }
 
-export function TopAppBar({ className, text, icon, border, onClick, rightContent }: TopAppBarProps) {
+export function TopAppBar({
+  className,
+  text,
+  icon,
+  border,
+  onClick,
+  rightContent,
+  background,
+  shadow,
+}: TopAppBarProps) {
   return (
     <div
       className={cn(
         'h-topnav-height flex w-full flex-shrink-0 items-center justify-between px-3',
         border && 'border-b border-[var(--gray-3)]',
+        background && `bg-[var(--gray-1)]`,
+        shadow && 'shadow-2xl shadow-black',
         className
       )}
     >

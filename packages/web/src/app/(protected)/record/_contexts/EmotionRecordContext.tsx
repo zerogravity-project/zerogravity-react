@@ -8,20 +8,22 @@ import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/com
 
 import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
-export type RecordStep = 'emotion' | 'reason' | 'diary';
-export type RecordType = 'moment' | 'daily';
+import { EmotionRecordType } from '@/services/emotion/emotion.dto';
+
+export type RecordStep = 'emotion' | 'reason' | 'diary' | 'ai-prediction';
 
 // Step order configuration
 const STEP_ORDER: Record<RecordStep, number> = {
-  emotion: 0,
-  reason: 1,
-  diary: 2,
+  'ai-prediction': 0,
+  emotion: 1,
+  reason: 2,
+  diary: 3,
 };
 
-const STEP_SEQUENCE: RecordStep[] = ['emotion', 'reason', 'diary'];
+const STEP_SEQUENCE: RecordStep[] = ['ai-prediction', 'emotion', 'reason', 'diary'];
 
 // Final step based on record type
-const FINAL_STEP: Record<RecordType, RecordStep> = {
+const FINAL_STEP: Record<EmotionRecordType, RecordStep> = {
   moment: 'reason',
   daily: 'diary',
 };
@@ -29,12 +31,16 @@ const FINAL_STEP: Record<RecordType, RecordStep> = {
 interface EmotionRecordContextType {
   // Record data
   emotionId: EmotionId;
-  emotionSliderValue: number[];
+  emotionRecordType: EmotionRecordType;
   emotionReasons: EmotionReason[];
-  diaryEntry: string;
-  emotionValueToStepIndex: number;
-  recordType: RecordType;
+  diaryEntry?: string;
+  aiAnalysisId?: string;
   date: string | null; // YYYY-MM-DD format
+
+  // Helpers
+  emotionValueToStepIndex: number;
+  emotionSliderValue: number[];
+  isUsingAiAnalysis: boolean;
 
   // Step navigation
   currentStep: RecordStep;
@@ -50,6 +56,8 @@ interface EmotionRecordContextType {
   setEmotionSliderValue: (emotionSliderValue: number[]) => void;
   setEmotionReasons: (emotionReason: EmotionReason[]) => void;
   setDiaryEntry: (diaryEntry: string) => void;
+  setAiAnalysisId: (aiAnalysisId: string) => void;
+  setIsUsingAiAnalysis: (isUsingAiAnalysis: boolean) => void;
 }
 
 export const EmotionRecordContext = createContext<EmotionRecordContextType | undefined>(undefined);
@@ -59,11 +67,12 @@ const defaultValues = {
   emotionSliderValue: [EMOTION_STEPS[3].sliderValue],
   emotionReasons: [],
   diaryEntry: '',
+  aiAnalysisId: undefined,
 };
 
 interface EmotionRecordProviderProps {
   children: React.ReactNode;
-  recordType: RecordType;
+  emotionRecordType: EmotionRecordType;
   date: string | null;
 
   emotionRecordId?: string;
@@ -74,8 +83,8 @@ interface EmotionRecordProviderProps {
 
 export const EmotionRecordProvider = ({
   children,
-  recordType,
-  date,
+  emotionRecordType,
+  date: date,
   emotionRecordId,
   initialDailyEmotionId,
   initialDailyEmotionReasons,
@@ -86,17 +95,21 @@ export const EmotionRecordProvider = ({
 
   // Record data
   const [emotionId, setEmotionId] = useState<EmotionId>(initialDailyEmotionId ?? defaultValues.emotionId);
-  const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(
-    initialDailyEmotionId ? [EMOTION_STEPS[initialDailyEmotionId].sliderValue] : defaultValues.emotionSliderValue
-  );
   const [emotionReasons, setEmotionReasons] = useState<EmotionReason[]>(
     initialDailyEmotionReasons ?? defaultValues.emotionReasons
   );
   const [diaryEntry, setDiaryEntry] = useState<string>(initialDailyDiaryEntry ?? defaultValues.diaryEntry);
+  const [aiAnalysisId, setAiAnalysisId] = useState<string | undefined>(defaultValues.aiAnalysisId);
+
+  // Helpers
+  const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(
+    initialDailyEmotionId ? [EMOTION_STEPS[initialDailyEmotionId].sliderValue] : defaultValues.emotionSliderValue
+  );
+  const [isUsingAiAnalysis, setIsUsingAiAnalysis] = useState<boolean>(false);
 
   // Track if steps were completed
   const [completedSteps, setCompletedSteps] = useState<Set<RecordStep>>(
-    initialDailyEmotionId ? new Set(['emotion', 'reason', 'diary']) : new Set()
+    initialDailyEmotionId ? new Set(['ai-prediction', 'emotion', 'reason', 'diary']) : new Set(['ai-prediction'])
   );
 
   // Initialize step from URL
@@ -107,8 +120,8 @@ export const EmotionRecordProvider = ({
 
   // Check if current step is the final step for the current record type
   const isFinalStep = useMemo(() => {
-    return currentStep === FINAL_STEP[recordType];
-  }, [currentStep, recordType]);
+    return currentStep === FINAL_STEP[emotionRecordType];
+  }, [currentStep, emotionRecordType]);
 
   // Sync emotion slider value with emotionId
   useEffect(() => {
@@ -118,13 +131,13 @@ export const EmotionRecordProvider = ({
   // Build URL with date param
   const buildUrl = useCallback(
     (step: RecordStep) => {
-      const baseUrl = `/record/${recordType}`;
+      const baseUrl = `/record/${emotionRecordType}`;
       const params = new URLSearchParams();
       if (date) params.set('date', date);
       params.set('step', step);
       return `${baseUrl}?${params.toString()}`;
     },
-    [recordType, date]
+    [emotionRecordType, date]
   );
 
   // Helper: Check if all previous steps are completed
@@ -177,7 +190,7 @@ export const EmotionRecordProvider = ({
   const nextStep = useCallback(() => {
     const currentIndex = STEP_ORDER[currentStep];
     const nextIndex = currentIndex + 1;
-    const finalStep = FINAL_STEP[recordType];
+    const finalStep = FINAL_STEP[emotionRecordType];
 
     // Mark current step as completed
     setCompletedSteps(prev => new Set(prev).add(currentStep));
@@ -195,7 +208,7 @@ export const EmotionRecordProvider = ({
         goToStep(nextStep);
       }
     }
-  }, [currentStep, recordType, goToStep]);
+  }, [currentStep, emotionRecordType, goToStep]);
 
   const prevStep = useCallback(() => {
     const currentIndex = STEP_ORDER[currentStep];
@@ -209,27 +222,31 @@ export const EmotionRecordProvider = ({
   // Validation for next button
   const canGoNext = useMemo(() => {
     switch (currentStep) {
+      case 'ai-prediction':
+        return diaryEntry.length >= 100 && diaryEntry.length <= 300;
       case 'emotion':
         return emotionId !== null;
       case 'reason':
         return emotionReasons.length > 0;
       case 'diary':
-        return true; // Always allow submission
+        return diaryEntry.length <= 300;
       default:
         return false;
     }
-  }, [currentStep, emotionId, emotionReasons.length]);
+  }, [currentStep, emotionId, emotionReasons.length, diaryEntry.length]);
 
   return (
     <EmotionRecordContext.Provider
       value={{
         emotionId,
-        emotionSliderValue,
+        emotionRecordType,
         emotionReasons,
         diaryEntry,
-        emotionValueToStepIndex,
-        recordType,
+        aiAnalysisId,
         date,
+        emotionValueToStepIndex,
+        emotionSliderValue,
+        isUsingAiAnalysis,
         currentStep,
         goToStep,
         nextStep,
@@ -238,9 +255,11 @@ export const EmotionRecordProvider = ({
         isFinalStep,
         emotionRecordId,
         setEmotionId,
-        setEmotionSliderValue,
         setEmotionReasons,
         setDiaryEntry,
+        setAiAnalysisId,
+        setEmotionSliderValue,
+        setIsUsingAiAnalysis,
       }}
     >
       {children}
@@ -248,10 +267,10 @@ export const EmotionRecordProvider = ({
   );
 };
 
-export const useEmotionRecordContext = () => {
+export const useEmotionRecordContext: () => EmotionRecordContextType = () => {
   const context = useContext(EmotionRecordContext);
   if (!context) {
-    throw new Error('useEmotionRecordContext must be used within a EmotionRecordProvider');
+    throw new Error('useEmotionRecordContext must be used within an EmotionRecordProvider');
   }
-  return context;
+  return context as EmotionRecordContextType;
 };
