@@ -33,6 +33,24 @@ if [ "$EUID" -ne 0 ]; then
     exit 1
 fi
 
+# Create nginx cache directories if they don't exist
+echo "Step 0: Ensuring nginx cache directories exist..."
+CACHE_DIRS=(
+    "/var/cache/nginx/api_dev"
+    "/var/cache/nginx/api_prod"
+)
+
+for cache_dir in "${CACHE_DIRS[@]}"; do
+    if [ ! -d "$cache_dir" ]; then
+        echo "  - Creating $cache_dir"
+        mkdir -p "$cache_dir"
+        chown -R www-data:www-data "$cache_dir"
+    else
+        echo "  - $cache_dir already exists"
+    fi
+done
+echo ""
+
 # Copy nginx configuration files
 echo "Step 1: Copying nginx configuration files..."
 for conf_file in "$NGINX_CONFIG_DIR"/*.conf; do
