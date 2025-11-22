@@ -84,11 +84,11 @@ jobs:
             fi
 
             # Step 2: Stop current containers
-            docker compose -p zerogv-${ENV} down || true
+            docker compose -p zerogv-frontend-${ENV} down || true
 
             # Step 3: Build and start new containers
             echo "🚀 Building and deploying new version..."
-            docker compose -p zerogv-${ENV} up -d --build
+            docker compose -p zerogv-frontend-${ENV} up -d --build
 
             # Step 4: Health check with validation
             echo "⏳ Waiting for frontend to be healthy (max 90 seconds)..."
@@ -128,13 +128,13 @@ jobs:
               echo "🔄 Rolling back to previous version..."
 
               # Stop failed containers
-              docker compose -p zerogv-${ENV} down
+              docker compose -p zerogv-frontend-${ENV} down
 
               # Check if backup exists
               if docker images | grep -q "zerogv-frontend.*${ENV}-backup"; then
                 echo "📦 Restoring backup image..."
                 docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:latest
-                docker compose -p zerogv-${ENV} up -d
+                docker compose -p zerogv-frontend-${ENV} up -d
                 echo "✅ Rollback completed. Previous version restored."
                 exit 1
               else
