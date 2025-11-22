@@ -7,8 +7,10 @@
 
 import { useMutation } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import { authService } from './auth.service';
+
 import type { VerifyAuthRequest, VerifyAuthResponse } from './auth.dto';
+import { authService } from './auth.service';
+
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 /**
