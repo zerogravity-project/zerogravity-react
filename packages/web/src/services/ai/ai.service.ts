@@ -3,6 +3,9 @@
  * API calls for AI-powered features (SSR/CSR compatible)
  */
 
+import axiosInstance from '@/lib/axios';
+import type { ApiResponse } from '@/types/api.types';
+
 import type {
   GetPeriodAnalysisParams,
   AIAnalysisResponse,
@@ -11,9 +14,6 @@ import type {
   GetDiarySummaryParams,
   DiarySummaryResponse,
 } from './ai.dto';
-
-import axiosInstance from '@/lib/axios';
-import type { ApiResponse } from '@/types/api.types';
 
 export const aiService = {
   /**

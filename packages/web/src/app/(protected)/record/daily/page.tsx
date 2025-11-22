@@ -1,9 +1,9 @@
 import { endOfDay, format, startOfDay } from 'date-fns';
 
+import { getEmotionRecordsServer } from '@/services/emotion/emotion.service.server';
+
 import EmotionRecord from '../_components/EmotionRecord';
 import { EmotionRecordProvider } from '../_contexts/EmotionRecordContext';
-
-import { getEmotionRecordsServer } from '@/services/emotion/emotion.service.server';
 
 interface DailyRecordPageProps {
   searchParams: Promise<{

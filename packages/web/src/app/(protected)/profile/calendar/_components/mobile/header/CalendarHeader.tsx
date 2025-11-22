@@ -5,10 +5,10 @@ import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { cn, getWeekDates } from '@zerogravity/shared/utils';
 
+import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
+
 import { DAYS_OF_WEEK } from '../../../_constants/calendar.constants';
 import { useCalendar } from '../../../_contexts/CalendarContext';
-
-import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
 
 interface CalendarHeaderProps {
   emotionRecords?: GetEmotionRecordsResponse;

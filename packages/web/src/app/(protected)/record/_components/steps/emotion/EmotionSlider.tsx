@@ -2,9 +2,9 @@ import { Text } from '@radix-ui/themes';
 
 import { EMOTION_STEPS, EmotionId } from '@zerogravity/shared/components/ui/emotion';
 
-import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
-
 import { Slider } from '@/app/_components/ui/slider/slider';
+
+import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 export default function EmotionSlider() {
   const { setEmotionId, emotionSliderValue, setEmotionSliderValue, emotionValueToStepIndex } =

@@ -8,13 +8,13 @@ import { isToday } from 'date-fns';
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
+import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useCreateEmotionRecordMutation } from '@/services/emotion/emotion.query';
+
 import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 import ReasonSelection from './ReasonSelection';
-
-import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
-import { useCreateEmotionRecordMutation } from '@/services/emotion/emotion.query';
 
 export default function ReasonStep() {
   const router = useRouter();

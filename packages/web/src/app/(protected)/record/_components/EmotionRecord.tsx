@@ -5,15 +5,15 @@ import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef } from 'react';
 
+import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
+import { useScroll } from '@/app/_hooks/useScroll';
+
 import { useEmotionRecordContext } from '../_contexts/EmotionRecordContext';
 
 import AiPredictionStep from './steps/ai-prediction/AiPredictionStep';
 import DiaryStep from './steps/diary/DiaryStep';
 import EmotionStep from './steps/emotion/EmotionStep';
 import ReasonStep from './steps/reason/ReasonStep';
-
-import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
-import { useScroll } from '@/app/_hooks/useScroll';
 
 export default function EmotionRecord() {
   const router = useRouter();

@@ -5,14 +5,14 @@ import { endOfDay, endOfMonth, format, isAfter, startOfDay, startOfMonth } from 
 import { LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
+import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
+
 import { DAYS_OF_WEEK } from '../../_constants/calendar.constants';
 import { useCalendar } from '../../_contexts/CalendarContext';
 
 import DesktopCalendarCell from './cell/DesktopCalendarCell';
 import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';
 import DesktopCalendarHeader from './header/DesktopCalendarHeader';
-
-import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
 export default function DesktopCalendar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);

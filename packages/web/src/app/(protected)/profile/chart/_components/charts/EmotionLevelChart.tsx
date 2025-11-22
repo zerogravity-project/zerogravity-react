@@ -7,11 +7,11 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { EMOTION_COLORS_MAP, EMOTION_COLORS_MAP_ALPHA, EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 
+import { useChartLevelQuery } from '@/services/chart/chart.query';
+
 import { useChart } from '../../_contexts/ChartContext';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
-
-import { useChartLevelQuery } from '@/services/chart/chart.query';
 
 // Register annotation plugin
 Chart.register(annotationPlugin);

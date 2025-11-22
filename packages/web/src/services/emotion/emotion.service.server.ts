@@ -3,10 +3,10 @@
  * For use in Server Components (RSC)
  */
 
-import type { GetEmotionRecordsParams, GetEmotionRecordsResponse } from './emotion.dto';
-
 import { auth } from '@/lib/auth';
 import type { ApiResponse } from '@/types/api.types';
+
+import type { GetEmotionRecordsParams, GetEmotionRecordsResponse } from './emotion.dto';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

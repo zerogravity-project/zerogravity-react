@@ -8,6 +8,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
+import type { ApiResponse, ErrorResponse } from '@/types/api.types';
+
 import type {
   CreateEmotionRecordRequest,
   CreateEmotionRecordResponse,
@@ -15,8 +17,6 @@ import type {
   UpdateEmotionRecordRequest,
 } from './emotion.dto';
 import { emotionService } from './emotion.service';
-
-import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 export const EMOTION_QUERY_KEY = {
   RECORDS: 'emotionRecords',

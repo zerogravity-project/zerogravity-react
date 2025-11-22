@@ -7,10 +7,10 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
-import { useChart } from '../../_contexts/ChartContext';
-
 import { useScroll } from '@/app/_hooks/useScroll';
 import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
+
+import { useChart } from '../../_contexts/ChartContext';
 
 interface AiAnalysisDrawerProps {
   isOpen: boolean;

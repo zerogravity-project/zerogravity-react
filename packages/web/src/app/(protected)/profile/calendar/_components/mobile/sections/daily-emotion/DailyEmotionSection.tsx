@@ -14,10 +14,10 @@ import {
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { formatDateString } from '@zerogravity/shared/utils';
 
+import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
+
 import { useCalendar } from '../../../../_contexts/CalendarContext';
 import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';
-
-import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 
 interface DailyEmotionSectionProps {
   emotionRecords?: EmotionRecordDetail;

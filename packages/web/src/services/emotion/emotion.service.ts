@@ -3,6 +3,9 @@
  * API calls for emotion management (SSR/CSR compatible)
  */
 
+import axiosInstance from '@/lib/axios';
+import type { ApiResponse } from '@/types/api.types';
+
 import type {
   CreateEmotionRecordRequest,
   CreateEmotionRecordResponse,
@@ -10,9 +13,6 @@ import type {
   GetEmotionRecordsResponse,
   UpdateEmotionRecordRequest,
 } from './emotion.dto';
-
-import axiosInstance from '@/lib/axios';
-import type { ApiResponse } from '@/types/api.types';
 
 export const emotionService = {
   /**

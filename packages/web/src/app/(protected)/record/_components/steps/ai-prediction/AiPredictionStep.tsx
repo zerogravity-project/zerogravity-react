@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 
+import { usePredictEmotionMutation } from '@/services/ai/ai.query';
+
 import AiPredictionInput from './_components/AiPredictionInput';
 import AiPredictionLoading from './_components/AiPredictionLoading';
 import AiPredictionResult from './_components/AiPredictionResult';
-
-import { usePredictEmotionMutation } from '@/services/ai/ai.query';
 
 export default function AiPredictionStep() {
   /**

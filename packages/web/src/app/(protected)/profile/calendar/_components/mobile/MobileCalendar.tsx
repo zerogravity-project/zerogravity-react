@@ -1,12 +1,12 @@
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 
+import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
+
 import { useCalendar } from '../../_contexts/CalendarContext';
 
 import CalendarHeader from './header/CalendarHeader';
 import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
-
-import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
 export default function MobileCalendar() {
   const { currentDate, selectedDate } = useCalendar();

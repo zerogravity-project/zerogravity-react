@@ -8,10 +8,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
+import type { ApiResponse, ErrorResponse } from '@/types/api.types';
+
 import type { DeleteUserResponse, UpdateConsentRequest, UpdateConsentResponse } from './user.dto';
 import { userService } from './user.service';
-
-import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 export const USER_QUERY_KEY = {
   PROFILE: 'userProfile',

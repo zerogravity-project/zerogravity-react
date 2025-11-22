@@ -4,11 +4,11 @@ import { ScrollArea, Text } from '@radix-ui/themes';
 
 import { useIsSm } from '@zerogravity/shared/hooks';
 
+import { useChartReasonQuery } from '@/services/chart/chart.query';
+
 import { useChart } from '../../_contexts/ChartContext';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
-
-import { useChartReasonQuery } from '@/services/chart/chart.query';
 
 export function EmotionReasonsChart() {
   const isSm = useIsSm();

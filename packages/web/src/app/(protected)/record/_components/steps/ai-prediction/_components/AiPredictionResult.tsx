@@ -8,10 +8,10 @@ import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 
-import { FINAL_STEP, useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
-
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import type { EmotionPredictionResponse } from '@/services/ai/ai.dto';
+
+import { FINAL_STEP, useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
 interface AiPredictionResultProps {
   predictionData: EmotionPredictionResponse;

@@ -8,6 +8,8 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
 
+import type { ApiResponse, ErrorResponse } from '@/types/api.types';
+
 import type {
   AIAnalysisResponse,
   DiarySummaryResponse,
@@ -17,8 +19,6 @@ import type {
   GetPeriodAnalysisParams,
 } from './ai.dto';
 import { aiService } from './ai.service';
-
-import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 export const AI_QUERY_KEY = {
   PERIOD_ANALYSIS: 'aiPeriodAnalysis',

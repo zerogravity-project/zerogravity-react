@@ -8,12 +8,12 @@ import { isToday } from 'date-fns';
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
+import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useCreateEmotionRecordMutation, useUpdateEmotionRecordMutation } from '@/services/emotion/emotion.query';
+
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 import DiaryTextArea from './DiaryTextArea';
-
-import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
-import { useCreateEmotionRecordMutation, useUpdateEmotionRecordMutation } from '@/services/emotion/emotion.query';
 
 export default function DiaryStep() {
   const router = useRouter();
