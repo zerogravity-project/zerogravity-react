@@ -1,0 +1,64 @@
+name: Build Chrome Extension
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/extension/**'
+      - 'packages/shared/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build shared package
+        run: pnpm build:shared
+
+      - name: Build extension
+        run: pnpm build:extension
+
+      - name: Create extension archive
+        run: |
+          cd packages/extension/dist
+          zip -r ../../../zerogravity-extension.zip .
+          cd ../../..
+
+      - name: Upload extension artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zerogravity-extension-${{ github.sha }}
+          path: zerogravity-extension.zip
+          retention-days: 30
+
+      - name: Build summary
+        run: |
+          echo "## Chrome Extension Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Extension built successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Artifact:** zerogravity-extension-${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next Steps:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download the artifact from the Actions tab" >> $GITHUB_STEP_SUMMARY
+          echo "2. Upload to Chrome Web Store manually" >> $GITHUB_STEP_SUMMARY
+          echo "3. Submit for review" >> $GITHUB_STEP_SUMMARY
