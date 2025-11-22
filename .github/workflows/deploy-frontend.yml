@@ -71,73 +71,116 @@ jobs:
             export ENV=$ENV
             export FRONTEND_PORT=$FRONTEND_PORT
 
-            # Get current container ID (for rollback)
-            CURRENT_CONTAINER=$(docker ps -q -f name=zerogv-frontend-$ENV) || true
+            # Step 1: Backup current image (if it exists)
+            echo "🔄 Backing up current image..."
+            if docker ps --filter "name=zerogv-frontend-$ENV" --format "{{.Names}}" | grep -q "zerogv-frontend-$ENV"; then
+              docker commit zerogv-frontend-$ENV zerogv-frontend:${ENV}-backup || true
+              echo "✅ Backup created: zerogv-frontend:${ENV}-backup"
+            else
+              echo "ℹ️  No existing container to backup (first deployment)"
+            fi
 
-            # Build and start new container
-            echo "Building and starting zerogv-frontend-$ENV..."
-            docker-compose up -d --build
+            # Step 2: Stop current containers
+            docker compose -p zerogv-${ENV} down || true
 
-            # Wait for container to be healthy
-            echo "Waiting for container to be healthy..."
-            sleep 30
+            # Step 3: Build and start new containers
+            echo "🚀 Building and deploying new version..."
+            docker compose -p zerogv-${ENV} up -d --build
 
-            # Health check
-            HEALTH_CHECK_URL="http://localhost:$FRONTEND_PORT/api/health"
-            MAX_RETRIES=6
-            RETRY_COUNT=0
-
-            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
-              echo "Health check attempt $((RETRY_COUNT + 1))/$MAX_RETRIES..."
-
-              if curl -f -s "$HEALTH_CHECK_URL" > /dev/null 2>&1; then
-                echo "✓ Health check passed!"
+            # Step 4: Health check with validation
+            echo "⏳ Waiting for frontend to be healthy (max 90 seconds)..."
+            HEALTH_CHECK_PASSED=false
+            for i in {1..18}; do
+              # Check if container is running first
+              if ! docker ps --filter "name=zerogv-frontend-$ENV" --format "{{.Names}}" | grep -q "zerogv-frontend-$ENV"; then
+                echo "❌ Container is not running! Deployment failed."
                 break
               fi
 
-              RETRY_COUNT=$((RETRY_COUNT + 1))
+              # Check health status (using jq for reliable JSON parsing)
+              HEALTH_STATUS=$(docker inspect zerogv-frontend-$ENV 2>/dev/null | jq -r '.[0].State.Health.Status // "starting"')
 
-              if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
-                echo "✗ Health check failed after $MAX_RETRIES attempts"
-
-                # Rollback to previous container
-                if [ -n "$CURRENT_CONTAINER" ]; then
-                  echo "Rolling back to previous container..."
-                  docker start $CURRENT_CONTAINER
-                fi
-
-                # Stop failed container
-                docker-compose down
-
-                echo "Deployment failed!"
-                exit 1
+              # Also check HTTP endpoint
+              HTTP_CHECK=false
+              if curl -f -s "http://localhost:$FRONTEND_PORT/api/health" > /dev/null 2>&1; then
+                HTTP_CHECK=true
               fi
 
-              sleep 10
+              if [ "$HEALTH_STATUS" = "healthy" ] && [ "$HTTP_CHECK" = true ]; then
+                echo "✅ Frontend is healthy! Deployment successful."
+                HEALTH_CHECK_PASSED=true
+                break
+              elif [ "$HEALTH_STATUS" = "unhealthy" ]; then
+                echo "❌ Frontend is unhealthy! Deployment failed."
+                break
+              fi
+
+              echo "Attempt $i/18: Docker status: ${HEALTH_STATUS:-starting}, HTTP: $HTTP_CHECK, waiting..."
+              sleep 5
             done
 
-            # Clean up old container if rollback wasn't needed
-            if [ -n "$CURRENT_CONTAINER" ]; then
-              echo "Removing old container..."
-              docker rm -f $CURRENT_CONTAINER || true
+            # Step 5: Rollback if health check failed
+            if [ "$HEALTH_CHECK_PASSED" = false ]; then
+              echo "❌ DEPLOYMENT FAILED: Health check did not pass"
+              echo "🔄 Rolling back to previous version..."
+
+              # Stop failed containers
+              docker compose -p zerogv-${ENV} down
+
+              # Check if backup exists
+              if docker images | grep -q "zerogv-frontend.*${ENV}-backup"; then
+                echo "📦 Restoring backup image..."
+                docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:latest
+                docker compose -p zerogv-${ENV} up -d
+                echo "✅ Rollback completed. Previous version restored."
+                exit 1
+              else
+                echo "⚠️  ERROR: No backup image found for rollback!"
+                echo "This may be the first deployment. Manual intervention required."
+                exit 1
+              fi
             fi
 
-            # Deploy nginx configuration
+            # Step 6: Cleanup old backup image
+            echo "🧹 Cleaning up old backup..."
+            docker images | grep "zerogv-frontend.*${ENV}-backup" | awk '{print $3}' | xargs -r docker rmi || true
+            echo "✅ Cleanup completed"
+
+            # Step 7: Deploy Nginx configuration
             echo "Deploying nginx configuration..."
             sudo ./scripts/deploy-nginx.sh
 
-            echo "=========================================="
-            echo "Deployment completed successfully!"
-            echo "Environment: $ENV"
-            echo "Port: $FRONTEND_PORT"
-            echo "Domain: $DOMAIN"
-            echo "=========================================="
+            # Step 8: Show container status
+            docker ps | grep zerogv
 
-      - name: Deployment status
-        if: always()
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          ENV: ${{ env.ENV }}
+          FRONTEND_PORT: ${{ env.FRONTEND_PORT }}
+          DOMAIN: ${{ env.DOMAIN }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: ENV,FRONTEND_PORT,DOMAIN
+          script: |
+            # Check health endpoint
+            echo "Checking health endpoint..."
+            curl -f http://localhost:$FRONTEND_PORT/api/health || exit 1
+            echo "Health check passed!"
+
+            # Warm-up: Precompile critical Next.js pages
+            echo "Warming up application..."
+            sleep 2
+            curl -s http://localhost:$FRONTEND_PORT/ > /dev/null || true
+            curl -s http://localhost:$FRONTEND_PORT/login > /dev/null || true
+            curl -s http://localhost:$FRONTEND_PORT/record/daily > /dev/null || true
+            echo "✅ Application warmed up and ready!"
+
+      - name: Deployment summary
         run: |
-          if [ "${{ job.status }}" = "success" ]; then
-            echo "✓ Deployment successful for ${{ env.ENV }} environment"
-          else
-            echo "✗ Deployment failed for ${{ env.ENV }} environment"
-          fi
+          echo "✅ Deployment completed successfully!"
+          echo "Environment: ${{ env.ENV }}"
+          echo "Domain: ${{ env.DOMAIN }}"
+          echo "Frontend Port: ${{ env.FRONTEND_PORT }}"
