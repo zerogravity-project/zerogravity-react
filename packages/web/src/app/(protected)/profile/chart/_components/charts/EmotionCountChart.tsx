@@ -10,12 +10,12 @@ import {
   EMOTION_TYPES,
 } from '@zerogravity/shared/components/ui/emotion';
 
+import { useChartCountQuery } from '@/services/chart/chart.query';
+
 import { useChart } from '../../_contexts/ChartContext';
 import { getChartConfig } from '../../_utils/chartUtils';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
-
-import { useChartCountQuery } from '@/services/chart/chart.query';
 
 // Mock data for charts - Week view
 // const mockCountData = [

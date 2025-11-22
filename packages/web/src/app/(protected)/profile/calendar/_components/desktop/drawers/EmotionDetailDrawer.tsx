@@ -7,6 +7,9 @@ import { EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emot
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn, formatDateString, isSameDay } from '@zerogravity/shared/utils';
 
+import { useScroll } from '@/app/_hooks/useScroll';
+import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
+
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
 import SectionTitle from './common/SectionTitle';
@@ -14,9 +17,6 @@ import DrawerHeader from './header/DrawerHeader';
 import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import DailyNoteSection from './sections/daily-note/DailyNoteSection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
-
-import { useScroll } from '@/app/_hooks/useScroll';
-import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 
 interface EmotionDetailDrawerProps {
   isOpen: boolean;

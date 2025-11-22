@@ -5,9 +5,9 @@ import { Button, Callout, Heading, SegmentedControl } from '@radix-ui/themes';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-import { useChart } from '../../_contexts/ChartContext';
-
 import GeminiButton from '@/app/_components/ui/button/GeminiButton';
+
+import { useChart } from '../../_contexts/ChartContext';
 
 interface EmotionChartsHeaderProps {
   setIsDrawerOpen: (isDrawerOpen: boolean) => void;

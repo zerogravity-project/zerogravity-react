@@ -1,9 +1,9 @@
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { TermsModal } from '../TermsModal';
-
 import { render } from '@/__tests__/utils/test-utils';
+
+import { TermsModal } from '../TermsModal';
 
 describe('TermsModal', () => {
   const mockOnClose = jest.fn();

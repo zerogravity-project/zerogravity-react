@@ -9,11 +9,11 @@ import { useRef } from 'react';
 import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
 import { formatDateString, isSameDay } from '@zerogravity/shared/utils';
 
-import { useCalendar } from '../../../_contexts/CalendarContext';
-
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import { useScroll } from '@/app/_hooks/useScroll';
+
+import { useCalendar } from '../../../_contexts/CalendarContext';
 
 interface EmotionDetailDrawerProps {
   isOpen: boolean;

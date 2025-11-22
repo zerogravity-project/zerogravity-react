@@ -7,10 +7,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 
+import type { ApiResponse } from '@/types/api.types';
+
 import type { ChartCountResponse, ChartLevelResponse, ChartQueryParams, ChartReasonResponse } from './chart.dto';
 import { chartService } from './chart.service';
-
-import type { ApiResponse } from '@/types/api.types';
 
 export const CHART_QUERY_KEY = {
   LEVEL: 'chartLevel',

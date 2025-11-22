@@ -3,10 +3,10 @@
  * API calls for authentication (SSR/CSR compatible)
  */
 
-import type { VerifyAuthRequest, VerifyAuthResponse } from './auth.dto';
-
 import axiosInstance from '@/lib/axios';
 import type { ApiResponse } from '@/types/api.types';
+
+import type { VerifyAuthRequest, VerifyAuthResponse } from './auth.dto';
 
 export const authService = {
   /**

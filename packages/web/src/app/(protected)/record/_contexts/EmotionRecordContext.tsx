@@ -6,9 +6,9 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
 
-import { valueToStepIndex } from '../_utils/emotionRecordUtils';
-
 import { EmotionRecordType } from '@/services/emotion/emotion.dto';
+
+import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
 /**
  * ============================================================

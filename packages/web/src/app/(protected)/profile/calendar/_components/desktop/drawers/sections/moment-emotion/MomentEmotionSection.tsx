@@ -1,6 +1,6 @@
-import MomentEmotionList from './MomentEmotionList';
-
 import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
+
+import MomentEmotionList from './MomentEmotionList';
 
 interface MomentEmotionSectionProps {
   momentEmotionRecords?: EmotionRecordDetail[];
