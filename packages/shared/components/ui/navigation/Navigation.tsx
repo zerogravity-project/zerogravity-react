@@ -5,10 +5,10 @@ import { ComponentType, useEffect, useState } from 'react';
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Link as RadixLink } from '@radix-ui/themes';
 
-import { Icon } from '@zerogravity/shared/components/ui/icon';
-import { Logo } from '@zerogravity/shared/components/ui/logo';
-import { useClock, useIsSm } from '@zerogravity/shared/hooks';
-import { cn, getDateStringData } from '@zerogravity/shared/utils';
+import { useClock, useIsSm } from '../../../hooks';
+import { cn, getDateStringData } from '../../../utils';
+import { Icon } from '../icon';
+import { Logo } from '../logo';
 
 import { MENU_ITEMS } from './constants/navigation.constants';
 import { MenuDrawer } from './drawer/MenuDrawer';

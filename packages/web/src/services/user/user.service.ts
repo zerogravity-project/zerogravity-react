@@ -3,14 +3,15 @@
  * API calls for user management (SSR/CSR compatible)
  */
 
-import axiosInstance from '@/lib/axios';
-import type { ApiResponse } from '@/types/api.types';
 import type {
   GetUserProfileResponse,
   UpdateConsentRequest,
   UpdateConsentResponse,
   DeleteUserResponse,
 } from './user.dto';
+
+import axiosInstance from '@/lib/axios';
+import type { ApiResponse } from '@/types/api.types';
 
 export const userService = {
   /**

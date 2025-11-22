@@ -2,9 +2,8 @@ import { ComponentType } from 'react';
 
 import { Avatar, Button, DropdownMenu, Text } from '@radix-ui/themes';
 
-import { Icon } from '@zerogravity/shared/components/ui/icon';
-import { cn } from '@zerogravity/shared/utils';
-
+import { cn } from '../../../../utils';
+import { Icon } from '../../icon';
 import { LinkProps, MenuItem } from '../types/navigation.types';
 
 interface ProfileDropdownProps {
