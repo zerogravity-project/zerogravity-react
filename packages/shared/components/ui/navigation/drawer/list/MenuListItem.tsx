@@ -1,7 +1,6 @@
 import { Text } from '@radix-ui/themes';
 
-import { cn } from '@zerogravity/shared/utils';
-
+import { cn } from '../../../../../utils';
 import { LinkProps } from '../../types/navigation.types';
 
 interface MenuListItemProps {
