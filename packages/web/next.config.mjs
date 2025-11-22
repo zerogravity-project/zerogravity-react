@@ -4,6 +4,7 @@ const withVanillaExtract = createVanillaExtractPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   transpilePackages: ['@zerogravity/shared'],
   webpack: config => {
     /* GLSL Loader */
