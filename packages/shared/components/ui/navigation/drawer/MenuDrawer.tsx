@@ -2,8 +2,7 @@ import { ComponentType } from 'react';
 
 import { AnimatePresence, motion } from 'motion/react';
 
-import { cn } from '@zerogravity/shared/utils';
-
+import { cn } from '../../../../utils';
 import { LinkProps, MenuItem, NavigationUser } from '../types/navigation.types';
 
 import { MenuDrawerHeader } from './header/MenuDrawerHeader';
