@@ -1,0 +1,137 @@
+name: Deploy Frontend to OCI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/workflows/build-extension.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set environment variables
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "ENV=prod" >> $GITHUB_ENV
+            echo "FRONTEND_PORT=3000" >> $GITHUB_ENV
+            echo "DOMAIN=zerogv.com" >> $GITHUB_ENV
+          else
+            echo "ENV=dev" >> $GITHUB_ENV
+            echo "FRONTEND_PORT=3001" >> $GITHUB_ENV
+            echo "DOMAIN=dev.zerogv.com" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: ENV,FRONTEND_PORT,DOMAIN
+          script: |
+            set -e
+
+            # Navigate to project directory
+            cd /home/ubuntu/frontend || { echo "Error: Directory not found"; exit 1; }
+
+            # Pull latest code
+            echo "Pulling latest code from ${{ github.ref }}..."
+            git fetch origin
+            git checkout ${{ github.ref_name }}
+            git pull origin ${{ github.ref_name }}
+
+            # Create .env file from secrets
+            echo "Creating .env.$ENV file..."
+            cat > .env.$ENV << EOF
+            NEXT_PUBLIC_API_BASE_URL=${{ secrets[format('NEXT_PUBLIC_API_BASE_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            NEXTAUTH_SECRET=${{ secrets[format('NEXTAUTH_SECRET_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            NEXTAUTH_URL=${{ secrets[format('NEXTAUTH_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
+            KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
+            KAKAO_CLIENT_SECRET=${{ secrets.KAKAO_CLIENT_SECRET }}
+            EOF
+
+            # Export environment variables for docker-compose
+            export ENV=$ENV
+            export FRONTEND_PORT=$FRONTEND_PORT
+
+            # Get current container ID (for rollback)
+            CURRENT_CONTAINER=$(docker ps -q -f name=zerogv-frontend-$ENV) || true
+
+            # Build and start new container
+            echo "Building and starting zerogv-frontend-$ENV..."
+            docker-compose up -d --build
+
+            # Wait for container to be healthy
+            echo "Waiting for container to be healthy..."
+            sleep 30
+
+            # Health check
+            HEALTH_CHECK_URL="http://localhost:$FRONTEND_PORT/api/health"
+            MAX_RETRIES=6
+            RETRY_COUNT=0
+
+            while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+              echo "Health check attempt $((RETRY_COUNT + 1))/$MAX_RETRIES..."
+
+              if curl -f -s "$HEALTH_CHECK_URL" > /dev/null 2>&1; then
+                echo "✓ Health check passed!"
+                break
+              fi
+
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+
+              if [ $RETRY_COUNT -eq $MAX_RETRIES ]; then
+                echo "✗ Health check failed after $MAX_RETRIES attempts"
+
+                # Rollback to previous container
+                if [ -n "$CURRENT_CONTAINER" ]; then
+                  echo "Rolling back to previous container..."
+                  docker start $CURRENT_CONTAINER
+                fi
+
+                # Stop failed container
+                docker-compose down
+
+                echo "Deployment failed!"
+                exit 1
+              fi
+
+              sleep 10
+            done
+
+            # Clean up old container if rollback wasn't needed
+            if [ -n "$CURRENT_CONTAINER" ]; then
+              echo "Removing old container..."
+              docker rm -f $CURRENT_CONTAINER || true
+            fi
+
+            # Deploy nginx configuration
+            echo "Deploying nginx configuration..."
+            sudo ./scripts/deploy-nginx.sh
+
+            echo "=========================================="
+            echo "Deployment completed successfully!"
+            echo "Environment: $ENV"
+            echo "Port: $FRONTEND_PORT"
+            echo "Domain: $DOMAIN"
+            echo "=========================================="
+
+      - name: Deployment status
+        if: always()
+        run: |
+          if [ "${{ job.status }}" = "success" ]; then
+            echo "✓ Deployment successful for ${{ env.ENV }} environment"
+          else
+            echo "✗ Deployment failed for ${{ env.ENV }} environment"
+          fi
