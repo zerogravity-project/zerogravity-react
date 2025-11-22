@@ -8,8 +8,8 @@ import { isToday } from 'date-fns';
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
+import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
-import AiPredictionLink from '../../AiPredictionLink/AiPredictionLink';
 
 import ReasonSelection from './ReasonSelection';
 
@@ -66,7 +66,9 @@ export default function ReasonStep() {
 
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
-        <AiPredictionLink className="mobile:!hidden" onClick={nextStep} />
+        <GeminiButton className="mobile:!hidden" onClick={nextStep}>
+          Skip and use AI Prediction with Gemini
+        </GeminiButton>
 
         <div className="flex w-full items-center gap-3">
           <Button
@@ -95,7 +97,9 @@ export default function ReasonStep() {
           </div>
         </div>
 
-        <AiPredictionLink className="max-mobile:!hidden" onClick={nextStep} />
+        <GeminiButton className="max-mobile:!hidden" onClick={nextStep}>
+          Skip and use AI Prediction with Gemini
+        </GeminiButton>
       </div>
     </>
   );

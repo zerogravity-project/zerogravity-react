@@ -1,13 +1,19 @@
 'use client';
 
-import { Button, Heading, SegmentedControl } from '@radix-ui/themes';
+import { Button, Callout, Heading, SegmentedControl } from '@radix-ui/themes';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
 import { useChart } from '../../_contexts/ChartContext';
 
-export function EmotionChartsHeader() {
+import GeminiButton from '@/app/_components/ui/button/GeminiButton';
+
+interface EmotionChartsHeaderProps {
+  setIsDrawerOpen: (isDrawerOpen: boolean) => void;
+}
+
+export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProps) {
   const isSm = useIsSm();
 
   const {
@@ -39,7 +45,7 @@ export function EmotionChartsHeader() {
           </SegmentedControl.Root>
         </div>
 
-        <div className="mobile:px-0 mobile:pl-2 flex items-center justify-between pt-1 pr-4 pb-5 pl-5">
+        <div className="mobile:px-0 mobile:pl-2 flex items-center justify-between pr-4 pb-4 pl-5">
           <Heading size="6" weight="medium" className="text-nowrap">
             {getFormattedDateRange()}
           </Heading>
@@ -67,12 +73,21 @@ export function EmotionChartsHeader() {
             </Button>
           </div>
         </div>
+
+        <div className="mobile:px-0 px-4 pb-5">
+          <Callout.Root color="gray">
+            {/* AI Analysis Button */}
+            <GeminiButton onClick={() => setIsDrawerOpen(true)} className="gap-3">
+              Discover insights from your emotions with AI analysis.
+            </GeminiButton>
+          </Callout.Root>
+        </div>
       </header>
     );
   }
 
   return (
-    <header className="p-0 pb-4">
+    <header className="flex flex-col gap-3 p-0 pb-4">
       <div className="flex items-center justify-between gap-3">
         <Heading size="5" weight="medium" className="text-nowrap">
           {getFormattedDateRange()}
@@ -120,6 +135,12 @@ export function EmotionChartsHeader() {
           </div>
         </div>
       </div>
+
+      <Callout.Root color="gray">
+        <GeminiButton onClick={() => setIsDrawerOpen(true)} className="gap-3">
+          Discover insights from your emotions with AI analysis.
+        </GeminiButton>
+      </Callout.Root>
     </header>
   );
 }

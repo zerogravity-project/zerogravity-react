@@ -6,8 +6,8 @@ import { useState } from 'react';
 import { EMOTION_STEPS, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
+import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
-import AiPredictionLink from '../../AiPredictionLink/AiPredictionLink';
 
 import EmotionSlider from './EmotionSlider';
 
@@ -45,12 +45,9 @@ export default function EmotionStep() {
 
       {/* Next Button */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
-        <AiPredictionLink
-          isLoaded={isSceneLoaded}
-          className="mobile:!hidden"
-          onClick={() => goToStep('ai-prediction')}
-        />
-
+        <GeminiButton isLoaded={isSceneLoaded} className="mobile:!hidden" onClick={() => goToStep('ai-prediction')}>
+          Skip and use AI Prediction with Gemini
+        </GeminiButton>
         <div className="w-full">
           <Button
             onClick={nextStep}
@@ -64,11 +61,9 @@ export default function EmotionStep() {
           </Button>
         </div>
 
-        <AiPredictionLink
-          isLoaded={isSceneLoaded}
-          className="max-mobile:!hidden"
-          onClick={() => goToStep('ai-prediction')}
-        />
+        <GeminiButton isLoaded={isSceneLoaded} className="max-mobile:!hidden" onClick={() => goToStep('ai-prediction')}>
+          Use AI Prediction with Gemini
+        </GeminiButton>
       </div>
     </>
   );
