@@ -12,7 +12,7 @@ export default async function MomentRecordPage({ searchParams }: MomentRecordPag
   const dateValue = date ?? null;
 
   return (
-    <EmotionRecordProvider recordType="moment" date={dateValue}>
+    <EmotionRecordProvider emotionRecordType="moment" date={dateValue}>
       <section className="mobile:px-5 absolute inset-0 flex h-[100dvh] w-[100dvw] flex-col items-center overflow-y-auto pt-[96px]">
         <EmotionRecord />
       </section>

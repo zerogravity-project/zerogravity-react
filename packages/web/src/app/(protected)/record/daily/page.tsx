@@ -36,7 +36,7 @@ export default async function DailyRecordPage({ searchParams }: DailyRecordPageP
 
   return (
     <EmotionRecordProvider
-      recordType="daily"
+      emotionRecordType="daily"
       date={dateValue}
       emotionRecordId={existingRecord?.emotionRecordId}
       initialDailyEmotionId={existingRecord?.emotionId}

@@ -40,6 +40,7 @@ export interface EmotionPredictionResponse {
   analysisId: string; // Snowflake ID as string
   suggestedEmotionId?: number | null; // 0-6, null if user already provided
   suggestedReasons?: string[] | null; // null if user already provided
+  refinedDiary: string; // Refined diary entry
   reasoning: string; // AI explanation of the prediction
   confidence: number; // 0.0 - 1.0
   analyzedAt: string; // ISO 8601 with timezone offset
