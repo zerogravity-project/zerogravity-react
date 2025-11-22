@@ -55,6 +55,9 @@ jobs:
               git reset --hard origin/${{ github.ref_name }}
             fi
 
+            # Verify current commit
+            echo "✅ Deployment commit: $(git log -1 --format='%h %s')"
+
             # Create .env file from secrets
             echo "Creating .env.$ENV file..."
             cat > .env.$ENV << EOF
