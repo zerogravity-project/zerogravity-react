@@ -8,6 +8,7 @@ import { isToday } from 'date-fns';
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
+import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 import ReasonSelection from './ReasonSelection';
@@ -64,31 +65,41 @@ export default function ReasonStep() {
       <ReasonSelection />
 
       {/* Navigation Buttons */}
-      <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
-        <Button
-          onClick={prevStep}
-          variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
-          color={EMOTION_STEPS[emotionId].color}
-          size="4"
-          radius="none"
-        >
-          <Icon>arrow_back</Icon>
-        </Button>
-        <div className="w-full">
+      <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
+        <GeminiButton className="mobile:!hidden" onClick={nextStep}>
+          Skip and use AI Prediction with Gemini
+        </GeminiButton>
+
+        <div className="flex w-full items-center gap-3">
           <Button
-            onClick={isFinalStep ? handleSubmit : nextStep}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            onClick={prevStep}
+            variant="surface"
+            className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
             color={EMOTION_STEPS[emotionId].color}
             size="4"
             radius="none"
-            disabled={!canGoNext || isCreatingEmotionRecord}
-            loading={isCreatingEmotionRecord}
           >
-            {isFinalStep ? 'Submit' : 'Next'}
-            <Icon>{isFinalStep ? 'check' : 'arrow_forward'}</Icon>
+            <Icon>arrow_back</Icon>
           </Button>
+          <div className="w-full">
+            <Button
+              onClick={isFinalStep ? handleSubmit : nextStep}
+              className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+              color={EMOTION_STEPS[emotionId].color}
+              size="4"
+              radius="none"
+              disabled={!canGoNext || isCreatingEmotionRecord}
+              loading={isCreatingEmotionRecord}
+            >
+              {isFinalStep ? 'Submit' : 'Next'}
+              <Icon>{isFinalStep ? 'check' : 'arrow_forward'}</Icon>
+            </Button>
+          </div>
         </div>
+
+        <GeminiButton className="max-mobile:!hidden" onClick={nextStep}>
+          Skip and use AI Prediction with Gemini
+        </GeminiButton>
       </div>
     </>
   );

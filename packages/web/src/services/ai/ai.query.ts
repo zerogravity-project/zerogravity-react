@@ -30,10 +30,11 @@ export const AI_QUERY_KEY = {
  * Get AI emotion analysis summary query
  * Results are cached for 24 hours by backend
  */
-export const usePeriodAnalysisQuery = (params: GetPeriodAnalysisParams) => {
+export const usePeriodAnalysisQuery = (params: GetPeriodAnalysisParams, enabled: boolean = true) => {
   return useQuery<ApiResponse<AIAnalysisResponse>>({
     queryKey: [AI_QUERY_KEY.PERIOD_ANALYSIS, params.period, params.startDate],
     queryFn: () => aiService.getPeriodAnalysis(params),
+    enabled,
   });
 };
 

@@ -8,62 +8,91 @@ import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/com
 
 import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
-export type RecordStep = 'emotion' | 'reason' | 'diary';
-export type RecordType = 'moment' | 'daily';
+import { EmotionRecordType } from '@/services/emotion/emotion.dto';
 
-// Step order configuration
-const STEP_ORDER: Record<RecordStep, number> = {
+/**
+ * ============================================================
+ * Type Definitions
+ * ============================================================
+ */
+
+export type MainStep = 'emotion' | 'reason' | 'diary';
+export type OptionalStep = 'ai-prediction';
+export type RecordStep = MainStep | OptionalStep;
+
+/**
+ * ============================================================
+ * Constants: Step Configuration
+ * ============================================================
+ */
+
+/** Step order mapping for navigation */
+export const MAIN_STEP_ORDER: Record<MainStep, number> = {
   emotion: 0,
   reason: 1,
   diary: 2,
 };
 
-const STEP_SEQUENCE: RecordStep[] = ['emotion', 'reason', 'diary'];
+/** Main step sequence (required flow, ai-prediction is optional) */
+export const MAIN_SEQUENCE: MainStep[] = ['emotion', 'reason', 'diary'];
 
-// Final step based on record type
-const FINAL_STEP: Record<RecordType, RecordStep> = {
+/** Final step based on record type */
+export const FINAL_STEP: Record<EmotionRecordType, MainStep> = {
   moment: 'reason',
   daily: 'diary',
 };
 
-interface EmotionRecordContextType {
-  // Record data
-  emotionId: EmotionId;
-  emotionSliderValue: number[];
-  emotionReasons: EmotionReason[];
-  diaryEntry: string;
-  emotionValueToStepIndex: number;
-  recordType: RecordType;
-  date: string | null; // YYYY-MM-DD format
+/**
+ * ============================================================
+ * Context Type Definition
+ * ============================================================
+ */
 
-  // Step navigation
+interface EmotionRecordContextType {
+  /** Record data */
+  emotionId: EmotionId;
+  emotionRecordType: EmotionRecordType;
+  emotionReasons: EmotionReason[];
+  diaryEntry?: string;
+  aiAnalysisId?: string;
+  date: string | null; // YYYY-MM-DD format
+  emotionRecordId?: string;
+
+  /** Helpers */
+  emotionValueToStepIndex: number;
+  emotionSliderValue: number[];
+
+  /** Step navigation */
   currentStep: RecordStep;
+  canGoNext: boolean;
+  canGoToStep: (step: RecordStep) => boolean;
+  isFinalStep: boolean;
   goToStep: (step: RecordStep) => void;
   nextStep: () => void;
   prevStep: () => void;
-  canGoNext: boolean;
-  isFinalStep: boolean;
-  emotionRecordId?: string;
 
-  // Setters
+  /** Setters */
   setEmotionId: (emotionId: EmotionId) => void;
   setEmotionSliderValue: (emotionSliderValue: number[]) => void;
   setEmotionReasons: (emotionReason: EmotionReason[]) => void;
   setDiaryEntry: (diaryEntry: string) => void;
+  setAiAnalysisId: (aiAnalysisId: string) => void;
 }
 
 export const EmotionRecordContext = createContext<EmotionRecordContextType | undefined>(undefined);
 
+/** Default values for emotion record */
 const defaultValues = {
   emotionId: 3 as EmotionId,
   emotionSliderValue: [EMOTION_STEPS[3].sliderValue],
   emotionReasons: [],
   diaryEntry: '',
+  aiAnalysisId: undefined,
 };
 
 interface EmotionRecordProviderProps {
   children: React.ReactNode;
-  recordType: RecordType;
+  emotionRecordType: EmotionRecordType;
   date: string | null;
 
   emotionRecordId?: string;
@@ -72,115 +101,177 @@ interface EmotionRecordProviderProps {
   initialDailyDiaryEntry?: string;
 }
 
+/**
+ * ============================================================
+ * Emotion Record Provider
+ * ============================================================
+ */
+
+/**
+ * Provider for the EmotionRecordContext
+ * @param children - The child components to wrap
+ * @param emotionRecordType - The type of emotion record
+ * @param date - The date of the emotion record
+ * @param emotionRecordId - The ID of the emotion record
+ * @param initialDailyEmotionId - The initial emotion ID for daily records
+ * @param initialDailyEmotionReasons - The initial emotion reasons for daily records
+ * @param initialDailyDiaryEntry - The initial diary entry for daily records
+ */
 export const EmotionRecordProvider = ({
   children,
-  recordType,
-  date,
+  emotionRecordType,
+  date: date,
   emotionRecordId,
   initialDailyEmotionId,
   initialDailyEmotionReasons,
   initialDailyDiaryEntry,
 }: EmotionRecordProviderProps) => {
+  /**
+   * ------------------------------------------------------------
+   * 1. External Hooks
+   * ------------------------------------------------------------
+   */
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Record data
+  /**
+   * ------------------------------------------------------------
+   * 2. States
+   * ------------------------------------------------------------
+   */
+
+  /** Record data */
   const [emotionId, setEmotionId] = useState<EmotionId>(initialDailyEmotionId ?? defaultValues.emotionId);
-  const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(
-    initialDailyEmotionId ? [EMOTION_STEPS[initialDailyEmotionId].sliderValue] : defaultValues.emotionSliderValue
-  );
   const [emotionReasons, setEmotionReasons] = useState<EmotionReason[]>(
     initialDailyEmotionReasons ?? defaultValues.emotionReasons
   );
   const [diaryEntry, setDiaryEntry] = useState<string>(initialDailyDiaryEntry ?? defaultValues.diaryEntry);
+  const [aiAnalysisId, setAiAnalysisId] = useState<string | undefined>(defaultValues.aiAnalysisId);
 
-  // Track if steps were completed
-  const [completedSteps, setCompletedSteps] = useState<Set<RecordStep>>(
-    initialDailyEmotionId ? new Set(['emotion', 'reason', 'diary']) : new Set()
+  /** Helpers */
+  const [emotionSliderValue, setEmotionSliderValue] = useState<number[]>(
+    initialDailyEmotionId ? [EMOTION_STEPS[initialDailyEmotionId].sliderValue] : defaultValues.emotionSliderValue
   );
+  const emotionValueToStepIndex = valueToStepIndex(emotionSliderValue[0]);
 
-  // Initialize step from URL
+  /** Initialize step from URL */
   const initialStep = (searchParams.get('step') as RecordStep) || 'emotion';
   const [currentStep, setCurrentStep] = useState<RecordStep>(initialStep);
 
-  const emotionValueToStepIndex = valueToStepIndex(emotionSliderValue[0]);
+  /**
+   * ------------------------------------------------------------
+   * 3. Derived Values
+   * ------------------------------------------------------------
+   */
 
-  // Check if current step is the final step for the current record type
+  /** Validation status for each step */
+  const isEmotionValid = emotionId !== null;
+  const isReasonValid = emotionReasons.length > 0;
+  const isDiaryValid = diaryEntry.length <= 300;
+
+  /**
+   * ------------------------------------------------------------
+   * 4. Computed Values
+   * ------------------------------------------------------------
+   */
+
+  /** Validation for next button */
+  const canGoNext = useMemo(() => {
+    switch (currentStep) {
+      case 'emotion':
+        return isEmotionValid;
+      case 'reason':
+        return isReasonValid;
+      case 'diary':
+        return isDiaryValid;
+      default:
+        return false;
+    }
+  }, [currentStep, isEmotionValid, isReasonValid, isDiaryValid]);
+
+  /** Check if can navigate to target step (all previous steps valid) */
+  const canGoToStep = useCallback(
+    (targetStep: RecordStep): boolean => {
+      // ai-prediction is optional and can be accessed anytime
+      if (!MAIN_SEQUENCE.includes(targetStep as MainStep)) return true;
+
+      const targetIndex = MAIN_STEP_ORDER[targetStep as MainStep];
+
+      // Check if all previous steps are valid
+      for (let i = 0; i < targetIndex; i++) {
+        const step = MAIN_SEQUENCE[i];
+        switch (step) {
+          case 'emotion':
+            if (!isEmotionValid) return false;
+            break;
+          case 'reason':
+            if (!isReasonValid) return false;
+            break;
+          case 'diary':
+            if (!isDiaryValid) return false;
+            break;
+        }
+      }
+      return true;
+    },
+    [isEmotionValid, isReasonValid, isDiaryValid]
+  );
+
+  /** Check if current step is the final step for the current record type */
   const isFinalStep = useMemo(() => {
-    return currentStep === FINAL_STEP[recordType];
-  }, [currentStep, recordType]);
+    return currentStep === FINAL_STEP[emotionRecordType];
+  }, [currentStep, emotionRecordType]);
 
-  // Sync emotion slider value with emotionId
-  useEffect(() => {
-    setEmotionSliderValue([EMOTION_STEPS[emotionId].sliderValue]);
-  }, [emotionId]);
+  /**
+   * ------------------------------------------------------------
+   * 5. Helper Functions (Callbacks)
+   * ------------------------------------------------------------
+   */
 
-  // Build URL with date param
+  /** Build URL with date param */
   const buildUrl = useCallback(
     (step: RecordStep) => {
-      const baseUrl = `/record/${recordType}`;
+      const baseUrl = `/record/${emotionRecordType}`;
       const params = new URLSearchParams();
       if (date) params.set('date', date);
       params.set('step', step);
       return `${baseUrl}?${params.toString()}`;
     },
-    [recordType, date]
+    [emotionRecordType, date]
   );
 
-  // Helper: Check if all previous steps are completed
-  const arePrerequisitesComplete = useCallback(
-    (targetStep: RecordStep): boolean => {
-      const targetIndex = STEP_ORDER[targetStep];
-      for (let i = 0; i < targetIndex; i++) {
-        if (!completedSteps.has(STEP_SEQUENCE[i])) {
-          return false;
-        }
-      }
-      return true;
-    },
-    [completedSteps]
-  );
+  /**
+   * ------------------------------------------------------------
+   * 6. Step Navigation (Callbacks)
+   * ------------------------------------------------------------
+   */
 
-  // Helper: Find first incomplete step
-  const getFirstIncompleteStep = useCallback((): RecordStep => {
-    for (const step of STEP_SEQUENCE) {
-      if (!completedSteps.has(step)) {
-        return step;
-      }
-    }
-    return 'emotion'; // Default fallback
-  }, [completedSteps]);
-
-  // Guard: Redirect to first incomplete step if accessing invalid step
-  useEffect(() => {
-    const stepFromUrl = (searchParams.get('step') as RecordStep) || 'emotion';
-
-    // If accessing a step without completing prerequisites, redirect
-    if (!arePrerequisitesComplete(stepFromUrl)) {
-      const firstIncomplete = getFirstIncompleteStep();
-      if (stepFromUrl !== firstIncomplete) {
-        router.replace(buildUrl(firstIncomplete), { scroll: false });
-        setCurrentStep(firstIncomplete);
-      }
-    }
-  }, [searchParams, arePrerequisitesComplete, getFirstIncompleteStep, router, buildUrl]);
-
-  // Step navigation
+  /** Go to a specific step */
   const goToStep = useCallback(
     (step: RecordStep) => {
+      // Check if can navigate to target step
+      if (!canGoToStep(step)) {
+        console.warn(`Cannot navigate to ${step}: prerequisites not met`);
+        return;
+      }
+
       setCurrentStep(step);
       router.replace(buildUrl(step), { scroll: false });
     },
-    [router, buildUrl]
+    [canGoToStep, router, buildUrl]
   );
 
+  /** Go to the next step */
   const nextStep = useCallback(() => {
-    const currentIndex = STEP_ORDER[currentStep];
-    const nextIndex = currentIndex + 1;
-    const finalStep = FINAL_STEP[recordType];
+    // Check if current step is complete
+    if (!canGoNext) {
+      console.warn('Cannot proceed: current step not complete');
+      return;
+    }
 
-    // Mark current step as completed
-    setCompletedSteps(prev => new Set(prev).add(currentStep));
+    const currentIndex = MAIN_STEP_ORDER[currentStep as MainStep];
+    const nextIndex = currentIndex + 1;
+    const finalStep = FINAL_STEP[emotionRecordType];
 
     // If current step is the final step for this record type, don't navigate
     if (currentStep === finalStep) {
@@ -188,59 +279,81 @@ export const EmotionRecordProvider = ({
     }
 
     // Navigate to next step, but don't go past the final step
-    if (nextIndex < STEP_SEQUENCE.length) {
-      const nextStep = STEP_SEQUENCE[nextIndex];
+    if (nextIndex < MAIN_SEQUENCE.length) {
+      const nextStep = MAIN_SEQUENCE[nextIndex];
       // Only navigate if next step is not past the final step
-      if (STEP_ORDER[nextStep] <= STEP_ORDER[finalStep]) {
+      if (MAIN_STEP_ORDER[nextStep] <= MAIN_STEP_ORDER[finalStep]) {
         goToStep(nextStep);
       }
     }
-  }, [currentStep, recordType, goToStep]);
+  }, [canGoNext, currentStep, emotionRecordType, goToStep]);
 
+  /** Go to the previous step */
   const prevStep = useCallback(() => {
-    const currentIndex = STEP_ORDER[currentStep];
+    const currentIndex = MAIN_STEP_ORDER[currentStep as MainStep];
     const prevIndex = currentIndex - 1;
 
     if (prevIndex >= 0) {
-      goToStep(STEP_SEQUENCE[prevIndex]);
+      goToStep(MAIN_SEQUENCE[prevIndex]);
     }
   }, [currentStep, goToStep]);
 
-  // Validation for next button
-  const canGoNext = useMemo(() => {
-    switch (currentStep) {
-      case 'emotion':
-        return emotionId !== null;
-      case 'reason':
-        return emotionReasons.length > 0;
-      case 'diary':
-        return true; // Always allow submission
-      default:
-        return false;
-    }
-  }, [currentStep, emotionId, emotionReasons.length]);
+  /**
+   * ------------------------------------------------------------
+   * 7. useEffect Hooks
+   * ------------------------------------------------------------
+   */
 
+  /** Sync emotion slider value with emotionId */
+  useEffect(() => {
+    setEmotionSliderValue([EMOTION_STEPS[emotionId].sliderValue]);
+  }, [emotionId]);
+
+  /** Redirect to accessible step if URL step is invalid */
+  useEffect(() => {
+    const stepFromUrl = (searchParams.get('step') as RecordStep) || 'emotion';
+
+    // Check if URL step is accessible
+    if (!canGoToStep(stepFromUrl)) {
+      // Find first accessible step
+      const firstAccessible = MAIN_SEQUENCE.find(step => canGoToStep(step)) || 'emotion';
+
+      if (stepFromUrl !== firstAccessible) {
+        router.replace(buildUrl(firstAccessible), { scroll: false });
+        setCurrentStep(firstAccessible);
+      }
+    }
+  }, [searchParams, canGoToStep, router, buildUrl]);
+
+  /**
+   * ------------------------------------------------------------
+   * 8. Return
+   * ------------------------------------------------------------
+   */
   return (
     <EmotionRecordContext.Provider
       value={{
         emotionId,
-        emotionSliderValue,
+        emotionRecordType,
         emotionReasons,
         diaryEntry,
-        emotionValueToStepIndex,
-        recordType,
+        aiAnalysisId,
         date,
+        emotionRecordId,
+        emotionValueToStepIndex,
+        emotionSliderValue,
         currentStep,
+        canGoNext,
+        canGoToStep,
+        isFinalStep,
         goToStep,
         nextStep,
         prevStep,
-        canGoNext,
-        isFinalStep,
-        emotionRecordId,
         setEmotionId,
         setEmotionSliderValue,
         setEmotionReasons,
         setDiaryEntry,
+        setAiAnalysisId,
       }}
     >
       {children}
@@ -248,10 +361,20 @@ export const EmotionRecordProvider = ({
   );
 };
 
-export const useEmotionRecordContext = () => {
+/**
+ * ============================================================
+ * Custom Hook
+ * ============================================================
+ */
+
+/**
+ * Hook to access EmotionRecordContext
+ * @throws Error if used outside of EmotionRecordProvider
+ */
+export const useEmotionRecordContext: () => EmotionRecordContextType = () => {
   const context = useContext(EmotionRecordContext);
   if (!context) {
-    throw new Error('useEmotionRecordContext must be used within a EmotionRecordProvider');
+    throw new Error('useEmotionRecordContext must be used within an EmotionRecordProvider');
   }
-  return context;
+  return context as EmotionRecordContextType;
 };
