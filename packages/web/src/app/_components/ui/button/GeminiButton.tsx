@@ -1,21 +1,33 @@
 import { Text } from '@radix-ui/themes';
+import { Responsive } from '@radix-ui/themes/dist/esm/props/prop-def.js';
 import { motion } from 'motion/react';
+import { ReactNode } from 'react';
 
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 import { cn } from '@zerogravity/shared/utils';
 
-interface AiPredictionLinkProps {
+interface GeminiButtonProps {
+  children: ReactNode;
   isLoaded?: boolean;
-  className?: string;
   onClick?: () => void;
+  logoSize?: number;
+  textSize?: Responsive<'1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'>;
+  className?: string;
 }
 
-export default function AiPredictionLink({ isLoaded = true, className, onClick }: AiPredictionLinkProps) {
+export default function GeminiButton({
+  children,
+  isLoaded = true,
+  onClick,
+  logoSize = 14,
+  textSize = '2',
+  className,
+}: GeminiButtonProps) {
   return (
     <div onClick={onClick} className={cn('flex items-center justify-center gap-2', className)}>
-      <GeminiLogo width={12} />
+      <GeminiLogo width={logoSize} />
 
-      <Text className="cursor-pointer !text-[13px] !leading-[17px]" color="gray" weight="light">
+      <Text size={textSize} className="cursor-pointer" color="gray" weight="light">
         <motion.span
           className={'inline-block bg-[length:200%_100%] bg-clip-text text-[var(--gray-a7)] hover:underline'}
           style={{
@@ -43,7 +55,7 @@ export default function AiPredictionLink({ isLoaded = true, className, onClick }
             ease: 'linear',
           }}
         >
-          Skip and use AI Prediction with Gemini
+          {children}
         </motion.span>
       </Text>
     </div>
