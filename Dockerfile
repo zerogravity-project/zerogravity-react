@@ -73,5 +73,8 @@ EXPOSE 3000
 # Set working directory to web package
 WORKDIR /app/packages/web
 
+# Set hostname to 0.0.0.0 to allow healthcheck
+ENV HOSTNAME="0.0.0.0"
+
 # Start Next.js server
 CMD ["node", "server.js"]
