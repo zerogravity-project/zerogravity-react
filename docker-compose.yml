@@ -24,5 +24,4 @@ services:
 
 networks:
   zerogv-network:
-    name: zerogv-network
-    external: true
+    driver: bridge
