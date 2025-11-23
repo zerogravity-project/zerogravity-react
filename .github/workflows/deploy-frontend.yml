@@ -64,6 +64,7 @@ jobs:
             NEXT_PUBLIC_API_BASE_URL=${{ secrets[format('NEXT_PUBLIC_API_BASE_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
             NEXTAUTH_SECRET=${{ secrets[format('NEXTAUTH_SECRET_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
             NEXTAUTH_URL=${{ secrets[format('NEXTAUTH_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            AUTH_TRUST_HOST=true
             GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}
             GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}
             KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}
@@ -84,11 +85,11 @@ jobs:
             fi
 
             # Step 2: Stop current containers
-            docker compose -p zerogv-frontend-${ENV} down || true
+            ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} down || true
 
             # Step 3: Build and start new containers
             echo "🚀 Building and deploying new version..."
-            docker compose -p zerogv-frontend-${ENV} up -d --build
+            ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} up -d --build
 
             # Step 4: Health check with validation
             echo "⏳ Waiting for frontend to be healthy (max 150 seconds)..."
@@ -122,13 +123,13 @@ jobs:
               echo "🔄 Rolling back to previous version..."
 
               # Stop failed containers
-              docker compose -p zerogv-frontend-${ENV} down
+              ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} down
 
               # Check if backup exists
               if docker images | grep -q "zerogv-frontend.*${ENV}-backup"; then
                 echo "📦 Restoring backup image..."
                 docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:latest
-                docker compose -p zerogv-frontend-${ENV} up -d
+                ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} up -d
                 echo "✅ Rollback completed. Previous version restored."
                 exit 1
               else
