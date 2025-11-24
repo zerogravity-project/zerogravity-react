@@ -84,12 +84,17 @@ jobs:
               echo "ℹ️  No existing container to backup (first deployment)"
             fi
 
+            # Export environment variables from .env file
+            export $(cat .env.$ENV | xargs)
+            export ENV=$ENV
+            export FRONTEND_PORT=$FRONTEND_PORT
+
             # Step 2: Stop current containers
-            ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} down || true
+            docker compose -p zerogv-frontend-${ENV} down || true
 
             # Step 3: Build and start new containers
             echo "🚀 Building and deploying new version..."
-            ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} up -d --build
+            docker compose -p zerogv-frontend-${ENV} up -d --build
 
             # Step 4: Health check with validation
             echo "⏳ Waiting for frontend to be healthy (max 150 seconds)..."
@@ -123,13 +128,13 @@ jobs:
               echo "🔄 Rolling back to previous version..."
 
               # Stop failed containers
-              ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} down
+              docker compose -p zerogv-frontend-${ENV} down
 
               # Check if backup exists
               if docker images | grep -q "zerogv-frontend.*${ENV}-backup"; then
                 echo "📦 Restoring backup image..."
                 docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:latest
-                ENV=$ENV FRONTEND_PORT=$FRONTEND_PORT docker compose -p zerogv-frontend-${ENV} up -d
+                docker compose -p zerogv-frontend-${ENV} up -d
                 echo "✅ Rollback completed. Previous version restored."
                 exit 1
               else
