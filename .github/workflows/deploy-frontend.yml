@@ -179,10 +179,30 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           envs: ENV,FRONTEND_PORT,DOMAIN
           script: |
-            # Check health endpoint
-            echo "Checking health endpoint..."
+            # Check health endpoint (localhost - container direct)
+            echo "Checking localhost health endpoint..."
             curl -f http://localhost:$FRONTEND_PORT/api/health || exit 1
-            echo "Health check passed!"
+            echo "✅ Localhost health check passed!"
+
+            # Check health endpoint (HTTPS - full stack via load balancer)
+            echo "Checking HTTPS health endpoint via load balancer..."
+
+            # Wait for DNS/SSL to be ready (max 30 seconds)
+            for i in {1..6}; do
+              if curl -f --connect-timeout 5 https://$DOMAIN 2>/dev/null; then
+                echo "✅ HTTPS health check passed!"
+                break
+              fi
+
+              if [ $i -eq 6 ]; then
+                echo "⚠️  WARNING: HTTPS health check failed after 30 seconds"
+                echo "This may be a DNS/SSL propagation issue. Container is healthy on localhost."
+                echo "Load balancer health checks will continue to verify full stack health."
+              else
+                echo "Attempt $i/6: Waiting for HTTPS endpoint..."
+                sleep 5
+              fi
+            done
 
             # Warm-up: Precompile critical Next.js pages
             echo "Warming up application..."
