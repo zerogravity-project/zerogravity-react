@@ -58,6 +58,10 @@ jobs:
             # Verify current commit
             echo "✅ Deployment commit: $(git log -1 --format='%h %s')"
 
+            # Clean up old .env files to prevent stale config accumulation
+            echo "🧹 Cleaning up old .env files..."
+            rm -f packages/web/.env packages/web/.env.* || true
+
             # Create .env.production file from secrets
             # Next.js always builds with NODE_ENV=production, so we always use .env.production
             # The content differs between dev and prod deployments
@@ -148,7 +152,13 @@ jobs:
             # Step 6: Cleanup old backup image
             echo "🧹 Cleaning up old backup..."
             docker images | grep "zerogv-frontend.*${ENV}-backup" | awk '{print $3}' | xargs -r docker rmi || true
-            echo "✅ Cleanup completed"
+            echo "✅ Backup cleanup completed"
+
+            # Step 6.5: Cleanup dangling images and old build cache
+            echo "🧹 Cleaning up dangling images and old build cache..."
+            docker image prune -f || true
+            docker builder prune -f --filter "until=24h" || true
+            echo "✅ Docker cleanup completed"
 
             # Step 7: Deploy Nginx configuration
             echo "Deploying nginx configuration..."
