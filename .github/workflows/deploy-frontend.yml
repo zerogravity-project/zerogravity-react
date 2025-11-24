@@ -81,27 +81,39 @@ jobs:
             export ENV=$ENV
             export FRONTEND_PORT=$FRONTEND_PORT
 
-            # Step 1: Backup current image (if it exists)
+            # ============================================================
+            # Build-First Deployment Strategy (Zero-Downtime)
+            # - Build new image FIRST (old container keeps running)
+            # - Only swap containers after build succeeds
+            # - Rollback uses backup image (no rebuild needed)
+            # ============================================================
+
+            # Step 1: Build new image (without stopping old container)
+            echo "🔨 Building new image (old container still running)..."
+            if ! docker build -t zerogv-frontend:${ENV}-new .; then
+              echo "❌ Build failed! Old container still running - no downtime."
+              exit 1
+            fi
+            echo "✅ Build successful!"
+
+            # Step 2: Backup current image (if container exists)
             echo "🔄 Backing up current image..."
-            if docker ps --filter "name=zerogv-frontend-$ENV" --format "{{.Names}}" | grep -q "zerogv-frontend-$ENV"; then
-              docker commit zerogv-frontend-$ENV zerogv-frontend:${ENV}-backup || true
+            if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "zerogv-frontend:${ENV}$"; then
+              docker tag zerogv-frontend:${ENV} zerogv-frontend:${ENV}-backup
               echo "✅ Backup created: zerogv-frontend:${ENV}-backup"
             else
-              echo "ℹ️  No existing container to backup (first deployment)"
+              echo "ℹ️  No existing image to backup (first deployment)"
             fi
 
-            # Export docker-compose variables
-            export ENV=$ENV
-            export FRONTEND_PORT=$FRONTEND_PORT
+            # Step 3: Tag new image as current
+            docker tag zerogv-frontend:${ENV}-new zerogv-frontend:${ENV}
 
-            # Step 2: Stop current containers
+            # Step 4: Swap containers (stop old, start new)
+            echo "🚀 Swapping containers..."
             docker compose -p zerogv-frontend-${ENV} down || true
+            docker compose -p zerogv-frontend-${ENV} up -d
 
-            # Step 3: Build and start new containers
-            echo "🚀 Building and deploying new version..."
-            docker compose -p zerogv-frontend-${ENV} up -d --build
-
-            # Step 4: Health check with validation
+            # Step 5: Health check with validation
             echo "⏳ Waiting for frontend to be healthy (max 150 seconds)..."
             HEALTH_CHECK_PASSED=false
             for i in {1..30}; do
@@ -127,18 +139,18 @@ jobs:
               sleep 5
             done
 
-            # Step 5: Rollback if health check failed
+            # Step 6: Rollback if health check failed (using backup image, no rebuild)
             if [ "$HEALTH_CHECK_PASSED" = false ]; then
               echo "❌ DEPLOYMENT FAILED: Health check did not pass"
-              echo "🔄 Rolling back to previous version..."
+              echo "🔄 Rolling back to previous version (using backup image)..."
 
               # Stop failed containers
               docker compose -p zerogv-frontend-${ENV} down
 
-              # Check if backup exists
-              if docker images | grep -q "zerogv-frontend.*${ENV}-backup"; then
+              # Check if backup exists and restore
+              if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "zerogv-frontend:${ENV}-backup"; then
                 echo "📦 Restoring backup image..."
-                docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:latest
+                docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:${ENV}
                 docker compose -p zerogv-frontend-${ENV} up -d
                 echo "✅ Rollback completed. Previous version restored."
                 exit 1
@@ -149,22 +161,19 @@ jobs:
               fi
             fi
 
-            # Step 6: Cleanup old backup image
-            echo "🧹 Cleaning up old backup..."
-            docker images | grep "zerogv-frontend.*${ENV}-backup" | awk '{print $3}' | xargs -r docker rmi || true
-            echo "✅ Backup cleanup completed"
-
-            # Step 6.5: Cleanup dangling images and old build cache
-            echo "🧹 Cleaning up dangling images and old build cache..."
+            # Step 7: Cleanup old images
+            echo "🧹 Cleaning up old images..."
+            docker rmi zerogv-frontend:${ENV}-new 2>/dev/null || true
+            docker rmi zerogv-frontend:${ENV}-backup 2>/dev/null || true
             docker image prune -f || true
             docker builder prune -f --filter "until=24h" || true
-            echo "✅ Docker cleanup completed"
+            echo "✅ Cleanup completed"
 
-            # Step 7: Deploy Nginx configuration
+            # Step 8: Deploy Nginx configuration
             echo "Deploying nginx configuration..."
             sudo ./scripts/deploy-nginx.sh
 
-            # Step 8: Show container status
+            # Step 9: Show container status
             docker ps | grep zerogv
 
       - name: Verify deployment
