@@ -6,10 +6,10 @@ import { useCallback, useState } from 'react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
-import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
-
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
+
+import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
 interface AiPredictionInputProps {
   predictEmotion: (params: { diaryEntry: string }) => void;

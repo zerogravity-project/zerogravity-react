@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 import { Button, Flex, Link as RadixLink } from '@radix-ui/themes';
 
+import { useUpdateConsentMutation } from '@/services/user/user.query';
+
 import { useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
-
-import { useUpdateConsentMutation } from '@/services/user/user.query';
 
 interface AiConsentModalProps {
   onAgree: () => void;
