@@ -6,11 +6,11 @@ import { useSession } from 'next-auth/react';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-import { useChart } from '../../_contexts/ChartContext';
-
 import GeminiButton from '@/app/_components/ui/button/GeminiButton';
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
+
+import { useChart } from '../../_contexts/ChartContext';
 
 interface EmotionChartsHeaderProps {
   setIsDrawerOpen: (isDrawerOpen: boolean) => void;
