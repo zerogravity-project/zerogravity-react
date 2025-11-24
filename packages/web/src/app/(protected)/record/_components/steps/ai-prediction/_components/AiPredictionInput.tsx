@@ -1,11 +1,15 @@
 'use client';
 
 import { Button, Heading, Text, TextArea } from '@radix-ui/themes';
+import { useSession } from 'next-auth/react';
 import { useCallback, useState } from 'react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
 import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
+
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
+import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 interface AiPredictionInputProps {
   predictEmotion: (params: { diaryEntry: string }) => void;
@@ -23,6 +27,8 @@ export default function AiPredictionInput({
    * 1. External Hooks
    * ------------------------------------------------------------
    */
+  const { data: session } = useSession();
+  const { openComponentModal } = useModal();
   const { goToStep } = useEmotionRecordContext();
 
   /**
@@ -37,6 +43,7 @@ export default function AiPredictionInput({
    * 3. Derived Values
    * ------------------------------------------------------------
    */
+  const consents = session?.user?.consents;
   const isValid = aiPredictionEntry?.length >= 100 && aiPredictionEntry?.length <= 300;
 
   /**
@@ -64,8 +71,16 @@ export default function AiPredictionInput({
       return;
     }
 
+    // Show AI consent modal if user has not consented to AI analysis
+    if (!consents?.aiAnalysisConsent) {
+      openComponentModal({
+        component: <AiConsentModal onAgree={() => predictEmotion({ diaryEntry: aiPredictionEntry })} />,
+      });
+      return;
+    }
+
     predictEmotion({ diaryEntry: aiPredictionEntry });
-  }, [aiPredictionEntry, isValid, predictEmotion]);
+  }, [aiPredictionEntry, isValid, predictEmotion, openComponentModal, consents?.aiAnalysisConsent]);
 
   /**
    * ------------------------------------------------------------
