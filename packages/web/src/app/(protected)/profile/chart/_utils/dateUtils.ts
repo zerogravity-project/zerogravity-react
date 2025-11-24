@@ -13,6 +13,8 @@ import {
 
 /**
  * Get week range for a given date
+ * @param date - Any date within the target week
+ * @returns Object with start (Sunday) and end (Saturday) dates
  */
 export function getWeekRange(date: Date) {
   const start = startOfWeek(date, { weekStartsOn: 0 });
@@ -22,6 +24,8 @@ export function getWeekRange(date: Date) {
 
 /**
  * Get month range for a given date
+ * @param date - Any date within the target month
+ * @returns Object with start (1st) and end (last day) dates
  */
 export function getMonthRange(date: Date) {
   const start = startOfMonth(date);
@@ -31,6 +35,8 @@ export function getMonthRange(date: Date) {
 
 /**
  * Get year range for a given date
+ * @param date - Any date within the target year
+ * @returns Object with start (Jan 1) and end (Dec 31) dates
  */
 export function getYearRange(date: Date) {
   const start = startOfYear(date);
@@ -40,6 +46,9 @@ export function getYearRange(date: Date) {
 
 /**
  * Format date range for display
+ * @param date - Reference date for the period
+ * @param period - Time period type
+ * @returns Formatted date range string for display
  */
 export function formatDateRange(date: Date, period: 'week' | 'month' | 'year'): string {
   switch (period) {
@@ -58,6 +67,10 @@ export function formatDateRange(date: Date, period: 'week' | 'month' | 'year'): 
 
 /**
  * Navigate to next/previous period
+ * @param date - Current reference date
+ * @param period - Time period type
+ * @param direction - Navigation direction
+ * @returns New date offset by one period in the specified direction
  */
 export function navigatePeriod(date: Date, period: 'week' | 'month' | 'year', direction: 'next' | 'prev'): Date {
   switch (period) {

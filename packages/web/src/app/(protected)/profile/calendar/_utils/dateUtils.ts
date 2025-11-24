@@ -2,6 +2,9 @@ import { MONTH_NAMES } from '../_constants/calendar.constants';
 
 /**
  * Get information about a specific month
+ * @param year - Year to get info for
+ * @param month - Month index (0-11)
+ * @returns Month information including days, weeks, and empty cells
  */
 export function getMonthInfo(year: number, month: number) {
   const firstDayOfMonth = new Date(year, month, 1);
@@ -29,6 +32,8 @@ export function getMonthInfo(year: number, month: number) {
 
 /**
  * Get the week number of the month for a given date
+ * @param date - Date to calculate week number for
+ * @returns Week number within the month (1-based)
  */
 export function getWeekOfMonth(date: Date) {
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
@@ -39,6 +44,8 @@ export function getWeekOfMonth(date: Date) {
 
 /**
  * Format the time of a date
+ * @param date - Date to format time from
+ * @returns Formatted time string in "HH:MM AM/PM" format
  */
 export function formatTime(date: Date) {
   const hours = date.getHours();
@@ -49,8 +56,8 @@ export function formatTime(date: Date) {
 
 /**
  * Get the name of the month of a date
- * @param date
- * @returns
+ * @param date - Date to get month name from
+ * @returns Full month name (e.g., "January")
  */
 export function getMonthName(date: Date) {
   return MONTH_NAMES[date.getMonth()];

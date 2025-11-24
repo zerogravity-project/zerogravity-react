@@ -2,6 +2,12 @@ import { getDaysInMonth } from 'date-fns';
 
 import { ChartPeriod, WEEK_LABELS, YEAR_LABELS } from '@/services/chart/chart.dto';
 
+/**
+ * Get chart configuration based on period
+ * @param period - Chart period type (week, month, year)
+ * @param startDate - Start date string to calculate days in month
+ * @returns Object with labels array and max value for the chart
+ */
 export function getChartConfig(period: ChartPeriod, startDate: string) {
   if (period === 'week') {
     return { labels: WEEK_LABELS, max: 7 };
