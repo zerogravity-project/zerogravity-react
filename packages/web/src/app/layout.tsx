@@ -4,7 +4,6 @@ import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
 import type { Metadata } from 'next';
 
 import ClientProviders from './_components/providers/ClientProviders';
-import { ModalProvider } from './_components/ui/modal/_contexts/ModalContext';
 
 export interface CustomIconDescriptorType extends IconDescriptor {
   precedence?: string;
@@ -32,9 +31,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <ClientProviders>
-          <ModalProvider>{children}</ModalProvider>
-        </ClientProviders>
+        <ClientProviders>{children}</ClientProviders>
       </body>
     </html>
   );

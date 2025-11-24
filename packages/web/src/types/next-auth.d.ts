@@ -43,6 +43,11 @@ declare module 'next-auth' {
      */
     backendJwt?: string;
 
+    /**
+     * Error message if authentication failed
+     */
+    error?: string;
+
     user: {
       id: string;
       email: string;
@@ -91,5 +96,10 @@ declare module 'next-auth/jwt' {
      * User consent information
      */
     consents?: ConsentData;
+
+    /**
+     * Error message if authentication failed
+     */
+    error?: string;
   }
 }

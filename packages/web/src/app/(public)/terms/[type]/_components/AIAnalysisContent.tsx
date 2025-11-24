@@ -9,18 +9,16 @@ export function AIAnalysisContent() {
     <Flex direction="column" gap="5">
       {/* Critical Warning */}
       <Callout.Root color="red" size="2">
-        <Callout.Text>
-          <Flex direction="column" gap="2">
-            <Text size="3" weight="bold">
-              IMPORTANT: Data Transmission is Irreversible
-            </Text>
-            <Text size="3">
-              Once your emotion data is sent to AI systems for analysis, it cannot be retrieved or deleted from those
-              external systems. This consent is optional, but the decision should be made carefully as it cannot be
-              undone.
-            </Text>
-          </Flex>
-        </Callout.Text>
+        <Flex direction="column" gap="2">
+          <Text size="3" weight="bold">
+            IMPORTANT: Data Transmission is Irreversible
+          </Text>
+          <Text size="3">
+            Once your emotion data is sent to AI systems for analysis, it cannot be retrieved or deleted from those
+            external systems. This consent is optional, but the decision should be made carefully as it cannot be
+            undone.
+          </Text>
+        </Flex>
       </Callout.Root>
 
       {/* Introduction */}
@@ -153,28 +151,22 @@ export function AIAnalysisContent() {
       <Flex direction="column" gap="3">
         <Heading size="5">7. Irreversibility of Data Transmission</Heading>
         <Callout.Root color="red">
-          <Callout.Text>
-            <Flex direction="column" gap="2">
-              <Text size="3" weight="bold">
-                Critical Understanding Required:
-              </Text>
-              <Text size="3">
-                Once your emotion data is transmitted to Google Gemini AI, it cannot be retrieved, deleted, or
-                controlled by ZeroGravity or by you. This is a permanent action with the following implications:
-              </Text>
-              <Flex direction="column" gap="2" ml="4">
-                <Text size="3">• You cannot request deletion of data already sent to Google&apos;s AI systems</Text>
-                <Text size="3">
-                  • ZeroGravity cannot retrieve or remove your data from Google&apos;s infrastructure
-                </Text>
-                <Text size="3">• Withdrawing consent only prevents future transmissions, not past ones</Text>
-                <Text size="3">
-                  • Deleting your ZeroGravity account does not delete data in Google&apos;s AI systems
-                </Text>
-                <Text size="3">• Google may retain and process your data according to their own policies</Text>
-              </Flex>
+          <Flex direction="column" gap="2">
+            <Text size="3" weight="bold">
+              Critical Understanding Required:
+            </Text>
+            <Text size="3">
+              Once your emotion data is transmitted to Google Gemini AI, it cannot be retrieved, deleted, or controlled
+              by ZeroGravity or by you. This is a permanent action with the following implications:
+            </Text>
+            <Flex direction="column" gap="2" ml="4">
+              <Text size="3">• You cannot request deletion of data already sent to Google&apos;s AI systems</Text>
+              <Text size="3">• ZeroGravity cannot retrieve or remove your data from Google&apos;s infrastructure</Text>
+              <Text size="3">• Withdrawing consent only prevents future transmissions, not past ones</Text>
+              <Text size="3">• Deleting your ZeroGravity account does not delete data in Google&apos;s AI systems</Text>
+              <Text size="3">• Google may retain and process your data according to their own policies</Text>
             </Flex>
-          </Callout.Text>
+          </Flex>
         </Callout.Root>
       </Flex>
 
@@ -213,18 +205,16 @@ export function AIAnalysisContent() {
       <Flex direction="column" gap="3">
         <Heading size="5">9. Limitations and Disclaimers</Heading>
         <Callout.Root color="yellow">
-          <Callout.Text>
-            <Flex direction="column" gap="2">
-              <Text size="3" weight="bold">
-                AI Analysis is NOT Professional Advice:
-              </Text>
-              <Text size="3">• AI-generated insights are based on pattern recognition and statistical analysis</Text>
-              <Text size="3">• They are not a substitute for professional mental health advice or treatment</Text>
-              <Text size="3">• AI may produce inaccurate, biased, or misleading insights</Text>
-              <Text size="3">• ZeroGravity does not validate or guarantee the accuracy of AI-generated content</Text>
-              <Text size="3">• For mental health concerns, always consult qualified professionals</Text>
-            </Flex>
-          </Callout.Text>
+          <Flex direction="column" gap="2">
+            <Text size="3" weight="bold">
+              AI Analysis is NOT Professional Advice:
+            </Text>
+            <Text size="3">• AI-generated insights are based on pattern recognition and statistical analysis</Text>
+            <Text size="3">• They are not a substitute for professional mental health advice or treatment</Text>
+            <Text size="3">• AI may produce inaccurate, biased, or misleading insights</Text>
+            <Text size="3">• ZeroGravity does not validate or guarantee the accuracy of AI-generated content</Text>
+            <Text size="3">• For mental health concerns, always consult qualified professionals</Text>
+          </Flex>
         </Callout.Root>
       </Flex>
 

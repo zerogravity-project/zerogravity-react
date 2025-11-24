@@ -84,10 +84,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // Set expiration time (15 minutes from now)
             token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
           } else {
-            console.error('Backend verification failed');
+            console.error('[JWT Callback] Backend verification failed:', {
+              status: response.status,
+              statusText: response.statusText,
+              requestUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify`,
+              requestBody: {
+                provider: account.provider.toUpperCase(),
+                providerId: account.providerAccountId,
+                email: user.email,
+                name: user.name,
+              },
+            });
+            // Throw error to prevent login - NextAuth will redirect to login with error
+            throw new Error('BackendVerificationFailed');
           }
         } catch (error) {
           console.error('[JWT Callback] Error:', error);
+          // Throw error to prevent login
+          throw new Error('BackendConnectionError');
         }
       }
 
@@ -180,7 +194,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     /**
      * Transform JWT into client-accessible session
      * Include consent data, isNewUser flag, and backend JWT
-     * Handle token refresh errors
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     session: async ({ session, token }: any) => {
@@ -191,16 +204,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.backendJwt = token.backendJwt;
       session.refreshToken = token.refreshToken;
 
-      // Pass refresh error to client for handling
-      if (token.error) {
-        session.error = token.error;
-      }
-
       return session;
     },
   },
   pages: {
     signIn: '/login',
+    error: '/login', // Redirect to login page on error
   },
   session: {
     strategy: 'jwt',

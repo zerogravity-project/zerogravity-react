@@ -34,7 +34,7 @@ export function Footer({ className, LinkComponent = DefaultLink }: FooterProps) 
           <Fragment key={index}>
             <li>
               <RadixLink asChild color="gray" size="1">
-                <LinkComponent href={`/${menu.linkPath}`}>
+                <LinkComponent href={menu.linkPath}>
                   <span className="text-[var(--gray-8)] transition-opacity hover:opacity-80">{menu.text}</span>
                 </LinkComponent>
               </RadixLink>

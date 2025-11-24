@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import { Text } from '@radix-ui/themes';
-import { useEffect, useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -20,16 +19,7 @@ export function DesktopMenuListItem({ href, icon, label }: DesktopMenuListItemPr
   const { accentColor } = useTheme();
   const pathname = usePathname();
 
-  const [basePath, setBasePath] = useState(pathname);
-
-  useEffect(() => {
-    // 모달이 아닌 실제 페이지 경로만 기억
-    if (!pathname.includes('setting')) {
-      setBasePath(pathname);
-    }
-  }, [pathname]);
-
-  const isActive = basePath === href;
+  const isActive = pathname === href;
 
   return (
     <li className="w-full">

@@ -5,8 +5,6 @@
 
 import { Box, Container, Flex, Heading, Text } from '@radix-ui/themes';
 
-import { Logo } from '@zerogravity/shared/components/ui/logo';
-
 interface TermsLayoutProps {
   title: string;
   lastUpdated: string;
@@ -18,8 +16,7 @@ export function TermsLayout({ title, lastUpdated, children }: TermsLayoutProps) 
     <Box style={{ minHeight: '100vh', backgroundColor: 'var(--gray-1)', padding: '2rem 0' }}>
       <Container size="3">
         {/* Header */}
-        <Flex direction="column" align="center" gap="4" mb="6">
-          <Logo width={48} />
+        <Flex direction="column" align="center" gap="4" mb="6" mt="6">
           <Flex direction="column" align="center" gap="2">
             <Heading size="8" align="center">
               {title}
