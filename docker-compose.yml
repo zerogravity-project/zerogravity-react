@@ -6,14 +6,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        NODE_ENV: ${NODE_ENV:-production}
     ports:
       - '${FRONTEND_PORT:-3000}:3000'
-    environment:
-      - NODE_ENV=${NODE_ENV:-production}
     env_file:
-      - packages/web/.env.${NODE_ENV:-production}
+      - packages/web/.env.production
     restart: unless-stopped
     networks:
       - zerogv-network
