@@ -22,10 +22,12 @@ jobs:
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "ENV=prod" >> $GITHUB_ENV
+            echo "NODE_ENV=production" >> $GITHUB_ENV
             echo "FRONTEND_PORT=3000" >> $GITHUB_ENV
             echo "DOMAIN=zerogv.com" >> $GITHUB_ENV
           else
             echo "ENV=dev" >> $GITHUB_ENV
+            echo "NODE_ENV=development" >> $GITHUB_ENV
             echo "FRONTEND_PORT=3001" >> $GITHUB_ENV
             echo "DOMAIN=dev.zerogv.com" >> $GITHUB_ENV
           fi
@@ -58,9 +60,10 @@ jobs:
             # Verify current commit
             echo "✅ Deployment commit: $(git log -1 --format='%h %s')"
 
-            # Create .env file from secrets
-            echo "Creating .env.$ENV file..."
-            cat > .env.$ENV << EOF
+            # Create .env file from secrets (Next.js standard naming)
+            # Place in packages/web/ where Next.js expects it
+            echo "Creating packages/web/.env.$NODE_ENV file..."
+            cat > packages/web/.env.$NODE_ENV << EOF
             NEXT_PUBLIC_API_BASE_URL=${{ secrets[format('NEXT_PUBLIC_API_BASE_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
             AUTH_SECRET=${{ secrets[format('AUTH_SECRET_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
             AUTH_URL=${{ secrets[format('AUTH_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
@@ -84,9 +87,9 @@ jobs:
               echo "ℹ️  No existing container to backup (first deployment)"
             fi
 
-            # Export environment variables from .env file
-            export $(cat .env.$ENV | xargs)
+            # Export docker-compose variables
             export ENV=$ENV
+            export NODE_ENV=$NODE_ENV
             export FRONTEND_PORT=$FRONTEND_PORT
 
             # Step 2: Stop current containers

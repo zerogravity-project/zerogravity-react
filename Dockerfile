@@ -32,17 +32,14 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=deps /app/packages/web/node_modules ./packages/web/node_modules
 COPY --from=deps /app/packages/shared/node_modules ./packages/shared/node_modules
 
-# Copy source code
+# Copy source code (includes packages/web/.env.development or .env.production)
 COPY . .
 
 # Build shared package first
 RUN pnpm --filter shared build
 
-# Build arguments for Next.js public env vars (passed from docker-compose)
-ARG NEXT_PUBLIC_API_BASE_URL
-ENV NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL
-
 # Build web package (Next.js standalone)
+# Next.js automatically reads packages/web/.env.${NODE_ENV} based on NODE_ENV
 RUN pnpm --filter web build
 
 # ==============================================================================
