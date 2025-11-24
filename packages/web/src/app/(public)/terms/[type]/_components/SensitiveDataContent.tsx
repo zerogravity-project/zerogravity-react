@@ -190,20 +190,18 @@ export function SensitiveDataContent() {
       <Flex direction="column" gap="3">
         <Heading size="5">7. Important Limitations</Heading>
         <Callout.Root color="red">
-          <Callout.Text>
-            <Flex direction="column" gap="2">
-              <Text size="3" weight="bold">
-                ZeroGravity is NOT a medical device or mental health treatment service.
-              </Text>
-              <Text size="3">• The Service is designed for personal wellness tracking and self-awareness only</Text>
-              <Text size="3">• It does not provide medical advice, diagnosis, or treatment</Text>
-              <Text size="3">• It is not a substitute for professional mental health care</Text>
-              <Text size="3">
-                • If you are experiencing a mental health crisis, please contact a qualified mental health professional
-                or emergency services immediately
-              </Text>
-            </Flex>
-          </Callout.Text>
+          <Flex direction="column" gap="2">
+            <Text size="3" weight="bold">
+              ZeroGravity is NOT a medical device or mental health treatment service.
+            </Text>
+            <Text size="3">• The Service is designed for personal wellness tracking and self-awareness only</Text>
+            <Text size="3">• It does not provide medical advice, diagnosis, or treatment</Text>
+            <Text size="3">• It is not a substitute for professional mental health care</Text>
+            <Text size="3">
+              • If you are experiencing a mental health crisis, please contact a qualified mental health professional or
+              emergency services immediately
+            </Text>
+          </Flex>
         </Callout.Root>
       </Flex>
 

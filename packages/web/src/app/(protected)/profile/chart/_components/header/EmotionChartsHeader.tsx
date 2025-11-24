@@ -1,19 +1,23 @@
 'use client';
 
 import { Button, Callout, Heading, SegmentedControl } from '@radix-ui/themes';
+import { useSession } from 'next-auth/react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-import GeminiButton from '@/app/_components/ui/button/GeminiButton';
-
 import { useChart } from '../../_contexts/ChartContext';
+
+import GeminiButton from '@/app/_components/ui/button/GeminiButton';
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
+import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 interface EmotionChartsHeaderProps {
   setIsDrawerOpen: (isDrawerOpen: boolean) => void;
 }
 
 export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProps) {
+  const { data: session } = useSession();
   const isSm = useIsSm();
 
   const {
@@ -25,6 +29,23 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
     canGoNext,
     canGoPrevious,
   } = useChart();
+
+  const { openComponentModal } = useModal();
+
+  const consents = session?.user?.consents;
+
+  const handleOpenAiAnalysisDrawer = () => {
+    // Show AI consent modal if user has not consented to AI analysis
+    if (!consents?.aiAnalysisConsent) {
+      openComponentModal({
+        component: <AiConsentModal onAgree={() => setIsDrawerOpen(true)} />,
+      });
+
+      return;
+    }
+
+    setIsDrawerOpen(true);
+  };
 
   if (isSm) {
     return (
@@ -77,7 +98,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
         <div className="mobile:px-0 px-4 pb-5">
           <Callout.Root color="gray">
             {/* AI Analysis Button */}
-            <GeminiButton onClick={() => setIsDrawerOpen(true)} className="gap-3">
+            <GeminiButton onClick={handleOpenAiAnalysisDrawer} className="gap-3">
               Discover insights from your emotions with AI analysis.
             </GeminiButton>
           </Callout.Root>
@@ -137,7 +158,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
       </div>
 
       <Callout.Root color="gray">
-        <GeminiButton onClick={() => setIsDrawerOpen(true)} className="gap-3">
+        <GeminiButton onClick={handleOpenAiAnalysisDrawer} className="gap-3">
           Discover insights from your emotions with AI analysis.
         </GeminiButton>
       </Callout.Root>
