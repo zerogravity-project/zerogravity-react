@@ -11,10 +11,32 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 import EmotionSlider from './EmotionSlider';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function EmotionStep() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { emotionValueToStepIndex, nextStep, goToStep, emotionRecordType } = useEmotionRecordContext();
+
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const [isSceneLoaded, setIsSceneLoaded] = useState(false);
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <>
       {/* Title */}

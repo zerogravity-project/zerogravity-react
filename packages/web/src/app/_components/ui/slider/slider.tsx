@@ -5,6 +5,12 @@ import * as React from 'react';
 
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface SliderColorTokens {
   range?: string; // e.g. 'var(--green-9)'
   ring?: string; // e.g. 'var(--green-a8)'
@@ -22,6 +28,12 @@ interface SliderProps extends React.ComponentProps<typeof SliderPrimitive.Root> 
   className?: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function Slider({
   value,
   defaultValue,
@@ -33,13 +45,28 @@ export function Slider({
   className,
   ...props
 }: SliderProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
+  const [isFocused, setIsFocused] = React.useState(false);
+
+  /**
+   * --------------------------------------------
+   * 2. Computed Values
+   * --------------------------------------------
+   */
   const _values = React.useMemo(
     () => (Array.isArray(value) ? value : Array.isArray(defaultValue) ? defaultValue : [min, max]),
     [value, defaultValue, min, max]
   );
 
-  const [isFocused, setIsFocused] = React.useState(false);
-
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <SliderPrimitive.Root
       data-slot="slider"

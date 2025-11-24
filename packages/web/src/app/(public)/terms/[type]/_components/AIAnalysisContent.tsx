@@ -1,9 +1,12 @@
-/**
- * AI-Powered Analysis Agreement content
- */
-
 import { Flex, Heading, Text, Callout } from '@radix-ui/themes';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+/** AI-Powered Analysis Agreement content */
 export function AIAnalysisContent() {
   return (
     <Flex direction="column" gap="5">

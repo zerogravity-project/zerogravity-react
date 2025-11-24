@@ -6,10 +6,26 @@ import { EmotionCountChart } from '../charts/EmotionCountChart';
 import { EmotionLevelChart } from '../charts/EmotionLevelChart';
 import { EmotionReasonsChart } from '../charts/EmotionReasonsChart';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function ChartLayout() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const isMobile = useIsMobile();
   const isSm = useIsSm();
 
+  /**
+   * --------------------------------------------
+   * 2. Return
+   * --------------------------------------------
+   */
   if (isMobile) {
     return (
       <div className="flex h-full min-h-0 w-full min-w-0 flex-shrink-0 flex-col gap-3">

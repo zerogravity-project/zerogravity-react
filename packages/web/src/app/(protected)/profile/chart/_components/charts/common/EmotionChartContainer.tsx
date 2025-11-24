@@ -2,11 +2,23 @@ import { cn } from '@zerogravity/shared/utils';
 
 import { EmotionChartHeader } from '../header/EmotionChartHeader';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface EmotionChartContainerProps {
   title: string;
   children: React.ReactNode;
   className?: string;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function EmotionChartContainer({ title, children, className }: EmotionChartContainerProps) {
   return (

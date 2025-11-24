@@ -1,9 +1,12 @@
-/**
- * Terms of Service content
- */
-
 import { Flex, Heading, Text } from '@radix-ui/themes';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+/** Terms of Service content */
 export function ServiceTermsContent() {
   return (
     <Flex direction="column" gap="5">

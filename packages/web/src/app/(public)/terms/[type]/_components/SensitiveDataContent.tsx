@@ -1,9 +1,12 @@
-/**
- * Sensitive Personal Data Agreement content
- */
-
 import { Flex, Heading, Text, Callout } from '@radix-ui/themes';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+/** Sensitive Personal Data Agreement content */
 export function SensitiveDataContent() {
   return (
     <Flex direction="column" gap="5">

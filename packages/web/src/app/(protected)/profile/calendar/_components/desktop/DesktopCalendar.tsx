@@ -14,10 +14,32 @@ import DesktopCalendarCell from './cell/DesktopCalendarCell';
 import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';
 import DesktopCalendarHeader from './header/DesktopCalendarHeader';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function DesktopCalendar() {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { isToday, getYear, getMonth, getMonthDaysInfo, selectedDate, setSelectedDate } = useCalendar();
 
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
   const year = getYear();
   const month = getMonth();
   const { daysInMonth, emptyCellsBefore: emptyBefore, emptyCellsAfter: emptyAfter } = getMonthDaysInfo();
@@ -28,6 +50,11 @@ export default function DesktopCalendar() {
   const selectedDateStart = startOfDay(selectedDate);
   const selectedDateEnd = endOfDay(selectedDate);
 
+  /**
+   * --------------------------------------------
+   * 4. Query Hooks
+   * --------------------------------------------
+   */
   const { data: currentMonthEmotionRecords } = useGetEmotionRecordsQuery({
     startDateTime: format(monthStart, "yyyy-MM-dd'T'HH:mm:ss"),
     endDateTime: format(monthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
@@ -38,12 +65,30 @@ export default function DesktopCalendar() {
     endDateTime: format(selectedDateEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
 
-  // Empty cells for days before the first day of the month
+  /**
+   * --------------------------------------------
+   * 5. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Handle cell click - open drawer and select date */
+  const handleCellClick = (date: Date) => {
+    setIsDrawerOpen(true);
+    setSelectedDate(date);
+  };
+
+  /**
+   * --------------------------------------------
+   * 6. Render Helpers
+   * --------------------------------------------
+   */
+
+  /** Empty cells before the first day of the month */
   const emptyCellsBefore = Array.from({ length: emptyBefore }, (_, i) => (
     <div key={`empty-before-${i}`} className="h-full w-full outline outline-[0.5px] outline-[var(--gray-3)]" />
   ));
 
-  // Days of the month
+  /** Days of the month */
   const dayCells = Array.from({ length: daysInMonth }, (_, i) => {
     const day = i + 1;
     const date = new Date(year, month, day);
@@ -64,16 +109,16 @@ export default function DesktopCalendar() {
     );
   });
 
-  // Empty cells for days after the last day of the month
+  /** Empty cells after the last day of the month */
   const emptyCellsAfterMonth = Array.from({ length: emptyAfter }, (_, i) => (
     <div key={`empty-after-${i}`} className="h-full w-full outline outline-[0.5px] outline-[var(--gray-3)]" />
   ));
 
-  const handleCellClick = (date: Date) => {
-    setIsDrawerOpen(true);
-    setSelectedDate(date);
-  };
-
+  /**
+   * --------------------------------------------
+   * 7. Return
+   * --------------------------------------------
+   */
   return (
     <LayoutGroup>
       <div className="flex h-full w-full">

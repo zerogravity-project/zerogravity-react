@@ -1,8 +1,3 @@
-/**
- * Consent page
- * First-time user consent collection with Radix UI
- */
-
 'use client';
 
 import { useRouter } from 'next/navigation';
@@ -16,9 +11,26 @@ import { Logo } from '@zerogravity/shared/components/ui/logo';
 import type { UpdateConsentRequest } from '@/services/user/user.dto';
 import { useUpdateConsentMutation } from '@/services/user/user.query';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function ConsentPage() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const router = useRouter();
   const { update: updateSession } = useSession();
+
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const [consents, setConsents] = useState<UpdateConsentRequest>({
     termsAgreed: false,
     privacyAgreed: false,
@@ -26,6 +38,11 @@ export default function ConsentPage() {
     aiAnalysisConsent: false,
   });
 
+  /**
+   * --------------------------------------------
+   * 3. Query Hooks
+   * --------------------------------------------
+   */
   const { mutate: updateConsent, isPending: isUpdatingConsent } = useUpdateConsentMutation({
     onSuccess: async data => {
       // Update NextAuth session with new consent data
@@ -42,6 +59,20 @@ export default function ConsentPage() {
     },
   });
 
+  /**
+   * --------------------------------------------
+   * 4. Derived Values
+   * --------------------------------------------
+   */
+  const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
+
+  /**
+   * --------------------------------------------
+   * 5. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Handle form submission */
   const handleSubmit = () => {
     // Validate required consents
     if (!consents.termsAgreed || !consents.privacyAgreed || !consents.sensitiveDataConsent) {
@@ -52,8 +83,11 @@ export default function ConsentPage() {
     updateConsent(consents);
   };
 
-  const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
-
+  /**
+   * --------------------------------------------
+   * 6. Return
+   * --------------------------------------------
+   */
   return (
     <Flex
       direction="column"

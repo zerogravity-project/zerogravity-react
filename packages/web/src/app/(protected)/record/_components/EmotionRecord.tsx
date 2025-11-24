@@ -15,26 +15,58 @@ import DiaryStep from './steps/diary/DiaryStep';
 import EmotionStep from './steps/emotion/EmotionStep';
 import ReasonStep from './steps/reason/ReasonStep';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function EmotionRecord() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const router = useRouter();
   const { currentStep, prevStep } = useEmotionRecordContext();
 
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * --------------------------------------------
+   * 3. Custom Hooks
+   * --------------------------------------------
+   */
   const { isScrolling } = useScroll({
     scrollRef: scrollRef,
     enable: true,
   });
 
+  /**
+   * --------------------------------------------
+   * 4. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Handle go back - navigate to previous step or go back to previous page */
   const handleGoBack = () => {
     if (currentStep === 'emotion') {
       router.back();
-
       return;
     }
-
     prevStep();
   };
 
+  /**
+   * --------------------------------------------
+   * 5. Return
+   * --------------------------------------------
+   */
   return (
     <>
       <TopAppBar
@@ -46,8 +78,6 @@ export default function EmotionRecord() {
         shadow={isScrolling}
       />
       <div ref={scrollRef} className="flex h-full w-full flex-col items-center justify-between">
-        {/* <EmotionRecordHeader /> */}
-
         {/* Step Content */}
         <AnimatePresence mode="wait">
           {currentStep === 'emotion' && (

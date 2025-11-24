@@ -19,22 +19,54 @@ import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 import { useCalendar } from '../../../../_contexts/CalendarContext';
 import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface DailyEmotionSectionProps {
   emotionRecords?: EmotionRecordDetail;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSectionProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { selectedDate } = useCalendar();
   const { accentColor } = useTheme();
 
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
   const selectedDateString = formatDateString(selectedDate);
   const isEmpty = emotionRecords?.emotionId === undefined;
   const accentEmotionId = EMOTION_COLORS.indexOf(accentColor);
   const emotionId = emotionRecords?.emotionId ?? (accentEmotionId as EmotionId);
   const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   return (
     <section className="flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pb-9">
       {/* Selected date daily emotion */}

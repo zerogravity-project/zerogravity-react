@@ -16,12 +16,26 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 import ReasonSelection from './ReasonSelection';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function ReasonStep() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const router = useRouter();
   const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
 
-  const isTodayDate = date ? isToday(new Date(date)) : false;
-
+  /**
+   * --------------------------------------------
+   * 2. Query Hooks
+   * --------------------------------------------
+   */
   const { mutate: createEmotionRecord, isPending: isCreatingEmotionRecord } = useCreateEmotionRecordMutation({
     onSuccess: () => {
       router.push('/profile/calendar');
@@ -31,6 +45,20 @@ export default function ReasonStep() {
     },
   });
 
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+  const isTodayDate = date ? isToday(new Date(date)) : false;
+
+  /**
+   * --------------------------------------------
+   * 4. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Submit emotion record */
   const handleSubmit = () => {
     createEmotionRecord({
       emotionId,
@@ -40,6 +68,11 @@ export default function ReasonStep() {
     });
   };
 
+  /**
+   * --------------------------------------------
+   * 5. Return
+   * --------------------------------------------
+   */
   return (
     <>
       {/* Title */}

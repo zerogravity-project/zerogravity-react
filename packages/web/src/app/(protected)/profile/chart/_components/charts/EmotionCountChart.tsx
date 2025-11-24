@@ -17,38 +17,54 @@ import { getChartConfig } from '../../_utils/chartUtils';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
-// Mock data for charts - Week view
-// const mockCountData = [
-//   {
-//     label: 'Emotion Count',
-//     data: [
-//       { x: 0.5, y: 3 }, // Mon 12:00
-//       { x: 0.78, y: 5 }, // Mon 18:45
-//       { x: 1.38, y: 2 }, // Tue 09:00
-//       { x: 2.25, y: 4 }, // Wed 06:00
-//       { x: 3.5, y: 6 }, // Thu 12:00
-//       { x: 4.1, y: 3 }, // Fri 02:24
-//       { x: 5.67, y: 5 }, // Sat 16:00
-//       { x: 6.25, y: 4 }, // Sun 06:00
-//     ],
-//     backgroundColor: '#8E4EC6',
-//   },
-// ];
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function EmotionCountChart() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { timePeriod, startDate } = useChart();
 
-  const { data: countData } = useChartCountQuery({ period: timePeriod, startDate });
-
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
+  /**
+   * --------------------------------------------
+   * 3. Query Hooks
+   * --------------------------------------------
+   */
+  const { data: countData } = useChartCountQuery({ period: timePeriod, startDate });
+
+  /**
+   * --------------------------------------------
+   * 4. Callbacks
+   * --------------------------------------------
+   */
+
+  /** Convert emotion value to label */
   const valueToLabel = useCallback((value: number) => {
     const labels = EMOTION_STEPS.map(step => step.type);
     return labels[value] || '';
   }, []);
 
-  // emotionId별로 데이터 가공
+  /**
+   * --------------------------------------------
+   * 5. Computed Values
+   * --------------------------------------------
+   */
+
+  /** Group data by emotionId for chart datasets */
   const chartDatasets = useMemo(() => {
     if (!countData?.data) return [];
 
@@ -85,6 +101,7 @@ export function EmotionCountChart() {
     });
   }, [countData]);
 
+  /** Chart data configuration */
   const chartData = useMemo(
     () => ({
       datasets: chartDatasets,
@@ -92,6 +109,7 @@ export function EmotionCountChart() {
     [chartDatasets]
   );
 
+  /** Chart options configuration */
   const chartOptions = useMemo(
     () => ({
       clip: false as const,
@@ -155,6 +173,13 @@ export function EmotionCountChart() {
     [valueToLabel, timePeriod, startDate]
   );
 
+  /**
+   * --------------------------------------------
+   * 6. Effects
+   * --------------------------------------------
+   */
+
+  /** Initialize and update chart instance */
   useEffect(() => {
     if (!chartRef.current) return;
 
@@ -177,6 +202,11 @@ export function EmotionCountChart() {
     };
   }, [chartData, chartOptions]);
 
+  /**
+   * --------------------------------------------
+   * 7. Return
+   * --------------------------------------------
+   */
   return (
     <EmotionChartContainer title="Emotion Count Chart" className="max-mobile:h-[320px] sm:col-span-2">
       <div className="h-full min-h-0 w-full min-w-0">
