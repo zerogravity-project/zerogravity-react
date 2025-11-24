@@ -5,9 +5,21 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { DefaultLoading } from './DefaultLoading';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface PageLoadingProps {
   isLoaded: boolean;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function PageLoading({ isLoaded }: PageLoadingProps) {
   return (

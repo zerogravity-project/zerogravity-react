@@ -7,12 +7,16 @@ import { Theme } from '@radix-ui/themes';
 import { EMOTION_COLORS } from '../ui/emotion/constants/emotion.constants';
 import { type EmotionColor } from '../ui/emotion/types/emotion.types';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface ThemeContextValue {
   accentColor: EmotionColor;
   setAccentColor: (color: EmotionColor) => void;
 }
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 interface ThemeProviderProps {
   children: ReactNode;
@@ -20,7 +24,13 @@ interface ThemeProviderProps {
   setColor?: (color: EmotionColor) => void;
 }
 
-// Cookie helper functions
+/**
+ * ============================================
+ * Helper Functions
+ * ============================================
+ */
+
+/** Get cookie value by name */
 function getCookie(name: string): string | null {
   if (typeof document === 'undefined') return null;
   const value = `; ${document.cookie}`;
@@ -29,17 +39,49 @@ function getCookie(name: string): string | null {
   return null;
 }
 
+/** Set cookie with name, value and max age */
 function setCookie(name: string, value: string, maxAge: number = 86400) {
   if (typeof document === 'undefined') return;
   document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
 }
 
+/**
+ * ============================================
+ * Context
+ * ============================================
+ */
+
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+/**
+ * ============================================
+ * Provider
+ * ============================================
+ */
+
 export function ThemeProvider({ children, getColor, setColor }: ThemeProviderProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   // Use a stable default for SSR/first client render to avoid hydration mismatch
   const [accentColor, setAccentColor] = useState<EmotionColor>('green');
   const [mounted, setMounted] = useState(false);
 
-  // Load theme from cookie on mount
+  /**
+   * --------------------------------------------
+   * 2. Computed Values
+   * --------------------------------------------
+   */
+  const value = useMemo(() => ({ accentColor, setAccentColor }), [accentColor]);
+
+  /**
+   * --------------------------------------------
+   * 3. Effects
+   * --------------------------------------------
+   */
+  /** Load theme from cookie on mount */
   useEffect(() => {
     async function loadTheme() {
       setMounted(true);
@@ -69,7 +111,7 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
     loadTheme();
   }, [getColor, setColor]);
 
-  // Persist changes to cookie
+  /** Persist changes to cookie */
   useEffect(() => {
     if (!mounted) return;
     try {
@@ -84,8 +126,11 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
     }
   }, [accentColor, mounted, setColor]);
 
-  const value = useMemo(() => ({ accentColor, setAccentColor }), [accentColor]);
-
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   if (!mounted) return null;
 
   return (
@@ -96,6 +141,12 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
     </ThemeContext.Provider>
   );
 }
+
+/**
+ * ============================================
+ * Hook
+ * ============================================
+ */
 
 export function useTheme(): ThemeContextValue {
   const ctx = useContext(ThemeContext);

@@ -6,6 +6,12 @@ import { cn } from '../../../../utils';
 import { Icon } from '../../icon';
 import { LinkProps, MenuItem } from '../types/navigation.types';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface ProfileDropdownProps {
   userName: string;
   profileImage?: string;
@@ -13,6 +19,21 @@ interface ProfileDropdownProps {
   LinkComponent: ComponentType<LinkProps>;
   className?: string;
 }
+
+interface ProfileDropdownItemProps {
+  label: string;
+  href: string;
+  icon?: string;
+  onClick?: () => void;
+  className?: string;
+  LinkComponent: React.ComponentType<LinkProps>;
+}
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function ProfileDropdown({ userName, profileImage, menuItems, LinkComponent, className }: ProfileDropdownProps) {
   return (
@@ -55,14 +76,11 @@ export function ProfileDropdown({ userName, profileImage, menuItems, LinkCompone
   );
 }
 
-interface ProfileDropdownItemProps {
-  label: string;
-  href: string;
-  icon?: string;
-  onClick?: () => void;
-  className?: string;
-  LinkComponent: React.ComponentType<LinkProps>;
-}
+/**
+ * ============================================
+ * Helper Components
+ * ============================================
+ */
 
 function ProfileDropdownItem({ href, icon, label, onClick, className, LinkComponent }: ProfileDropdownItemProps) {
   return (

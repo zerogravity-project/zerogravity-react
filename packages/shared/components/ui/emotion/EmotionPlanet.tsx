@@ -8,8 +8,12 @@ import { EMOTION_STEPS } from './constants/emotion.constants';
 import { WobbleMesh } from './objects/WobbleMesh';
 
 /**
- * Default Light Properties
+ * ============================================
+ * Constants
+ * ============================================
  */
+
+/** Default Light Properties */
 const DEFAULT_LIGHT_PROPS = {
   color: '#ffffff',
   intensity: 5,
@@ -20,9 +24,7 @@ const DEFAULT_LIGHT_PROPS = {
   shadowNormalBias: 0.05,
 };
 
-/**
- * Default Sparkles Properties
- */
+/** Default Sparkles Properties */
 const DEFAULT_SPARKLES_PROPS = {
   count: 50,
   scale: 7,
@@ -37,6 +39,12 @@ const DEFAULT_LARGE_SPARKLES_PROPS = {
   speed: 0.05,
 };
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface EmotionPlanetProps {
   emotionId: number;
   onLoaded: () => void;
@@ -45,6 +53,12 @@ interface EmotionPlanetProps {
   isLarge?: boolean;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionPlanet({
   emotionId,
   onLoaded,
@@ -52,11 +66,21 @@ export function EmotionPlanet({
   isSparkles = true,
   isLarge = false,
 }: EmotionPlanetProps) {
+  /**
+   * --------------------------------------------
+   * 1. Effects
+   * --------------------------------------------
+   */
+  /** Notify parent when component is mounted (Suspense resolved) */
   useEffect(() => {
-    // When Suspense is resolved, this component will be mounted, so send the loading complete signal
     onLoaded();
   }, [onLoaded]);
 
+  /**
+   * --------------------------------------------
+   * 2. Return
+   * --------------------------------------------
+   */
   return (
     <>
       {/* Environment */}

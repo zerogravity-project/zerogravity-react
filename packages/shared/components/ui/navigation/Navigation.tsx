@@ -15,27 +15,45 @@ import { MenuDrawer } from './drawer/MenuDrawer';
 import { ProfileDropdown } from './dropdown/ProfileDropdown';
 import { LinkProps, MenuItem, NavigationUser } from './types/navigation.types';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface NavigationProps {
-  // Authentication
+  /** Authentication */
   isAuthenticated: boolean;
   user?: NavigationUser;
 
-  // Navigation
+  /** Navigation */
   currentPath: string;
   LinkComponent?: ComponentType<LinkProps>;
   menuItems?: MenuItem[];
 
-  // Styling
+  /** Styling */
   background?: boolean;
   border?: boolean;
   className?: string;
 }
+
+/**
+ * ============================================
+ * Helper Components
+ * ============================================
+ */
 
 const DefaultLink = ({ href, children, className, ...props }: LinkProps) => (
   <a {...props} href={href} className={className}>
     {children}
   </a>
 );
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function Navigation({
   isAuthenticated,
@@ -47,20 +65,45 @@ export function Navigation({
   border,
   className,
 }: NavigationProps) {
-  const isSm = useIsSm();
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  /**
+   * --------------------------------------------
+   * 2. Custom Hooks
+   * --------------------------------------------
+   */
+  const isSm = useIsSm();
   const now = useClock();
-  const dateData = now ? getDateStringData(now) : null;
 
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+  const dateData = now ? getDateStringData(now) : null;
   const userName = user?.name ?? 'ZeroGravity User';
   const profileImage = user?.image;
 
-  // Close menu when current path changes
+  /**
+   * --------------------------------------------
+   * 4. Effects
+   * --------------------------------------------
+   */
+  /** Close menu when current path changes */
   useEffect(() => {
     setIsMenuOpen(false);
   }, [currentPath]);
 
+  /**
+   * --------------------------------------------
+   * 5. Return
+   * --------------------------------------------
+   */
   return (
     <NavigationMenu.Root
       className={cn(

@@ -8,7 +8,19 @@ import { cn } from '../../../utils/styleUtils';
 import { EMOTION_STEPS } from './constants/emotion.constants';
 import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
 
+/**
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
 const CIRCLE_RADIUS = 45;
+
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
 
 interface EmotionPlanetNullProps {
   emotionId: number;
@@ -21,6 +33,12 @@ interface EmotionPlanetNullProps {
   className?: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionPlanetNull({
   emotionId,
   width,
@@ -29,12 +47,19 @@ export function EmotionPlanetNull({
   isResize = true,
   className,
 }: EmotionPlanetNullProps) {
+  /**
+   * --------------------------------------------
+   * 1. Custom Hooks
+   * --------------------------------------------
+   */
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
-  const resolvedWidth = width || squareSize || '100%';
-  const resolvedHeight = height || squareSize || '100%';
-
-  // Calculate display sizes
+  /**
+   * --------------------------------------------
+   * 2. Helper Functions
+   * --------------------------------------------
+   */
+  /** Calculate display size based on dimension and square size */
   const getDisplaySize = (dimension: number | string, isFull: boolean) => {
     if (isFull) {
       return squareSize ? `${squareSize}px` : '100%';
@@ -42,6 +67,7 @@ export function EmotionPlanetNull({
     return typeof dimension === 'number' ? dimension : dimension;
   };
 
+  /** Calculate null indicator size with scale factor */
   const getNullSize = (dimension: number | string, isFull: boolean, scale = 0.85) => {
     if (isFull) {
       return squareSize ? `${squareSize * scale}px` : undefined;
@@ -49,11 +75,23 @@ export function EmotionPlanetNull({
     return typeof dimension === 'number' ? dimension * scale : dimension;
   };
 
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+  const resolvedWidth = width || squareSize || '100%';
+  const resolvedHeight = height || squareSize || '100%';
   const displayWidth = getDisplaySize(resolvedWidth, resolvedWidth === '100%');
   const displayHeight = getDisplaySize(resolvedHeight, resolvedHeight === '100%');
   const nullWidth = getNullSize(resolvedWidth, resolvedWidth === '100%');
   const nullHeight = getNullSize(resolvedHeight, resolvedHeight === '100%');
 
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   return (
     <div
       ref={containerRef}

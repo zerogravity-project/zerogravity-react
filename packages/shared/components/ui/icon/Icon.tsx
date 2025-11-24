@@ -1,11 +1,23 @@
 import { cn } from '../../../utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface IconProps {
   children: React.ReactNode;
   size?: number;
   color?: string;
   className?: string;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function Icon({ children, size, color, className }: IconProps) {
   return (

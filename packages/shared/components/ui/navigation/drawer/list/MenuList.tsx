@@ -4,11 +4,23 @@ import { LinkProps, MenuItem } from '../../types/navigation.types';
 
 import { MenuListItem } from './MenuListItem';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface MenuListProps {
   menuItems: MenuItem[];
   currentPath: string;
   LinkComponent: React.ComponentType<LinkProps>;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function MenuList({ menuItems, currentPath, LinkComponent }: MenuListProps) {
   return (
