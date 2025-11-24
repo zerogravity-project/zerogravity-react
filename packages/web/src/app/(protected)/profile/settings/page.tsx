@@ -1,7 +1,5 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
-
 import { Button, Dialog, Flex, Separator, Switch, Text, TextField } from '@radix-ui/themes';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
@@ -9,10 +7,10 @@ import { useState } from 'react';
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
-import { useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
+import { useLogoutMutation } from '@/services/auth/auth.query';
+import { useDeleteUserMutation, useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
 export default function ProfileSettingsPage() {
-  const pathname = usePathname();
   const { data: session } = useSession();
   const { data: userProfile } = useUserProfileQuery();
   const { openHashModal } = useModal();
@@ -22,13 +20,33 @@ export default function ProfileSettingsPage() {
 
   const [showAIWarning, setShowAIWarning] = useState(false);
 
-  const updateConsentMutation = useUpdateConsentMutation({
+  const { mutate: updateConsent, isPending: isUpdatingConsent } = useUpdateConsentMutation({
     onSuccess: () => {
       setShowAIWarning(false);
     },
     onError: error => {
       console.error('[Settings] Failed to update consent:', error);
       alert('Failed to update consent. Please try again.');
+    },
+  });
+
+  const { mutate: logout } = useLogoutMutation({
+    onSuccess: () => {
+      signOut({ callbackUrl: '/login' });
+    },
+    onError: error => {
+      console.error('[Settings] Failed to logout:', error);
+      alert('Failed to logout. Please try again.');
+    },
+  });
+
+  const { mutate: deleteUser } = useDeleteUserMutation({
+    onSuccess: () => {
+      signOut({ callbackUrl: '/login' });
+    },
+    onError: error => {
+      console.error('[Settings] Failed to delete user:', error);
+      alert('Failed to delete user. Please try again.');
     },
   });
 
@@ -40,7 +58,7 @@ export default function ProfileSettingsPage() {
       setShowAIWarning(true);
     } else {
       // Enable AI consent immediately
-      updateConsentMutation.mutate({
+      updateConsent({
         termsAgreed: true,
         privacyAgreed: true,
         sensitiveDataConsent: true,
@@ -50,7 +68,7 @@ export default function ProfileSettingsPage() {
   };
 
   const confirmAIConsentDisable = () => {
-    updateConsentMutation.mutate({
+    updateConsent({
       termsAgreed: true,
       privacyAgreed: true,
       sensitiveDataConsent: true,
@@ -93,7 +111,7 @@ export default function ProfileSettingsPage() {
           label="AI-Powered Analysis"
           description="Optional: Get personalized insights from AI"
           checked={consents?.aiAnalysisConsent ?? false}
-          disabled={updateConsentMutation.isPending}
+          disabled={isUpdatingConsent}
           onCheckedChange={handleAIConsentToggle}
           onViewDetails={() => openHashModal('terms-ai-analysis')}
         />
@@ -101,16 +119,14 @@ export default function ProfileSettingsPage() {
 
       {/* Account Actions Section */}
       <SettingSection title="Account">
+        <SettingAction label="Logout" buttonText="Logout" variant="soft" color="gray" onClick={() => logout()} />
         <SettingAction
-          label="Logout"
-          buttonText="Logout"
+          label="Delete Account"
+          buttonText="Delete"
           variant="soft"
-          color="gray"
-          onClick={() => {
-            signOut({ callbackUrl: `/login?callbackUrl=${encodeURIComponent(pathname)}` });
-          }}
+          color="red"
+          onClick={() => deleteUser()}
         />
-        <SettingAction label="Delete Account" buttonText="Delete" variant="soft" color="red" />
       </SettingSection>
 
       {/* AI Consent Warning Dialog */}
