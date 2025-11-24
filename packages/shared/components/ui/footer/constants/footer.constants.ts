@@ -3,10 +3,10 @@ import { FooterMenuItem } from '../types/footer.types';
 export const FOOTER_MENU_ITEMS: FooterMenuItem[] = [
   {
     text: 'Terms of Service',
-    linkPath: 'terms',
+    linkPath: '/terms/service',
   },
   {
     text: 'Privacy Policy',
-    linkPath: 'privacy-policy',
+    linkPath: '/terms/privacy',
   },
 ];
