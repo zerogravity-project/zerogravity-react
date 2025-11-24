@@ -2,12 +2,12 @@
 
 import { Button, Dialog, Flex } from '@radix-ui/themes';
 
-import { useModal } from './_contexts/ModalContext';
-
 import { AIAnalysisContent } from '@/app/(public)/terms/[type]/_components/AIAnalysisContent';
 import { PrivacyPolicyContent } from '@/app/(public)/terms/[type]/_components/PrivacyPolicyContent';
 import { SensitiveDataContent } from '@/app/(public)/terms/[type]/_components/SensitiveDataContent';
 import { ServiceTermsContent } from '@/app/(public)/terms/[type]/_components/ServiceTermsContent';
+
+import { useModal } from './_contexts/ModalContext';
 
 /**
  * ============================================
