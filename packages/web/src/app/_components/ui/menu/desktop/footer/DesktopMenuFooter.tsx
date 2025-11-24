@@ -13,7 +13,7 @@ export function DesktopMenuFooter() {
           <Fragment key={index}>
             <li>
               <RadixLink asChild color="gray" size="1">
-                <Link href={`/${menu.linkPath}`}>
+                <Link href={menu.linkPath}>
                   <span className="transition-opacity hover:opacity-80">{menu.text}</span>
                 </Link>
               </RadixLink>
