@@ -45,6 +45,9 @@ interface ChartProviderProps {
  * ============================================
  * Context
  * ============================================
+ *
+ * Chart navigation and period selection state
+ * Manages date ranges for week/month/year views
  */
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
@@ -53,6 +56,11 @@ const ChartContext = createContext<ChartContextType | undefined>(undefined);
  * ============================================
  * Provider
  * ============================================
+ *
+ * Provides chart navigation controls and date calculations
+ * Handles period switching and date range formatting
+ *
+ * @param children - Child components to wrap
  */
 
 export function ChartProvider({ children }: ChartProviderProps) {

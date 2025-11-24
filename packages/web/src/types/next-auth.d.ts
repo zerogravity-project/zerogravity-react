@@ -1,3 +1,8 @@
+/**
+ * [NextAuth type extensions]
+ * Custom session, JWT, and user type definitions
+ */
+
 import { DefaultSession } from 'next-auth';
 
 /**

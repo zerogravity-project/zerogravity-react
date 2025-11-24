@@ -27,11 +27,12 @@ interface ThemeProviderAdapterProps {
  * ============================================
  * Component
  * ============================================
- */
-
-/**
+ *
  * Extension-specific ThemeProvider wrapper
  * Uses Chrome Cookies API to sync theme with web app
+ * Reads/writes accentColor cookie from web app domain
+ *
+ * @param children - Child components to wrap
  */
 export function ThemeProviderAdapter({ children }: ThemeProviderAdapterProps) {
   /**

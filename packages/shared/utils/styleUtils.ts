@@ -1,3 +1,8 @@
+/**
+ * [Style utilities]
+ * Tailwind CSS class merging and manipulation
+ */
+
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 

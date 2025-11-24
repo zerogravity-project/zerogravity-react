@@ -17,8 +17,12 @@ interface TanstackQueryProviderProps {
  * ============================================
  * Component
  * ============================================
+ *
+ * TanStack Query provider with default configuration
+ * Configures staleTime, gcTime, retry, and refetch options
+ *
+ * @param children - Child components to wrap
  */
-
 export default function TanstackQueryProvider({ children }: TanstackQueryProviderProps) {
   /**
    * --------------------------------------------

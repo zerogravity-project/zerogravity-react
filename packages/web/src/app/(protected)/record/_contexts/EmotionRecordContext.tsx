@@ -105,17 +105,18 @@ interface EmotionRecordProviderProps {
  * ============================================================
  * Emotion Record Provider
  * ============================================================
- */
-
-/**
- * Provider for the EmotionRecordContext
- * @param children - The child components to wrap
- * @param emotionRecordType - The type of emotion record
- * @param date - The date of the emotion record
- * @param emotionRecordId - The ID of the emotion record
- * @param initialDailyEmotionId - The initial emotion ID for daily records
- * @param initialDailyEmotionReasons - The initial emotion reasons for daily records
- * @param initialDailyDiaryEntry - The initial diary entry for daily records
+ *
+ * Manages multi-step emotion recording flow (emotion → reason → diary)
+ * Handles navigation between steps, form state, and API mutations
+ * Supports both 'moment' (quick) and 'daily' (full) record types
+ *
+ * @param children - Child components to wrap
+ * @param emotionRecordType - Record type ('moment' or 'daily')
+ * @param date - Date of the emotion record (YYYY-MM-DD)
+ * @param emotionRecordId - ID of existing record (for updates)
+ * @param initialDailyEmotionId - Initial emotion ID for daily records
+ * @param initialDailyEmotionReasons - Initial reasons for daily records
+ * @param initialDailyDiaryEntry - Initial diary entry for daily records
  */
 export const EmotionRecordProvider = ({
   children,

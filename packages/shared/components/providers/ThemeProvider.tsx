@@ -49,6 +49,9 @@ function setCookie(name: string, value: string, maxAge: number = 86400) {
  * ============================================
  * Context
  * ============================================
+ *
+ * Theme accent color state
+ * Provides current color and setter function
  */
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
@@ -57,8 +60,15 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
  * ============================================
  * Provider
  * ============================================
+ *
+ * Manages theme accent color with SSR-safe hydration
+ * Uses custom getter/setter if provided (for Extension)
+ * Falls back to document.cookie for web app
+ *
+ * @param children - Child components to wrap
+ * @param getColor - Custom async color getter (optional)
+ * @param setColor - Custom color setter (optional)
  */
-
 export function ThemeProvider({ children, getColor, setColor }: ThemeProviderProps) {
   /**
    * --------------------------------------------

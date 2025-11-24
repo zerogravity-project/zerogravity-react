@@ -1,3 +1,8 @@
+/**
+ * [Chart date utilities]
+ * Date range calculations and period navigation
+ */
+
 import {
   addDays,
   addMonths,

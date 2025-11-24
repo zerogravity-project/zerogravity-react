@@ -1,3 +1,8 @@
+/**
+ * [Chart utilities]
+ * Configuration and labels for chart display
+ */
+
 import { getDaysInMonth } from 'date-fns';
 
 import { ChartPeriod, WEEK_LABELS, YEAR_LABELS } from '@/services/chart/chart.dto';

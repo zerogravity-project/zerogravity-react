@@ -70,16 +70,24 @@ interface ModalContextType {
 
 /**
  * ============================================
- * Context Creation
+ * Context
  * ============================================
+ *
+ * Global modal state management
+ * Supports alert, confirm, component modals and hash-based modals
+ * Manages modal queue for sequential display
  */
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
 /**
  * ============================================
- * Provider Component
+ * Provider
  * ============================================
+ *
+ * Provides modal operations to child components
+ * Handles URL hash sync for hash-based modals
+ * Processes modal queue with FIFO order
  */
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
