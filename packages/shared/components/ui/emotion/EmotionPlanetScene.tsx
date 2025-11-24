@@ -158,7 +158,7 @@ export function EmotionPlanetScene({
               toneMapping: THREE.ACESFilmicToneMapping,
               toneMappingExposure: 1,
               powerPreference: 'high-performance',
-              precision: 'highp', // 높은 정밀도
+              precision: 'highp',
               preserveDrawingBuffer: false,
               logarithmicDepthBuffer: false,
             }}

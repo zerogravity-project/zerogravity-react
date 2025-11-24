@@ -1,5 +1,5 @@
 /**
- * AI query hooks
+ * [AI query hooks]
  * React Query hooks for AI-powered features (CSR only)
  */
 
@@ -20,10 +20,21 @@ import type {
 } from './ai.dto';
 import { aiService } from './ai.service';
 
+/**
+ * ============================================
+ * Query Keys
+ * ============================================
+ */
 export const AI_QUERY_KEY = {
   PERIOD_ANALYSIS: 'aiPeriodAnalysis',
   DIARY_SUMMARY: 'aiDiarySummary',
 } as const;
+
+/**
+ * ============================================
+ * Hooks
+ * ============================================
+ */
 
 /**
  * GET /ai/period-analyses

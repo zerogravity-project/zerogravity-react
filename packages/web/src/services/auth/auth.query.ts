@@ -1,5 +1,5 @@
 /**
- * Auth query hooks
+ * [Auth query hooks]
  * React Query hooks for authentication (CSR only)
  */
 
@@ -12,6 +12,12 @@ import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 import type { VerifyAuthRequest, VerifyAuthResponse } from './auth.dto';
 import { authService } from './auth.service';
+
+/**
+ * ============================================
+ * Hooks
+ * ============================================
+ */
 
 /**
  * POST /auth/verify

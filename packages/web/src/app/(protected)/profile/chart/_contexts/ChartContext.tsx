@@ -21,18 +21,18 @@ interface ChartContextType {
   /** Start date string in YYYY-MM-DD format */
   startDate: string;
 
-  // Navigation
+  /** Navigation functions */
   goToNextPeriod: () => void;
   goToPreviousPeriod: () => void;
   goToToday: () => void;
   setTimePeriod: (period: TimePeriod) => void;
   setCurrentDate: (date: Date) => void;
 
-  // Navigation state
+  /** Navigation state */
   canGoNext: boolean;
   canGoPrevious: boolean;
 
-  // Helper functions
+  /** Helper functions */
   getFormattedDateRange: () => string;
   getTotalEntries: () => number;
 }

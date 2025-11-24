@@ -1,5 +1,5 @@
 /**
- * Chart query hooks
+ * [Chart query hooks]
  * React Query hooks for chart statistics (CSR only)
  */
 
@@ -12,11 +12,22 @@ import type { ApiResponse } from '@/types/api.types';
 import type { ChartCountResponse, ChartLevelResponse, ChartQueryParams, ChartReasonResponse } from './chart.dto';
 import { chartService } from './chart.service';
 
+/**
+ * ============================================
+ * Query Keys
+ * ============================================
+ */
 export const CHART_QUERY_KEY = {
   LEVEL: 'chartLevel',
   REASON: 'chartReason',
   COUNT: 'chartCount',
 } as const;
+
+/**
+ * ============================================
+ * Hooks
+ * ============================================
+ */
 
 /**
  * GET /chart/level
