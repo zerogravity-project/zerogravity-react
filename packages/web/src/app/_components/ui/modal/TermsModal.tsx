@@ -1,18 +1,21 @@
 'use client';
 
-import { Dialog, Button, Flex } from '@radix-ui/themes';
+import { Button, Dialog, Flex } from '@radix-ui/themes';
+
+import { useModal } from './_contexts/ModalContext';
 
 import { AIAnalysisContent } from '@/app/(public)/terms/[type]/_components/AIAnalysisContent';
 import { PrivacyPolicyContent } from '@/app/(public)/terms/[type]/_components/PrivacyPolicyContent';
 import { SensitiveDataContent } from '@/app/(public)/terms/[type]/_components/SensitiveDataContent';
 import { ServiceTermsContent } from '@/app/(public)/terms/[type]/_components/ServiceTermsContent';
 
-interface TermsModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  type: 'service' | 'privacy' | 'sensitive-data' | 'ai-analysis' | '';
-}
+/**
+ * ============================================
+ * Constants
+ * ============================================
+ */
 
+/** Terms type mapping */
 const TERMS_TITLE_MAP = {
   service: 'Terms of Service',
   privacy: 'Privacy Policy',
@@ -20,6 +23,7 @@ const TERMS_TITLE_MAP = {
   'ai-analysis': 'AI-Powered Analysis',
 } as const;
 
+/** Content component mapping */
 const TERMS_CONTENT_MAP = {
   service: ServiceTermsContent,
   privacy: PrivacyPolicyContent,
@@ -27,19 +31,78 @@ const TERMS_CONTENT_MAP = {
   'ai-analysis': AIAnalysisContent,
 } as const;
 
-export function TermsModal({ isOpen, onClose, type }: TermsModalProps) {
-  if (!type) return null;
+/** Hash prefix for terms modals */
+const TERMS_HASH_PREFIX = 'terms-';
 
-  const title = TERMS_TITLE_MAP[type];
-  const ContentComponent = TERMS_CONTENT_MAP[type];
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+type TermsType = keyof typeof TERMS_TITLE_MAP;
+
+/**
+ * ============================================
+ * TermsModal Component
+ * ============================================
+ * Hash-based modal for displaying terms and policies
+ * Usage: openHashModal('terms-service'), openHashModal('terms-privacy'), etc.
+ * URL: #terms-service, #terms-privacy, #terms-sensitive-data, #terms-ai-analysis
+ */
+
+export function TermsModal() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
+  const { currentHashModal, closeModal } = useModal();
+
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
+  /** Check if current hash is a terms modal */
+  const isTermsModal = currentHashModal?.startsWith(TERMS_HASH_PREFIX) ?? false;
+
+  /** Extract terms type from hash (e.g., 'terms-service' → 'service') */
+  const termsType =
+    isTermsModal && currentHashModal ? (currentHashModal.replace(TERMS_HASH_PREFIX, '') as TermsType) : null;
+
+  /** Get title for current terms type */
+  const title = termsType ? TERMS_TITLE_MAP[termsType] : '';
+
+  /** Get content component for current terms type */
+  const ContentComponent = termsType ? TERMS_CONTENT_MAP[termsType] : null;
+
+  /**
+   * --------------------------------------------
+   * 3. Event Handlers
+   * --------------------------------------------
+   */
+  /** Handle dialog close */
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      closeModal();
+    }
+  };
+
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
+  if (!isTermsModal || !termsType || !ContentComponent) return null;
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={onClose}>
+    <Dialog.Root open={isTermsModal} onOpenChange={handleOpenChange}>
       <Dialog.Content maxWidth="600px" style={{ maxHeight: '80vh', overflow: 'auto' }}>
         <Dialog.Title>{title}</Dialog.Title>
-        <Dialog.Description size="2" mb="4">
-          {ContentComponent && <ContentComponent />}
-        </Dialog.Description>
+        <div className="rt-r-mb-4">
+          <ContentComponent />
+        </div>
 
         <Flex gap="3" mt="4" justify="end">
           <Dialog.Close>
