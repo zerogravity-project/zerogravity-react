@@ -38,7 +38,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: ENV,FRONTEND_PORT,DOMAIN
+          envs: ENV,NODE_ENV,FRONTEND_PORT,DOMAIN
           script: |
             set -e
 
@@ -169,7 +169,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: ENV,FRONTEND_PORT,DOMAIN
+          envs: ENV,NODE_ENV,FRONTEND_PORT,DOMAIN
           script: |
             # Check health endpoint
             echo "Checking health endpoint..."
