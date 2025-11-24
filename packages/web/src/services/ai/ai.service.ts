@@ -1,5 +1,5 @@
 /**
- * AI service
+ * [AI service]
  * API calls for AI-powered features (SSR/CSR compatible)
  */
 
@@ -7,12 +7,12 @@ import axiosInstance from '@/lib/axios';
 import type { ApiResponse } from '@/types/api.types';
 
 import type {
-  GetPeriodAnalysisParams,
   AIAnalysisResponse,
+  DiarySummaryResponse,
   EmotionPredictionRequest,
   EmotionPredictionResponse,
   GetDiarySummaryParams,
-  DiarySummaryResponse,
+  GetPeriodAnalysisParams,
 } from './ai.dto';
 
 export const aiService = {

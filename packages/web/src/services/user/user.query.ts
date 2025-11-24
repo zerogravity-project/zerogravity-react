@@ -1,5 +1,5 @@
 /**
- * User query hooks
+ * [User query hooks]
  * React Query hooks for user management (CSR only)
  */
 
@@ -13,9 +13,21 @@ import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 import type { DeleteUserResponse, UpdateConsentRequest, UpdateConsentResponse } from './user.dto';
 import { userService } from './user.service';
 
+/**
+ * ============================================
+ * Query Keys
+ * ============================================
+ */
+
 export const USER_QUERY_KEY = {
   PROFILE: 'userProfile',
 } as const;
+
+/**
+ * ============================================
+ * Hooks
+ * ============================================
+ */
 
 /**
  * GET /users/me

@@ -1,5 +1,5 @@
 /**
- * Auth service
+ * [Auth service]
  * API calls for authentication (SSR/CSR compatible)
  */
 

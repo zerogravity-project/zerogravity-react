@@ -8,6 +8,12 @@ import { LinkProps, MenuItem, NavigationUser } from '../types/navigation.types';
 import { MenuDrawerHeader } from './header/MenuDrawerHeader';
 import { MenuList } from './list/MenuList';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface MenuDrawerProps {
   isOpen: boolean;
   user?: NavigationUser;
@@ -16,6 +22,12 @@ interface MenuDrawerProps {
   LinkComponent: ComponentType<LinkProps>;
   className?: string;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function MenuDrawer({ isOpen, user, currentPath, menuItems, LinkComponent, className }: MenuDrawerProps) {
   return (

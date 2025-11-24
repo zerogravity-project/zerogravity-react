@@ -10,6 +10,12 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 
 import { useSpaceoutVisit } from './_hooks/useSpaceoutVisit';
 
+/**
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
 const ONBOARDING_MESSAGES = [
   'Welcome to Spaceout',
   'We help you track your emotions more clearly',
@@ -17,12 +23,58 @@ const ONBOARDING_MESSAGES = [
   'Choose your path',
 ];
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function SpaceoutPage() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const router = useRouter();
+
+  /**
+   * --------------------------------------------
+   * 2. Custom Hooks
+   * --------------------------------------------
+   */
   const { shouldShowOnboarding, isLoading } = useSpaceoutVisit();
+
+  /**
+   * --------------------------------------------
+   * 3. States
+   * --------------------------------------------
+   */
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [showSelection, setShowSelection] = useState(false);
 
+  /**
+   * --------------------------------------------
+   * 4. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Navigate to video page */
+  const handleWatchVideo = () => {
+    router.push('/spaceout/video');
+  };
+
+  /** Navigate to record page */
+  const handleRecordNow = () => {
+    router.push('/record');
+  };
+
+  /**
+   * --------------------------------------------
+   * 5. Effects
+   * --------------------------------------------
+   */
+
+  /** Handle onboarding message progression */
   useEffect(() => {
     if (isLoading) return;
 
@@ -48,13 +100,11 @@ export default function SpaceoutPage() {
     return () => clearInterval(messageInterval);
   }, [isLoading, shouldShowOnboarding]);
 
-  const handleWatchVideo = () => {
-    router.push('/spaceout/video');
-  };
-
-  const handleRecordNow = () => {
-    router.push('/record');
-  };
+  /**
+   * --------------------------------------------
+   * 6. Return
+   * --------------------------------------------
+   */
 
   // Loading state
   if (isLoading) {

@@ -8,19 +8,24 @@ import AiPredictionInput from './_components/AiPredictionInput';
 import AiPredictionLoading from './_components/AiPredictionLoading';
 import AiPredictionResult from './_components/AiPredictionResult';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function AiPredictionStep() {
   /**
-   * ------------------------------------------------------------
+   * --------------------------------------------
    * 1. States
-   * ------------------------------------------------------------
+   * --------------------------------------------
    */
-
   const [aiPredictionEntry, setAiPredictionEntry] = useState<string>('');
 
   /**
-   * ------------------------------------------------------------
+   * --------------------------------------------
    * 2. Query Hooks
-   * ------------------------------------------------------------
+   * --------------------------------------------
    */
 
   /** AI emotion prediction mutation */
@@ -37,18 +42,18 @@ export default function AiPredictionStep() {
   });
 
   /**
-   * ------------------------------------------------------------
+   * --------------------------------------------
    * 3. Derived Values
-   * ------------------------------------------------------------
+   * --------------------------------------------
    */
 
   /** Extract prediction data from mutation response */
   const predictionData = predictEmotionData?.data;
 
   /**
-   * ------------------------------------------------------------
-   * 4. Render
-   * ------------------------------------------------------------
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
    */
 
   // Analyzing phase

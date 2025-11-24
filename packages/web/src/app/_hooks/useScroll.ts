@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface UseScrollProps {
   scrollRef: React.RefObject<HTMLDivElement | null>;
   enable: boolean;
@@ -9,6 +15,12 @@ interface UseScrollProps {
   enablePreventBackgroundScroll?: boolean;
 }
 
+/**
+ * ============================================
+ * Hook
+ * ============================================
+ */
+
 export function useScroll({
   scrollRef,
   enable,
@@ -17,11 +29,22 @@ export function useScroll({
   enableScrollAtBottom = true,
   enablePreventBackgroundScroll,
 }: UseScrollProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const [isScrollable, setIsScrollable] = useState(false);
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollAtBottom, setIsScrollAtBottom] = useState(false);
 
-  // Prevent background scroll when enablePreventBackgroundScroll is true
+  /**
+   * --------------------------------------------
+   * 2. Effects
+   * --------------------------------------------
+   */
+
+  /** Prevent background scroll when enablePreventBackgroundScroll is true */
   useEffect(() => {
     if (enablePreventBackgroundScroll) {
       document.body.style.overflow = 'hidden';
@@ -34,7 +57,7 @@ export function useScroll({
     };
   }, [enablePreventBackgroundScroll]);
 
-  // Detect scroll to get scrollable, scrolling, and scroll at bottom state
+  /** Detect scroll to get scrollable, scrolling, and scroll at bottom state */
   useEffect(() => {
     if (!enable) return;
 
@@ -83,5 +106,10 @@ export function useScroll({
     };
   }, [scrollRef, enable, enableScrollable, enableScrolling, enableScrollAtBottom]);
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return { isScrollable, isScrolling, isScrollAtBottom };
 }

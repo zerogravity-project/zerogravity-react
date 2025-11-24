@@ -5,18 +5,42 @@ import { type ReactNode } from 'react';
 import { ThemeProvider } from '@zerogravity/shared/components/providers';
 import { type EmotionColor } from '@zerogravity/shared/components/ui/emotion';
 
-interface ThemeProviderAdapterProps {
-  children: ReactNode;
-}
+/**
+ * ============================================
+ * Constants
+ * ============================================
+ */
 
 const WEB_APP_URL = import.meta.env.VITE_WEB_APP_URL || 'http://localhost:3000';
 
 /**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+interface ThemeProviderAdapterProps {
+  children: ReactNode;
+}
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ *
  * Extension-specific ThemeProvider wrapper
  * Uses Chrome Cookies API to sync theme with web app
+ * Reads/writes accentColor cookie from web app domain
+ *
+ * @param children - Child components to wrap
  */
 export function ThemeProviderAdapter({ children }: ThemeProviderAdapterProps) {
-  // Get color from web app cookies
+  /**
+   * --------------------------------------------
+   * 1. Helper Functions
+   * --------------------------------------------
+   */
+  /** Get color from web app cookies */
   const getColor = async (): Promise<EmotionColor | null> => {
     try {
       if (typeof chrome === 'undefined' || !chrome.cookies) {
@@ -57,6 +81,11 @@ export function ThemeProviderAdapter({ children }: ThemeProviderAdapterProps) {
     }
   };
 
+  /**
+   * --------------------------------------------
+   * 2. Return
+   * --------------------------------------------
+   */
   return (
     <ThemeProvider getColor={getColor} setColor={setColor}>
       {children}

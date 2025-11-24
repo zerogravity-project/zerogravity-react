@@ -6,7 +6,25 @@ import { Navigation, LinkProps as SharedLinkProps } from '@zerogravity/shared/co
 
 import { useAuth } from '../../hooks/useAuth';
 
-// Extension Link wrapper that opens links in web app
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+interface NavigationAdapterProps {
+  className?: string;
+  background?: boolean;
+  border?: boolean;
+}
+
+/**
+ * ============================================
+ * Helper Components
+ * ============================================
+ */
+
+/** Extension Link wrapper that opens links in web app */
 const NavigationLink: ComponentType<SharedLinkProps> = forwardRef<HTMLAnchorElement, SharedLinkProps>(
   function NavigationLink({ href, children, onClick, className, ...props }, ref) {
     const webAppUrl = import.meta.env.VITE_WEB_APP_URL as string;
@@ -35,15 +53,25 @@ const NavigationLink: ComponentType<SharedLinkProps> = forwardRef<HTMLAnchorElem
   }
 );
 
-interface NavigationAdapterProps {
-  className?: string;
-  background?: boolean;
-  border?: boolean;
-}
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function NavigationAdapter({ className, background, border }: NavigationAdapterProps) {
+  /**
+   * --------------------------------------------
+   * 1. Custom Hooks
+   * --------------------------------------------
+   */
   const { isAuthenticated, user: authUser } = useAuth();
 
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const user = authUser
     ? {
         name: authUser.name ?? 'ZeroGravity User',
@@ -52,6 +80,11 @@ export function NavigationAdapter({ className, background, border }: NavigationA
       }
     : undefined;
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <Navigation
       isAuthenticated={isAuthenticated}

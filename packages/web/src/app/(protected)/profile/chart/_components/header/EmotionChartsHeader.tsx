@@ -12,14 +12,30 @@ import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 import { useChart } from '../../_contexts/ChartContext';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface EmotionChartsHeaderProps {
   setIsDrawerOpen: (isDrawerOpen: boolean) => void;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { data: session } = useSession();
   const isSm = useIsSm();
-
   const {
     timePeriod,
     goToNextPeriod,
@@ -29,11 +45,22 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
     canGoNext,
     canGoPrevious,
   } = useChart();
-
   const { openComponentModal } = useModal();
 
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const consents = session?.user?.consents;
 
+  /**
+   * --------------------------------------------
+   * 3. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Open AI analysis drawer with consent check */
   const handleOpenAiAnalysisDrawer = () => {
     // Show AI consent modal if user has not consented to AI analysis
     if (!consents?.aiAnalysisConsent) {
@@ -47,6 +74,11 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
     setIsDrawerOpen(true);
   };
 
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   if (isSm) {
     return (
       <header className="flex flex-col">

@@ -12,10 +12,22 @@ import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
 
 import { useChart } from '../../_contexts/ChartContext';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface AiAnalysisDrawerProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+/**
+ * ============================================
+ * Helper Functions
+ * ============================================
+ */
 
 /**
  * Parse markdown bold syntax (**text**) into React elements
@@ -54,18 +66,44 @@ function parseBoldMarkdown(text: string): (string | React.ReactElement)[] {
   return parts.length > 0 ? parts : [text];
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * --------------------------------------------
+   * 2. External Hooks
+   * --------------------------------------------
+   */
   const isOverLargeScreen = !useIsLg();
+  const { timePeriod, startDate } = useChart();
+
+  /**
+   * --------------------------------------------
+   * 3. Custom Hooks
+   * --------------------------------------------
+   */
   const { isScrollable, isScrolling, isScrollAtBottom } = useScroll({
     scrollRef,
     enable: isOpen,
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
-  const { timePeriod, startDate } = useChart();
-
+  /**
+   * --------------------------------------------
+   * 4. Query Hooks
+   * --------------------------------------------
+   */
   const { data: periodAnalysisData } = usePeriodAnalysisQuery(
     {
       period: timePeriod,
@@ -74,7 +112,13 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     isOpen
   );
 
-  // Animation variants based on screen size
+  /**
+   * --------------------------------------------
+   * 5. Derived Values
+   * --------------------------------------------
+   */
+
+  /** Animation variants based on screen size */
   const wrapperAnimation = isOverLargeScreen
     ? {
         initial: { width: 0 },
@@ -101,6 +145,11 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     ? format(new Date(periodAnalysisData.data.endDate), 'MMM d, yyyy')
     : '—';
 
+  /**
+   * --------------------------------------------
+   * 6. Return
+   * --------------------------------------------
+   */
   return (
     <AnimatePresence>
       {isOpen && (

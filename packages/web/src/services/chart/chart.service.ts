@@ -1,12 +1,12 @@
 /**
- * Chart service
+ * [Chart service]
  * API calls for chart statistics (SSR/CSR compatible)
  */
 
 import axiosInstance from '@/lib/axios';
 import type { ApiResponse } from '@/types/api.types';
 
-import type { ChartQueryParams, ChartLevelResponse, ChartReasonResponse, ChartCountResponse } from './chart.dto';
+import type { ChartCountResponse, ChartLevelResponse, ChartQueryParams, ChartReasonResponse } from './chart.dto';
 
 export const chartService = {
   /**

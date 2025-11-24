@@ -3,13 +3,29 @@
 import { useEffect, useState } from 'react';
 
 /**
+ * ============================================
+ * Hook
+ * ============================================
+ */
+
+/**
  * Custom hook to detect media query matches
  * @param query - CSS media query string (e.g., '(min-width: 768px)')
  * @returns boolean indicating if the media query matches
  */
 export function useMediaQuery(query: string): boolean {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const [matches, setMatches] = useState<boolean>(false);
 
+  /**
+   * --------------------------------------------
+   * 2. Effects
+   * --------------------------------------------
+   */
   useEffect(() => {
     // Check if window is available (SSR safety)
     if (typeof window === 'undefined') {
@@ -35,12 +51,21 @@ export function useMediaQuery(query: string): boolean {
     };
   }, [query]);
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return matches;
 }
 
 /**
- * Common media query breakpoints (Tailwind CSS based)
+ * ============================================
+ * Constants
+ * ============================================
  */
+
+/** Common media query breakpoints (Tailwind CSS based) */
 export const MEDIA_QUERIES = {
   mobile: '(width < 480px)',
   sm: '(width < 640px)',
@@ -51,8 +76,11 @@ export const MEDIA_QUERIES = {
 } as const;
 
 /**
- * Predefined media query hooks for common breakpoints
+ * ============================================
+ * Predefined Hooks
+ * ============================================
  */
+
 export const useIsMobile = () => useMediaQuery(MEDIA_QUERIES.mobile);
 export const useIsSm = () => useMediaQuery(MEDIA_QUERIES.sm);
 export const useIsMd = () => useMediaQuery(MEDIA_QUERIES.md);

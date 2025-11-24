@@ -1,5 +1,11 @@
+/**
+ * [Emotion constants]
+ * Color maps, slider values, reasons, and step configurations
+ */
+
 import { EmotionStep } from '../types/emotion.types';
 
+/** Internal keys for emotion levels */
 export const EMOTION_KEYS = [
   'very_negative',
   'negative',
@@ -10,6 +16,7 @@ export const EMOTION_KEYS = [
   'very_positive',
 ] as const;
 
+/** Display labels for emotion levels */
 export const EMOTION_TYPES = [
   'VERY NEGATIVE',
   'NEGATIVE',
@@ -20,10 +27,13 @@ export const EMOTION_TYPES = [
   'VERY POSITIVE',
 ] as const;
 
+/** Color names for emotion themes */
 export const EMOTION_COLORS = ['purple', 'red', 'orange', 'amber', 'green', 'cyan', 'indigo'] as const;
 
+/** Slider values mapped to emotion levels */
 export const EMOTION_SLIDER_VALUES = [0, 16, 33, 50, 67, 84, 100] as const;
 
+/** Primary hex color values for each emotion */
 export const EMOTION_COLORS_MAP = {
   purple: '#8E4EC6',
   red: '#E5484D',
@@ -34,6 +44,7 @@ export const EMOTION_COLORS_MAP = {
   indigo: '#3E63DD',
 } as const;
 
+/** Dark variant hex colors for 3D planet */
 export const EMOTION_COLORS_MAP_DARK = {
   purple: '#35173e',
   red: '#6c1b1b',
@@ -44,6 +55,7 @@ export const EMOTION_COLORS_MAP_DARK = {
   indigo: '#2d338d',
 } as const;
 
+/** Semi-transparent hex colors with alpha channel */
 export const EMOTION_COLORS_MAP_ALPHA = {
   purple: '#C150FF2D',
   red: '#FF173F2D',
@@ -54,6 +66,7 @@ export const EMOTION_COLORS_MAP_ALPHA = {
   indigo: '#2F62FF3C',
 } as const;
 
+/** Available reason categories for emotion tracking */
 export const EMOTION_REASONS = [
   'Health',
   'Fitness',
@@ -76,7 +89,7 @@ export const EMOTION_REASONS = [
   'Global Issues',
 ];
 
-// Create EMOTION_STEPS array
+/** Complete emotion step configurations with styling */
 export const EMOTION_STEPS: EmotionStep[] = [
   {
     id: 0,

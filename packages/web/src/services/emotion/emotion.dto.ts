@@ -1,5 +1,5 @@
 /**
- * Emotion service type definitions
+ * [Emotion service type definitions]
  * Request and response types for emotion endpoints
  */
 
@@ -15,16 +15,22 @@ export type EmotionRecordType = 'daily' | 'moment';
  * Create emotion record
  */
 export interface CreateEmotionRecordRequest {
-  emotionId: EmotionId; // 0-6
+  /** 0-6 */
+  emotionId: EmotionId;
   emotionRecordType: EmotionRecordType;
-  emotionReasons?: EmotionReason[]; // Predefined or custom reasons
-  diaryEntry?: string; // Optional diary text
-  aiAnalysisId?: string; // Optional Snowflake ID from AI prediction
-  recordDate?: string; // Optional date string
+  /** Predefined or custom reasons */
+  emotionReasons?: EmotionReason[];
+  /** Optional diary text */
+  diaryEntry?: string;
+  /** Optional Snowflake ID from AI prediction */
+  aiAnalysisId?: string;
+  /** Optional date string */
+  recordDate?: string;
 }
 
 export interface CreateEmotionRecordResponse {
-  emotionRecordId: string; // Snowflake ID as string
+  /** Snowflake ID as string */
+  emotionRecordId: string;
 }
 
 /**
@@ -32,21 +38,31 @@ export interface CreateEmotionRecordResponse {
  * Get emotion records with date range filter
  */
 export interface GetEmotionRecordsParams {
-  startDateTime: string; // ISO 8601 in user's timezone
-  endDateTime: string; // ISO 8601 in user's timezone
+  /** ISO 8601 in user's timezone */
+  startDateTime: string;
+  /** ISO 8601 in user's timezone */
+  endDateTime: string;
 }
 
 export interface EmotionRecordDetail {
-  emotionRecordId: string; // Snowflake ID as string
-  emotionId: EmotionId; // 0-6
+  /** Snowflake ID as string */
+  emotionRecordId: string;
+  /** Emotion ID (0-6) */
+  emotionId: EmotionId;
+  /** Emotion type */
   emotionType: EmotionType;
+  /** Emotion reasons */
   reasons: EmotionReason[];
+  /** Diary entry, null if not provided */
   diaryEntry: string | null;
-  createdAt: string; // ISO 8601 with timezone offset
+  /** ISO 8601 with timezone offset */
+  createdAt: string;
 }
 
 export interface GetEmotionRecordsResponse {
+  /** Daily emotion records */
   daily: EmotionRecordDetail[];
+  /** Moment emotion records */
   moment: EmotionRecordDetail[];
 }
 
@@ -55,9 +71,12 @@ export interface GetEmotionRecordsResponse {
  * Update emotion record (only daily records, within 24 hours)
  */
 export interface UpdateEmotionRecordRequest {
-  emotionId: EmotionId; // 0-6
-  emotionReasons: EmotionReason[]; // Required
-  diaryEntry?: string | null; // Optional diary text
+  /** 0-6 */
+  emotionId: EmotionId;
+  /** Required */
+  emotionReasons: EmotionReason[];
+  /** Optional diary text */
+  diaryEntry?: string | null;
 }
 
 /**

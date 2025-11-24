@@ -10,12 +10,33 @@ import { useChart } from '../../_contexts/ChartContext';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionReasonsChart() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const isSm = useIsSm();
   const { timePeriod, startDate } = useChart();
 
+  /**
+   * --------------------------------------------
+   * 2. Query Hooks
+   * --------------------------------------------
+   */
   const { data: reasonData } = useChartReasonQuery({ period: timePeriod, startDate });
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <EmotionChartContainer title="Emotion Reasons" className="max-mobile:max-h-[200px]">
       <ScrollArea type="always" scrollbars="vertical" style={{ height: '100%' }}>

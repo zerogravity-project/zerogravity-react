@@ -8,7 +8,13 @@ import { ComponentType, forwardRef } from 'react';
 
 import { Navigation, LinkProps as SharedLinkProps } from '@zerogravity/shared/components/ui/navigation';
 
-// Next.js Link wrapper that matches the shared LinkProps interface
+/**
+ * ============================================
+ * Helper Components
+ * ============================================
+ */
+
+/** Next.js Link wrapper that matches the shared LinkProps interface */
 const NextLink: ComponentType<SharedLinkProps> = forwardRef<HTMLAnchorElement, SharedLinkProps>(function NextLink(
   { href, children, onClick, ...props },
   ref
@@ -20,16 +26,38 @@ const NextLink: ComponentType<SharedLinkProps> = forwardRef<HTMLAnchorElement, S
   );
 });
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface NavigationAdapterProps {
   className?: string;
   background?: boolean;
   border?: boolean;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function NavigationAdapter({ className, background, border }: NavigationAdapterProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const isAuthenticated = status === 'authenticated';
   const user = session?.user
     ? {
@@ -39,6 +67,11 @@ export function NavigationAdapter({ className, background, border }: NavigationA
       }
     : undefined;
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <Navigation
       isAuthenticated={isAuthenticated}

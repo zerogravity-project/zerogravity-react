@@ -1,5 +1,5 @@
 /**
- * User service type definitions
+ * [User service type definitions]
  * Request and response types for user endpoints
  */
 
@@ -10,10 +10,15 @@ import type { ConsentData } from '@/types/next-auth';
  * Get user profile
  */
 export interface GetUserProfileResponse {
+  /** User name */
   name: string;
+  /** User image URL, optional */
   image?: string;
+  /** User email */
   email: string;
+  /** User provider */
   provider: string;
+  /** User consent data */
   consents: ConsentData;
 }
 
@@ -22,13 +27,18 @@ export interface GetUserProfileResponse {
  * Update user consent preferences
  */
 export interface UpdateConsentRequest {
+  /** Flag indicating if user has agreed to terms of service */
   termsAgreed: boolean;
+  /** Flag indicating if user has agreed to privacy policy */
   privacyAgreed: boolean;
+  /** Flag indicating if user has agreed to sensitive data processing */
   sensitiveDataConsent: boolean;
+  /** Flag indicating if user has agreed to AI-powered analysis */
   aiAnalysisConsent: boolean;
 }
 
 export interface UpdateConsentResponse {
+  /** User consent data */
   consents: ConsentData;
 }
 

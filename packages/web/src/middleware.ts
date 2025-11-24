@@ -1,3 +1,8 @@
+/**
+ * [Middleware]
+ * Protects routes, checks consent, and redirects appropriately
+ */
+
 import type { NextRequest } from 'next/server';
 
 import { auth } from './lib/auth';

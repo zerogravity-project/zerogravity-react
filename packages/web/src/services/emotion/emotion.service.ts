@@ -1,5 +1,5 @@
 /**
- * Emotion service
+ * [Emotion service]
  * API calls for emotion management (SSR/CSR compatible)
  */
 

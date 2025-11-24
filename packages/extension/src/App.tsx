@@ -13,16 +13,43 @@ import { cn } from '@zerogravity/shared/utils';
 
 import { NavigationAdapter } from './components/navigation/NavigationAdapter';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 function App() {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  /**
+   * --------------------------------------------
+   * 2. Custom Hooks
+   * --------------------------------------------
+   */
   const { accentColor } = useTheme();
   const isLg = useIsLg();
 
-  const [isLoaded, setIsLoaded] = useState(false);
-
+  /**
+   * --------------------------------------------
+   * 3. Event Handlers
+   * --------------------------------------------
+   */
+  /** Navigate to spaceout page in web app */
   const handleSpaceoutClick = () => {
     window.location.href = `${import.meta.env.VITE_WEB_APP_URL as string}/spaceout`;
   };
 
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   return (
     <div className="pt-topnav-height relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
       <PageLoading isLoaded={isLoaded} />

@@ -1,3 +1,9 @@
+/**
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
 const TEXT_COLOR = 'var(--gray-9)';
 const SYMBOL_COLOR = 'var(--accent-9)';
 
@@ -6,19 +12,40 @@ const V1_HEIGHT = 21;
 const V2_WIDTH = 112;
 const V2_HEIGHT = 41;
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface LogoProps {
   version?: 'v1' | 'v2';
   width?: number;
   className?: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function Logo({ version = 'v1', width = 142, className = '' }: LogoProps) {
+  /**
+   * --------------------------------------------
+   * 1. Derived Values
+   * --------------------------------------------
+   */
   const v1Scale = width / V1_WIDTH;
   const v1Height = V1_HEIGHT * v1Scale;
-
   const v2Scale = width / V2_WIDTH;
   const v2Height = V2_HEIGHT * v2Scale;
 
+  /**
+   * --------------------------------------------
+   * 2. Return
+   * --------------------------------------------
+   */
   if (version === 'v2') {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" width={width} height={v2Height} viewBox="0 0 112 41" fill="none">

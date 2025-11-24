@@ -1,19 +1,28 @@
 /**
- * Common API response types
+ * [Common API response types]
  * Backend returns standardized responses with success, data, and timestamp
  */
 
 export interface ApiResponse<T> {
+  /** Request success status */
   success: boolean;
+  /** Response payload */
   data: T;
+  /** ISO 8601 timestamp */
   timestamp: string;
 }
 
+/** API error response structure */
 export interface ErrorResponse {
+  /** Always false for error responses */
   success: false;
+  /** Error details */
   error: {
+    /** Error code for identification */
     code: string;
+    /** Human-readable error message */
     message: string;
   };
+  /** ISO 8601 timestamp */
   timestamp: string;
 }
