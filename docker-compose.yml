@@ -6,14 +6,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
     ports:
       - '${FRONTEND_PORT:-3000}:3000'
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=${NODE_ENV:-production}
     env_file:
-      - .env.${ENV:-production}
+      - packages/web/.env.${NODE_ENV:-production}
     restart: unless-stopped
     networks:
       - zerogv-network
