@@ -26,11 +26,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Env files (except .env.example)
+# Env files
+# .env.production is needed for builds (created by GitHub Actions)
 .env
 .env*.local
 .env.development
-.env.production
 
 # Vercel
 .vercel

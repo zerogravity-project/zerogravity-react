@@ -38,12 +38,9 @@ COPY . .
 # Build shared package first
 RUN pnpm --filter shared build
 
-# Accept NODE_ENV as build argument (defaults to production)
-ARG NODE_ENV=production
-ENV NODE_ENV=$NODE_ENV
-
 # Build web package (Next.js standalone)
-# Next.js reads packages/web/.env.${NODE_ENV} based on NODE_ENV
+# Next.js automatically sets NODE_ENV=production for builds
+# Reads packages/web/.env.production at build time
 RUN pnpm --filter web build
 
 # ==============================================================================

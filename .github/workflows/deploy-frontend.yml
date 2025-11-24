@@ -22,12 +22,10 @@ jobs:
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             echo "ENV=prod" >> $GITHUB_ENV
-            echo "NODE_ENV=production" >> $GITHUB_ENV
             echo "FRONTEND_PORT=3000" >> $GITHUB_ENV
             echo "DOMAIN=zerogv.com" >> $GITHUB_ENV
           else
             echo "ENV=dev" >> $GITHUB_ENV
-            echo "NODE_ENV=development" >> $GITHUB_ENV
             echo "FRONTEND_PORT=3001" >> $GITHUB_ENV
             echo "DOMAIN=dev.zerogv.com" >> $GITHUB_ENV
           fi
@@ -38,7 +36,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: ENV,NODE_ENV,FRONTEND_PORT,DOMAIN
+          envs: ENV,FRONTEND_PORT,DOMAIN
           script: |
             set -e
 
@@ -60,10 +58,11 @@ jobs:
             # Verify current commit
             echo "✅ Deployment commit: $(git log -1 --format='%h %s')"
 
-            # Create .env file from secrets (Next.js standard naming)
-            # Place in packages/web/ where Next.js expects it
-            echo "Creating packages/web/.env.$NODE_ENV file..."
-            cat > packages/web/.env.$NODE_ENV << EOF
+            # Create .env.production file from secrets
+            # Next.js always builds with NODE_ENV=production, so we always use .env.production
+            # The content differs between dev and prod deployments
+            echo "Creating packages/web/.env.production file..."
+            cat > packages/web/.env.production << EOF
             NEXT_PUBLIC_API_BASE_URL=${{ secrets[format('NEXT_PUBLIC_API_BASE_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
             AUTH_SECRET=${{ secrets[format('AUTH_SECRET_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
             AUTH_URL=${{ secrets[format('AUTH_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
@@ -89,7 +88,6 @@ jobs:
 
             # Export docker-compose variables
             export ENV=$ENV
-            export NODE_ENV=$NODE_ENV
             export FRONTEND_PORT=$FRONTEND_PORT
 
             # Step 2: Stop current containers
@@ -169,7 +167,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: ENV,NODE_ENV,FRONTEND_PORT,DOMAIN
+          envs: ENV,FRONTEND_PORT,DOMAIN
           script: |
             # Check health endpoint
             echo "Checking health endpoint..."
