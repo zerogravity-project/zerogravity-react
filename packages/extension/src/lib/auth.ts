@@ -1,26 +1,48 @@
 /**
+ * [Chrome Extension auth utilities]
  * Authentication and theme utilities for Chrome Extension
  * Uses Chrome Cookies API to read NextAuth session and theme from web app
  */
 
+/**
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
+/** Web app URL */
 const WEB_APP_URL = import.meta.env.VITE_WEB_APP_URL || 'http://localhost:3000';
 
-// NextAuth cookie names (different for HTTP vs HTTPS)
+/** NextAuth cookie names (different for HTTP vs HTTPS) */
 const SESSION_COOKIE_NAMES = {
   http: 'authjs.session-token',
   https: '__Secure-authjs.session-token',
 } as const;
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+/** User interface */
 export interface User {
   name?: string | null;
   email?: string | null;
   image?: string | null;
 }
 
+/** Session data interface */
 export interface SessionData {
   user?: User;
   expires?: string;
 }
+
+/**
+ * ============================================
+ * Functions
+ * ============================================
+ */
 
 /**
  * Check if Chrome Extension API is available
