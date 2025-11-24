@@ -35,6 +35,11 @@
             "pattern": "@zerogravity/**",
             "group": "internal",
             "position": "before"
+          },
+          {
+            "pattern": "@/**",
+            "group": "internal",
+            "position": "after"
           }
         ],
         "pathGroupsExcludedImportTypes": ["next"]
