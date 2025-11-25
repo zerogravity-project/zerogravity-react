@@ -1,7 +1,3 @@
-import NextAuth from 'next-auth';
-import Google from 'next-auth/providers/google';
-import Kakao from 'next-auth/providers/kakao';
-
 /**
  * [Auth.js v5 configuration]
  * Centralized authentication setup for Next.js 15 App Router
@@ -10,6 +6,10 @@ import Kakao from 'next-auth/providers/kakao';
  * Pages: signIn, error
  * Session: strategy, maxAge, updateAge
  */
+
+import NextAuth from 'next-auth';
+import Google from 'next-auth/providers/google';
+import Kakao from 'next-auth/providers/kakao';
 
 /** Refresh lock to prevent concurrent refresh attempts */
 let isRefreshing = false;

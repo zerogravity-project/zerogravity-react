@@ -1,5 +1,5 @@
 /**
- * AI service type definitions
+ * [AI service type definitions]
  * Request and response types for AI endpoints
  */
 
@@ -8,22 +8,32 @@
  * Get AI emotion analysis summary for a period
  */
 export interface GetPeriodAnalysisParams {
+  /** Time period for analysis */
   period: 'week' | 'month' | 'year';
-  startDate: string; // ISO 8601 date (YYYY-MM-DD)
+  /** Start date in ISO 8601 format (YYYY-MM-DD) */
+  startDate: string;
 }
 
 export interface SummaryData {
-  overview: string; // Overall summary paragraph
-  keyInsights: string[]; // Array of key insights
-  recommendations: string[]; // Array of recommendations
+  /** Overall summary paragraph */
+  overview: string;
+  /** Array of key insights */
+  keyInsights: string[];
+  /** Array of recommendations */
+  recommendations: string[];
 }
 
 export interface AIAnalysisResponse {
-  period: string; // "week", "month", or "year"
-  startDate: string; // ISO 8601 date
-  endDate: string; // ISO 8601 date
+  /** Time period ("week", "month", or "year") */
+  period: string;
+  /** Start date in ISO 8601 format */
+  startDate: string;
+  /** End date in ISO 8601 format */
+  endDate: string;
+  /** Summary data */
   summary: SummaryData;
-  generatedAt: string; // ISO 8601 with timezone offset
+  /** Generation timestamp in ISO 8601 with timezone */
+  generatedAt: string;
 }
 
 /**
@@ -31,19 +41,29 @@ export interface AIAnalysisResponse {
  * Predict emotion from diary entry
  */
 export interface EmotionPredictionRequest {
-  diaryEntry: string; // Required diary text
-  emotionId?: number | null; // Optional: 0-6, if provided AI only predicts reasons
-  emotionReasons?: string[] | null; // Optional: if provided AI only predicts emotionId
+  /** Required diary text */
+  diaryEntry: string;
+  /** Optional emotion ID (0-6), if provided AI only predicts reasons */
+  emotionId?: number | null;
+  /** Optional reasons, if provided AI only predicts emotionId */
+  emotionReasons?: string[] | null;
 }
 
 export interface EmotionPredictionResponse {
-  analysisId: string; // Snowflake ID as string
-  suggestedEmotionId?: number | null; // 0-6, null if user already provided
-  suggestedReasons?: string[] | null; // null if user already provided
-  refinedDiary: string; // Refined diary entry
-  reasoning: string; // AI explanation of the prediction
-  confidence: number; // 0.0 - 1.0
-  analyzedAt: string; // ISO 8601 with timezone offset
+  /** Snowflake ID as string */
+  analysisId: string;
+  /** Suggested emotion ID (0-6), null if user already provided */
+  suggestedEmotionId?: number | null;
+  /** Suggested reasons, null if user already provided */
+  suggestedReasons?: string[] | null;
+  /** Refined diary entry */
+  refinedDiary: string;
+  /** AI explanation of the prediction */
+  reasoning: string;
+  /** Confidence score (0.0 - 1.0) */
+  confidence: number;
+  /** Analysis timestamp in ISO 8601 with timezone */
+  analyzedAt: string;
 }
 
 /**
@@ -51,13 +71,17 @@ export interface EmotionPredictionResponse {
  * Get AI-generated diary summary
  */
 export interface GetDiarySummaryParams {
-  startDate: string; // ISO 8601 date (YYYY-MM-DD)
-  endDate: string; // ISO 8601 date (YYYY-MM-DD)
+  /** Start date in ISO 8601 format (YYYY-MM-DD) */
+  startDate: string;
+  /** End date in ISO 8601 format (YYYY-MM-DD) */
+  endDate: string;
 }
 
 export interface DiarySummaryResponse {
-  summary: string; // AI-generated summary (max 1000 characters)
-  totalEntries: number; // Number of diary entries used
+  /** AI-generated summary (max 1000 characters) */
+  summary: string;
+  /** Number of diary entries used */
+  totalEntries: number;
 }
 
 /**

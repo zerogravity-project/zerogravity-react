@@ -29,7 +29,7 @@ interface CalendarContextType {
   /** Today's date */
   today: Date;
 
-  // Navigation
+  /** Navigation functions */
   goToNextMonth: () => void;
   goToPreviousMonth: () => void;
   goToNextWeek: () => void;
@@ -37,7 +37,7 @@ interface CalendarContextType {
   goToToday: () => void;
   setSelectedDate: (date: Date) => void;
 
-  // Helper functions
+  /** Helper functions */
   isToday: (date: Date) => boolean;
   isSelected: (date: Date) => boolean;
   getMonthName: () => string;

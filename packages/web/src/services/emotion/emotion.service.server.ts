@@ -1,5 +1,5 @@
 /**
- * Server-side emotion service
+ * [Server-side emotion service]
  * For use in Server Components (RSC)
  */
 
@@ -8,6 +8,7 @@ import type { ApiResponse } from '@/types/api.types';
 
 import type { GetEmotionRecordsParams, GetEmotionRecordsResponse } from './emotion.dto';
 
+/** API base URL */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 /**
