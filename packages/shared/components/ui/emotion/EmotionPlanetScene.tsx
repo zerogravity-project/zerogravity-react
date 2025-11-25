@@ -12,6 +12,12 @@ import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
 import { EmotionPlanetLoading } from './decorations/EmotionPlanetLoading';
 import { EmotionPlanet } from './EmotionPlanet';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface EmotionPlanetSceneProps {
   emotionId: number;
   width?: number | '100%';
@@ -31,6 +37,12 @@ interface EmotionPlanetSceneProps {
   className?: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionPlanetScene({
   emotionId,
   width,
@@ -46,19 +58,27 @@ export function EmotionPlanetScene({
   onSceneLoaded,
   className,
 }: EmotionPlanetSceneProps) {
-  const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const [isLoaded, setIsLoaded] = useState(false);
   const [showCanvas, setShowCanvas] = useState(delay === 0);
 
-  const resolvedWidth = width || squareSize || '100%';
-  const resolvedHeight = height || squareSize || '100%';
+  /**
+   * --------------------------------------------
+   * 2. Custom Hooks
+   * --------------------------------------------
+   */
+  const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
-  const handleLoaded = () => {
-    setIsLoaded(true);
-    onSceneLoaded?.();
-  };
-
-  // Calculate display sizes
+  /**
+   * --------------------------------------------
+   * 3. Helper Functions
+   * --------------------------------------------
+   */
+  /** Calculate display size based on dimension and square size */
   const getDisplaySize = (dimension: number | string, isFull: boolean) => {
     if (isFull) {
       return squareSize ? `${squareSize}px` : '100%';
@@ -66,6 +86,7 @@ export function EmotionPlanetScene({
     return typeof dimension === 'number' ? dimension : dimension;
   };
 
+  /** Calculate loading indicator size with scale factor */
   const getLoadingSize = (dimension: number | string, isFull: boolean, scale = 0.85) => {
     if (isFull) {
       return squareSize ? `${squareSize * scale}px` : undefined;
@@ -73,12 +94,35 @@ export function EmotionPlanetScene({
     return typeof dimension === 'number' ? dimension * scale : dimension;
   };
 
+  /**
+   * --------------------------------------------
+   * 4. Derived Values
+   * --------------------------------------------
+   */
+  const resolvedWidth = width || squareSize || '100%';
+  const resolvedHeight = height || squareSize || '100%';
   const displayWidth = getDisplaySize(resolvedWidth, resolvedWidth === '100%');
   const displayHeight = getDisplaySize(resolvedHeight, resolvedHeight === '100%');
   const loadingWidth = getLoadingSize(resolvedWidth, resolvedWidth === '100%');
   const loadingHeight = getLoadingSize(resolvedHeight, resolvedHeight === '100%');
 
-  // Handle delay for canvas rendering
+  /**
+   * --------------------------------------------
+   * 5. Event Handlers
+   * --------------------------------------------
+   */
+  /** Handle planet loaded event */
+  const handleLoaded = () => {
+    setIsLoaded(true);
+    onSceneLoaded?.();
+  };
+
+  /**
+   * --------------------------------------------
+   * 6. Effects
+   * --------------------------------------------
+   */
+  /** Handle delay for canvas rendering */
   useEffect(() => {
     if (delay > 0) {
       const timer = setTimeout(() => {
@@ -89,6 +133,11 @@ export function EmotionPlanetScene({
     }
   }, [delay]);
 
+  /**
+   * --------------------------------------------
+   * 7. Return
+   * --------------------------------------------
+   */
   return (
     <div
       ref={containerRef}

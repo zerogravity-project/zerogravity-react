@@ -5,6 +5,12 @@ import { motion } from 'motion/react';
 
 import { Icon } from '../icon';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function DefaultLoading() {
   return (
     <motion.div
