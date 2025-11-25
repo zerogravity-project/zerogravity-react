@@ -6,10 +6,28 @@ import { Slider } from '@/app/_components/ui/slider/slider';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function EmotionSlider() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { setEmotionId, emotionSliderValue, setEmotionSliderValue, emotionValueToStepIndex } =
     useEmotionRecordContext();
 
+  /**
+   * --------------------------------------------
+   * 2. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Handle slider value commit - snap to step and set emotion ID */
   const handleValueCommit = () => {
     if (emotionSliderValue[0] !== EMOTION_STEPS[emotionValueToStepIndex].sliderValue) {
       setEmotionSliderValue([EMOTION_STEPS[emotionValueToStepIndex].sliderValue]);
@@ -17,6 +35,11 @@ export default function EmotionSlider() {
     setEmotionId(emotionValueToStepIndex as EmotionId);
   };
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <div className="mobile:px-0 mb-15 flex w-full max-w-[480px] flex-col items-center gap-3 px-5">
       <Slider

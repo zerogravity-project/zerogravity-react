@@ -11,6 +11,21 @@ import { useIsMobile } from '@zerogravity/shared/hooks';
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 
 /**
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
+/** Backend connection error types from NextAuth */
+const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+/**
  * Login buttons component
  * Separated into Client Component to use useIsMobile hook
  * Uses next-auth/react signIn for client-side authentication
@@ -18,18 +33,31 @@ import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
  * Shows alert modal if backend authentication fails
  */
 export default function LoginButtons() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const isMobile = useIsMobile();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
-  const authError = searchParams.get('error');
   const { openAlertModal } = useModal();
 
-  // Check for authentication errors from NextAuth
-  useEffect(() => {
-    // Handle backend connection errors (Configuration, CallbackRouteError, or Default)
-    const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
+  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const authError = searchParams.get('error');
 
+  /**
+   * --------------------------------------------
+   * 3. Effects
+   * --------------------------------------------
+   */
+  /** Check for authentication errors from NextAuth */
+  useEffect(() => {
     if (authError && BACKEND_ERROR_TYPES.includes(authError)) {
       // Show error modal
       openAlertModal({
@@ -45,6 +73,11 @@ export default function LoginButtons() {
     }
   }, [authError, openAlertModal, router, callbackUrl]);
 
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   return (
     <div className="flex flex-col gap-4">
       <Button

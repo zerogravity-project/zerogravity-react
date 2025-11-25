@@ -3,6 +3,12 @@
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface DesktopCalendarCellProps {
   day: number;
   isToday: boolean;
@@ -11,6 +17,12 @@ interface DesktopCalendarCellProps {
   onClick?: () => void;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function DesktopCalendarCell({
   day,
   isToday,
@@ -18,8 +30,18 @@ export default function DesktopCalendarCell({
   dailyEmotionId,
   onClick,
 }: DesktopCalendarCellProps) {
+  /**
+   * --------------------------------------------
+   * 1. Derived Values
+   * --------------------------------------------
+   */
   const isEmpty = dailyEmotionId === undefined;
 
+  /**
+   * --------------------------------------------
+   * 2. Return
+   * --------------------------------------------
+   */
   return (
     <div
       onClick={!isAfterToday ? onClick : undefined}

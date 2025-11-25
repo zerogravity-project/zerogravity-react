@@ -1,10 +1,10 @@
 import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
 
-export default function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
   return (
     <>
       <NavigationAdapter className="fixed top-0" />

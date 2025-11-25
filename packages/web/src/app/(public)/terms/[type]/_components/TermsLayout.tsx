@@ -1,9 +1,10 @@
-/**
- * Terms layout component
- * Shared layout for all terms pages
- */
-
 import { Box, Container, Flex, Heading, Text } from '@radix-ui/themes';
+
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
 
 interface TermsLayoutProps {
   title: string;
@@ -11,6 +12,16 @@ interface TermsLayoutProps {
   children: React.ReactNode;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+/**
+ * Terms layout component
+ * Shared layout for all terms pages
+ */
 export function TermsLayout({ title, lastUpdated, children }: TermsLayoutProps) {
   return (
     <Box style={{ minHeight: '100vh', backgroundColor: 'var(--gray-1)', padding: '2rem 0' }}>

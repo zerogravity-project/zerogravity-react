@@ -9,16 +9,34 @@ import { LinkProps } from '../navigation/types/navigation.types';
 
 import { FOOTER_MENU_ITEMS } from './constants/footer.constants';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface FooterProps {
   className?: string;
   LinkComponent?: ComponentType<LinkProps>;
 }
+
+/**
+ * ============================================
+ * Helper Components
+ * ============================================
+ */
 
 const DefaultLink = ({ href, children, className, ...props }: LinkProps) => (
   <a {...props} href={href} className={className}>
     {children}
   </a>
 );
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export function Footer({ className, LinkComponent = DefaultLink }: FooterProps) {
   return (

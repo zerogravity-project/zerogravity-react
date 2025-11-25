@@ -1,9 +1,12 @@
-/**
- * Privacy Policy content
- */
-
 import { Flex, Heading, Text } from '@radix-ui/themes';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+/** Privacy Policy content */
 export function PrivacyPolicyContent() {
   return (
     <Flex direction="column" gap="5">

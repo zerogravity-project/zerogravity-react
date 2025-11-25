@@ -4,15 +4,43 @@ import { useId } from 'react';
 
 import { cn } from '../../../utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface GeminiLogoProps {
   width: number;
   className?: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function GeminiLogo({ width, className }: GeminiLogoProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const maskId = useId();
+
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const gradientId = `gradient-${maskId}`;
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

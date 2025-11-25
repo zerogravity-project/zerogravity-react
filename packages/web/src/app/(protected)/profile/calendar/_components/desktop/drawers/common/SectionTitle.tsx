@@ -2,11 +2,23 @@ import Link from 'next/link';
 
 import { Link as RadixLink, Text } from '@radix-ui/themes';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface SectionTitleProps {
   title: string;
   linkText?: string;
   href?: string;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export default function SectionTitle({ title, linkText, href }: SectionTitleProps) {
   return (

@@ -10,17 +10,44 @@ import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
 import { DAYS_OF_WEEK } from '../../../_constants/calendar.constants';
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface CalendarHeaderProps {
   emotionRecords?: GetEmotionRecordsResponse;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function CalendarHeader({ emotionRecords }: CalendarHeaderProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { currentDate, setSelectedDate, goToNextWeek, goToPreviousWeek, goToToday, isSelected, getMonthName } =
     useCalendar();
 
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const monthName = getMonthName();
   const weekDates = getWeekDates(currentDate);
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <header className="mb-6 flex w-full flex-col items-center px-5 pt-6">
       <div className="mb-4 flex w-full items-center justify-between">

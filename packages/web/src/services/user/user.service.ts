@@ -1,5 +1,5 @@
 /**
- * User service
+ * [User service]
  * API calls for user management (SSR/CSR compatible)
  */
 
@@ -7,10 +7,10 @@ import axiosInstance from '@/lib/axios';
 import type { ApiResponse } from '@/types/api.types';
 
 import type {
+  DeleteUserResponse,
   GetUserProfileResponse,
   UpdateConsentRequest,
   UpdateConsentResponse,
-  DeleteUserResponse,
 } from './user.dto';
 
 export const userService = {

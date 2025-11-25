@@ -15,13 +15,34 @@ import { PageLoading } from '@zerogravity/shared/components/ui/loading';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function Main() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { accentColor } = useTheme();
   const isLg = useIsLg();
   const router = useRouter();
 
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const [isLoaded, setIsLoaded] = useState(false);
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <div className="pt-topnav-height relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
       <PageLoading isLoaded={isLoaded} />

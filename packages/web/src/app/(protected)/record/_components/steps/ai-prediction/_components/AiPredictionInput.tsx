@@ -11,11 +11,23 @@ import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface AiPredictionInputProps {
   predictEmotion: (params: { diaryEntry: string }) => void;
   aiPredictionEntry: string;
   setAiPredictionEntry: (value: string) => void;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export default function AiPredictionInput({
   predictEmotion,
@@ -84,7 +96,7 @@ export default function AiPredictionInput({
 
   /**
    * ------------------------------------------------------------
-   * 5. Render
+   * 5. Return
    * ------------------------------------------------------------
    */
   return (

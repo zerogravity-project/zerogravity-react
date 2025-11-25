@@ -11,10 +11,27 @@ import { TermsModal } from '../ui/modal/TermsModal';
 import NextAuthSessionProvider from './NextAuthSessionProvider';
 import TanstackQueryProvider from './TanstackQueryProvider';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface ClientProvidersProps {
   children: React.ReactNode;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ *
+ * Root client-side providers composition
+ * Wraps app with Session, Query, Theme, and Modal providers
+ * Renders global modal components
+ *
+ * @param children - Child components to wrap
+ */
 export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
     <NextAuthSessionProvider>

@@ -9,6 +9,12 @@ import { EmotionPlanetGlow } from '@zerogravity/shared/components/ui/emotion';
 import { useSquareResize } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface EmotionPlanetImageProps {
   emotionId: number;
   width?: number;
@@ -21,6 +27,12 @@ interface EmotionPlanetImageProps {
   className?: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionPlanetImage({
   emotionId,
   width,
@@ -31,9 +43,25 @@ export function EmotionPlanetImage({
   className,
   ...props
 }: EmotionPlanetImageProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const [isLoaded, setIsLoaded] = useState(false);
+
+  /**
+   * --------------------------------------------
+   * 2. Custom Hooks
+   * --------------------------------------------
+   */
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <motion.div
       ref={containerRef}

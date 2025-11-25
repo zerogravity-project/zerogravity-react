@@ -6,6 +6,12 @@ import { ReactNode } from 'react';
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface GeminiButtonProps {
   children: ReactNode;
   isLoaded?: boolean;
@@ -14,6 +20,12 @@ interface GeminiButtonProps {
   textSize?: Responsive<'1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9'>;
   className?: string;
 }
+
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
 export default function GeminiButton({
   children,

@@ -16,8 +16,31 @@ const icon: CustomIconDescriptorType = {
 };
 
 export const metadata: Metadata = {
-  title: 'ZeroGravity',
-  description: '아무것도 하지 않기 위한 시간, 무중력의 세계로',
+  title: {
+    default: 'ZeroGravity',
+    template: '%s | ZeroGravity',
+  },
+  description:
+    'ZeroGravity is an emotion tracking and personal wellness application that helps users monitor their emotional states, visualize patterns, and receive personalized insights.',
+  keywords: [
+    'emotion tracking',
+    'personal wellness',
+    'mental health',
+    'wellness',
+    'mental wellness',
+    'mental health tracking',
+    'mental health tracking app',
+    'mental health tracking app',
+    'mental health tracking app',
+  ],
+  authors: [{ name: 'ZeroGravity', url: 'https://zerogravity.io' }],
+  creator: 'ZeroGravity',
+  publisher: 'ZeroGravity',
+  applicationName: 'ZeroGravity',
+  appleWebApp: {
+    title: 'ZeroGravity',
+    statusBarStyle: 'black-translucent',
+  },
   icons: {
     other: icon,
   },

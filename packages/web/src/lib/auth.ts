@@ -1,19 +1,26 @@
+/**
+ * [Auth.js v5 configuration]
+ * Centralized authentication setup for Next.js 15 App Router
+ * Providers: Google, Kakao
+ * Callbacks: jwt, session
+ * Pages: signIn, error
+ * Session: strategy, maxAge, updateAge
+ */
+
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 import Kakao from 'next-auth/providers/kakao';
 
-/**
- * Auth.js v5 Configuration
- * Centralized authentication setup for Next.js 15 App Router
- */
-
-// Refresh lock to prevent concurrent refresh attempts
+/** Refresh lock to prevent concurrent refresh attempts */
 let isRefreshing = false;
 let refreshPromise: Promise<any> | null = null;
 
-// Refresh JWT 5 minutes before expiration to avoid timing issues
+/** Refresh JWT 5 minutes before expiration to avoid timing issues */
 const REFRESH_BUFFER_MS = 5 * 60 * 1000; // 5 minutes
 
+/**
+ * Define auth handlers
+ */
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Google({

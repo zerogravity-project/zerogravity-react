@@ -13,8 +13,12 @@ import wobbleFragmentShader from '../shaders/wobble/fragment.glsl';
 import wobbleVertexShader from '../shaders/wobble/vertex.glsl';
 
 /**
- * Default Material Properties
+ * ============================================
+ * Constants
+ * ============================================
  */
+
+/** Default Material Properties */
 const DEFAULT_MATERIAL_PROPS = {
   transmission: 0,
   ior: 1.3,
@@ -23,6 +27,12 @@ const DEFAULT_MATERIAL_PROPS = {
   iridescenceIOR: 1.3,
   iridescenceThicknessRange: [120, 800],
 };
+
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
 
 interface WobbleMeshProps {
   radius?: number;
@@ -38,6 +48,12 @@ interface WobbleMeshProps {
   colorB: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function WobbleMesh({
   radius = 2.5,
   subdivisions = 50,
@@ -51,10 +67,23 @@ export function WobbleMesh({
   colorA,
   colorB,
 }: WobbleMeshProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshPhysicalMaterial | null>(null);
+  /** Target colors for smooth transitions (using refs to avoid creating new objects each frame) */
+  const targetColorA = useRef(new THREE.Color(colorA));
+  const targetColorB = useRef(new THREE.Color(colorB));
 
-  // Create shader uniforms once (stable object reference for GPU)
+  /**
+   * --------------------------------------------
+   * 2. Computed Values
+   * --------------------------------------------
+   */
+  /** Create shader uniforms once (stable object reference for GPU) */
   const uniforms = useMemo(
     () => ({
       uTime: new THREE.Uniform(0),
@@ -71,12 +100,12 @@ export function WobbleMesh({
     [] // Empty array: create once and reuse (update .value in useFrame)
   );
 
-  // Compose vertex shader with inlined noise function
+  /** Compose vertex shader with inlined noise function */
   const composedVertexShader = useMemo(() => {
     return `${simplexNoise4d}\n${wobbleVertexShader}`;
   }, []);
 
-  // Geometry with computed tangents for shader
+  /** Geometry with computed tangents for shader */
   const geometry = useMemo<THREE.BufferGeometry>(() => {
     const base = new THREE.IcosahedronGeometry(radius, subdivisions);
     const merged = mergeVertices(base) as THREE.BufferGeometry;
@@ -84,17 +113,18 @@ export function WobbleMesh({
     return merged;
   }, [radius, subdivisions]);
 
-  // Target colors for smooth transitions (using refs to avoid creating new objects each frame)
-  const targetColorA = useRef(new THREE.Color(colorA));
-  const targetColorB = useRef(new THREE.Color(colorB));
-
-  // Update target colors when props change
+  /**
+   * --------------------------------------------
+   * 3. Effects
+   * --------------------------------------------
+   */
+  /** Update target colors when props change */
   useEffect(() => {
     targetColorA.current.set(colorA);
     targetColorB.current.set(colorB);
   }, [colorA, colorB]);
 
-  // Animate uniforms every frame
+  /** Animate uniforms every frame */
   useFrame(({ clock }) => {
     // Update time for animation
     uniforms.uTime.value = clock.getElapsedTime();
@@ -130,6 +160,11 @@ export function WobbleMesh({
     }
   });
 
+  /**
+   * --------------------------------------------
+   * 4. Return
+   * --------------------------------------------
+   */
   return (
     <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
       {/* Custom shader material with wobble effect */}
