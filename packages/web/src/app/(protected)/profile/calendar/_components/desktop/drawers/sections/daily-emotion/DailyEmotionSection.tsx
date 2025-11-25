@@ -11,18 +11,45 @@ import {
 } from '@zerogravity/shared/components/ui/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface DailyEmotionSectionProps {
   emotionId?: EmotionId;
   emotionReasons?: EmotionReason[];
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function DailyEmotionSection({ emotionId, emotionReasons }: DailyEmotionSectionProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { accentColor } = useTheme();
 
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const isEmpty = emotionId === undefined;
   const accentEmotionId = EMOTION_COLORS.indexOf(accentColor);
   const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <Theme appearance="dark">
       <section

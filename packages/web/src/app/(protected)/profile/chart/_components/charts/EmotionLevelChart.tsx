@@ -16,21 +16,55 @@ import { EmotionChartContainer } from './common/EmotionChartContainer';
 // Register annotation plugin
 Chart.register(annotationPlugin);
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function EmotionLevelChart() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { accentColor } = useTheme();
   const { timePeriod, startDate } = useChart();
 
-  const { data: levelData } = useChartLevelQuery({ period: timePeriod, startDate });
-
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
+  /**
+   * --------------------------------------------
+   * 3. Query Hooks
+   * --------------------------------------------
+   */
+  const { data: levelData } = useChartLevelQuery({ period: timePeriod, startDate });
+
+  /**
+   * --------------------------------------------
+   * 4. Helper Functions
+   * --------------------------------------------
+   */
+
+  /** Convert emotion value to label */
   const valueToLabel = (value: number) => {
     const labels = EMOTION_STEPS.map(step => step.type);
     return labels[value] || '';
   };
 
-  // 데이터 가공
+  /**
+   * --------------------------------------------
+   * 5. Computed Values
+   * --------------------------------------------
+   */
+
+  /** Chart labels from level data */
   const labels = useMemo(() => levelData?.data.map(item => item.label) || [], [levelData]);
   const barColor = useMemo(
     () => EMOTION_COLORS_MAP_ALPHA[accentColor as keyof typeof EMOTION_COLORS_MAP_ALPHA],
@@ -136,6 +170,13 @@ export function EmotionLevelChart() {
     [labels, levelData]
   );
 
+  /**
+   * --------------------------------------------
+   * 6. Effects
+   * --------------------------------------------
+   */
+
+  /** Initialize and update chart instance */
   useEffect(() => {
     if (!chartRef.current) return;
 
@@ -158,6 +199,11 @@ export function EmotionLevelChart() {
     };
   }, [chartData, chartOptions]);
 
+  /**
+   * --------------------------------------------
+   * 7. Return
+   * --------------------------------------------
+   */
   return (
     <EmotionChartContainer title="Emotion Level Chart" className="max-mobile:h-[320px] max-mobile:pb-10">
       <div className="h-full min-h-0 w-full min-w-0">

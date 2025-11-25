@@ -2,6 +2,12 @@ import { Heading, Spinner, Text } from '@radix-ui/themes';
 
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function AiPredictionLoading() {
   return (
     <>

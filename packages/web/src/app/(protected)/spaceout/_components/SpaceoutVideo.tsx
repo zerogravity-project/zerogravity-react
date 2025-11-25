@@ -7,6 +7,12 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface SpaceoutVideoProps {
   videos?: string[];
   poster?: string;
@@ -19,6 +25,12 @@ interface SpaceoutVideoProps {
   onError?: (error: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function SpaceoutVideo({
   videos = ['/videos/sun.mp4', '/videos/mercury.mp4'],
   poster,
@@ -30,13 +42,35 @@ export default function SpaceoutVideo({
   onLoadedData,
   onError,
 }: SpaceoutVideoProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const router = useRouter();
+
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isUserInteracted, setIsUserInteracted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
   const currentVideo = videos[currentVideoIndex];
 
+  /**
+   * --------------------------------------------
+   * 4. Event Handlers
+   * --------------------------------------------
+   */
+  /** Handle video end - move to next video or navigate to record page */
   const handleVideoEnd = () => {
     if (currentVideoIndex < videos.length - 1) {
       // Move to next video
@@ -47,6 +81,7 @@ export default function SpaceoutVideo({
     }
   };
 
+  /** Handle user interaction to enable sound */
   const handleUserInteraction = () => {
     if (!isUserInteracted && videoRef.current) {
       setIsUserInteracted(true);
@@ -55,12 +90,23 @@ export default function SpaceoutVideo({
     }
   };
 
+  /**
+   * --------------------------------------------
+   * 5. Effects
+   * --------------------------------------------
+   */
+  /** Unmute video when user has interacted */
   useEffect(() => {
     if (videoRef.current && isUserInteracted) {
       videoRef.current.muted = false;
     }
   }, [isUserInteracted, currentVideoIndex]);
 
+  /**
+   * --------------------------------------------
+   * 6. Return
+   * --------------------------------------------
+   */
   return (
     <div
       className={cn('relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]', className)}

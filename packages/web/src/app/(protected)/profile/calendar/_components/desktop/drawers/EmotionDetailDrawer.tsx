@@ -18,6 +18,12 @@ import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import DailyNoteSection from './sections/daily-note/DailyNoteSection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface EmotionDetailDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -27,6 +33,12 @@ interface EmotionDetailDrawerProps {
   momentEmotionRecords?: EmotionRecordDetail[];
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function EmotionDetailDrawer({
   isOpen,
   onClose,
@@ -35,21 +47,42 @@ export default function EmotionDetailDrawer({
   diaryEntry,
   momentEmotionRecords,
 }: EmotionDetailDrawerProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * --------------------------------------------
+   * 2. External Hooks
+   * --------------------------------------------
+   */
   const { selectedDate } = useCalendar();
   const isOverLargeScreen = !useIsLg();
+
+  /**
+   * --------------------------------------------
+   * 3. Custom Hooks
+   * --------------------------------------------
+   */
   const { isScrollable, isScrolling, isScrollAtBottom } = useScroll({
     scrollRef,
     enable: isOpen,
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
+  /**
+   * --------------------------------------------
+   * 4. Derived Values
+   * --------------------------------------------
+   */
   const selectedDateString = formatDateString(selectedDate);
   const isToday = isSameDay(selectedDate, new Date());
   const isEmpty = dailyEmotionId === undefined;
 
-  // Animation variants based on screen size
+  /** Animation variants based on screen size */
   const wrapperAnimation = isOverLargeScreen
     ? {
         initial: { width: 0 },
@@ -68,6 +101,11 @@ export default function EmotionDetailDrawer({
     ? 'h-full flex-shrink-0 overflow-hidden'
     : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
+  /**
+   * --------------------------------------------
+   * 5. Return
+   * --------------------------------------------
+   */
   return (
     <AnimatePresence>
       {isOpen && (

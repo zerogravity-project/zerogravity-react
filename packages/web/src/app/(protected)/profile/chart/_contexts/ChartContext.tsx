@@ -5,12 +5,20 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 
 import { formatDateRange, navigatePeriod } from '../_utils/dateUtils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 export type TimePeriod = 'week' | 'month' | 'year';
 
 interface ChartContextType {
-  // Current state
+  /** Current date for chart navigation */
   currentDate: Date;
+  /** Selected time period (week/month/year) */
   timePeriod: TimePeriod;
+  /** Start date string in YYYY-MM-DD format */
   startDate: string;
 
   // Navigation
@@ -29,18 +37,41 @@ interface ChartContextType {
   getTotalEntries: () => number;
 }
 
-const ChartContext = createContext<ChartContextType | undefined>(undefined);
-
 interface ChartProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * ============================================
+ * Context
+ * ============================================
+ */
+
+const ChartContext = createContext<ChartContextType | undefined>(undefined);
+
+/**
+ * ============================================
+ * Provider
+ * ============================================
+ */
+
 export function ChartProvider({ children }: ChartProviderProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
   const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('week');
 
-  // Start date for the chart
+  /**
+   * --------------------------------------------
+   * 2. Computed Values
+   * --------------------------------------------
+   */
+
+  /** Calculate start date based on time period */
   const startDate = useMemo(() => {
     switch (timePeriod) {
       case 'week':
@@ -54,42 +85,57 @@ export function ChartProvider({ children }: ChartProviderProps) {
     }
   }, [currentDate, timePeriod]);
 
-  // Navigation state
+  /** Check if can navigate to next period */
   const canGoNext = useMemo(() => {
     const nextDate = navigatePeriod(currentDate, timePeriod, 'next');
     return nextDate <= today;
   }, [currentDate, timePeriod, today]);
 
+  /** Check if can navigate to previous period (up to 2 years ago) */
   const canGoPrevious = useMemo(() => {
-    // Allow going back to reasonable past (e.g., 2 years ago)
     const twoYearsAgo = new Date(today);
     twoYearsAgo.setFullYear(today.getFullYear() - 2);
     const prevDate = navigatePeriod(currentDate, timePeriod, 'prev');
     return prevDate >= twoYearsAgo;
   }, [currentDate, timePeriod, today]);
 
-  // Navigation functions
+  /**
+   * --------------------------------------------
+   * 3. Callbacks - Navigation
+   * --------------------------------------------
+   */
+
+  /** Navigate to next period */
   const goToNextPeriod = useCallback(() => {
     if (canGoNext) {
       setCurrentDate(prev => navigatePeriod(prev, timePeriod, 'next'));
     }
   }, [timePeriod, canGoNext]);
 
+  /** Navigate to previous period */
   const goToPreviousPeriod = useCallback(() => {
     if (canGoPrevious) {
       setCurrentDate(prev => navigatePeriod(prev, timePeriod, 'prev'));
     }
   }, [timePeriod, canGoPrevious]);
 
+  /** Navigate to today */
   const goToToday = useCallback(() => {
     setCurrentDate(today);
   }, [today]);
 
-  // Helper functions
+  /**
+   * --------------------------------------------
+   * 4. Callbacks - Helpers
+   * --------------------------------------------
+   */
+
+  /** Get formatted date range string for display */
   const getFormattedDateRange = useCallback(() => {
     return formatDateRange(currentDate, timePeriod);
   }, [currentDate, timePeriod]);
 
+  /** Get total number of entries for current time period */
   const getTotalEntries = useCallback(() => {
     switch (timePeriod) {
       case 'week':
@@ -103,6 +149,11 @@ export function ChartProvider({ children }: ChartProviderProps) {
     }
   }, [timePeriod]);
 
+  /**
+   * --------------------------------------------
+   * 5. Context Value
+   * --------------------------------------------
+   */
   const value = useMemo(
     () => ({
       currentDate,
@@ -132,8 +183,19 @@ export function ChartProvider({ children }: ChartProviderProps) {
     ]
   );
 
+  /**
+   * --------------------------------------------
+   * 6. Return
+   * --------------------------------------------
+   */
   return <ChartContext.Provider value={value}>{children}</ChartContext.Provider>;
 }
+
+/**
+ * ============================================
+ * Custom Hook
+ * ============================================
+ */
 
 export function useChart() {
   const context = useContext(ChartContext);

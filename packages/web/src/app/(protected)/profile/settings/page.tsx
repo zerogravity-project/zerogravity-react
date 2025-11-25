@@ -10,15 +10,34 @@ import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { useLogoutMutation } from '@/services/auth/auth.query';
 import { useDeleteUserMutation, useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
-export default function ProfileSettingsPage() {
-  const { data: session } = useSession();
-  const { data: userProfile } = useUserProfileQuery();
-  const { openHashModal } = useModal();
-  const user = session?.user;
-  const displayName = user?.name ?? 'ZeroGravity User';
-  const email = user?.email ?? 'example@example.com';
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
 
+export default function ProfileSettingsPage() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
+  const { data: session } = useSession();
+  const { openHashModal } = useModal();
+
+  /**
+   * --------------------------------------------
+   * 2. States
+   * --------------------------------------------
+   */
   const [showAIWarning, setShowAIWarning] = useState(false);
+
+  /**
+   * --------------------------------------------
+   * 3. Query Hooks
+   * --------------------------------------------
+   */
+  const { data: userProfile } = useUserProfileQuery();
 
   const { mutate: updateConsent, isPending: isUpdatingConsent } = useUpdateConsentMutation({
     onSuccess: () => {
@@ -50,8 +69,23 @@ export default function ProfileSettingsPage() {
     },
   });
 
+  /**
+   * --------------------------------------------
+   * 4. Derived Values
+   * --------------------------------------------
+   */
+  const user = session?.user;
+  const displayName = user?.name ?? 'ZeroGravity User';
+  const email = user?.email ?? 'example@example.com';
   const consents = userProfile?.consents || user?.consents;
 
+  /**
+   * --------------------------------------------
+   * 5. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Handle AI consent toggle */
   const handleAIConsentToggle = (checked: boolean) => {
     if (!checked) {
       // Show warning when disabling AI consent
@@ -67,6 +101,7 @@ export default function ProfileSettingsPage() {
     }
   };
 
+  /** Confirm AI consent disable */
   const confirmAIConsentDisable = () => {
     updateConsent({
       termsAgreed: true,
@@ -76,6 +111,11 @@ export default function ProfileSettingsPage() {
     });
   };
 
+  /**
+   * --------------------------------------------
+   * 6. Return
+   * --------------------------------------------
+   */
   return (
     <div className="flex h-full w-full flex-1 flex-col gap-7 overflow-y-auto p-6 md:p-8">
       {/* Profile Settings Section */}
@@ -163,7 +203,15 @@ export default function ProfileSettingsPage() {
   );
 }
 
-// SettingSection Component
+/**
+ * ============================================
+ * Sub Components
+ * ============================================
+ */
+
+/**
+ * SettingSection Component
+ */
 interface SettingSectionProps {
   title: string;
   children: React.ReactNode;
@@ -185,7 +233,9 @@ function SettingSection({ title, children }: SettingSectionProps) {
   );
 }
 
-// SettingField Component
+/**
+ * SettingField Component
+ */
 interface SettingFieldProps {
   label: string;
   value: string;
@@ -226,7 +276,9 @@ function SettingField({ label, value, type = 'text', readOnly = true }: SettingF
   );
 }
 
-// ConsentToggle Component
+/**
+ * ConsentToggle Component
+ */
 interface ConsentToggleProps {
   label: string;
   description: string;
@@ -271,7 +323,9 @@ function ConsentToggle({
   );
 }
 
-// SettingAction Component
+/**
+ * SettingAction Component
+ */
 interface SettingActionProps {
   label: string;
   buttonText: string;

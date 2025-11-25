@@ -5,6 +5,12 @@ import { Fragment } from 'react';
 
 import { FOOTER_MENU_ITEMS } from '@zerogravity/shared/components/ui/footer';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function DesktopMenuFooter() {
   return (
     <footer className="max-mobile:hidden flex w-full flex-col gap-1 border-t border-[var(--gray-3)] px-5 pt-2 pb-4">

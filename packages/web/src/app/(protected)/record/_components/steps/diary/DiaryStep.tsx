@@ -15,12 +15,26 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 import DiaryTextArea from './DiaryTextArea';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function DiaryStep() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const router = useRouter();
   const { date, emotionId, emotionReasons, diaryEntry, prevStep, emotionRecordId } = useEmotionRecordContext();
 
-  const isTodayDate = date ? isToday(new Date(date)) : false;
-
+  /**
+   * --------------------------------------------
+   * 2. Query Hooks
+   * --------------------------------------------
+   */
   const { mutate: createEmotionRecord, isPending: isCreatingEmotionRecord } = useCreateEmotionRecordMutation({
     onSuccess: () => {
       router.push('/profile/calendar');
@@ -39,6 +53,20 @@ export default function DiaryStep() {
     },
   });
 
+  /**
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+  const isTodayDate = date ? isToday(new Date(date)) : false;
+
+  /**
+   * --------------------------------------------
+   * 4. Event Handlers
+   * --------------------------------------------
+   */
+
+  /** Submit emotion record (create or update) */
   const handleSubmit = () => {
     if (emotionRecordId) {
       updateEmotionRecord({
@@ -49,7 +77,6 @@ export default function DiaryStep() {
           diaryEntry,
         },
       });
-
       return;
     }
 
@@ -62,6 +89,11 @@ export default function DiaryStep() {
     });
   };
 
+  /**
+   * --------------------------------------------
+   * 5. Return
+   * --------------------------------------------
+   */
   return (
     <>
       {/* Title */}

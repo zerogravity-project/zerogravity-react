@@ -9,12 +9,35 @@ import { useUpdateConsentMutation } from '@/services/user/user.query';
 import { useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface AiConsentModalProps {
   onAgree: () => void;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function AiConsentModal({ onAgree }: AiConsentModalProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { closeModal } = useModal();
+
+  /**
+   * --------------------------------------------
+   * 2. Query Hooks
+   * --------------------------------------------
+   */
   const { mutate: updateConsent } = useUpdateConsentMutation({
     onSuccess: () => {
       closeModal();
@@ -25,6 +48,11 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
     },
   });
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <div className="flex flex-col gap-8 py-2">
       <ModalHeader title="Use AI for analysis?" description="Do you agree to use AI for analysis?" />

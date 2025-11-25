@@ -7,6 +7,12 @@ import { isSameDay } from '@zerogravity/shared/utils';
 import { MONTH_NAMES } from '../_constants/calendar.constants';
 import { getMonthInfo as getMonthInfoUtil, getWeekOfMonth } from '../_utils/dateUtils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface MonthDaysInfo {
   firstDayOfWeek: number;
   daysInMonth: number;
@@ -16,9 +22,11 @@ interface MonthDaysInfo {
 }
 
 interface CalendarContextType {
-  // Current state
+  /** Current displayed date for calendar navigation */
   currentDate: Date;
+  /** User selected date */
   selectedDate: Date;
+  /** Today's date */
   today: Date;
 
   // Navigation
@@ -40,19 +48,41 @@ interface CalendarContextType {
   getMonthDaysInfo: () => MonthDaysInfo;
 }
 
-const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
-
 interface CalendarProviderProps {
   children: React.ReactNode;
 }
 
-export function CalendarProvider({ children }: CalendarProviderProps) {
-  const today = new Date();
+/**
+ * ============================================
+ * Context
+ * ============================================
+ */
 
+const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
+
+/**
+ * ============================================
+ * Provider
+ * ============================================
+ */
+
+export function CalendarProvider({ children }: CalendarProviderProps) {
+  /**
+   * --------------------------------------------
+   * 1. States
+   * --------------------------------------------
+   */
+  const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
-  // Navigation functions
+  /**
+   * --------------------------------------------
+   * 2. Callbacks - Navigation
+   * --------------------------------------------
+   */
+
+  /** Navigate to next month */
   const goToNextMonth = useCallback(() => {
     setCurrentDate(prev => {
       const next = new Date(prev);
@@ -61,6 +91,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     });
   }, []);
 
+  /** Navigate to previous month */
   const goToPreviousMonth = useCallback(() => {
     setCurrentDate(prev => {
       const prevDate = new Date(prev);
@@ -69,6 +100,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     });
   }, []);
 
+  /** Navigate to next week */
   const goToNextWeek = useCallback(() => {
     setCurrentDate(prev => {
       const next = new Date(prev);
@@ -77,6 +109,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     });
   }, []);
 
+  /** Navigate to previous week */
   const goToPreviousWeek = useCallback(() => {
     setCurrentDate(prev => {
       const prevDate = new Date(prev);
@@ -85,16 +118,27 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     });
   }, []);
 
+  /** Navigate to today and select it */
   const goToToday = useCallback(() => {
     setCurrentDate(today);
     setSelectedDate(today);
-  }, []);
+  }, [today]);
 
-  // Helper functions
-  const isToday = useCallback((date: Date) => {
-    return isSameDay(date, today);
-  }, []);
+  /**
+   * --------------------------------------------
+   * 3. Callbacks - Helpers
+   * --------------------------------------------
+   */
 
+  /** Check if given date is today */
+  const isToday = useCallback(
+    (date: Date) => {
+      return isSameDay(date, today);
+    },
+    [today]
+  );
+
+  /** Check if given date is selected */
   const isSelected = useCallback(
     (date: Date) => {
       return isSameDay(date, selectedDate);
@@ -102,23 +146,30 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     [selectedDate]
   );
 
+  /** Get current month name */
   const getMonthName = useCallback(() => {
     return MONTH_NAMES[currentDate.getMonth()];
   }, [currentDate]);
 
+  /** Get current year */
   const getYear = useCallback(() => currentDate.getFullYear(), [currentDate]);
+
+  /** Get current month (0-indexed) */
   const getMonth = useCallback(() => currentDate.getMonth(), [currentDate]);
 
+  /** Get selected date's month name */
   const getSelectedMonthName = useCallback(() => {
     return MONTH_NAMES[selectedDate.getMonth()];
   }, [selectedDate]);
 
+  /** Get week info for current date */
   const getWeekInfo = useCallback(() => {
     const month = currentDate.getMonth() + 1;
     const weekOfMonth = getWeekOfMonth(currentDate);
     return { month, weekOfMonth };
   }, [currentDate]);
 
+  /** Get month days info for calendar grid */
   const getMonthDaysInfo = useCallback((): MonthDaysInfo => {
     const year = currentDate.getFullYear();
     const month = currentDate.getMonth();
@@ -133,6 +184,11 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     };
   }, [currentDate]);
 
+  /**
+   * --------------------------------------------
+   * 4. Context Value
+   * --------------------------------------------
+   */
   const value = useMemo(
     () => ({
       currentDate,
@@ -173,8 +229,19 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     ]
   );
 
+  /**
+   * --------------------------------------------
+   * 5. Return
+   * --------------------------------------------
+   */
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }
+
+/**
+ * ============================================
+ * Custom Hook
+ * ============================================
+ */
 
 export function useCalendar() {
   const context = useContext(CalendarContext);

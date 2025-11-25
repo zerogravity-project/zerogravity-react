@@ -4,13 +4,30 @@ import { EMOTION_REASONS, EMOTION_STEPS } from '@zerogravity/shared/components/u
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function ReasonSelection() {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const {
     emotionValueToStepIndex,
     emotionReasons: emotionReason,
     setEmotionReasons: setEmotionReason,
   } = useEmotionRecordContext();
 
+  /**
+   * --------------------------------------------
+   * 2. Event Handlers
+   * --------------------------------------------
+   */
+  /** Toggle reason selection */
   const toggleReason = (reason: string) => {
     if (emotionReason.includes(reason)) {
       setEmotionReason(emotionReason.filter(r => r !== reason));
@@ -19,6 +36,11 @@ export default function ReasonSelection() {
     }
   };
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <div className="max-mobile:px-5 flex w-full flex-1 flex-col items-center pt-10 pb-12">
       <div className="flex w-full max-w-[480px] flex-wrap gap-3">

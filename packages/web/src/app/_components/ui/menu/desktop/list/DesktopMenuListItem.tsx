@@ -9,18 +9,45 @@ import { useTheme } from '@zerogravity/shared/components/providers';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { cn } from '@zerogravity/shared/utils';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface DesktopMenuListItemProps {
   href: string;
   icon: string;
   label: string;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export function DesktopMenuListItem({ href, icon, label }: DesktopMenuListItemProps) {
+  /**
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
   const { accentColor } = useTheme();
   const pathname = usePathname();
 
+  /**
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
   const isActive = pathname === href;
 
+  /**
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
   return (
     <li className="w-full">
       <Link href={href}>

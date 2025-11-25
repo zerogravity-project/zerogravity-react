@@ -3,12 +3,30 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
 interface TanstackQueryProviderProps {
   children: React.ReactNode;
 }
 
+/**
+ * ============================================
+ * Component
+ * ============================================
+ */
+
 export default function TanstackQueryProvider({ children }: TanstackQueryProviderProps) {
-  // Create QueryClient instance (recreated on each render but memoized)
+  /**
+   * --------------------------------------------
+   * 1. Computed Values
+   * --------------------------------------------
+   */
+
+  /** Create QueryClient instance (recreated on each render but memoized) */
   const queryClient = useMemo(
     () =>
       new QueryClient({
@@ -27,6 +45,11 @@ export default function TanstackQueryProvider({ children }: TanstackQueryProvide
     []
   );
 
+  /**
+   * --------------------------------------------
+   * 2. Return
+   * --------------------------------------------
+   */
   if (!queryClient) return null;
 
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
