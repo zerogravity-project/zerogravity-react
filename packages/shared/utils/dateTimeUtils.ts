@@ -1,3 +1,8 @@
+/**
+ * [Date and time utilities]
+ * Formatting, comparison, and week calculation functions
+ */
+
 import { addDays, format, startOfWeek } from 'date-fns';
 
 /**

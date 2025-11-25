@@ -1,3 +1,8 @@
+/**
+ * [Calendar date utilities]
+ * Month info, week calculations, and time formatting
+ */
+
 import { MONTH_NAMES } from '../_constants/calendar.constants';
 
 /**

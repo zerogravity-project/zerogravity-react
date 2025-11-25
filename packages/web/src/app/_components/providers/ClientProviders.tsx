@@ -25,8 +25,13 @@ interface ClientProvidersProps {
  * ============================================
  * Component
  * ============================================
+ *
+ * Root client-side providers composition
+ * Wraps app with Session, Query, Theme, and Modal providers
+ * Renders global modal components
+ *
+ * @param children - Child components to wrap
  */
-
 export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
     <NextAuthSessionProvider>

@@ -56,6 +56,9 @@ interface CalendarProviderProps {
  * ============================================
  * Context
  * ============================================
+ *
+ * Calendar navigation and date selection state
+ * Manages month/week views and selected date
  */
 
 const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
@@ -64,8 +67,12 @@ const CalendarContext = createContext<CalendarContextType | undefined>(undefined
  * ============================================
  * Provider
  * ============================================
+ *
+ * Provides calendar navigation and date selection
+ * Handles month/week calculations and date helpers
+ *
+ * @param children - Child components to wrap
  */
-
 export function CalendarProvider({ children }: CalendarProviderProps) {
   /**
    * --------------------------------------------

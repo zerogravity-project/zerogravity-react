@@ -1,3 +1,8 @@
+/**
+ * [Emotion record utilities]
+ * Value to emotion step conversion functions
+ */
+
 import { EMOTION_STEPS, EmotionStep } from '@zerogravity/shared/components/ui/emotion';
 
 /**
