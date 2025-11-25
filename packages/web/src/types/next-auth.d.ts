@@ -9,14 +9,23 @@ import { DefaultSession } from 'next-auth';
  * Consent data structure from backend
  */
 export interface ConsentData {
+  /** Flag indicating if user has agreed to terms of service */
   termsAgreed: boolean;
+  /** Date and time when user agreed to terms of service */
   termsAgreedAt?: string;
+  /** Flag indicating if user has agreed to privacy policy */
   privacyAgreed: boolean;
+  /** Date and time when user agreed to privacy policy */
   privacyAgreedAt?: string;
+  /** Flag indicating if user has agreed to sensitive data processing */
   sensitiveDataConsent: boolean;
+  /** Date and time when user agreed to sensitive data processing */
   sensitiveDataConsentAt?: string;
+  /** Flag indicating if user has agreed to AI-powered analysis */
   aiAnalysisConsent: boolean;
+  /** Date and time when user agreed to AI-powered analysis */
   aiAnalysisConsentAt?: string;
+  /** Version of the consent agreement */
   consentVersion: string;
 }
 
@@ -26,7 +35,9 @@ export interface ConsentData {
  */
 declare module 'next-auth' {
   interface User {
+    /** Flag indicating if user is newly created */
     isNewUser?: boolean;
+    /** User consent information */
     consents?: ConsentData;
   }
 

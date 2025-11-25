@@ -2,8 +2,17 @@ import axios from 'axios';
 import type { Session } from 'next-auth';
 import { getSession, signOut } from 'next-auth/react';
 
+/**
+ * [Axios configuration]
+ * Axios instance with base URL, credentials, and headers
+ * Request interceptor to add backend JWT and X-Timezone header
+ * Response interceptor to handle 401 errors and refresh token
+ */
+
+/** API base URL */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
+/** Create axios instance */
 const axiosInstance = axios.create({
   baseURL: `${API_BASE_URL}`,
   withCredentials: true,
