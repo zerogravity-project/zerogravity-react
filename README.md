@@ -27,7 +27,7 @@
 ZeroGravity is a personal wellness application that helps users track and visualize their emotions through an immersive 3D experience. The platform transforms emotional data into beautiful, interactive 3D planets that morph and change based on your emotional state.
 
 > 📌 Rebuilt from an incomplete collaborative Vue project into a full-featured solo full-stack application.
-> [Original Vue version](https://github.com/zerogravity-project/zerogravity-frontend/tree/main/zerogravity-vue) | [Backend Repository](https://github.com/zerogravity-project/zerogravity-backend)
+> [Original Vue version](https://github.com/zerogravity-project/zerogravity-frontend/tree/main) | [Backend Repository](https://github.com/zerogravity-project/zerogravity-backend)
 
 ### Why ZeroGravity?
 
@@ -335,6 +335,13 @@ New tab override synced with web app authentication and theme.
 - [ ] More emotion visualization themes
 - [ ] Social features (share emotions with friends)
 - [ ] Advanced AI insights with trend analysis
+
+---
+
+## 🔗 Related
+
+- [Backend (Spring Boot)](https://github.com/zerogravity-project/zerogravity-backend)
+- [Original Vue Version](https://github.com/zerogravity-project/zerogravity-frontend/tree/main)
 
 ---
 
