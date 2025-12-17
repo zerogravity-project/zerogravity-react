@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Dialog, Flex } from '@radix-ui/themes';
+import { Button, Dialog } from '@radix-ui/themes';
 
 import { AlertModalConfig, useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
@@ -63,11 +63,11 @@ export function AlertModal() {
         <div className="flex flex-col gap-8 py-2">
           <ModalHeader title={config.title} description={config.description} />
 
-          <Flex gap="3" justify="end">
+          <div className="flex justify-end gap-3">
             <Button onClick={handleConfirm} size="3">
               {config.confirmText ?? 'OK'}
             </Button>
-          </Flex>
+          </div>
         </div>
       </Dialog.Content>
     </Dialog.Root>

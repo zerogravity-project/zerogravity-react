@@ -1,7 +1,7 @@
 'use client';
 
 import { Text } from '@radix-ui/themes';
-import { endOfDay, endOfMonth, format, isAfter, startOfDay, startOfMonth } from 'date-fns';
+import { endOfMonth, format, isAfter, startOfMonth } from 'date-fns';
 import { LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
@@ -47,27 +47,37 @@ export default function DesktopCalendar() {
   const currentMonthDate = new Date(year, month);
   const monthStart = startOfMonth(currentMonthDate);
   const monthEnd = endOfMonth(currentMonthDate);
-  const selectedDateStart = startOfDay(selectedDate);
-  const selectedDateEnd = endOfDay(selectedDate);
 
   /**
    * --------------------------------------------
    * 4. Query Hooks
    * --------------------------------------------
    */
-  const { data: currentMonthEmotionRecords } = useGetEmotionRecordsQuery({
+  const { data: currentMonthEmotionRecords, isLoading: isMonthDataLoading } = useGetEmotionRecordsQuery({
     startDateTime: format(monthStart, "yyyy-MM-dd'T'HH:mm:ss"),
     endDateTime: format(monthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
 
-  const { data: selectedDateEmotionRecords } = useGetEmotionRecordsQuery({
-    startDateTime: format(selectedDateStart, "yyyy-MM-dd'T'HH:mm:ss"),
-    endDateTime: format(selectedDateEnd, "yyyy-MM-dd'T'HH:mm:ss"),
-  });
+  /**
+   * --------------------------------------------
+   * 5. Derived Values (from query)
+   * --------------------------------------------
+   */
+  const selectedDateString = format(selectedDate, 'yyyy-MM-dd');
+
+  /** Daily emotion record for selected date */
+  const selectedDailyRecord = currentMonthEmotionRecords?.data?.daily.find(
+    record => format(record.createdAt, 'yyyy-MM-dd') === selectedDateString
+  );
+
+  /** Moment emotion records for selected date */
+  const selectedMomentRecords = currentMonthEmotionRecords?.data?.moment.filter(
+    record => format(record.createdAt, 'yyyy-MM-dd') === selectedDateString
+  );
 
   /**
    * --------------------------------------------
-   * 5. Event Handlers
+   * 6. Event Handlers
    * --------------------------------------------
    */
 
@@ -79,7 +89,7 @@ export default function DesktopCalendar() {
 
   /**
    * --------------------------------------------
-   * 6. Render Helpers
+   * 7. Render Helpers
    * --------------------------------------------
    */
 
@@ -103,6 +113,7 @@ export default function DesktopCalendar() {
         day={day}
         isToday={isToday(date)}
         isAfterToday={isAfterToday}
+        isLoading={isMonthDataLoading}
         dailyEmotionId={dailyEmotionId}
         onClick={() => handleCellClick(date)}
       />
@@ -116,7 +127,7 @@ export default function DesktopCalendar() {
 
   /**
    * --------------------------------------------
-   * 7. Return
+   * 8. Return
    * --------------------------------------------
    */
   return (
@@ -156,10 +167,10 @@ export default function DesktopCalendar() {
         <EmotionDetailDrawer
           isOpen={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}
-          dailyEmotionId={selectedDateEmotionRecords?.data?.daily[0]?.emotionId}
-          dailyEmotionReasons={selectedDateEmotionRecords?.data?.daily[0]?.reasons}
-          diaryEntry={selectedDateEmotionRecords?.data?.daily[0]?.diaryEntry ?? ''}
-          momentEmotionRecords={selectedDateEmotionRecords?.data?.moment}
+          dailyEmotionId={selectedDailyRecord?.emotionId}
+          dailyEmotionReasons={selectedDailyRecord?.reasons}
+          diaryEntry={selectedDailyRecord?.diaryEntry ?? ''}
+          momentEmotionRecords={selectedMomentRecords}
         />
       </div>
     </LayoutGroup>

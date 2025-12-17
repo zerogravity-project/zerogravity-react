@@ -140,16 +140,16 @@ export default function EmotionDetailDrawer({
                 </div>
               </div>
 
-              {/* Daily Note - Takes remaining space */}
+              {/* Diary - Takes remaining space */}
               <div className="flex flex-1 flex-col overflow-hidden border-t border-[var(--gray-3)]">
-                {/* Daily Note Header - Fixed */}
+                {/* Diary Header - Fixed */}
                 <div
                   className={`z-1 flex w-full items-center justify-between bg-[var(--gray-1)] px-5 pt-6 pb-4 transition-shadow duration-200 ${
                     isScrolling && 'shadow-2xl'
                   }`}
                 >
                   <Heading as="h2" size="4" weight="medium">
-                    Daily Note
+                    Diary
                   </Heading>
                   {isToday && !isEmpty && (
                     <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
@@ -162,7 +162,15 @@ export default function EmotionDetailDrawer({
 
                 {/* Text Area - Scrollable only */}
                 <div ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto px-5 pb-8">
-                  <Text>{diaryEntry}</Text>
+                  {diaryEntry ? (
+                    <Text as="p">{diaryEntry}</Text>
+                  ) : (
+                    <div className="flex w-full flex-col items-center justify-center py-14">
+                      <Text as="p" className="!text-[var(--gray-a7)]" align="center">
+                        Unwritten thoughts...
+                      </Text>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
