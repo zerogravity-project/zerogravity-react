@@ -13,6 +13,7 @@ interface DesktopCalendarCellProps {
   day: number;
   isToday: boolean;
   isAfterToday: boolean;
+  isLoading?: boolean;
   dailyEmotionId?: number;
   onClick?: () => void;
 }
@@ -27,6 +28,7 @@ export default function DesktopCalendarCell({
   day,
   isToday,
   isAfterToday,
+  isLoading = false,
   dailyEmotionId,
   onClick,
 }: DesktopCalendarCellProps) {
@@ -36,6 +38,7 @@ export default function DesktopCalendarCell({
    * --------------------------------------------
    */
   const isEmpty = dailyEmotionId === undefined;
+  const isDisabled = isAfterToday || isLoading;
 
   /**
    * --------------------------------------------
@@ -44,10 +47,10 @@ export default function DesktopCalendarCell({
    */
   return (
     <div
-      onClick={!isAfterToday ? onClick : undefined}
+      onClick={!isDisabled ? onClick : undefined}
       className={cn(
         'relative flex h-full w-full items-center justify-center p-1 outline outline-[0.5px] outline-[var(--gray-3)]',
-        !isAfterToday && 'cursor-pointer hover:!bg-[var(--gray-a3)]'
+        isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:!bg-[var(--gray-a3)]'
       )}
     >
       {/* Day number */}

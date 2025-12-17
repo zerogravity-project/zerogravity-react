@@ -15,7 +15,7 @@ import { useCalendar } from '../../../_contexts/CalendarContext';
 import SectionTitle from './common/SectionTitle';
 import DrawerHeader from './header/DrawerHeader';
 import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
-import DailyNoteSection from './sections/daily-note/DailyNoteSection';
+import DiarySection from './sections/diary/DiarySection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
 /**
@@ -127,18 +127,18 @@ export default function EmotionDetailDrawer({
               {/* Daily Emotion */}
               <SectionTitle
                 title="Daily Emotion"
-                linkText={isToday && !isEmpty ? 'Edit' : 'Add'}
+                linkText={isEmpty ? 'Add' : isToday ? 'Edit' : undefined}
                 href={`/record/daily?date=${selectedDateString}`}
               />
               <DailyEmotionSection emotionId={dailyEmotionId} emotionReasons={dailyEmotionReasons} />
 
               {/* Daily Note */}
               <SectionTitle
-                title="Daily Note"
-                linkText={isToday && !isEmpty ? 'Edit' : 'Add'}
+                title="Diary"
+                linkText={isEmpty ? 'Add' : isToday ? 'Edit' : undefined}
                 href={isToday && !isEmpty ? `/record/daily?date=${selectedDateString}&step=diary` : undefined}
               />
-              <DailyNoteSection diaryEntry={diaryEntry} />
+              <DiarySection diaryEntry={diaryEntry} />
 
               {/* Moment Emotion */}
               <SectionTitle title="Moment Emotion" linkText="Add" href={`/record/moment?date=${selectedDateString}`} />

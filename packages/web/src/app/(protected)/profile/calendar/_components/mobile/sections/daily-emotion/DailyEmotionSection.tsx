@@ -27,6 +27,7 @@ import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';
 
 interface DailyEmotionSectionProps {
   emotionRecords?: EmotionRecordDetail;
+  isLoading?: boolean;
 }
 
 /**
@@ -35,7 +36,7 @@ interface DailyEmotionSectionProps {
  * ============================================
  */
 
-export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSectionProps) {
+export default function DailyEmotionSection({ emotionRecords, isLoading = false }: DailyEmotionSectionProps) {
   /**
    * --------------------------------------------
    * 1. External Hooks
@@ -69,9 +70,11 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
    */
   return (
     <section className="flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pb-9">
-      {/* Selected date daily emotion */}
+      {/* Loading state */}
+      {isLoading && <div className="flex h-[458px] w-full items-center justify-center" />}
 
-      {isEmpty && (
+      {/* Empty state */}
+      {!isLoading && isEmpty && (
         <>
           <EmotionPlanetNull emotionId={accentEmotionId} />
           <Link
@@ -85,7 +88,8 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
         </>
       )}
 
-      {!isEmpty && (
+      {/* Data state */}
+      {!isLoading && !isEmpty && (
         <>
           <EmotionPlanetScene emotionId={emotionId} />
           <Text color={emotionColor} className="!text-center !text-3xl transition-all duration-400">
@@ -105,12 +109,12 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
             className="!mt-6 !w-full !font-normal"
             onClick={() => setIsDrawerOpen(true)}
           >
-            See Detail <Icon size={20}>arrow_forward</Icon>
+            See Detail
           </Button>
         </>
       )}
 
-      {!isEmpty && (
+      {!isLoading && !isEmpty && (
         <EmotionDetailDrawer
           isOpen={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}

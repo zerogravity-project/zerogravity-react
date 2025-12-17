@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Box, Button, Callout, Checkbox, Flex, Link, Text } from '@radix-ui/themes';
+import { Button, Callout, Checkbox, Link, Text } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
@@ -89,54 +89,39 @@ export default function ConsentPage() {
    * --------------------------------------------
    */
   return (
-    <Flex
-      direction="column"
-      align="center"
-      justify="center"
-      style={{
-        minHeight: '100vh',
-        padding: '2rem',
-        backgroundColor: 'var(--gray-1)',
-      }}
-    >
-      <Box
-        style={{
-          maxWidth: '600px',
-          width: '100%',
-          backgroundColor: 'var(--color-background)',
-          borderRadius: 'var(--radius-4)',
-          padding: '2rem',
-          boxShadow: 'var(--shadow-4)',
-        }}
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--gray-1)] p-8">
+      <div
+        className="w-full max-w-[600px] rounded-[var(--radius-4)] bg-[var(--color-background)] p-8"
+        style={{ boxShadow: 'var(--shadow-4)' }}
       >
         {/* Logo and Title */}
-        <Flex direction="column" align="center" gap="4" mb="6">
+        <div className="mb-6 flex flex-col items-center gap-4">
           <Logo width={48} />
-          <Flex direction="column" align="center" gap="2">
+          <div className="flex flex-col items-center gap-2">
             <Text size="6" weight="bold">
               Welcome to ZeroGravity
             </Text>
             <Text size="3" color="gray" style={{ textAlign: 'center' }}>
               Before you begin, please review and accept our terms
             </Text>
-          </Flex>
-        </Flex>
+          </div>
+        </div>
 
         {/* Required Consents */}
-        <Flex direction="column" gap="4" mb="5">
+        <div className="mb-5 flex flex-col gap-4">
           <Text size="4" weight="bold" mb="2">
             Required Agreements
           </Text>
 
           {/* Terms of Service */}
-          <Flex gap="3" align="start">
+          <div className="flex items-start gap-3">
             <Checkbox
               checked={consents.termsAgreed}
               onCheckedChange={checked => setConsents({ ...consents, termsAgreed: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
-            <Flex direction="column" gap="1" style={{ flex: 1 }}>
+            <div className="flex flex-1 flex-col gap-1">
               <Text size="3">
                 I agree to the{' '}
                 <Link href="/terms/service" target="_blank" rel="noopener noreferrer" color="blue" underline="hover">
@@ -144,18 +129,18 @@ export default function ConsentPage() {
                 </Link>{' '}
                 <Text color="red">*</Text>
               </Text>
-            </Flex>
-          </Flex>
+            </div>
+          </div>
 
           {/* Privacy Policy */}
-          <Flex gap="3" align="start">
+          <div className="flex items-start gap-3">
             <Checkbox
               checked={consents.privacyAgreed}
               onCheckedChange={checked => setConsents({ ...consents, privacyAgreed: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
-            <Flex direction="column" gap="1" style={{ flex: 1 }}>
+            <div className="flex flex-1 flex-col gap-1">
               <Text size="3">
                 I agree to the{' '}
                 <Link href="/terms/privacy" target="_blank" rel="noopener noreferrer" color="blue" underline="hover">
@@ -163,18 +148,18 @@ export default function ConsentPage() {
                 </Link>{' '}
                 <Text color="red">*</Text>
               </Text>
-            </Flex>
-          </Flex>
+            </div>
+          </div>
 
           {/* Sensitive Data Consent */}
-          <Flex gap="3" align="start">
+          <div className="flex items-start gap-3">
             <Checkbox
               checked={consents.sensitiveDataConsent}
               onCheckedChange={checked => setConsents({ ...consents, sensitiveDataConsent: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
-            <Flex direction="column" gap="1" style={{ flex: 1 }}>
+            <div className="flex flex-1 flex-col gap-1">
               <Text size="3">
                 I agree to the collection and processing of{' '}
                 <Link
@@ -191,25 +176,25 @@ export default function ConsentPage() {
               <Text size="2" color="gray">
                 Includes emotion data, health-related information, and personal notes
               </Text>
-            </Flex>
-          </Flex>
-        </Flex>
+            </div>
+          </div>
+        </div>
 
         {/* Optional Consents */}
-        <Flex direction="column" gap="4" mb="6">
+        <div className="mb-6 flex flex-col gap-4">
           <Text size="4" weight="bold" mb="2">
             Optional Features
           </Text>
 
           {/* AI Analysis Consent */}
-          <Flex gap="3" align="start">
+          <div className="flex items-start gap-3">
             <Checkbox
               checked={consents.aiAnalysisConsent}
               onCheckedChange={checked => setConsents({ ...consents, aiAnalysisConsent: checked === true })}
               size="2"
               style={{ marginTop: '2px' }}
             />
-            <Flex direction="column" gap="2" style={{ flex: 1 }}>
+            <div className="flex flex-1 flex-col gap-2">
               <Text size="3">
                 I agree to{' '}
                 <Link
@@ -231,12 +216,12 @@ export default function ConsentPage() {
                   </Text>
                 </Callout.Text>
               </Callout.Root>
-            </Flex>
-          </Flex>
-        </Flex>
+            </div>
+          </div>
+        </div>
 
         {/* Submit Button */}
-        <Flex direction="column" gap="3">
+        <div className="flex flex-col gap-3">
           <Button
             size="3"
             disabled={!allRequiredConsentsChecked || isUpdatingConsent}
@@ -248,8 +233,8 @@ export default function ConsentPage() {
           <Text size="2" color="gray" style={{ textAlign: 'center' }}>
             <Text color="red">*</Text> Required to use ZeroGravity
           </Text>
-        </Flex>
-      </Box>
-    </Flex>
+        </div>
+      </div>
+    </div>
   );
 }

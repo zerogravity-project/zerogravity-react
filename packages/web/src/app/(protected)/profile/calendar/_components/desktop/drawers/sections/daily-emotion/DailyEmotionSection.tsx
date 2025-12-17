@@ -58,13 +58,10 @@ export default function DailyEmotionSection({ emotionId, emotionReasons }: Daily
           !isEmpty ? 'pb-7' : 'pb-1'
         )}
       >
-        {/* Selected date daily emotion */}
-        {isEmpty && (
-          <>
-            <EmotionPlanetNull emotionId={accentEmotionId} width={240} height={240} isShowText={false} />
-          </>
-        )}
+        {/* Empty state */}
+        {isEmpty && <EmotionPlanetNull emotionId={accentEmotionId} width={240} height={240} isShowText={false} />}
 
+        {/* Data state */}
         {!isEmpty && (
           <>
             <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />

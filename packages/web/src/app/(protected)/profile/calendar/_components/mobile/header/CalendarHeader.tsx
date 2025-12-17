@@ -18,6 +18,7 @@ import { useCalendar } from '../../../_contexts/CalendarContext';
 
 interface CalendarHeaderProps {
   emotionRecords?: GetEmotionRecordsResponse;
+  isLoading?: boolean;
 }
 
 /**
@@ -26,7 +27,7 @@ interface CalendarHeaderProps {
  * ============================================
  */
 
-export default function CalendarHeader({ emotionRecords }: CalendarHeaderProps) {
+export default function CalendarHeader({ emotionRecords, isLoading = false }: CalendarHeaderProps) {
   /**
    * --------------------------------------------
    * 1. External Hooks
@@ -61,6 +62,7 @@ export default function CalendarHeader({ emotionRecords }: CalendarHeaderProps) 
               variant="surface"
               color="gray"
               onClick={goToPreviousWeek}
+              disabled={isLoading}
               className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
             >
               <Icon>chevron_left</Icon>
@@ -70,12 +72,20 @@ export default function CalendarHeader({ emotionRecords }: CalendarHeaderProps) 
               variant="surface"
               color="gray"
               onClick={goToNextWeek}
+              disabled={isLoading}
               className="!w-8 !cursor-pointer !rounded-l-none"
             >
               <Icon>chevron_right</Icon>
             </Button>
           </div>
-          <Button size="2" variant="surface" color="gray" onClick={goToToday} className="!cursor-pointer">
+          <Button
+            size="2"
+            variant="surface"
+            color="gray"
+            onClick={goToToday}
+            disabled={isLoading}
+            className="!cursor-pointer"
+          >
             Today
           </Button>
         </div>
@@ -109,7 +119,7 @@ export default function CalendarHeader({ emotionRecords }: CalendarHeaderProps) 
                 variant={!isEmpty ? (isSelectedDate ? 'solid' : 'soft') : 'soft'}
                 color={isEmpty ? (isSelectedDate ? undefined : 'gray') : EMOTION_STEPS[dailyEmotionId].color}
                 className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`, isEmpty && '!bg-transparent')}
-                disabled={isAfterToday}
+                disabled={isAfterToday || isLoading}
               >
                 {date.getDate()}
               </Button>

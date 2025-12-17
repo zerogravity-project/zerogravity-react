@@ -12,6 +12,8 @@ import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
 
 import { useChart } from '../../_contexts/ChartContext';
 
+import { ContentSkeleton, HeaderSkeleton } from './_components/AiAnalysisDrawerSkeleton';
+
 /**
  * ============================================
  * Type Definitions
@@ -104,7 +106,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
    * 4. Query Hooks
    * --------------------------------------------
    */
-  const { data: periodAnalysisData } = usePeriodAnalysisQuery(
+  const { data: periodAnalysisData, isLoading } = usePeriodAnalysisQuery(
     {
       period: timePeriod,
       startDate: startDate,
@@ -164,9 +166,12 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
             {/* Header - Fixed */}
             <div className={cn('z-10 flex-shrink-0', isScrolling && 'border-b border-[var(--gray-3)]')}>
               <header className="relative flex w-full items-center p-4">
-                <Text size="3">
-                  {startDateLabel} - {endDateLabel}
-                </Text>
+                {isLoading && <HeaderSkeleton />}
+                {!isLoading && (
+                  <Text size="3">
+                    {startDateLabel} - {endDateLabel}
+                  </Text>
+                )}
 
                 <button
                   onClick={onClose}
@@ -180,19 +185,22 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
             {/* Scrollable Content */}
             <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto pb-5">
-              <div className="flex flex-col gap-6 p-4">
-                <Blockquote size="2">{periodAnalysisData?.data.summary.overview}</Blockquote>
-                <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
-                  {periodAnalysisData?.data.summary.keyInsights.map((insight, index) => (
-                    <li key={`insight-${index}`}>{parseBoldMarkdown(insight)}</li>
-                  ))}
-                </ul>
-                <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
-                  {periodAnalysisData?.data.summary.recommendations.map((recommendation, index) => (
-                    <li key={`recommendation-${index}`}>{parseBoldMarkdown(recommendation)}</li>
-                  ))}
-                </ul>
-              </div>
+              {isLoading && <ContentSkeleton />}
+              {!isLoading && (
+                <div className="flex flex-col gap-6 p-4">
+                  <Blockquote size="2">{periodAnalysisData?.data.summary.overview}</Blockquote>
+                  <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
+                    {periodAnalysisData?.data.summary.keyInsights.map((insight, index) => (
+                      <li key={`insight-${index}`}>{parseBoldMarkdown(insight)}</li>
+                    ))}
+                  </ul>
+                  <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
+                    {periodAnalysisData?.data.summary.recommendations.map((recommendation, index) => (
+                      <li key={`recommendation-${index}`}>{parseBoldMarkdown(recommendation)}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
               {isScrollable && !isScrollAtBottom && (

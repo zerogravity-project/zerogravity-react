@@ -2,14 +2,16 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button, Card, Flex, Heading, Text } from '@radix-ui/themes';
+import { Button, Heading, Text } from '@radix-ui/themes';
 import { motion } from 'motion/react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { useIsSm } from '@zerogravity/shared/hooks';
 import { getTodayString } from '@zerogravity/shared/utils';
 
 export default function RecordSelectionPage() {
   const router = useRouter();
+  const isSm = useIsSm();
   const today = getTodayString();
 
   const handleMomentRecord = () => {
@@ -28,84 +30,98 @@ export default function RecordSelectionPage() {
         transition={{ duration: 0.5 }}
         className="w-full max-w-2xl"
       >
-        <Flex direction="column" gap="6">
-          <Flex direction="column" gap="2" align="center">
-            <Heading size="8" weight="medium" align="center">
+        <div className="flex flex-col gap-4 sm:gap-6">
+          <div className="flex flex-col items-center gap-2">
+            <Heading size={isSm ? '7' : '8'} weight="medium" align="center">
               Record Your Emotions
             </Heading>
-            <Text size="3" color="gray" align="center">
-              Choose how you want to track your emotions today
+            <Text size={isSm ? '2' : '3'} color="gray" align="center">
+              Choose how you want to track your emotions
             </Text>
-          </Flex>
+          </div>
 
-          <Flex direction="column" gap="4" className="w-full">
+          <div className="flex w-full flex-col gap-3 sm:gap-4">
             {/* Moment Record Card */}
-            <Card asChild>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button
-                  size="4"
-                  variant="soft"
-                  className="!h-auto !w-full !cursor-pointer !p-6"
-                  onClick={handleMomentRecord}
-                >
-                  <Flex direction="column" gap="3" align="start" className="w-full">
-                    <Flex gap="3" align="center">
-                      <Icon className="!text-[32px]">bolt</Icon>
-                      <Heading size="6" weight="medium">
-                        Moment Record
-                      </Heading>
-                    </Flex>
-                    <Text size="3" color="gray" align="left">
-                      Quick emotional check-in. Capture your current emotion and the reason behind it in just 2 simple
-                      steps.
+
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                size="4"
+                variant="soft"
+                className="!h-auto !w-full !cursor-pointer !p-4 sm:!p-6"
+                onClick={handleMomentRecord}
+              >
+                <div className="flex w-full flex-col items-start gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Icon className="!text-[24px] sm:!text-[32px]">bolt</Icon>
+                    <Heading size={isSm ? '5' : '6'} weight="medium">
+                      Moment Record
+                    </Heading>
+                  </div>
+                  <Text size={isSm ? '2' : '3'} color="gray" align="left">
+                    Quick emotional check-in. Capture your current emotion and the reason behind it in just 2 simple
+                    steps.
+                  </Text>
+                  <div className="mt-1 flex gap-2 sm:mt-2">
+                    <Text
+                      size={isSm ? '1' : '2'}
+                      weight="medium"
+                      className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    >
+                      2 steps
                     </Text>
-                    <Flex gap="2" className="mt-2">
-                      <Text size="2" weight="medium" className="rounded-full bg-[var(--accent-3)] px-3 py-1">
-                        2 steps
-                      </Text>
-                      <Text size="2" weight="medium" className="rounded-full bg-[var(--accent-3)] px-3 py-1">
-                        ~1 minute
-                      </Text>
-                    </Flex>
-                  </Flex>
-                </Button>
-              </motion.div>
-            </Card>
+                    <Text
+                      size={isSm ? '1' : '2'}
+                      weight="medium"
+                      className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    >
+                      ~1 minute
+                    </Text>
+                  </div>
+                </div>
+              </Button>
+            </motion.div>
 
             {/* Daily Record Card */}
-            <Card asChild>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Button
-                  size="4"
-                  variant="surface"
-                  className="!h-auto !w-full !cursor-pointer !p-6"
-                  onClick={handleDailyRecord}
-                >
-                  <Flex direction="column" gap="3" align="start" className="w-full">
-                    <Flex gap="3" align="center">
-                      <Icon className="!text-[32px]">edit_note</Icon>
-                      <Heading size="6" weight="medium">
-                        Daily Record
-                      </Heading>
-                    </Flex>
-                    <Text size="3" color="gray" align="left">
-                      Complete emotional journal entry. Record your emotion, identify the reason, and write detailed
-                      notes about your day.
+
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+              <Button
+                size="4"
+                variant="surface"
+                className="!h-auto !w-full !cursor-pointer !p-4 sm:!p-6"
+                onClick={handleDailyRecord}
+              >
+                <div className="flex w-full flex-col items-start gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Icon className="!text-[24px] sm:!text-[32px]">edit_note</Icon>
+                    <Heading size={isSm ? '5' : '6'} weight="medium">
+                      Daily Record
+                    </Heading>
+                  </div>
+                  <Text size={isSm ? '2' : '3'} color="gray" align="left">
+                    Complete emotional journal entry. Record your emotion, identify the reason, and write detailed notes
+                    about your day.
+                  </Text>
+                  <div className="mt-1 flex gap-2 sm:mt-2">
+                    <Text
+                      size={isSm ? '1' : '2'}
+                      weight="medium"
+                      className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    >
+                      3 steps
                     </Text>
-                    <Flex gap="2" className="mt-2">
-                      <Text size="2" weight="medium" className="rounded-full bg-[var(--accent-3)] px-3 py-1">
-                        3 steps
-                      </Text>
-                      <Text size="2" weight="medium" className="rounded-full bg-[var(--accent-3)] px-3 py-1">
-                        ~3-5 minutes
-                      </Text>
-                    </Flex>
-                  </Flex>
-                </Button>
-              </motion.div>
-            </Card>
-          </Flex>
-        </Flex>
+                    <Text
+                      size={isSm ? '1' : '2'}
+                      weight="medium"
+                      className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    >
+                      ~3-5 minutes
+                    </Text>
+                  </div>
+                </div>
+              </Button>
+            </motion.div>
+          </div>
+        </div>
       </motion.div>
     </div>
   );

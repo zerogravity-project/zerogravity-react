@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { Button, Heading } from '@radix-ui/themes';
+import { Button, Heading, Text } from '@radix-ui/themes';
 
 import { formatDateString } from '@zerogravity/shared/utils';
 
@@ -59,16 +59,24 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
         </Link>
       </div>
 
-      <ul className="flex w-full flex-col items-center">
-        {emotionRecords?.map((record, index) => (
-          <MomentEmotionList
-            key={index}
-            emotionId={record.emotionId}
-            time={record.createdAt}
-            reasons={record.reasons}
-          />
-        ))}
-      </ul>
+      {emotionRecords?.length === 0 ? (
+        <div className="flex w-full flex-col items-center justify-center py-14">
+          <Text as="p" className="!text-[var(--gray-a7)]" align="center">
+            A quiet day so far
+          </Text>
+        </div>
+      ) : (
+        <ul className="flex w-full flex-col items-center">
+          {emotionRecords?.map((record, index) => (
+            <MomentEmotionList
+              key={index}
+              emotionId={record.emotionId}
+              time={record.createdAt}
+              reasons={record.reasons}
+            />
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
