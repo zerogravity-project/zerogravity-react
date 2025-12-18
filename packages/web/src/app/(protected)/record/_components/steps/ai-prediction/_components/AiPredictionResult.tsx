@@ -1,6 +1,6 @@
 'use client';
 
-import { Badge, Button, Heading, Text } from '@radix-ui/themes';
+import { Badge, Button, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { useCallback } from 'react';
 
 import type { EmotionId } from '@zerogravity/shared/components/ui/emotion';
@@ -73,7 +73,19 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
 
   /**
    * --------------------------------------------
-   * 3. Return
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+
+  /** Current emotion step data based on suggested emotion ID */
+  const emotionStep = predictionData.suggestedEmotionId ? EMOTION_STEPS[predictionData.suggestedEmotionId] : null;
+
+  /** Emotion color for styling */
+  const emotionColor = emotionStep?.color;
+
+  /**
+   * --------------------------------------------
+   * 4. Return
    * --------------------------------------------
    */
   return (
@@ -90,71 +102,75 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
       </div>
 
       {/* AI Analysis Results */}
-      <div className="flex w-full max-w-[480px] flex-col gap-6 pt-6">
-        {/* Suggested Emotion */}
-        {predictionData.suggestedEmotionId && (
-          <div className="flex flex-col items-center gap-3 rounded-3xl border border-[var(--gray-a5)] p-6">
-            <Text color="gray" size="2" weight="medium">
-              Suggested Emotion
-            </Text>
-            <EmotionPlanetImage emotionId={predictionData.suggestedEmotionId} width={80} height={80} />
-            <Text color={EMOTION_STEPS[predictionData.suggestedEmotionId].color} className="!text-2xl !font-normal">
-              {EMOTION_STEPS[predictionData.suggestedEmotionId].type}
-            </Text>
-          </div>
-        )}
-
-        {/* Suggested Reasons */}
-        {predictionData.suggestedReasons && predictionData.suggestedReasons.length > 0 && (
-          <div className="flex flex-col gap-3 rounded-3xl border border-[var(--gray-a5)] p-6">
-            <Text color="gray" size="2" weight="medium" className="text-center">
-              Suggested Reasons
-            </Text>
-            <div className="flex flex-wrap justify-center gap-2">
-              {predictionData.suggestedReasons?.map(reason => (
+      <div className="mobile:pb-12 flex min-h-0 w-full max-w-[480px] flex-1 flex-col gap-10 overflow-hidden py-10">
+        {/* Emotion Visual */}
+        <div className="flex flex-col items-center justify-center">
+          {emotionStep && (
+            <>
+              <EmotionPlanetImage emotionId={predictionData.suggestedEmotionId!} width={100} height={100} />
+              <Text
+                color={emotionColor}
+                className="mobile:!text-xl !text-center !text-lg !font-normal transition-all duration-400"
+              >
+                {emotionStep.type}
+              </Text>
+            </>
+          )}
+          {predictionData.suggestedReasons && predictionData.suggestedReasons.length > 0 && (
+            <div className="mt-5 flex max-w-[480px] flex-wrap gap-2 px-5">
+              {predictionData.suggestedReasons.map(reason => (
                 <Badge key={reason} color="gray" radius="full" variant="soft" className="!font-normal">
                   {reason}
                 </Badge>
               ))}
             </div>
-          </div>
-        )}
-
+          )}
+        </div>
         {/* AI Reasoning */}
-        <div className="flex flex-col gap-3 rounded-3xl border border-[var(--gray-a5)] p-6">
-          <Text color="gray" size="2" weight="medium">
-            AI Analysis
-          </Text>
-          <Text size="2" className="!leading-relaxed">
-            {predictionData.reasoning}
-          </Text>
-          <div className="mt-2 flex items-center justify-between">
-            <Text color="gray" size="1">
-              Confidence
-            </Text>
-            <Text size="1" weight="medium">
-              {Math.round(predictionData.confidence * 100)}%
-            </Text>
+
+        <div className="max-mobile:mx-4 flex min-h-0 flex-1 flex-col overflow-hidden rounded-[6px] border border-[var(--gray-3)] bg-[var(--color-surface)]">
+          <div className="flex min-h-0 flex-1 flex-col">
+            <div className="flex items-center justify-between border-b border-[var(--gray-3)] bg-[var(--gray-a2)] px-5 pt-3.5 pb-3">
+              <div className="flex items-center gap-2">
+                <Icon size={16}>auto_awesome</Icon>
+                <Text color="gray" size="3" weight="medium">
+                  AI Analysis
+                </Text>
+              </div>
+
+              <Text size="2" color={emotionColor} weight="medium">
+                (Confidence: {Math.round(predictionData.confidence * 100)}%)
+              </Text>
+            </div>
+
+            <ScrollArea type="auto" scrollbars="vertical" style={{ height: '100%' }}>
+              <div className="px-5 py-4">
+                <Text size="2" className="!leading-relaxed">
+                  {predictionData.reasoning}
+                </Text>
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-3">
-        <div className="flex w-full gap-3">
-          <Button
-            onClick={handleReject}
-            variant="surface"
-            className="mobile:!rounded-[9999px] !flex-1 !cursor-pointer"
-            size="4"
-            radius="none"
-          >
-            <Icon>close</Icon>
-            Reject
-          </Button>
+      <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
+        <Button
+          onClick={handleReject}
+          variant="surface"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+          color={emotionColor}
+          size="4"
+          radius="none"
+        >
+          <Icon>arrow_back</Icon>
+        </Button>
+        <div className="w-full">
           <Button
             onClick={handleAccept}
-            className="mobile:!rounded-[9999px] !flex-1 !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            color={emotionColor}
             size="4"
             radius="none"
           >

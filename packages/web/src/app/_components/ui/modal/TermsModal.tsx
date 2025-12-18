@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, Dialog, Flex } from '@radix-ui/themes';
+import { Button, Dialog } from '@radix-ui/themes';
 
 import { AIAnalysisContent } from '@/app/(public)/terms/[type]/_components/AIAnalysisContent';
 import { PrivacyPolicyContent } from '@/app/(public)/terms/[type]/_components/PrivacyPolicyContent';
@@ -104,13 +104,13 @@ export function TermsModal() {
           <ContentComponent />
         </div>
 
-        <Flex gap="3" mt="4" justify="end">
+        <div className="mt-4 flex justify-end gap-3">
           <Dialog.Close>
             <Button variant="soft" color="gray">
               Close
             </Button>
           </Dialog.Close>
-        </Flex>
+        </div>
       </Dialog.Content>
     </Dialog.Root>
   );

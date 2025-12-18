@@ -22,18 +22,18 @@
 
 ---
 
-## Table of Contents
+## 📑 Table of Contents
 
-1. [Overview](#-overview)
-2. [Key Features](#-key-features)
-3. [Tech Stack](#-tech-stack)
-4. [Architecture](#-architecture)
-5. [Technical Challenges & Solutions](#-technical-challenges--solutions)
-6. [Getting Started](#-getting-started)
-7. [Screenshots](#-screenshots)
-8. [Roadmap](#-roadmap)
-9. [Related](#-related)
-10. [Author](#-author)
+1. [📖 Overview](#-overview)
+2. [✨ Key Features](#-key-features)
+3. [🛠 Tech Stack](#-tech-stack)
+4. [🏗 Architecture](#-architecture)
+5. [🔧 Technical Challenges & Solutions](#-technical-challenges--solutions)
+6. [🚀 Getting Started](#-getting-started)
+7. [📸 Screenshots](#-screenshots)
+8. [🗓 Roadmap](#-roadmap)
+9. [🔗 Related](#-related)
+10. [👤 Author](#-author)
 
 ---
 

@@ -1,5 +1,3 @@
-import { Box, Container, Flex, Heading, Text } from '@radix-ui/themes';
-
 /**
  * ============================================
  * Type Definitions
@@ -24,37 +22,26 @@ interface TermsLayoutProps {
  */
 export function TermsLayout({ title, lastUpdated, children }: TermsLayoutProps) {
   return (
-    <Box style={{ minHeight: '100vh', backgroundColor: 'var(--gray-1)', padding: '2rem 0' }}>
-      <Container size="3">
+    <main className="pt-topnav-height mobile:pb-8 min-h-screen bg-[var(--gray-1)] pb-10">
+      <div className="mobile:mt-10 mx-auto mt-10 max-w-3xl px-5">
         {/* Header */}
-        <Flex direction="column" align="center" gap="4" mb="6" mt="6">
-          <Flex direction="column" align="center" gap="2">
-            <Heading size="8" align="center">
-              {title}
-            </Heading>
-            <Text size="2" color="gray">
-              Last Updated:{' '}
-              {new Date(lastUpdated).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </Text>
-          </Flex>
-        </Flex>
+        <header className="mobile:mb-10 mb-8 flex flex-col items-center gap-2 text-center">
+          <h1 className="text-3xl font-bold">{title}</h1>
+          <time dateTime={lastUpdated} className="text-sm text-[var(--gray-11)]">
+            Last Updated:{' '}
+            {new Date(lastUpdated).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </time>
+        </header>
 
         {/* Content */}
-        <Box
-          style={{
-            backgroundColor: 'var(--color-background)',
-            borderRadius: 'var(--radius-4)',
-            padding: '2rem',
-            boxShadow: 'var(--shadow-2)',
-          }}
-        >
+        <article className="mobile:px-8 mobile:mb-10 rounded-lg bg-[var(--color-background)] shadow-md">
           {children}
-        </Box>
-      </Container>
-    </Box>
+        </article>
+      </div>
+    </main>
   );
 }
