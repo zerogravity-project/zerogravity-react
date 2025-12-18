@@ -27,6 +27,7 @@ interface EmotionPlanetSceneProps {
   isFreeze?: boolean;
   isGlow?: boolean;
   isSparkles?: boolean;
+  isLoading?: boolean;
   isLoadingShowText?: boolean;
   isResize?: boolean;
   isLarge?: boolean;
@@ -51,6 +52,7 @@ export function EmotionPlanetScene({
   isFreeze = false,
   isGlow = true,
   isSparkles = true,
+  isLoading = false,
   isLoadingShowText = true,
   isResize = true,
   isLarge = false,
@@ -196,7 +198,7 @@ export function EmotionPlanetScene({
       {!isLarge && (
         <EmotionPlanetLoading
           emotionId={emotionId}
-          isVisible={!isLoaded}
+          isVisible={!isLoaded || isLoading}
           width={loadingWidth}
           height={loadingHeight}
           isShowText={isLoadingShowText}

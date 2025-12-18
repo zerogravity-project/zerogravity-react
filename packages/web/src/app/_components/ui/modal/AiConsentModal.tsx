@@ -2,7 +2,8 @@
 
 import Link from 'next/link';
 
-import { Button, Flex, Link as RadixLink } from '@radix-ui/themes';
+import { Button, Link as RadixLink } from '@radix-ui/themes';
+import { useSession } from 'next-auth/react';
 
 import { useUpdateConsentMutation } from '@/services/user/user.query';
 
@@ -31,6 +32,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
    * 1. External Hooks
    * --------------------------------------------
    */
+  const { update: updateSession } = useSession();
   const { closeModal } = useModal();
 
   /**
@@ -39,7 +41,18 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
    * --------------------------------------------
    */
   const { mutate: updateConsent } = useUpdateConsentMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      // Update next-auth session with new consent data
+      await updateSession({
+        user: {
+          consents: {
+            termsAgreed: true,
+            privacyAgreed: true,
+            sensitiveDataConsent: true,
+            aiAnalysisConsent: true,
+          },
+        },
+      });
       closeModal();
       onAgree();
     },
@@ -63,7 +76,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
         </Link>
       </RadixLink>
 
-      <Flex gap="3" justify="end">
+      <div className="flex justify-end gap-3">
         <Button variant="soft" color="gray" size="3" onClick={() => closeModal()}>
           Cancel
         </Button>
@@ -80,7 +93,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
         >
           Agree
         </Button>
-      </Flex>
+      </div>
     </div>
   );
 }

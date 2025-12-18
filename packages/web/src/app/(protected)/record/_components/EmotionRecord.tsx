@@ -124,7 +124,7 @@ export default function EmotionRecord() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="flex w-full flex-1 flex-col items-center"
+              className="flex min-h-0 w-full flex-1 flex-col items-center overflow-hidden"
             >
               <AiPredictionStep />
             </motion.div>
