@@ -10,6 +10,9 @@ import type { AxiosError } from 'axios';
 
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
+import { AI_QUERY_KEY } from '../ai/ai.query';
+import { CHART_QUERY_KEY } from '../chart/chart.query';
+
 import type {
   CreateEmotionRecordRequest,
   CreateEmotionRecordResponse,
@@ -59,8 +62,13 @@ export const useCreateEmotionRecordMutation = (options: UseCreateEmotionRecordMu
   return useMutation({
     mutationFn: (params: CreateEmotionRecordRequest) => emotionService.createEmotionRecord(params),
     onSuccess: data => {
-      // Invalidate emotion records query to refresh data
+      // Invalidate all related queries (use isFetching to show loading UI)
       queryClient.invalidateQueries({ queryKey: [EMOTION_QUERY_KEY.RECORDS] });
+      queryClient.invalidateQueries({ queryKey: [CHART_QUERY_KEY.LEVEL] });
+      queryClient.invalidateQueries({ queryKey: [CHART_QUERY_KEY.REASON] });
+      queryClient.invalidateQueries({ queryKey: [CHART_QUERY_KEY.COUNT] });
+      queryClient.invalidateQueries({ queryKey: [AI_QUERY_KEY.PERIOD_ANALYSIS] });
+      queryClient.invalidateQueries({ queryKey: [AI_QUERY_KEY.DIARY_SUMMARY] });
       options.onSuccess?.(data);
     },
     onError: options.onError,
@@ -88,8 +96,13 @@ export const useUpdateEmotionRecordMutation = (options: UseUpdateEmotionRecordMu
     mutationFn: ({ emotionRecordId, data }: UpdateEmotionRecordMutationParams) =>
       emotionService.updateEmotionRecord(emotionRecordId, data),
     onSuccess: data => {
-      // Invalidate emotion records query to refresh data
+      // Invalidate all related queries (use isFetching to show loading UI)
       queryClient.invalidateQueries({ queryKey: [EMOTION_QUERY_KEY.RECORDS] });
+      queryClient.invalidateQueries({ queryKey: [CHART_QUERY_KEY.LEVEL] });
+      queryClient.invalidateQueries({ queryKey: [CHART_QUERY_KEY.REASON] });
+      queryClient.invalidateQueries({ queryKey: [CHART_QUERY_KEY.COUNT] });
+      queryClient.invalidateQueries({ queryKey: [AI_QUERY_KEY.PERIOD_ANALYSIS] });
+      queryClient.invalidateQueries({ queryKey: [AI_QUERY_KEY.DIARY_SUMMARY] });
       options.onSuccess?.(data);
     },
     onError: options.onError,
