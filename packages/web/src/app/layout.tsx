@@ -11,7 +11,7 @@ export interface CustomIconDescriptorType extends IconDescriptor {
 
 const icon: CustomIconDescriptorType = {
   rel: 'stylesheet',
-  url: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined',
+  url: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block',
   precedence: 'default',
 };
 
