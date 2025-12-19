@@ -30,7 +30,7 @@ export function EmotionReasonsChart() {
    * 2. Query Hooks
    * --------------------------------------------
    */
-  const { data: reasonData } = useChartReasonQuery({ period: timePeriod, startDate });
+  const { data: reasonData, isFetching: isReasonFetching } = useChartReasonQuery({ period: timePeriod, startDate });
 
   /**
    * --------------------------------------------
@@ -41,16 +41,17 @@ export function EmotionReasonsChart() {
     <EmotionChartContainer title="Emotion Reasons" className="max-mobile:max-h-[200px]">
       <ScrollArea type="always" scrollbars="vertical" style={{ height: '100%' }}>
         <div className="flex h-full min-h-0 w-full min-w-0 flex-col gap-3 pr-7">
-          {reasonData?.data.map(reason => (
-            <div key={reason.label} className="flex items-center justify-between">
-              <Text size={isSm ? '2' : '1'} weight="light">
-                {reason.label}
-              </Text>
-              <Text size={isSm ? '2' : '1'} weight="regular" className="text-[var(--accent-9)]">
-                {reason.count}
-              </Text>
-            </div>
-          ))}
+          {!isReasonFetching &&
+            reasonData?.data.map(reason => (
+              <div key={reason.label} className="flex items-center justify-between">
+                <Text size={isSm ? '2' : '1'} weight="light">
+                  {reason.label}
+                </Text>
+                <Text size={isSm ? '2' : '1'} weight="regular" className="text-[var(--accent-9)]">
+                  {reason.count}
+                </Text>
+              </div>
+            ))}
         </div>
       </ScrollArea>
     </EmotionChartContainer>

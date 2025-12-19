@@ -1,19 +1,21 @@
 'use client';
 
 import { Chart } from 'chart.js/auto';
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
-import {
-  EMOTION_COLORS,
-  EMOTION_COLORS_MAP,
-  EMOTION_STEPS,
-  EMOTION_TYPES,
-} from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_COLORS, EMOTION_COLORS_MAP, EMOTION_TYPES } from '@zerogravity/shared/components/ui/emotion';
 
 import { useChartCountQuery } from '@/services/chart/chart.query';
 
+import { CHART_GRID_COLOR } from '../../_constants/chart.constants';
 import { useChart } from '../../_contexts/ChartContext';
-import { getChartConfig } from '../../_utils/chartUtils';
+import {
+  calculateTooltipLeftPosition,
+  createEmotionYScaleConfig,
+  formatTooltipDate,
+  getChartConfig,
+  getOrCreateTooltip,
+} from '../../_utils/chartUtils';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
@@ -44,29 +46,17 @@ export function EmotionCountChart() {
    * 3. Query Hooks
    * --------------------------------------------
    */
-  const { data: countData } = useChartCountQuery({ period: timePeriod, startDate });
+  const { data: countData, isFetching: isCountFetching } = useChartCountQuery({ period: timePeriod, startDate });
 
   /**
    * --------------------------------------------
-   * 4. Callbacks
+   * 4. Computed Values
    * --------------------------------------------
    */
 
-  /** Convert emotion value to label */
-  const valueToLabel = useCallback((value: number) => {
-    const labels = EMOTION_STEPS.map(step => step.type);
-    return labels[value] || '';
-  }, []);
-
-  /**
-   * --------------------------------------------
-   * 5. Computed Values
-   * --------------------------------------------
-   */
-
-  /** Group data by emotionId for chart datasets */
+  /** Group data by emotionId for chart datasets (empty when fetching) */
   const chartDatasets = useMemo(() => {
-    if (!countData?.data) return [];
+    if (isCountFetching || !countData?.data) return [];
 
     const groupedByEmotionId = countData.data.reduce(
       (acc, item) => {
@@ -77,10 +67,17 @@ export function EmotionCountChart() {
         acc[emotionId].push({
           x: item.position,
           y: item.emotionId,
+          timestamp: item.timestamp,
+          emotionType: item.emotionType,
+          daily: item.daily,
+          moment: item.moment,
         });
         return acc;
       },
-      {} as Record<number, Array<{ x: number; y: number }>>
+      {} as Record<
+        number,
+        Array<{ x: number; y: number; timestamp: string; emotionType: string; daily: number; moment: number }>
+      >
     );
 
     return Object.entries(groupedByEmotionId).map(([emotionIdStr, points]) => {
@@ -99,7 +96,7 @@ export function EmotionCountChart() {
         pointHoverRadius: 6,
       };
     });
-  }, [countData]);
+  }, [countData, isCountFetching]);
 
   /** Chart data configuration */
   const chartData = useMemo(
@@ -115,11 +112,15 @@ export function EmotionCountChart() {
       clip: false as const,
       responsive: true,
       maintainAspectRatio: false,
+      onHover: (event: any, elements: any[]) => {
+        const canvas = event.native?.target;
+        if (canvas) {
+          canvas.style.cursor = elements.length > 0 ? 'pointer' : 'default';
+        }
+      },
       scales: {
         x: {
-          grid: {
-            color: '#212225',
-          },
+          grid: { color: CHART_GRID_COLOR },
           type: 'linear' as const,
           min: 0,
           max: getChartConfig(timePeriod, startDate)?.max || 0,
@@ -127,31 +128,13 @@ export function EmotionCountChart() {
             stepSize: 1,
             callback: (value: string | number) => {
               const index = Number(value);
-              return index >= 0 && index <= (getChartConfig(timePeriod, startDate)?.max || 0)
-                ? getChartConfig(timePeriod, startDate)?.labels[index] || ''
-                : '';
+              const config = getChartConfig(timePeriod, startDate);
+              return index >= 0 && index <= (config?.max || 0) ? config?.labels[index] || '' : '';
             },
-            font: {
-              size: 11,
-            },
+            font: { size: 11 },
           },
         },
-        y: {
-          min: 0,
-          max: 6,
-          grid: {
-            color: '#212225',
-          },
-          ticks: {
-            callback: (tickValue: string | number) => valueToLabel(Number(tickValue)),
-            stepSize: 1,
-            autoSkip: false,
-            maxTicksLimit: 7,
-            font: {
-              size: 11,
-            },
-          },
-        },
+        y: createEmotionYScaleConfig(),
       },
       plugins: {
         legend: {
@@ -159,18 +142,57 @@ export function EmotionCountChart() {
           position: 'bottom' as const,
         },
         tooltip: {
-          callbacks: {
-            title: () => '',
-            label: (tooltipItem: any) => {
-              const dayIndex = Math.floor(tooltipItem.parsed.x);
-              const emotionLabel = valueToLabel(tooltipItem.parsed.y);
-              return `${getChartConfig(timePeriod, startDate)?.labels[dayIndex] || ''} - ${emotionLabel}`;
-            },
+          enabled: false,
+          external: (context: any) => {
+            const { chart, tooltip } = context;
+            const parentNode = chart.canvas.parentNode as HTMLElement;
+            const tooltipEl = getOrCreateTooltip(parentNode, 'count-tooltip');
+
+            if (tooltip.opacity === 0) {
+              tooltipEl.style.opacity = '0';
+              return;
+            }
+
+            if (tooltip.dataPoints && tooltip.dataPoints.length > 0) {
+              const dataPoint = tooltip.dataPoints[0];
+              const rawData = dataPoint.raw;
+
+              const emotionId = rawData.y;
+              const colorKey = EMOTION_COLORS[emotionId];
+              const emotionColor = EMOTION_COLORS_MAP[colorKey as keyof typeof EMOTION_COLORS_MAP];
+              const dateStr = formatTooltipDate(rawData.timestamp, timePeriod);
+
+              tooltipEl.innerHTML = `
+                <div style="font-weight: 600; color: #fff; margin-bottom: 4px; font-size: 13px;">
+                  ${dateStr}
+                </div>
+                <div style="color: ${emotionColor}; margin-bottom: 4px; font-size: 12px;">
+                  ${rawData.emotionType}
+                </div>
+                <div style="color: #aaa; font-size: 11px;">
+                  Daily <span style="font-weight: 600; color: #fff;">${rawData.daily}</span> / Moment <span style="font-weight: 600; color: #fff;">${rawData.moment}</span>
+                </div>
+              `;
+
+              const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
+              const parentRect = parentNode.getBoundingClientRect();
+              const tooltipRect = tooltipEl.getBoundingClientRect();
+              const left = calculateTooltipLeftPosition(
+                positionX + tooltip.caretX,
+                tooltipRect.width,
+                parentRect.width
+              );
+
+              tooltipEl.style.opacity = '1';
+              tooltipEl.style.left = left + 'px';
+              tooltipEl.style.top = positionY + tooltip.caretY - 10 + 'px';
+              tooltipEl.style.transform = 'translate(-50%, -100%)';
+            }
           },
         },
       },
     }),
-    [valueToLabel, timePeriod, startDate]
+    [timePeriod, startDate]
   );
 
   /**
@@ -179,14 +201,9 @@ export function EmotionCountChart() {
    * --------------------------------------------
    */
 
-  /** Initialize and update chart instance */
+  /** Initialize chart instance once */
   useEffect(() => {
     if (!chartRef.current) return;
-
-    // Destroy existing chart
-    if (chartInstanceRef.current) {
-      chartInstanceRef.current.destroy();
-    }
 
     chartInstanceRef.current = new Chart(chartRef.current, {
       type: 'scatter',
@@ -200,6 +217,16 @@ export function EmotionCountChart() {
         chartInstanceRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /** Update chart data and options (with animation) */
+  useEffect(() => {
+    if (!chartInstanceRef.current) return;
+
+    chartInstanceRef.current.data = chartData;
+    chartInstanceRef.current.options = chartOptions;
+    chartInstanceRef.current.update();
   }, [chartData, chartOptions]);
 
   /**
@@ -209,7 +236,7 @@ export function EmotionCountChart() {
    */
   return (
     <EmotionChartContainer title="Emotion Count Chart" className="max-mobile:h-[320px] sm:col-span-2">
-      <div className="h-full min-h-0 w-full min-w-0">
+      <div className="relative h-full min-h-0 w-full min-w-0">
         <canvas ref={chartRef} className="h-full w-full" />
       </div>
     </EmotionChartContainer>
