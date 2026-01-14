@@ -7,7 +7,7 @@ import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 import { EMOTION_STEPS } from './constants/emotion.constants';
 import { WobbleMesh } from './objects/WobbleMesh';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -39,7 +39,7 @@ const DEFAULT_LARGE_SPARKLES_PROPS = {
   speed: 0.05,
 };
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -53,7 +53,7 @@ interface EmotionPlanetProps {
   isLarge?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -66,7 +66,7 @@ export function EmotionPlanet({
   isSparkles = true,
   isLarge = false,
 }: EmotionPlanetProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Effects
    * --------------------------------------------
@@ -76,7 +76,7 @@ export function EmotionPlanet({
     onLoaded();
   }, [onLoaded]);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

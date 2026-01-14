@@ -27,7 +27,7 @@ import { EmotionChartContainer } from './common/EmotionChartContainer';
 // Register annotation plugin
 Chart.register(annotationPlugin);
 
-/**
+/*
  * ============================================
  * Type Extensions
  * ============================================
@@ -40,14 +40,14 @@ declare global {
   }
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function EmotionLevelChart() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -55,7 +55,7 @@ export function EmotionLevelChart() {
   const { accentColor } = useTheme();
   const { timePeriod, startDate } = useChart();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -63,14 +63,14 @@ export function EmotionLevelChart() {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Query Hooks
    * --------------------------------------------
    */
   const { data: levelData, isFetching: isLevelFetching } = useChartLevelQuery({ period: timePeriod, startDate });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Computed Values
    * --------------------------------------------
@@ -320,7 +320,7 @@ export function EmotionLevelChart() {
     [labels, levelData, hasAverage, timePeriod, startDate]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Effects
    * --------------------------------------------
@@ -354,7 +354,7 @@ export function EmotionLevelChart() {
     chartInstanceRef.current.update();
   }, [chartData, chartOptions]);
 
-  /**
+  /*
    * --------------------------------------------
    * 7. Return
    * --------------------------------------------

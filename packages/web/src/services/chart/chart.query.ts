@@ -12,7 +12,7 @@ import type { ApiResponse } from '@/types/api.types';
 import type { ChartCountResponse, ChartLevelResponse, ChartQueryParams, ChartReasonResponse } from './chart.dto';
 import { chartService } from './chart.service';
 
-/**
+/*
  * ============================================
  * Query Keys
  * ============================================
@@ -23,7 +23,7 @@ export const CHART_QUERY_KEY = {
   COUNT: 'chartCount',
 } as const;
 
-/**
+/*
  * ============================================
  * Hooks
  * ============================================

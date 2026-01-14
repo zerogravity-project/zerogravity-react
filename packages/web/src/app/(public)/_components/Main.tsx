@@ -16,14 +16,14 @@ import { EMOTION_COLORS, type EmotionColor } from '@zerogravity/shared/entities/
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function Main() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -32,14 +32,14 @@ export default function Main() {
   const isLg = useIsLg();
   const router = useRouter();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
    */
   const [isLoaded, setIsLoaded] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

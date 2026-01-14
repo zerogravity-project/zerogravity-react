@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 
 import { PlanetLoading } from '@zerogravity/shared/components/ui/loading';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -22,21 +22,21 @@ const LOADING_MESSAGES = [
   'Painting your day with light...',
 ];
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function AiPredictionLoading() {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [messageIndex, setMessageIndex] = useState(0);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Effects
    * --------------------------------------------
@@ -51,7 +51,7 @@ export default function AiPredictionLoading() {
     return () => clearInterval(interval);
   }, []);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

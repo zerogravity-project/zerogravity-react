@@ -1,8 +1,13 @@
+/**
+ * [useAuth hook]
+ * Authentication state management for Chrome extension
+ */
+
 import { useEffect, useState } from 'react';
 
 import { getUserInfo, type SessionData, type User } from '../lib/auth';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -17,7 +22,7 @@ interface UseAuthReturn {
   refetch: () => Promise<void>;
 }
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
@@ -28,7 +33,7 @@ interface UseAuthReturn {
  * Checks session only on mount (new tab open) as per user requirement
  */
 export function useAuth(): UseAuthReturn {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -39,7 +44,7 @@ export function useAuth(): UseAuthReturn {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Callbacks
    * --------------------------------------------
@@ -66,7 +71,7 @@ export function useAuth(): UseAuthReturn {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
@@ -76,7 +81,7 @@ export function useAuth(): UseAuthReturn {
     fetchAuthStatus();
   }, []);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

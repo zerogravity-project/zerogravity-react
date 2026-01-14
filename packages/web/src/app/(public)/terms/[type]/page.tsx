@@ -11,7 +11,7 @@ import { SensitiveDataContent } from './_components/SensitiveDataContent';
 import { ServiceTermsContent } from './_components/ServiceTermsContent';
 import { TermsLayout } from './_components/TermsLayout';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -40,7 +40,7 @@ const TERM_METADATA: Record<TermType, { title: string; lastUpdated: string }> = 
   },
 };
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -54,7 +54,7 @@ interface TermsPageProps {
   }>;
 }
 
-/**
+/*
  * ============================================
  * Helper Functions
  * ============================================
@@ -76,7 +76,7 @@ function renderContent(termType: TermType) {
   }
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -100,7 +100,7 @@ export default async function TermsPage({ params }: TermsPageProps) {
   );
 }
 
-/**
+/*
  * ============================================
  * Static Generation
  * ============================================

@@ -10,7 +10,7 @@ import type { EmotionId } from '@zerogravity/shared/entities/emotion';
 import { useSquareResize } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -28,7 +28,7 @@ interface EmotionPlanetImageProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -44,21 +44,21 @@ export function EmotionPlanetImage({
   className,
   ...props
 }: EmotionPlanetImageProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [isLoaded, setIsLoaded] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Custom Hooks
    * --------------------------------------------
    */
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

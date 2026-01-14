@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { cn } from '../../../../utils/styleUtils';
 import { EMOTION_STEPS } from '../constants/emotion.constants';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -19,14 +19,14 @@ interface EmotionPlanetGlowProps {
   isLarge?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function EmotionPlanetGlow({ emotionId, isVisible, width, height, isLarge = false }: EmotionPlanetGlowProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Derived Values
    * --------------------------------------------
@@ -34,7 +34,7 @@ export function EmotionPlanetGlow({ emotionId, isVisible, width, height, isLarge
   const resolvedWidth = isLarge && typeof width === 'number' ? width * 0.8 : width || '100%';
   const resolvedHeight = isLarge && typeof height === 'number' ? height * 0.8 : height || '100%';
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

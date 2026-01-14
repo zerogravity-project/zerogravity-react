@@ -13,7 +13,7 @@ import type { EmotionPredictionResponse } from '@/services/ai/ai.dto';
 
 import { FINAL_STEP, useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -24,14 +24,14 @@ interface AiPredictionResultProps {
   resetPredictEmotionMutation: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function AiPredictionResult({ predictionData, resetPredictEmotionMutation }: AiPredictionResultProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -39,7 +39,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
   const { setEmotionId, setDiaryEntry, setEmotionReasons, setAiAnalysisId, goToStep, emotionRecordType } =
     useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Callbacks
    * --------------------------------------------
@@ -71,7 +71,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
     resetPredictEmotionMutation();
   }, [resetPredictEmotionMutation]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -83,7 +83,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
   /** Emotion color for styling */
   const emotionColor = emotionStep?.color;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

@@ -4,21 +4,21 @@ import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DiaryTextArea() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { diaryEntry, setDiaryEntry, emotionValueToStepIndex } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

@@ -7,21 +7,21 @@ import { getTodayString } from '@zerogravity/shared/utils';
 
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DesktopCalendarHeader() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { goToNextMonth, goToPreviousMonth, goToToday, getMonthName, getYear } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -30,7 +30,7 @@ export default function DesktopCalendarHeader() {
   const year = getYear();
   const today = getTodayString();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

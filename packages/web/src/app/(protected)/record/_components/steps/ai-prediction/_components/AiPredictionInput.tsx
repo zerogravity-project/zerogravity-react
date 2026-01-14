@@ -11,7 +11,7 @@ import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -23,7 +23,7 @@ interface AiPredictionInputProps {
   setAiPredictionEntry: (value: string) => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -34,7 +34,7 @@ export default function AiPredictionInput({
   aiPredictionEntry,
   setAiPredictionEntry,
 }: AiPredictionInputProps) {
-  /**
+  /*
    * ------------------------------------------------------------
    * 1. External Hooks
    * ------------------------------------------------------------
@@ -43,14 +43,14 @@ export default function AiPredictionInput({
   const { openComponentModal } = useModal();
   const { goToStep } = useEmotionRecordContext();
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 2. States
    * ------------------------------------------------------------
    */
   const [isFocused, setIsFocused] = useState(false);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 3. Derived Values
    * ------------------------------------------------------------
@@ -58,7 +58,7 @@ export default function AiPredictionInput({
   const consents = session?.user?.consents;
   const isValid = aiPredictionEntry?.length >= 100 && aiPredictionEntry?.length <= 300;
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 4. Callbacks
    * ------------------------------------------------------------
@@ -94,7 +94,7 @@ export default function AiPredictionInput({
     predictEmotion({ diaryEntry: aiPredictionEntry });
   }, [aiPredictionEntry, isValid, predictEmotion, openComponentModal, consents?.aiAnalysisConsent]);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 5. Return
    * ------------------------------------------------------------

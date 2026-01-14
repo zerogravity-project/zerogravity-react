@@ -6,7 +6,7 @@ import { ReactNode } from 'react';
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -21,7 +21,7 @@ interface GeminiButtonProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

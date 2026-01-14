@@ -20,7 +20,7 @@ import type {
 } from './ai.dto';
 import { aiService } from './ai.service';
 
-/**
+/*
  * ============================================
  * Query Keys
  * ============================================
@@ -30,7 +30,7 @@ export const AI_QUERY_KEY = {
   DIARY_SUMMARY: 'aiDiarySummary',
 } as const;
 
-/**
+/*
  * ============================================
  * Hooks
  * ============================================

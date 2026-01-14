@@ -12,7 +12,7 @@ import { ChartPeriod, WEEK_LABELS, YEAR_LABELS } from '@/services/chart/chart.dt
 
 import { CHART_GRID_COLOR, TOOLTIP_STYLES } from '../_constants/chart.constants';
 
-/**
+/*
  * ============================================
  * Emotion Utilities
  * ============================================
@@ -52,7 +52,7 @@ export function generateEmotionRangeHtml(value: number): string {
   return `<span style="color: ${floorColor};">${floorType}</span> - <span style="color: ${ceilColor};">${ceilType}</span>`;
 }
 
-/**
+/*
  * ============================================
  * Tooltip Utilities
  * ============================================
@@ -95,7 +95,7 @@ export function calculateTooltipLeftPosition(caretX: number, tooltipWidth: numbe
   return left;
 }
 
-/**
+/*
  * ============================================
  * Scale Utilities
  * ============================================
@@ -120,7 +120,7 @@ export function createEmotionYScaleConfig() {
   };
 }
 
-/**
+/*
  * ============================================
  * Chart Configuration
  * ============================================

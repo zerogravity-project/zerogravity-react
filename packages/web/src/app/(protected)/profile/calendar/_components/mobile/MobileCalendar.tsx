@@ -8,21 +8,21 @@ import CalendarHeader from './header/CalendarHeader';
 import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function MobileCalendar() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { currentDate, selectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -36,7 +36,7 @@ export default function MobileCalendar() {
   const selectedWeekStart = startOfWeek(selectedDate);
   const selectedWeekEnd = endOfWeek(selectedDate);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Query Hooks
    * --------------------------------------------
@@ -54,7 +54,7 @@ export default function MobileCalendar() {
     endDateTime: format(selectedWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Computed Values
    * --------------------------------------------
@@ -70,7 +70,7 @@ export default function MobileCalendar() {
     record => format(record.createdAt, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

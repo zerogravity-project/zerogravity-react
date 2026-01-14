@@ -14,7 +14,7 @@ import { useChart } from '../../_contexts/ChartContext';
 
 import { ContentSkeleton, HeaderSkeleton } from './_components/AiAnalysisDrawerSkeleton';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -25,7 +25,7 @@ interface AiAnalysisDrawerProps {
   onClose: () => void;
 }
 
-/**
+/*
  * ============================================
  * Helper Functions
  * ============================================
@@ -68,21 +68,21 @@ function parseBoldMarkdown(text: string): (string | React.ReactElement)[] {
   return parts.length > 0 ? parts : [text];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. External Hooks
    * --------------------------------------------
@@ -90,7 +90,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
   const isOverLargeScreen = !useIsLg();
   const { timePeriod, startDate } = useChart();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -101,7 +101,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Query Hooks
    * --------------------------------------------
@@ -114,7 +114,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     isOpen
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Derived Values
    * --------------------------------------------
@@ -147,7 +147,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     ? format(new Date(periodAnalysisData.data.endDate), 'MMM d, yyyy')
     : '—';
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------

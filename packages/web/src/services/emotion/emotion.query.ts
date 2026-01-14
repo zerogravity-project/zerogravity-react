@@ -21,7 +21,7 @@ import type {
 } from './emotion.dto';
 import { emotionService } from './emotion.service';
 
-/**
+/*
  * ============================================
  * Query Keys
  * ============================================
@@ -30,7 +30,7 @@ export const EMOTION_QUERY_KEY = {
   RECORDS: 'emotionRecords',
 } as const;
 
-/**
+/*
  * ============================================
  * Hooks
  * ============================================

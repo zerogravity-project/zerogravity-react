@@ -11,7 +11,7 @@ import {
   EMOTION_TYPES,
 } from './emotion.constants';
 
-/**
+/*
  * ============================================
  * Pure Types
  * ============================================
@@ -20,7 +20,7 @@ import {
 /** Emotion level identifier (0-6, where 0 is most negative) */
 export type EmotionId = 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
-/**
+/*
  * ============================================
  * Derived Types
  * ============================================

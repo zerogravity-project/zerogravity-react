@@ -1,3 +1,8 @@
+/**
+ * [EmotionRecordContext]
+ * State management for emotion recording flow (daily/moment)
+ */
+
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -11,7 +16,7 @@ import { EmotionRecordType } from '@/services/emotion/emotion.dto';
 
 import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
-/**
+/*
  * ============================================================
  * Type Definitions
  * ============================================================
@@ -21,7 +26,7 @@ export type MainStep = 'emotion' | 'reason' | 'diary';
 export type OptionalStep = 'ai-prediction';
 export type RecordStep = MainStep | OptionalStep;
 
-/**
+/*
  * ============================================================
  * Constants: Step Configuration
  * ============================================================
@@ -43,7 +48,7 @@ export const FINAL_STEP: Record<EmotionRecordType, MainStep> = {
   daily: 'diary',
 };
 
-/**
+/*
  * ============================================================
  * Context Type Definition
  * ============================================================
@@ -102,7 +107,7 @@ interface EmotionRecordProviderProps {
   initialDailyDiaryEntry?: string;
 }
 
-/**
+/*
  * ============================================================
  * Emotion Record Provider
  * ============================================================
@@ -128,7 +133,7 @@ export const EmotionRecordProvider = ({
   initialDailyEmotionReasons,
   initialDailyDiaryEntry,
 }: EmotionRecordProviderProps) => {
-  /**
+  /*
    * ------------------------------------------------------------
    * 1. External Hooks
    * ------------------------------------------------------------
@@ -136,7 +141,7 @@ export const EmotionRecordProvider = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 2. States
    * ------------------------------------------------------------
@@ -160,7 +165,7 @@ export const EmotionRecordProvider = ({
   const initialStep = (searchParams.get('step') as RecordStep) || 'emotion';
   const [currentStep, setCurrentStep] = useState<RecordStep>(initialStep);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 3. Derived Values
    * ------------------------------------------------------------
@@ -171,7 +176,7 @@ export const EmotionRecordProvider = ({
   const isReasonValid = emotionReasons.length > 0;
   const isDiaryValid = diaryEntry.length <= 300;
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 4. Computed Values
    * ------------------------------------------------------------
@@ -224,7 +229,7 @@ export const EmotionRecordProvider = ({
     return currentStep === FINAL_STEP[emotionRecordType];
   }, [currentStep, emotionRecordType]);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 5. Helper Functions (Callbacks)
    * ------------------------------------------------------------
@@ -242,7 +247,7 @@ export const EmotionRecordProvider = ({
     [emotionRecordType, date]
   );
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 6. Step Navigation (Callbacks)
    * ------------------------------------------------------------
@@ -300,7 +305,7 @@ export const EmotionRecordProvider = ({
     }
   }, [currentStep, goToStep]);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 7. useEffect Hooks
    * ------------------------------------------------------------
@@ -327,7 +332,7 @@ export const EmotionRecordProvider = ({
     }
   }, [searchParams, canGoToStep, router, buildUrl]);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 8. Return
    * ------------------------------------------------------------
@@ -363,7 +368,7 @@ export const EmotionRecordProvider = ({
   );
 };
 
-/**
+/*
  * ============================================================
  * Custom Hook
  * ============================================================

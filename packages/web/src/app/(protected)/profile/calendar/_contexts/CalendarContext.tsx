@@ -1,3 +1,8 @@
+/**
+ * [CalendarContext]
+ * State management for emotion calendar navigation and selection
+ */
+
 'use client';
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
@@ -7,7 +12,7 @@ import { isSameDay } from '@zerogravity/shared/utils';
 import { MONTH_NAMES } from '../_constants/calendar.constants';
 import { getMonthInfo as getMonthInfoUtil, getWeekOfMonth } from '../_utils/dateUtils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -52,7 +57,7 @@ interface CalendarProviderProps {
   children: React.ReactNode;
 }
 
-/**
+/*
  * ============================================
  * Context
  * ============================================
@@ -63,7 +68,7 @@ interface CalendarProviderProps {
 
 const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
 
-/**
+/*
  * ============================================
  * Provider
  * ============================================
@@ -74,7 +79,7 @@ const CalendarContext = createContext<CalendarContextType | undefined>(undefined
  * @param children - Child components to wrap
  */
 export function CalendarProvider({ children }: CalendarProviderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -83,7 +88,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Callbacks - Navigation
    * --------------------------------------------
@@ -131,7 +136,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     setSelectedDate(today);
   }, [today]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Callbacks - Helpers
    * --------------------------------------------
@@ -191,7 +196,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     };
   }, [currentDate]);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Context Value
    * --------------------------------------------
@@ -236,7 +241,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     ]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------
@@ -244,7 +249,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }
 
-/**
+/*
  * ============================================
  * Custom Hook
  * ============================================

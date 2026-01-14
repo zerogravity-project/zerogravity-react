@@ -4,7 +4,7 @@
  * Uses Chrome Cookies API to read NextAuth session and theme from web app
  */
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -19,7 +19,7 @@ const SESSION_COOKIE_NAMES = {
   https: '__Secure-authjs.session-token',
 } as const;
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -38,7 +38,7 @@ export interface SessionData {
   expires?: string;
 }
 
-/**
+/*
  * ============================================
  * Functions
  * ============================================

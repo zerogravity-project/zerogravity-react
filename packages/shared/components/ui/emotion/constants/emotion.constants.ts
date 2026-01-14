@@ -5,7 +5,7 @@
 
 import type { EmotionStep } from '../types/emotion.types';
 
-/**
+/*
  * ============================================
  * UI-Specific Constants
  * ============================================

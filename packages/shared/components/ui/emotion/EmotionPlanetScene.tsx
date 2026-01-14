@@ -12,7 +12,7 @@ import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
 import { EmotionPlanetLoading } from './decorations/EmotionPlanetLoading';
 import { EmotionPlanet } from './EmotionPlanet';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -38,7 +38,7 @@ interface EmotionPlanetSceneProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -60,7 +60,7 @@ export function EmotionPlanetScene({
   onSceneLoaded,
   className,
 }: EmotionPlanetSceneProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -68,14 +68,14 @@ export function EmotionPlanetScene({
   const [isLoaded, setIsLoaded] = useState(false);
   const [showCanvas, setShowCanvas] = useState(delay === 0);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Custom Hooks
    * --------------------------------------------
    */
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Helper Functions
    * --------------------------------------------
@@ -96,7 +96,7 @@ export function EmotionPlanetScene({
     return typeof dimension === 'number' ? dimension * scale : dimension;
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
@@ -108,7 +108,7 @@ export function EmotionPlanetScene({
   const loadingWidth = getLoadingSize(resolvedWidth, resolvedWidth === '100%');
   const loadingHeight = getLoadingSize(resolvedHeight, resolvedHeight === '100%');
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Event Handlers
    * --------------------------------------------
@@ -119,7 +119,7 @@ export function EmotionPlanetScene({
     onSceneLoaded?.();
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Effects
    * --------------------------------------------
@@ -135,7 +135,7 @@ export function EmotionPlanetScene({
     }
   }, [delay]);
 
-  /**
+  /*
    * --------------------------------------------
    * 7. Return
    * --------------------------------------------

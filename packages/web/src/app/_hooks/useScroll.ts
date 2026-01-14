@@ -1,6 +1,11 @@
+/**
+ * [useScroll hook]
+ * Track scroll position and state for container elements
+ */
+
 import { useEffect, useState } from 'react';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -15,7 +20,7 @@ interface UseScrollProps {
   enablePreventBackgroundScroll?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
@@ -29,7 +34,7 @@ export function useScroll({
   enableScrollAtBottom = true,
   enablePreventBackgroundScroll,
 }: UseScrollProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -38,7 +43,7 @@ export function useScroll({
   const [isScrolling, setIsScrolling] = useState(false);
   const [isScrollAtBottom, setIsScrollAtBottom] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Effects
    * --------------------------------------------
@@ -106,7 +111,7 @@ export function useScroll({
     };
   }, [scrollRef, enable, enableScrollable, enableScrolling, enableScrollAtBottom]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

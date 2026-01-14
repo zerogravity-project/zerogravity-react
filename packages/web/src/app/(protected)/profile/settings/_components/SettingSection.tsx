@@ -4,7 +4,7 @@ import { Separator, Text } from '@radix-ui/themes';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -15,21 +15,21 @@ interface SettingSectionProps {
   children: React.ReactNode;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function SettingSection({ title, children }: SettingSectionProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const isMobile = useIsMobile();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

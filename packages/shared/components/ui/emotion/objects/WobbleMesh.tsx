@@ -12,7 +12,7 @@ import simplexNoise4d from '../shaders/includes/simplexNoise4d.glsl';
 import wobbleFragmentShader from '../shaders/wobble/fragment.glsl';
 import wobbleVertexShader from '../shaders/wobble/vertex.glsl';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -28,7 +28,7 @@ const DEFAULT_MATERIAL_PROPS = {
   iridescenceThicknessRange: [120, 800],
 };
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -48,7 +48,7 @@ interface WobbleMeshProps {
   colorB: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -67,7 +67,7 @@ export function WobbleMesh({
   colorA,
   colorB,
 }: WobbleMeshProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -78,7 +78,7 @@ export function WobbleMesh({
   const targetColorA = useRef(new THREE.Color(colorA));
   const targetColorB = useRef(new THREE.Color(colorB));
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Computed Values
    * --------------------------------------------
@@ -113,7 +113,7 @@ export function WobbleMesh({
     return merged;
   }, [radius, subdivisions]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
@@ -160,7 +160,7 @@ export function WobbleMesh({
     }
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

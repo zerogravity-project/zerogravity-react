@@ -9,7 +9,7 @@ import { ServiceTermsContent } from '@/app/(public)/terms/[type]/_components/Ser
 
 import { useModal } from './_contexts/ModalContext';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -34,7 +34,7 @@ const TERMS_CONTENT_MAP = {
 /** Hash prefix for terms modals */
 const TERMS_HASH_PREFIX = 'terms-';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -42,7 +42,7 @@ const TERMS_HASH_PREFIX = 'terms-';
 
 type TermsType = keyof typeof TERMS_TITLE_MAP;
 
-/**
+/*
  * ============================================
  * TermsModal Component
  * ============================================
@@ -52,14 +52,14 @@ type TermsType = keyof typeof TERMS_TITLE_MAP;
  */
 
 export function TermsModal() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { currentHashModal, closeModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -77,7 +77,7 @@ export function TermsModal() {
   /** Get content component for current terms type */
   const ContentComponent = termsType ? TERMS_CONTENT_MAP[termsType] : null;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Event Handlers
    * --------------------------------------------
@@ -89,7 +89,7 @@ export function TermsModal() {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

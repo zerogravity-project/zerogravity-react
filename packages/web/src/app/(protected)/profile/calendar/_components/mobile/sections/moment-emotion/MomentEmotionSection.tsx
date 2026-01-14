@@ -10,7 +10,7 @@ import { useCalendar } from '../../../../_contexts/CalendarContext';
 
 import MomentEmotionList from './MomentEmotionList';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -20,28 +20,28 @@ interface MomentEmotionSectionProps {
   emotionRecords?: EmotionRecordDetail[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSectionProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { selectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
    */
   const selectedDateString = formatDateString(selectedDate);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

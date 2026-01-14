@@ -3,21 +3,21 @@
 import { Avatar, Text } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function DesktopMenuHeader() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { data: session } = useSession();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -26,7 +26,7 @@ export function DesktopMenuHeader() {
   const displayName = session?.user?.name ?? 'ZeroGravity User';
   const email = session?.user?.email;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

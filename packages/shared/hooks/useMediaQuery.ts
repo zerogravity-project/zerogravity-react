@@ -1,8 +1,13 @@
+/**
+ * [useMediaQuery hook]
+ * Detect CSS media query matches for responsive behavior
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
@@ -14,14 +19,14 @@ import { useEffect, useState } from 'react';
  * @returns boolean indicating if the media query matches
  */
 export function useMediaQuery(query: string): boolean {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [matches, setMatches] = useState<boolean>(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Effects
    * --------------------------------------------
@@ -51,7 +56,7 @@ export function useMediaQuery(query: string): boolean {
     };
   }, [query]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
@@ -59,7 +64,7 @@ export function useMediaQuery(query: string): boolean {
   return matches;
 }
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -75,7 +80,7 @@ export const MEDIA_QUERIES = {
   '2xl': '(width < 1536px)',
 } as const;
 
-/**
+/*
  * ============================================
  * Predefined Hooks
  * ============================================

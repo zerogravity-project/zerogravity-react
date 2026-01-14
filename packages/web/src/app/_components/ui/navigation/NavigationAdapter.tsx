@@ -8,7 +8,7 @@ import { ComponentType, forwardRef } from 'react';
 
 import { Navigation, LinkProps as SharedLinkProps } from '@zerogravity/shared/components/ui/navigation';
 
-/**
+/*
  * ============================================
  * Helper Components
  * ============================================
@@ -26,7 +26,7 @@ const NextLink: ComponentType<SharedLinkProps> = forwardRef<HTMLAnchorElement, S
   );
 });
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -38,14 +38,14 @@ interface NavigationAdapterProps {
   border?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function NavigationAdapter({ className, background, border }: NavigationAdapterProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -53,7 +53,7 @@ export function NavigationAdapter({ className, background, border }: NavigationA
   const pathname = usePathname();
   const { data: session, status } = useSession();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -67,7 +67,7 @@ export function NavigationAdapter({ className, background, border }: NavigationA
       }
     : undefined;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

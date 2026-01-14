@@ -9,7 +9,7 @@ import { LinkProps } from '../navigation/types/navigation.types';
 
 import { FOOTER_MENU_ITEMS } from './constants/footer.constants';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -20,7 +20,7 @@ interface FooterProps {
   LinkComponent?: ComponentType<LinkProps>;
 }
 
-/**
+/*
  * ============================================
  * Helper Components
  * ============================================
@@ -32,7 +32,7 @@ const DefaultLink = ({ href, children, className, ...props }: LinkProps) => (
   </a>
 );
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

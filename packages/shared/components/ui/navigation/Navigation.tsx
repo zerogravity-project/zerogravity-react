@@ -15,7 +15,7 @@ import { MenuDrawer } from './drawer/MenuDrawer';
 import { ProfileDropdown } from './dropdown/ProfileDropdown';
 import { LinkProps, MenuItem, NavigationUser } from './types/navigation.types';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -37,7 +37,7 @@ interface NavigationProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Helper Components
  * ============================================
@@ -49,7 +49,7 @@ const DefaultLink = ({ href, children, className, ...props }: LinkProps) => (
   </a>
 );
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -65,14 +65,14 @@ export function Navigation({
   border,
   className,
 }: NavigationProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Custom Hooks
    * --------------------------------------------
@@ -80,7 +80,7 @@ export function Navigation({
   const isSm = useIsSm();
   const now = useClock();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -89,7 +89,7 @@ export function Navigation({
   const userName = user?.name ?? 'ZeroGravity User';
   const profileImage = user?.image;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Effects
    * --------------------------------------------
@@ -99,7 +99,7 @@ export function Navigation({
     setIsMenuOpen(false);
   }, [currentPath]);
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

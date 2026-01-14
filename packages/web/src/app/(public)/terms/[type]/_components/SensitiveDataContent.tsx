@@ -2,7 +2,7 @@ import { Callout, Heading, Text } from '@radix-ui/themes';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

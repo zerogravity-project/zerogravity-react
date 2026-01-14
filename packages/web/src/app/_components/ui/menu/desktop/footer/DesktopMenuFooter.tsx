@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 
 import { FOOTER_MENU_ITEMS } from '@zerogravity/shared/components/ui/footer';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

@@ -16,7 +16,7 @@ import { useScroll } from '@/app/_hooks/useScroll';
 
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -30,7 +30,7 @@ interface EmotionDetailDrawerProps {
   diaryEntry: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -43,21 +43,21 @@ export default function EmotionDetailDrawer({
   reasons,
   diaryEntry,
 }: EmotionDetailDrawerProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. External Hooks
    * --------------------------------------------
    */
   const { selectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -68,7 +68,7 @@ export default function EmotionDetailDrawer({
     enablePreventBackgroundScroll: isOpen,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
@@ -77,7 +77,7 @@ export default function EmotionDetailDrawer({
   const isToday = isSameDay(selectedDate, new Date());
   const isEmpty = emotionId === undefined;
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

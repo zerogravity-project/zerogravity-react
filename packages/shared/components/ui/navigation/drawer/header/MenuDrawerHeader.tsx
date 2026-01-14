@@ -4,7 +4,7 @@ import { Avatar, Text } from '@radix-ui/themes';
 
 import { NavigationUser } from '../../types/navigation.types';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -14,14 +14,14 @@ interface MenuDrawerHeaderProps {
   user?: NavigationUser;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function MenuDrawerHeader({ user }: MenuDrawerHeaderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Derived Values
    * --------------------------------------------
@@ -30,7 +30,7 @@ export function MenuDrawerHeader({ user }: MenuDrawerHeaderProps) {
   const displayName = user?.name ?? 'ZeroGravity User';
   const email = user?.email;
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

@@ -12,28 +12,28 @@ import { SettingAction } from './_components/SettingAction';
 import { SettingField } from './_components/SettingField';
 import { SettingSection } from './_components/SettingSection';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function ProfileSettingsPage() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { data: session, update: updateSession } = useSession();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
    */
   const [showAIWarning, setShowAIWarning] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Query Hooks
    * --------------------------------------------
@@ -76,7 +76,7 @@ export default function ProfileSettingsPage() {
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
@@ -86,7 +86,7 @@ export default function ProfileSettingsPage() {
   const email = user?.email ?? 'example@example.com';
   const consents = userProfile?.consents || user?.consents;
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Event Handlers
    * --------------------------------------------
@@ -118,7 +118,7 @@ export default function ProfileSettingsPage() {
     });
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------

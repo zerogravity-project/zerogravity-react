@@ -15,14 +15,14 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 import DiaryTextArea from './DiaryTextArea';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DiaryStep() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -30,7 +30,7 @@ export default function DiaryStep() {
   const router = useRouter();
   const { date, emotionId, emotionReasons, diaryEntry, prevStep, emotionRecordId } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
@@ -53,14 +53,14 @@ export default function DiaryStep() {
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
    */
   const isTodayDate = date ? isToday(new Date(date)) : false;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Event Handlers
    * --------------------------------------------
@@ -89,7 +89,7 @@ export default function DiaryStep() {
     });
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

@@ -26,7 +26,7 @@ import {
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -42,21 +42,21 @@ interface EmotionCountDataPoint {
   moment: number;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function EmotionCountChart() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { timePeriod, startDate } = useChart();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -64,14 +64,14 @@ export function EmotionCountChart() {
   const chartRef = useRef<HTMLCanvasElement>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Query Hooks
    * --------------------------------------------
    */
   const { data: countData, isFetching: isCountFetching } = useChartCountQuery({ period: timePeriod, startDate });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Computed Values
    * --------------------------------------------
@@ -215,7 +215,7 @@ export function EmotionCountChart() {
     [timePeriod, startDate]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Effects
    * --------------------------------------------
@@ -249,7 +249,7 @@ export function EmotionCountChart() {
     chartInstanceRef.current.update();
   }, [chartData, chartOptions]);
 
-  /**
+  /*
    * --------------------------------------------
    * 7. Return
    * --------------------------------------------

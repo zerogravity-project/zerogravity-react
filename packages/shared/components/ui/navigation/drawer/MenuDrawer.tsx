@@ -8,7 +8,7 @@ import { LinkProps, MenuItem, NavigationUser } from '../types/navigation.types';
 import { MenuDrawerHeader } from './header/MenuDrawerHeader';
 import { MenuList } from './list/MenuList';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -23,7 +23,7 @@ interface MenuDrawerProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

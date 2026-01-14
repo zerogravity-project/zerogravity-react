@@ -11,14 +11,14 @@ import { Logo } from '@zerogravity/shared/components/ui/logo';
 import type { UpdateConsentRequest } from '@/services/user/user.dto';
 import { useUpdateConsentMutation } from '@/services/user/user.query';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function ConsentPage() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -26,7 +26,7 @@ export default function ConsentPage() {
   const router = useRouter();
   const { update: updateSession } = useSession();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -38,7 +38,7 @@ export default function ConsentPage() {
     aiAnalysisConsent: false,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Query Hooks
    * --------------------------------------------
@@ -59,14 +59,14 @@ export default function ConsentPage() {
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
    */
   const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Event Handlers
    * --------------------------------------------
@@ -83,7 +83,7 @@ export default function ConsentPage() {
     updateConsent(consents);
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------

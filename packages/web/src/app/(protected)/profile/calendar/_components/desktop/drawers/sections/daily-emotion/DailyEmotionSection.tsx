@@ -5,7 +5,7 @@ import { EMOTION_STEPS, EmotionPlanetNull, EmotionPlanetScene } from '@zerogravi
 import { EMOTION_COLORS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -16,21 +16,21 @@ interface DailyEmotionSectionProps {
   emotionReasons?: EmotionReason[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DailyEmotionSection({ emotionId, emotionReasons }: DailyEmotionSectionProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { accentColor } = useTheme();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -39,7 +39,7 @@ export default function DailyEmotionSection({ emotionId, emotionReasons }: Daily
   const accentEmotionId = EMOTION_COLORS.indexOf(accentColor);
   const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

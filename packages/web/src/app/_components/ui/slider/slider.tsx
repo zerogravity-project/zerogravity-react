@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -28,7 +28,7 @@ interface SliderProps extends React.ComponentProps<typeof SliderPrimitive.Root> 
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -45,14 +45,14 @@ export function Slider({
   className,
   ...props
 }: SliderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [isFocused, setIsFocused] = React.useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Computed Values
    * --------------------------------------------
@@ -62,7 +62,7 @@ export function Slider({
     [value, defaultValue, min, max]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

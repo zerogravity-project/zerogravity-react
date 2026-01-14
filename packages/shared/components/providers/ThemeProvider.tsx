@@ -6,7 +6,7 @@ import { Theme } from '@radix-ui/themes';
 
 import { EMOTION_COLORS, type EmotionColor } from '../../entities/emotion';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -23,7 +23,7 @@ interface ThemeProviderProps {
   setColor?: (color: EmotionColor) => void;
 }
 
-/**
+/*
  * ============================================
  * Helper Functions
  * ============================================
@@ -44,7 +44,7 @@ function setCookie(name: string, value: string, maxAge: number = 86400) {
   document.cookie = `${name}=${value}; path=/; max-age=${maxAge}; SameSite=Lax`;
 }
 
-/**
+/*
  * ============================================
  * Context
  * ============================================
@@ -55,7 +55,7 @@ function setCookie(name: string, value: string, maxAge: number = 86400) {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-/**
+/*
  * ============================================
  * Provider
  * ============================================
@@ -69,7 +69,7 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
  * @param setColor - Custom color setter (optional)
  */
 export function ThemeProvider({ children, getColor, setColor }: ThemeProviderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -78,14 +78,14 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
   const [accentColor, setAccentColor] = useState<EmotionColor>('green');
   const [mounted, setMounted] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Computed Values
    * --------------------------------------------
    */
   const value = useMemo(() => ({ accentColor, setAccentColor }), [accentColor]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
@@ -135,7 +135,7 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
     }
   }, [accentColor, mounted, setColor]);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------
@@ -151,7 +151,7 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
   );
 }
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================

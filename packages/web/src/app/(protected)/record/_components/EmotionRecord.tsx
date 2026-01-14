@@ -15,14 +15,14 @@ import DiaryStep from './steps/diary/DiaryStep';
 import EmotionStep from './steps/emotion/EmotionStep';
 import ReasonStep from './steps/reason/ReasonStep';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function EmotionRecord() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -30,14 +30,14 @@ export default function EmotionRecord() {
   const router = useRouter();
   const { currentStep, prevStep } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -47,7 +47,7 @@ export default function EmotionRecord() {
     enable: true,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Event Handlers
    * --------------------------------------------
@@ -62,7 +62,7 @@ export default function EmotionRecord() {
     prevStep();
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

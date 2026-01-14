@@ -4,7 +4,7 @@ import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 
 import MomentEmotionList from './MomentEmotionList';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -14,7 +14,7 @@ interface MomentEmotionSectionProps {
   momentEmotionRecords?: EmotionRecordDetail[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

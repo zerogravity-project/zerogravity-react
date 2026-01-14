@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -21,7 +21,7 @@ interface TopAppBarProps {
   shadow?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
