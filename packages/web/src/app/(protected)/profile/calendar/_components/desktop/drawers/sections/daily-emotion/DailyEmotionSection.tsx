@@ -1,14 +1,8 @@
 import { Badge, Text, Theme } from '@radix-ui/themes';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
-import {
-  EMOTION_COLORS,
-  EMOTION_STEPS,
-  EmotionId,
-  EmotionPlanetNull,
-  EmotionPlanetScene,
-  EmotionReason,
-} from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, EmotionPlanetNull, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_COLORS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
 /**

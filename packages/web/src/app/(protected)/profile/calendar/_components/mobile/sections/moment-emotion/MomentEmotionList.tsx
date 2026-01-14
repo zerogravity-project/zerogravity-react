@@ -4,6 +4,7 @@ import { Badge, Text } from '@radix-ui/themes';
 import { useMemo } from 'react';
 
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 
@@ -24,7 +25,7 @@ const REASON_LISTS = ['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Re
  */
 
 interface MomentEmotionListProps {
-  emotionId: number;
+  emotionId: EmotionId;
   time: string;
   reasons: string[];
 }

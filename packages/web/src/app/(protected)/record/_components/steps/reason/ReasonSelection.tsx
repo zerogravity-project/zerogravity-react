@@ -1,6 +1,7 @@
 import { Button } from '@radix-ui/themes';
 
-import { EMOTION_REASONS, EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_REASONS, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
@@ -28,7 +29,7 @@ export default function ReasonSelection() {
    * --------------------------------------------
    */
   /** Toggle reason selection */
-  const toggleReason = (reason: string) => {
+  const toggleReason = (reason: EmotionReason) => {
     if (emotionReason.includes(reason)) {
       setEmotionReason(emotionReason.filter(r => r !== reason));
     } else {

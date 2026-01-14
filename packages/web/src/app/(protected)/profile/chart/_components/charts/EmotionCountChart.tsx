@@ -1,9 +1,16 @@
 'use client';
 
+import type { ActiveElement, ChartEvent, TooltipModel } from 'chart.js';
 import { Chart } from 'chart.js/auto';
 import { useEffect, useMemo, useRef } from 'react';
 
-import { EMOTION_COLORS, EMOTION_COLORS_MAP, EMOTION_TYPES } from '@zerogravity/shared/components/ui/emotion';
+import {
+  EMOTION_COLORS,
+  EMOTION_COLORS_MAP,
+  EMOTION_TYPES,
+  type EmotionId,
+  type EmotionType,
+} from '@zerogravity/shared/entities/emotion';
 
 import { useChartCountQuery } from '@/services/chart/chart.query';
 
@@ -18,6 +25,22 @@ import {
 } from '../../_utils/chartUtils';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
+
+/**
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+/** Raw data point structure for scatter chart */
+interface EmotionCountDataPoint {
+  x: number;
+  y: EmotionId;
+  timestamp: string;
+  emotionType: EmotionType;
+  daily: number;
+  moment: number;
+}
 
 /**
  * ============================================
@@ -74,10 +97,7 @@ export function EmotionCountChart() {
         });
         return acc;
       },
-      {} as Record<
-        number,
-        Array<{ x: number; y: number; timestamp: string; emotionType: string; daily: number; moment: number }>
-      >
+      {} as Record<EmotionId, EmotionCountDataPoint[]>
     );
 
     return Object.entries(groupedByEmotionId).map(([emotionIdStr, points]) => {
@@ -112,8 +132,8 @@ export function EmotionCountChart() {
       clip: false as const,
       responsive: true,
       maintainAspectRatio: false,
-      onHover: (event: any, elements: any[]) => {
-        const canvas = event.native?.target;
+      onHover: (event: ChartEvent, elements: ActiveElement[]) => {
+        const canvas = event.native?.target as HTMLCanvasElement | undefined;
         if (canvas) {
           canvas.style.cursor = elements.length > 0 ? 'pointer' : 'default';
         }
@@ -143,7 +163,7 @@ export function EmotionCountChart() {
         },
         tooltip: {
           enabled: false,
-          external: (context: any) => {
+          external: (context: { chart: Chart; tooltip: TooltipModel<'scatter'> }) => {
             const { chart, tooltip } = context;
             const parentNode = chart.canvas.parentNode as HTMLElement;
             const tooltipEl = getOrCreateTooltip(parentNode, 'count-tooltip');
@@ -155,7 +175,7 @@ export function EmotionCountChart() {
 
             if (tooltip.dataPoints && tooltip.dataPoints.length > 0) {
               const dataPoint = tooltip.dataPoints[0];
-              const rawData = dataPoint.raw;
+              const rawData = dataPoint.raw as EmotionCountDataPoint;
 
               const emotionId = rawData.y;
               const colorKey = EMOTION_COLORS[emotionId];

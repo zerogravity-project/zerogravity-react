@@ -3,7 +3,7 @@
  * Request and response types for chart endpoints
  */
 
-import { EmotionReason, EmotionType } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId, EmotionReason, EmotionType } from '@zerogravity/shared/entities/emotion';
 
 /**
  * Chart period types
@@ -63,8 +63,8 @@ export interface ChartCountData {
   label: string;
   /** Decimal position for X-axis */
   position: number;
-  /** Emotion ID (typically 0-6) */
-  emotionId: number;
+  /** Emotion ID (0-6) */
+  emotionId: EmotionId;
   emotionType: EmotionType;
   /** ISO 8601 with timezone offset */
   timestamp: string;

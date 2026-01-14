@@ -1,6 +1,7 @@
 import { Text } from '@radix-ui/themes';
 
-import { EMOTION_STEPS, EmotionId } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId } from '@zerogravity/shared/entities/emotion';
 
 import { Slider } from '@/app/_components/ui/slider/slider';
 

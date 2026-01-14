@@ -3,7 +3,7 @@
 import { type ReactNode } from 'react';
 
 import { ThemeProvider } from '@zerogravity/shared/components/providers';
-import { type EmotionColor } from '@zerogravity/shared/components/ui/emotion';
+import { type EmotionColor } from '@zerogravity/shared/entities/emotion';
 
 /**
  * ============================================
