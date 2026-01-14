@@ -22,6 +22,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
+        'entities/emotion/index': path.resolve(__dirname, 'entities/emotion/index.ts'),
         'components/ui/clock/index': path.resolve(__dirname, 'components/ui/clock/index.ts'),
         'components/ui/emotion/index': path.resolve(__dirname, 'components/ui/emotion/index.ts'),
         'components/ui/footer/index': path.resolve(__dirname, 'components/ui/footer/index.ts'),

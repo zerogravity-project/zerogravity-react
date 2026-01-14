@@ -6,6 +6,10 @@
   "main": "./dist/components/ui/clock/index.js",
   "types": "./dist/components/ui/clock/index.d.ts",
   "exports": {
+    "./entities/emotion": {
+      "types": "./dist/entities/emotion/index.d.ts",
+      "import": "./dist/entities/emotion/index.js"
+    },
     "./components/ui/clock": {
       "types": "./dist/components/ui/clock/index.d.ts",
       "import": "./dist/components/ui/clock/index.js"

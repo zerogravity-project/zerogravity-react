@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef } from 'react';
 
-import { EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId, EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn, formatDateString, isSameDay } from '@zerogravity/shared/utils';
 

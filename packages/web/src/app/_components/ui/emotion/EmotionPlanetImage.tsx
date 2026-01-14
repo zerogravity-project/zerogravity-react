@@ -6,6 +6,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 
 import { EmotionPlanetGlow } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId } from '@zerogravity/shared/entities/emotion';
 import { useSquareResize } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
@@ -16,7 +17,7 @@ import { cn } from '@zerogravity/shared/utils';
  */
 
 interface EmotionPlanetImageProps {
-  emotionId: number;
+  emotionId: EmotionId;
   width?: number;
   height?: number;
   fill?: boolean;

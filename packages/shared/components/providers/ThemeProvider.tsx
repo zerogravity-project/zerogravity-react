@@ -4,8 +4,7 @@ import { type ReactNode, createContext, useContext, useEffect, useMemo, useState
 
 import { Theme } from '@radix-ui/themes';
 
-import { EMOTION_COLORS } from '../ui/emotion/constants/emotion.constants';
-import { type EmotionColor } from '../ui/emotion/types/emotion.types';
+import { EMOTION_COLORS, type EmotionColor } from '../../entities/emotion';
 
 /**
  * ============================================

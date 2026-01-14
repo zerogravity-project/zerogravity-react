@@ -4,14 +4,9 @@ import { Badge, Button, Text } from '@radix-ui/themes';
 import { useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
-import {
-  EMOTION_COLORS,
-  EMOTION_STEPS,
-  EmotionId,
-  EmotionPlanetNull,
-  EmotionPlanetScene,
-} from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, EmotionPlanetNull, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { EMOTION_COLORS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 import { formatDateString } from '@zerogravity/shared/utils';
 
 import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';

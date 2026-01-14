@@ -58,7 +58,6 @@ axiosInstance.interceptors.response.use(
 
     // Handle authentication errors
     if (error.response?.status === 401 && !originalRequest._retry) {
-      console.log('[Axios] 401 Unauthorized - attempting token refresh');
       originalRequest._retry = true;
 
       try {
@@ -96,7 +95,6 @@ axiosInstance.interceptors.response.use(
 
         if (refreshResponse.ok) {
           const data = await refreshResponse.json();
-          console.log('[Axios] Token refreshed successfully, retrying original request');
 
           // Update the Authorization header with new token
           originalRequest.headers.Authorization = `Bearer ${data.data.accessToken}`;

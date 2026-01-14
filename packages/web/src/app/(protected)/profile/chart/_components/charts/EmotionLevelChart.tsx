@@ -1,11 +1,13 @@
 'use client';
 
+import type { ActiveElement, ChartEvent, TooltipItem, TooltipModel } from 'chart.js';
 import { Chart } from 'chart.js/auto';
+import type { EventContext } from 'chartjs-plugin-annotation';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
-import { EMOTION_COLORS_MAP, EMOTION_COLORS_MAP_ALPHA } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_COLORS_MAP, EMOTION_COLORS_MAP_ALPHA } from '@zerogravity/shared/entities/emotion';
 
 import { useChartLevelQuery } from '@/services/chart/chart.query';
 
@@ -24,6 +26,19 @@ import { EmotionChartContainer } from './common/EmotionChartContainer';
 
 // Register annotation plugin
 Chart.register(annotationPlugin);
+
+/**
+ * ============================================
+ * Type Extensions
+ * ============================================
+ */
+
+/** Extend HTMLCanvasElement to include custom tooltip handler */
+declare global {
+  interface HTMLCanvasElement {
+    _averageTooltipHandler?: (e: MouseEvent) => void;
+  }
+}
 
 /**
  * ============================================
@@ -113,8 +128,8 @@ export function EmotionLevelChart() {
       animations: {
         colors: { duration: 0 }, // Instant color change for average line visibility
       },
-      onHover: (event: any, elements: any[]) => {
-        const canvas = event.native?.target;
+      onHover: (event: ChartEvent, elements: ActiveElement[]) => {
+        const canvas = event.native?.target as HTMLCanvasElement | undefined;
         if (canvas) {
           // Change cursor for bar or line dataset
           const hasDataPoint = elements.length > 0;
@@ -142,7 +157,7 @@ export function EmotionLevelChart() {
         },
         tooltip: {
           enabled: false,
-          external: (context: any) => {
+          external: (context: { chart: Chart; tooltip: TooltipModel<'bar'> }) => {
             const { chart, tooltip } = context;
             const parentNode = chart.canvas.parentNode as HTMLElement;
             const tooltipEl = getOrCreateTooltip(parentNode, 'level-tooltip');
@@ -168,11 +183,15 @@ export function EmotionLevelChart() {
             // Show for both bar and line datasets (prioritize line if both hovered)
             if (tooltip.dataPoints && tooltip.dataPoints.length > 0) {
               // Prioritize line dataset (index 1) over bar dataset (index 0)
-              const linePoint = tooltip.dataPoints.find((dp: any) => dp.datasetIndex === 1);
+              const linePoint = tooltip.dataPoints.find((dp: TooltipItem<'bar'>) => dp.datasetIndex === 1);
               const dataPoint = linePoint || tooltip.dataPoints[0];
 
               const index = dataPoint.dataIndex;
               const value = dataPoint.parsed.y;
+
+              // Skip if value is null (shouldn't happen with valid data)
+              if (value === null) return;
+
               const dateLabel = formatTooltipDateFromIndex(index, timePeriod, startDate);
               const emotionHtml = generateEmotionRangeHtml(value);
 
@@ -225,7 +244,7 @@ export function EmotionLevelChart() {
               yMax: (levelData?.average || 0) + 0.25,
               backgroundColor: 'transparent',
               borderWidth: 0,
-              enter: (context: any) => {
+              enter: (context: EventContext) => {
                 const chart = context.chart;
                 const parentNode = chart.canvas.parentNode as HTMLElement;
                 const average = levelData?.average || 0;
@@ -273,9 +292,9 @@ export function EmotionLevelChart() {
                 chart.canvas._averageTooltipHandler = updateTooltipPosition;
                 chart.canvas.addEventListener('mousemove', updateTooltipPosition);
               },
-              leave: (context: any) => {
+              leave: (context: EventContext) => {
                 const chart = context.chart;
-                const parentNode = chart.canvas.parentNode;
+                const parentNode = chart.canvas.parentNode as HTMLElement | null;
 
                 // Remove mousemove handler
                 if (chart.canvas._averageTooltipHandler) {
@@ -287,7 +306,7 @@ export function EmotionLevelChart() {
                 delete chart.canvas.dataset.hoveringAverage;
                 chart.canvas.style.cursor = 'default';
 
-                const tooltipEl = parentNode.querySelector('.average-tooltip');
+                const tooltipEl = parentNode?.querySelector<HTMLElement>('.average-tooltip');
                 if (tooltipEl) {
                   tooltipEl.style.visibility = 'hidden';
                   tooltipEl.style.opacity = '0';

@@ -56,7 +56,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt: async ({ token, account, user, trigger, session }: any) => {
       // Handle session update (when updateSession() is called from client)
       if (trigger === 'update' && session?.user?.consents) {
-        console.log('[JWT Callback] Updating consents from client:', session.user.consents);
         token.consents = session.user.consents;
         return token;
       }
@@ -80,7 +79,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           if (response.ok) {
             const data = await response.json();
-            console.log('[JWT Callback] Backend response:', data);
             // Store isNewUser flag and consent data from ApiResponse wrapper
             // Note: Jackson serializes boolean isNewUser() getter as "newUser" in JSON
             token.isNewUser = data.data.newUser;
@@ -122,7 +120,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token.backendJwtExpiresAt && Date.now() > token.backendJwtExpiresAt - REFRESH_BUFFER_MS) {
         // If already refreshing, wait for the ongoing refresh to complete
         if (isRefreshing && refreshPromise) {
-          console.log('[JWT Callback] Refresh already in progress, waiting...');
           try {
             const refreshedData = await refreshPromise;
             token.backendJwt = refreshedData.accessToken;
@@ -137,11 +134,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         // Start new refresh
-        console.log('[JWT Callback] Backend JWT expired, refreshing...', {
-          currentRefreshToken: token.refreshToken,
-          expiresAt: new Date(token.backendJwtExpiresAt).toISOString(),
-        });
-
         isRefreshing = true;
         refreshPromise = (async () => {
           try {
@@ -157,10 +149,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
             if (response.ok) {
               const data = await response.json();
-              console.log('[JWT Callback] Token refreshed successfully', {
-                newAccessToken: data.data.accessToken?.substring(0, 20) + '...',
-                newRefreshToken: data.data.refreshToken,
-              });
               return {
                 accessToken: data.data.accessToken,
                 refreshToken: data.data.refreshToken,

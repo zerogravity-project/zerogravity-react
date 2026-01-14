@@ -141,8 +141,6 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
         if (config.id) {
           const isDuplicate = prevQueue.some(item => item.config.id === config.id);
           if (isDuplicate) {
-            // eslint-disable-next-line no-console
-            console.log(`[ModalContext] Duplicate modal ignored (id: ${config.id})`);
             return prevQueue;
           }
         }

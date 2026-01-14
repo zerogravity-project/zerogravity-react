@@ -3,7 +3,7 @@
  * Protects routes, checks consent, and redirects appropriately
  */
 
-import type { NextRequest } from 'next/server';
+import type { NextAuthRequest } from 'next-auth';
 
 import { auth } from './lib/auth';
 
@@ -21,7 +21,7 @@ const REQUIRED_CONSENTS = ['termsAgreed', 'privacyAgreed', 'sensitiveDataConsent
  * Auth.js v5 Middleware
  * Protects routes, checks consent, and redirects appropriately
  */
-export default auth((req: NextRequest & { auth: any }) => {
+export default auth((req: NextAuthRequest) => {
   const isLoggedIn = !!req.auth;
   const pathname = req.nextUrl.pathname;
   const isLoginPage = pathname === '/login';

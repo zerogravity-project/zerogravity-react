@@ -5,7 +5,8 @@
 
 import { addDays, addMonths, format, getDaysInMonth, setDate } from 'date-fns';
 
-import { EMOTION_COLORS, EMOTION_COLORS_MAP, EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_COLORS, EMOTION_COLORS_MAP } from '@zerogravity/shared/entities/emotion';
 
 import { ChartPeriod, WEEK_LABELS, YEAR_LABELS } from '@/services/chart/chart.dto';
 

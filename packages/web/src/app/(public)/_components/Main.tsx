@@ -8,10 +8,11 @@ import { useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { Clock } from '@zerogravity/shared/components/ui/clock';
-import { EMOTION_COLORS, EmotionColor, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
+import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
 import { Footer } from '@zerogravity/shared/components/ui/footer';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { PageLoading } from '@zerogravity/shared/components/ui/loading';
+import { EMOTION_COLORS, type EmotionColor } from '@zerogravity/shared/entities/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 

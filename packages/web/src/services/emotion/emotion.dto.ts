@@ -3,7 +3,7 @@
  * Request and response types for emotion endpoints
  */
 
-import { EmotionId, EmotionReason, EmotionType } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId, EmotionReason, EmotionType } from '@zerogravity/shared/entities/emotion';
 
 /**
  * Emotion record types
