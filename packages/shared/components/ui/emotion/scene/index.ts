@@ -5,4 +5,3 @@
 
 export { EmotionPlanet } from './EmotionPlanet';
 export { EmotionPlanetScene } from './EmotionPlanetScene';
-export * from './objects';

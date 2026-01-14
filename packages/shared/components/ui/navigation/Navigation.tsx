@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentType, useEffect, useState } from 'react';
+import { ComponentType, lazy, Suspense, useEffect, useState } from 'react';
 
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Link as RadixLink } from '@radix-ui/themes';
@@ -11,9 +11,11 @@ import { Icon } from '../icon';
 import { Logo } from '../logo';
 
 import { MENU_ITEMS } from './constants/navigation.constants';
-import { MenuDrawer } from './drawer/MenuDrawer';
 import { ProfileDropdown } from './dropdown/ProfileDropdown';
 import { LinkProps, MenuItem, NavigationUser } from './types/navigation.types';
+
+/** Lazy load MenuDrawer to avoid bundling motion on initial load */
+const LazyMenuDrawer = lazy(() => import('./drawer/MenuDrawer').then(mod => ({ default: mod.MenuDrawer })));
 
 /*
  * ============================================
@@ -155,13 +157,15 @@ export function Navigation({
                 >
                   <Icon color="accent">{isMenuOpen ? 'close' : 'menu'}</Icon>
                 </button>
-                <MenuDrawer
-                  isOpen={isMenuOpen}
-                  user={user}
-                  currentPath={currentPath}
-                  menuItems={menuItems}
-                  LinkComponent={LinkComponent}
-                />
+                <Suspense fallback={null}>
+                  <LazyMenuDrawer
+                    isOpen={isMenuOpen}
+                    user={user}
+                    currentPath={currentPath}
+                    menuItems={menuItems}
+                    LinkComponent={LinkComponent}
+                  />
+                </Suspense>
               </>
             )}
           </>
