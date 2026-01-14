@@ -22,6 +22,7 @@
     "type-check:web": "pnpm --filter web type-check",
     "type-check:extension": "pnpm --filter extension type-check",
     "type-check:all": "pnpm -r type-check",
+    "analyze:web": "pnpm --filter web analyze",
     "test:unit": "pnpm --filter web test",
     "test:unit:watch": "pnpm --filter web test:watch",
     "test:unit:coverage": "pnpm --filter web test:coverage",
