@@ -1,5 +1,7 @@
 'use client';
 
+import dynamic from 'next/dynamic';
+
 import { Text } from '@radix-ui/themes';
 import { endOfMonth, format, isAfter, startOfMonth } from 'date-fns';
 import { LayoutGroup, motion } from 'motion/react';
@@ -11,8 +13,12 @@ import { DAYS_OF_WEEK } from '../../_constants/calendar.constants';
 import { useCalendar } from '../../_contexts/CalendarContext';
 
 import DesktopCalendarCell from './cell/DesktopCalendarCell';
-import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';
 import DesktopCalendarHeader from './header/DesktopCalendarHeader';
+
+/** Lazy load drawer with Three.js components */
+const EmotionDetailDrawer = dynamic(() => import('./drawers/EmotionDetailDrawer'), {
+  ssr: false,
+});
 
 /*
  * ============================================

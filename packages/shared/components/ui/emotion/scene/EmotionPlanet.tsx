@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 
 import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 
-import { EMOTION_STEPS } from './constants/emotion.constants';
+import { EMOTION_STEPS } from '../../../../entities/emotion';
+
 import { WobbleMesh } from './objects/WobbleMesh';
 
 /*

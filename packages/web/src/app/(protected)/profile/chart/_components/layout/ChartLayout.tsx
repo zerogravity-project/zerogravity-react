@@ -1,10 +1,18 @@
 'use client';
 
+import dynamic from 'next/dynamic';
+
 import { useIsMobile, useIsSm } from '@zerogravity/shared/hooks';
 
-import { EmotionCountChart } from '../charts/EmotionCountChart';
-import { EmotionLevelChart } from '../charts/EmotionLevelChart';
 import { EmotionReasonsChart } from '../charts/EmotionReasonsChart';
+
+/** Lazy load Chart.js components */
+const EmotionCountChart = dynamic(() => import('../charts/EmotionCountChart').then(mod => mod.EmotionCountChart), {
+  ssr: false,
+});
+const EmotionLevelChart = dynamic(() => import('../charts/EmotionLevelChart').then(mod => mod.EmotionLevelChart), {
+  ssr: false,
+});
 
 /*
  * ============================================

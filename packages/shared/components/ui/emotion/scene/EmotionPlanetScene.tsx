@@ -5,11 +5,11 @@ import { Suspense, useEffect, useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import * as THREE from 'three';
 
-import { useSquareResize } from '../../../hooks/useSquareResize';
-import { cn } from '../../../utils/styleUtils';
+import { useSquareResize } from '../../../../hooks/useSquareResize';
+import { cn } from '../../../../utils/styleUtils';
+import { EmotionPlanetGlow } from '../decorations/EmotionPlanetGlow';
+import { EmotionPlanetLoading } from '../decorations/EmotionPlanetLoading';
 
-import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
-import { EmotionPlanetLoading } from './decorations/EmotionPlanetLoading';
 import { EmotionPlanet } from './EmotionPlanet';
 
 /*

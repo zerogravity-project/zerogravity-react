@@ -1,7 +1,6 @@
 import { Button } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
-import { EMOTION_REASONS, type EmotionReason } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_COLORS, EMOTION_REASONS, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
@@ -49,7 +48,7 @@ export default function ReasonSelection() {
           <Button
             key={reason}
             onClick={() => toggleReason(reason)}
-            color={EMOTION_STEPS[emotionValueToStepIndex].color}
+            color={EMOTION_COLORS[emotionValueToStepIndex]}
             variant={emotionReason.includes(reason) ? 'solid' : 'soft'}
             size="2"
             radius="full"

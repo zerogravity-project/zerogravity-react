@@ -3,6 +3,8 @@
  * Core constants for emotion entity
  */
 
+import type { EmotionId, EmotionPlanetParams, EmotionStep } from './emotion.types';
+
 /** Internal keys for emotion levels */
 export const EMOTION_KEYS = [
   'very_negative',
@@ -86,3 +88,95 @@ export const EMOTION_REASONS = [
   'Domestic Issues',
   'Global Issues',
 ] as const;
+
+/** 3D planet shader parameters for each emotion (excluding colors) */
+export const EMOTION_PLANET_PARAMS: EmotionPlanetParams[] = [
+  {
+    positionFrequency: 0.6,
+    timeFrequency: 0.8,
+    warpPositionFrequency: 0.5,
+    warpTimeFrequency: 0.4,
+    warpStrength: 1.6,
+    metalness: 0.6,
+    roughness: 0.8,
+  },
+  {
+    positionFrequency: 0.55,
+    timeFrequency: 0.7,
+    warpPositionFrequency: 0.5,
+    warpTimeFrequency: 0.4,
+    warpStrength: 1.5,
+    metalness: 0.3,
+    roughness: 0.9,
+  },
+  {
+    positionFrequency: 0.5,
+    timeFrequency: 0.5,
+    warpPositionFrequency: 0.5,
+    warpTimeFrequency: 0.3,
+    warpStrength: 1.5,
+    metalness: 0.15,
+    roughness: 1,
+  },
+  {
+    positionFrequency: 0.5,
+    timeFrequency: 0.3,
+    warpPositionFrequency: 0.5,
+    warpTimeFrequency: 0.15,
+    warpStrength: 1.3,
+    metalness: 0,
+    roughness: 1,
+  },
+  {
+    positionFrequency: 0.4,
+    timeFrequency: 0.25,
+    warpPositionFrequency: 0.4,
+    warpTimeFrequency: 0.1,
+    warpStrength: 1.3,
+    metalness: 0,
+    roughness: 1,
+  },
+  {
+    positionFrequency: 0.35,
+    timeFrequency: 0.2,
+    warpPositionFrequency: 0.3,
+    warpTimeFrequency: 0.07,
+    warpStrength: 1.1,
+    metalness: 0,
+    roughness: 1,
+  },
+  {
+    positionFrequency: 0.3,
+    timeFrequency: 0.2,
+    warpPositionFrequency: 0.3,
+    warpTimeFrequency: 0.05,
+    warpStrength: 0.75,
+    metalness: 0,
+    roughness: 1,
+  },
+];
+
+/** Complete emotion step configurations with styling (derived from other constants) */
+export const EMOTION_STEPS: EmotionStep[] = EMOTION_KEYS.map((key, index) => {
+  const id = index as EmotionId;
+  const color = EMOTION_COLORS[id];
+
+  return {
+    id,
+    key,
+    type: EMOTION_TYPES[id],
+    color,
+    sliderValue: EMOTION_SLIDER_VALUES[id],
+    style: {
+      slider: {
+        ring: `var(--${color}-a8)`,
+        ringOffset: `var(--${color}-4)`,
+      },
+      planet: {
+        ...EMOTION_PLANET_PARAMS[id],
+        colorA: EMOTION_COLORS_MAP[color],
+        colorB: EMOTION_COLORS_MAP_DARK[color],
+      },
+    },
+  };
+});

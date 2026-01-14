@@ -11,6 +11,16 @@ const withVanillaExtract = createVanillaExtractPlugin();
 const nextConfig = {
   output: 'standalone',
   transpilePackages: ['@zerogravity/shared'],
+  experimental: {
+    optimizePackageImports: [
+      '@radix-ui/themes',
+      'date-fns',
+      'lodash',
+      'lucide-react',
+      'motion',
+      '@tanstack/react-query',
+    ],
+  },
   webpack: config => {
     /* GLSL Loader */
     config.module.rules.push({

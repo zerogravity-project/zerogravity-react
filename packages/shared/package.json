@@ -14,9 +14,21 @@
       "types": "./dist/components/ui/clock/index.d.ts",
       "import": "./dist/components/ui/clock/index.js"
     },
-    "./components/ui/emotion": {
-      "types": "./dist/components/ui/emotion/index.d.ts",
-      "import": "./dist/components/ui/emotion/index.js"
+    "./components/ui/emotion/scene": {
+      "types": "./dist/components/ui/emotion/scene/index.d.ts",
+      "import": "./dist/components/ui/emotion/scene/index.js"
+    },
+    "./components/ui/emotion/scene-lazy": {
+      "types": "./dist/components/ui/emotion/scene-lazy/index.d.ts",
+      "import": "./dist/components/ui/emotion/scene-lazy/index.js"
+    },
+    "./components/ui/emotion/decorations": {
+      "types": "./dist/components/ui/emotion/decorations/index.d.ts",
+      "import": "./dist/components/ui/emotion/decorations/index.js"
+    },
+    "./components/ui/emotion/null": {
+      "types": "./dist/components/ui/emotion/null/index.d.ts",
+      "import": "./dist/components/ui/emotion/null/index.js"
     },
     "./components/ui/footer": {
       "types": "./dist/components/ui/footer/index.d.ts",

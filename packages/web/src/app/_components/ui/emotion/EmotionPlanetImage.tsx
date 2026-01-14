@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 
-import { EmotionPlanetGlow } from '@zerogravity/shared/components/ui/emotion';
+import { EmotionPlanetGlow } from '@zerogravity/shared/components/ui/emotion/decorations';
 import type { EmotionId } from '@zerogravity/shared/entities/emotion';
 import { useSquareResize } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';

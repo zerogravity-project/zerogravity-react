@@ -3,10 +3,12 @@
 import { Button, Heading, Text } from '@radix-ui/themes';
 import { useState } from 'react';
 
-import { EMOTION_STEPS, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
+import { LazyEmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene-lazy';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
-import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
+import GeminiButton from '@/app/_components/ui/button/GeminiButton';
+
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
 import EmotionSlider from './EmotionSlider';
@@ -49,7 +51,7 @@ export default function EmotionStep() {
 
       {/* Emotion Visual */}
       <div className="mb-16 flex h-full min-h-[160px] w-full flex-col items-center">
-        <EmotionPlanetScene
+        <LazyEmotionPlanetScene
           emotionId={emotionValueToStepIndex}
           width="100%"
           onSceneLoaded={() => setIsSceneLoaded(true)}

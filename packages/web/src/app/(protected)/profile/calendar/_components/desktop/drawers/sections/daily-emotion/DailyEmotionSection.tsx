@@ -1,8 +1,14 @@
 import { Badge, Text, Theme } from '@radix-ui/themes';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
-import { EMOTION_STEPS, EmotionPlanetNull, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
-import { EMOTION_COLORS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
+import { EmotionPlanetNull } from '@zerogravity/shared/components/ui/emotion/null';
+import { LazyEmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene-lazy';
+import {
+  EMOTION_COLORS,
+  EMOTION_STEPS,
+  type EmotionId,
+  type EmotionReason,
+} from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
 /*
@@ -58,7 +64,13 @@ export default function DailyEmotionSection({ emotionId, emotionReasons }: Daily
         {/* Data state */}
         {!isEmpty && (
           <>
-            <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />
+            <LazyEmotionPlanetScene
+              emotionId={emotionId}
+              width={240}
+              height={240}
+              isLoadingShowText={false}
+              delay={500}
+            />
             <Text color={emotionColor} size="7" weight="regular">
               {EMOTION_STEPS[emotionId].type}
             </Text>

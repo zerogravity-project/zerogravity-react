@@ -1,8 +1,8 @@
 import { Button, Heading, Text } from '@radix-ui/themes';
 import { format, isAfter } from 'date-fns';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
 import { cn, getWeekDates } from '@zerogravity/shared/utils';
 
 import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
@@ -117,7 +117,7 @@ export default function CalendarHeader({ emotionRecords, isLoading = false }: Ca
                 size="3"
                 onClick={() => setSelectedDate(date)}
                 variant={!isEmpty ? (isSelectedDate ? 'solid' : 'soft') : 'soft'}
-                color={isEmpty ? (isSelectedDate ? undefined : 'gray') : EMOTION_STEPS[dailyEmotionId].color}
+                color={isEmpty ? (isSelectedDate ? undefined : 'gray') : EMOTION_COLORS[dailyEmotionId]}
                 className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`, isEmpty && '!bg-transparent')}
                 disabled={isAfterToday || isLoading}
               >

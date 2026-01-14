@@ -2,11 +2,10 @@
 
 import { motion } from 'motion/react';
 
-import { useSquareResize } from '../../../hooks/useSquareResize';
-import { cn } from '../../../utils/styleUtils';
-
-import { EMOTION_STEPS } from './constants/emotion.constants';
-import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
+import { EMOTION_STEPS } from '../../../../entities/emotion';
+import { useSquareResize } from '../../../../hooks/useSquareResize';
+import { cn } from '../../../../utils/styleUtils';
+import { EmotionPlanetGlow } from '../decorations/EmotionPlanetGlow';
 
 /*
  * ============================================
