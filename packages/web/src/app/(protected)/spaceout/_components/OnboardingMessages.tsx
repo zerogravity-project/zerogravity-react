@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -16,21 +16,21 @@ interface OnboardingMessagesProps {
   messageIndex: number;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function OnboardingMessages({ message, messageIndex }: OnboardingMessagesProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const isSm = useIsSm();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

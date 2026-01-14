@@ -6,14 +6,14 @@ import { EmotionCountChart } from '../charts/EmotionCountChart';
 import { EmotionLevelChart } from '../charts/EmotionLevelChart';
 import { EmotionReasonsChart } from '../charts/EmotionReasonsChart';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function ChartLayout() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -21,7 +21,7 @@ export function ChartLayout() {
   const isMobile = useIsMobile();
   const isSm = useIsSm();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

@@ -1,8 +1,13 @@
+/**
+ * [useSquareResize hook]
+ * Responsive square sizing with throttled ResizeObserver
+ */
+
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import throttle from 'lodash/throttle';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -13,7 +18,7 @@ interface UseSquareResizeOptions {
   throttleMs?: number;
 }
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
@@ -24,7 +29,7 @@ interface UseSquareResizeOptions {
  * with throttled resize observer for performance
  */
 export function useSquareResize({ isResize = true, throttleMs = 100 }: UseSquareResizeOptions = {}) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -32,7 +37,7 @@ export function useSquareResize({ isResize = true, throttleMs = 100 }: UseSquare
   const ref = useRef<HTMLDivElement>(null);
   const [squareSize, setSquareSize] = useState<number | undefined>(undefined);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Computed Values
    * --------------------------------------------
@@ -49,7 +54,7 @@ export function useSquareResize({ isResize = true, throttleMs = 100 }: UseSquare
     [isResize, throttleMs]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
@@ -64,7 +69,7 @@ export function useSquareResize({ isResize = true, throttleMs = 100 }: UseSquare
     return () => ro.disconnect();
   }, [throttledUpdate]);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

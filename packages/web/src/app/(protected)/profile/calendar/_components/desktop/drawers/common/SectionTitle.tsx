@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { Link as RadixLink, Text } from '@radix-ui/themes';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -14,7 +14,7 @@ interface SectionTitleProps {
   href?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

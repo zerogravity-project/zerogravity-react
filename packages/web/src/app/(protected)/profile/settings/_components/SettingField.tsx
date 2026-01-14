@@ -4,7 +4,7 @@ import { Text, TextField } from '@radix-ui/themes';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -30,21 +30,21 @@ interface SettingFieldProps {
   readOnly?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function SettingField({ label, value, type = 'text', readOnly = true }: SettingFieldProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const isMobile = useIsMobile();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

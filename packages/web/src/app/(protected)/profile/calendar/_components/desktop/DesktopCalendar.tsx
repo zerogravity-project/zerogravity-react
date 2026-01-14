@@ -14,28 +14,28 @@ import DesktopCalendarCell from './cell/DesktopCalendarCell';
 import EmotionDetailDrawer from './drawers/EmotionDetailDrawer';
 import DesktopCalendarHeader from './header/DesktopCalendarHeader';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DesktopCalendar() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { isToday, getYear, getMonth, getMonthDaysInfo, selectedDate, setSelectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
    */
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -48,7 +48,7 @@ export default function DesktopCalendar() {
   const monthStart = startOfMonth(currentMonthDate);
   const monthEnd = endOfMonth(currentMonthDate);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Query Hooks
    * --------------------------------------------
@@ -58,7 +58,7 @@ export default function DesktopCalendar() {
     endDateTime: format(monthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Derived Values (from query)
    * --------------------------------------------
@@ -75,7 +75,7 @@ export default function DesktopCalendar() {
     record => format(record.createdAt, 'yyyy-MM-dd') === selectedDateString
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Event Handlers
    * --------------------------------------------
@@ -87,7 +87,7 @@ export default function DesktopCalendar() {
     setSelectedDate(date);
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 7. Render Helpers
    * --------------------------------------------
@@ -125,7 +125,7 @@ export default function DesktopCalendar() {
     <div key={`empty-after-${i}`} className="h-full w-full outline outline-[0.5px] outline-[var(--gray-3)]" />
   ));
 
-  /**
+  /*
    * --------------------------------------------
    * 8. Return
    * --------------------------------------------

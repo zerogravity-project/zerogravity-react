@@ -10,14 +10,14 @@ import { useChart } from '../../_contexts/ChartContext';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function EmotionReasonsChart() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -25,14 +25,14 @@ export function EmotionReasonsChart() {
   const isSm = useIsSm();
   const { timePeriod, startDate } = useChart();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
    */
   const { data: reasonData, isFetching: isReasonFetching } = useChartReasonQuery({ period: timePeriod, startDate });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

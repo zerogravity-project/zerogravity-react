@@ -5,7 +5,7 @@ import { motion } from 'motion/react';
 
 import { Icon } from '../icon';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

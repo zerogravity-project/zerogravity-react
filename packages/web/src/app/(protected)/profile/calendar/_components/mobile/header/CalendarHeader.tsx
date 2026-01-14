@@ -10,7 +10,7 @@ import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
 import { DAYS_OF_WEEK } from '../../../_constants/calendar.constants';
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -21,14 +21,14 @@ interface CalendarHeaderProps {
   isLoading?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function CalendarHeader({ emotionRecords, isLoading = false }: CalendarHeaderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -36,7 +36,7 @@ export default function CalendarHeader({ emotionRecords, isLoading = false }: Ca
   const { currentDate, setSelectedDate, goToNextWeek, goToPreviousWeek, goToToday, isSelected, getMonthName } =
     useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -44,7 +44,7 @@ export default function CalendarHeader({ emotionRecords, isLoading = false }: Ca
   const monthName = getMonthName();
   const weekDates = getWeekDates(currentDate);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

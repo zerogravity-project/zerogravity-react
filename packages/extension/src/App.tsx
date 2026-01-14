@@ -14,21 +14,21 @@ import { cn } from '@zerogravity/shared/utils';
 
 import { NavigationAdapter } from './components/navigation/NavigationAdapter';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 function App() {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [isLoaded, setIsLoaded] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Custom Hooks
    * --------------------------------------------
@@ -36,7 +36,7 @@ function App() {
   const { accentColor } = useTheme();
   const isLg = useIsLg();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Event Handlers
    * --------------------------------------------
@@ -46,7 +46,7 @@ function App() {
     window.location.href = `${import.meta.env.VITE_WEB_APP_URL as string}/spaceout`;
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

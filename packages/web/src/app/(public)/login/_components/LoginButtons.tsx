@@ -10,7 +10,7 @@ import { useIsMobile } from '@zerogravity/shared/hooks';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -19,7 +19,7 @@ import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 /** Backend connection error types from NextAuth */
 const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -33,7 +33,7 @@ const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
  * Shows alert modal if backend authentication fails
  */
 export default function LoginButtons() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -43,7 +43,7 @@ export default function LoginButtons() {
   const searchParams = useSearchParams();
   const { openAlertModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -51,7 +51,7 @@ export default function LoginButtons() {
   const callbackUrl = searchParams.get('callbackUrl') || '/';
   const authError = searchParams.get('error');
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
@@ -73,7 +73,7 @@ export default function LoginButtons() {
     }
   }, [authError, openAlertModal, router, callbackUrl]);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

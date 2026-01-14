@@ -4,7 +4,7 @@ import { LinkProps, MenuItem } from '../../types/navigation.types';
 
 import { MenuListItem } from './MenuListItem';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -16,7 +16,7 @@ interface MenuListProps {
   LinkComponent: React.ComponentType<LinkProps>;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

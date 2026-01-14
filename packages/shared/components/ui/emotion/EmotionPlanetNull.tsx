@@ -8,7 +8,7 @@ import { cn } from '../../../utils/styleUtils';
 import { EMOTION_STEPS } from './constants/emotion.constants';
 import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -16,7 +16,7 @@ import { EmotionPlanetGlow } from './decorations/EmotionPlanetGlow';
 
 const CIRCLE_RADIUS = 45;
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -33,7 +33,7 @@ interface EmotionPlanetNullProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -47,14 +47,14 @@ export function EmotionPlanetNull({
   isResize = true,
   className,
 }: EmotionPlanetNullProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Helper Functions
    * --------------------------------------------
@@ -75,7 +75,7 @@ export function EmotionPlanetNull({
     return typeof dimension === 'number' ? dimension * scale : dimension;
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -87,7 +87,7 @@ export function EmotionPlanetNull({
   const nullWidth = getNullSize(resolvedWidth, resolvedWidth === '100%');
   const nullHeight = getNullSize(resolvedHeight, resolvedHeight === '100%');
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

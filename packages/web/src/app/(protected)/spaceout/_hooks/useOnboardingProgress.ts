@@ -1,10 +1,15 @@
+/**
+ * [useOnboardingProgress hook]
+ * Manage spaceout onboarding message sequence and timing
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
 
 import { useSpaceoutVisit } from './useSpaceoutVisit';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -20,21 +25,21 @@ const ONBOARDING_MESSAGES = [
 const MESSAGE_DURATION = 3000;
 const SELECTION_DELAY = 1000;
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
  */
 
 export function useOnboardingProgress() {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const { shouldShowOnboarding, isLoading } = useSpaceoutVisit();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -42,7 +47,7 @@ export function useOnboardingProgress() {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
   const [showSelection, setShowSelection] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -50,7 +55,7 @@ export function useOnboardingProgress() {
   const currentMessage = ONBOARDING_MESSAGES[currentMessageIndex];
   const showOnboarding = !showSelection && shouldShowOnboarding;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Effects
    * --------------------------------------------
@@ -82,7 +87,7 @@ export function useOnboardingProgress() {
     return () => clearInterval(messageInterval);
   }, [isLoading, shouldShowOnboarding]);
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

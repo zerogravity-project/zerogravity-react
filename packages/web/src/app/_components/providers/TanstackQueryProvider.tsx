@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -13,7 +13,7 @@ interface TanstackQueryProviderProps {
   children: React.ReactNode;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -24,7 +24,7 @@ interface TanstackQueryProviderProps {
  * @param children - Child components to wrap
  */
 export default function TanstackQueryProvider({ children }: TanstackQueryProviderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Computed Values
    * --------------------------------------------
@@ -49,7 +49,7 @@ export default function TanstackQueryProvider({ children }: TanstackQueryProvide
     []
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

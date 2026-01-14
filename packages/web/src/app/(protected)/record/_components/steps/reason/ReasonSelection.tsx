@@ -5,14 +5,14 @@ import { EMOTION_REASONS, type EmotionReason } from '@zerogravity/shared/entitie
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function ReasonSelection() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -23,7 +23,7 @@ export default function ReasonSelection() {
     setEmotionReasons: setEmotionReason,
   } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Event Handlers
    * --------------------------------------------
@@ -37,7 +37,7 @@ export default function ReasonSelection() {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

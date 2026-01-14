@@ -1,10 +1,15 @@
+/**
+ * [ModalContext]
+ * Global modal state management with queue system
+ */
+
 'use client';
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { createContext, ReactNode, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -68,7 +73,7 @@ interface ModalContextType {
   currentStateModal: ModalQueueItem | null;
 }
 
-/**
+/*
  * ============================================
  * Context
  * ============================================
@@ -80,7 +85,7 @@ interface ModalContextType {
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-/**
+/*
  * ============================================
  * Provider
  * ============================================
@@ -91,7 +96,7 @@ const ModalContext = createContext<ModalContextType | undefined>(undefined);
  */
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -100,7 +105,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -109,7 +114,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [currentStateModal, setCurrentStateModal] = useState<ModalQueueItem | null>(null);
   const [modalQueue, setModalQueue] = useState<ModalQueueItem[]>([]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Callbacks
    * --------------------------------------------
@@ -204,7 +209,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     setModalQueue([]);
   }, [currentHashModal, router, buildUrl]);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Helper Functions
    * --------------------------------------------
@@ -212,7 +217,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   /** Safely read hash from current URL (SSR-safe) */
   const getHash = () => (typeof window !== 'undefined' ? window.location.hash : '');
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Effects
    * --------------------------------------------
@@ -253,7 +258,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     }
   }, [currentStateModal, modalQueue]);
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Context Values
    * --------------------------------------------
@@ -283,7 +288,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     ]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 7. Return
    * --------------------------------------------
@@ -291,7 +296,7 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>;
 }
 
-/**
+/*
  * ============================================
  * Custom Hooks
  * ============================================
@@ -303,7 +308,7 @@ export function useModal() {
   return ctx;
 }
 
-/**
+/*
  * ============================================
  * Type Exports
  * ============================================

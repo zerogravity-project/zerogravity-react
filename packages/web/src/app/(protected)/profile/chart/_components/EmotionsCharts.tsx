@@ -7,21 +7,21 @@ import { AiAnalysisDrawer } from './drawers/AiAnalysisDrawer';
 import { EmotionChartsHeader } from './header/EmotionChartsHeader';
 import { ChartLayout } from './layout/ChartLayout';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function EmotionsCharts() {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

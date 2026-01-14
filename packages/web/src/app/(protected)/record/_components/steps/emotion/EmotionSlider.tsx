@@ -7,14 +7,14 @@ import { Slider } from '@/app/_components/ui/slider/slider';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function EmotionSlider() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -22,7 +22,7 @@ export default function EmotionSlider() {
   const { setEmotionId, emotionSliderValue, setEmotionSliderValue, emotionValueToStepIndex } =
     useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Event Handlers
    * --------------------------------------------
@@ -36,7 +36,7 @@ export default function EmotionSlider() {
     setEmotionId(emotionValueToStepIndex as EmotionId);
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

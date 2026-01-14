@@ -3,7 +3,7 @@
 import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -18,7 +18,7 @@ interface DesktopCalendarCellProps {
   onClick?: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -32,7 +32,7 @@ export default function DesktopCalendarCell({
   dailyEmotionId,
   onClick,
 }: DesktopCalendarCellProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Derived Values
    * --------------------------------------------
@@ -40,7 +40,7 @@ export default function DesktopCalendarCell({
   const isEmpty = dailyEmotionId === undefined;
   const isDisabled = isAfterToday || isLoading;
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

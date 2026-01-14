@@ -14,7 +14,7 @@ import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 import { useCalendar } from '../../../../_contexts/CalendarContext';
 import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -25,14 +25,14 @@ interface DailyEmotionSectionProps {
   isLoading?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DailyEmotionSection({ emotionRecords, isLoading = false }: DailyEmotionSectionProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -40,14 +40,14 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
   const { selectedDate } = useCalendar();
   const { accentColor } = useTheme();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
    */
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -58,7 +58,7 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
   const emotionId = emotionRecords?.emotionId ?? (accentEmotionId as EmotionId);
   const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

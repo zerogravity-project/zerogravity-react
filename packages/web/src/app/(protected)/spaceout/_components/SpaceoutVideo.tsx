@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -25,7 +25,7 @@ interface SpaceoutVideoProps {
   onError?: (error: React.SyntheticEvent<HTMLVideoElement, Event>) => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -42,14 +42,14 @@ export default function SpaceoutVideo({
   onLoadedData,
   onError,
 }: SpaceoutVideoProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const router = useRouter();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -58,14 +58,14 @@ export default function SpaceoutVideo({
   const [isUserInteracted, setIsUserInteracted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
    */
   const currentVideo = videos[currentVideoIndex];
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Event Handlers
    * --------------------------------------------
@@ -90,7 +90,7 @@ export default function SpaceoutVideo({
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Effects
    * --------------------------------------------
@@ -102,7 +102,7 @@ export default function SpaceoutVideo({
     }
   }, [isUserInteracted, currentVideoIndex]);
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------

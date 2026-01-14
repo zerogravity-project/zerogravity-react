@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'motion/react';
 
 import { EMOTION_STEPS } from '../constants/emotion.constants';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -13,7 +13,7 @@ import { EMOTION_STEPS } from '../constants/emotion.constants';
 const CIRCLE_RADIUS = 45;
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS; // ≈ 283
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -27,7 +27,7 @@ interface EmotionPlanetLoadingProps {
   isShowText?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

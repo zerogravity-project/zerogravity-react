@@ -2,7 +2,7 @@ import { cn } from '@zerogravity/shared/utils';
 
 import { EmotionChartHeader } from '../header/EmotionChartHeader';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -14,7 +14,7 @@ interface EmotionChartContainerProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

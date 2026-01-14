@@ -5,7 +5,7 @@ import { DesktopMenuFooter } from './footer/DesktopMenuFooter';
 import { DesktopMenuHeader } from './header/DesktopMenuHeader';
 import { DesktopMenuList } from './list/DesktopMenuList';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -15,7 +15,7 @@ interface DesktopMenuProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

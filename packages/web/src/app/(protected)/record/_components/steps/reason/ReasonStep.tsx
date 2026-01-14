@@ -16,14 +16,14 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 import ReasonSelection from './ReasonSelection';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function ReasonStep() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -31,7 +31,7 @@ export default function ReasonStep() {
   const router = useRouter();
   const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
@@ -45,14 +45,14 @@ export default function ReasonStep() {
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
    */
   const isTodayDate = date ? isToday(new Date(date)) : false;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Event Handlers
    * --------------------------------------------
@@ -68,7 +68,7 @@ export default function ReasonStep() {
     });
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

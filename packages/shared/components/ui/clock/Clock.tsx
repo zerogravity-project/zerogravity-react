@@ -4,7 +4,7 @@ import { useClock } from '../../../hooks/useClock';
 import { getTimeStringData } from '../../../utils/dateTimeUtils';
 import { cn } from '../../../utils/styleUtils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -14,28 +14,28 @@ interface ClockProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export const Clock = ({ className }: ClockProps) => {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const now = useClock();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
    */
   const timeData = now ? getTimeStringData(now) : null;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

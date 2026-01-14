@@ -6,7 +6,7 @@ import { Switch, Text } from '@radix-ui/themes';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -21,7 +21,7 @@ interface ConsentToggleProps {
   viewDetailUrl: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -35,14 +35,14 @@ export function ConsentToggle({
   onCheckedChange,
   viewDetailUrl,
 }: ConsentToggleProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const isMobile = useIsMobile();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

@@ -8,14 +8,14 @@ import { motion } from 'motion/react';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function SelectionScreen() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -23,7 +23,7 @@ export default function SelectionScreen() {
   const router = useRouter();
   const isSm = useIsSm();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Event Handlers
    * --------------------------------------------
@@ -39,7 +39,7 @@ export default function SelectionScreen() {
     router.push('/record');
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

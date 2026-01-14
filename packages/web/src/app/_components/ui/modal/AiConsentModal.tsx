@@ -10,7 +10,7 @@ import { useUpdateConsentMutation } from '@/services/user/user.query';
 import { useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -20,14 +20,14 @@ interface AiConsentModalProps {
   onAgree: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function AiConsentModal({ onAgree }: AiConsentModalProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -35,7 +35,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
   const { update: updateSession } = useSession();
   const { closeModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
@@ -61,7 +61,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

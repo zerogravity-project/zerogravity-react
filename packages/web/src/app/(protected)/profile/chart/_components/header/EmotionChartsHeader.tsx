@@ -12,7 +12,7 @@ import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 import { useChart } from '../../_contexts/ChartContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -22,14 +22,14 @@ interface EmotionChartsHeaderProps {
   setIsDrawerOpen: (isDrawerOpen: boolean) => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -47,14 +47,14 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
   } = useChart();
   const { openComponentModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
    */
   const consents = session?.user?.consents;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Event Handlers
    * --------------------------------------------
@@ -74,7 +74,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
     setIsDrawerOpen(true);
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

@@ -18,7 +18,7 @@ import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import DiarySection from './sections/diary/DiarySection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -33,7 +33,7 @@ interface EmotionDetailDrawerProps {
   momentEmotionRecords?: EmotionRecordDetail[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -47,14 +47,14 @@ export default function EmotionDetailDrawer({
   diaryEntry,
   momentEmotionRecords,
 }: EmotionDetailDrawerProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. External Hooks
    * --------------------------------------------
@@ -62,7 +62,7 @@ export default function EmotionDetailDrawer({
   const { selectedDate } = useCalendar();
   const isOverLargeScreen = !useIsLg();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -73,7 +73,7 @@ export default function EmotionDetailDrawer({
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
@@ -101,7 +101,7 @@ export default function EmotionDetailDrawer({
     ? 'h-full flex-shrink-0 overflow-hidden'
     : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------

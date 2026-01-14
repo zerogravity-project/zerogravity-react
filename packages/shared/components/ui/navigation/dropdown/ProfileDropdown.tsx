@@ -6,7 +6,7 @@ import { cn } from '../../../../utils';
 import { Icon } from '../../icon';
 import { LinkProps, MenuItem } from '../types/navigation.types';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -29,7 +29,7 @@ interface ProfileDropdownItemProps {
   LinkComponent: React.ComponentType<LinkProps>;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -76,7 +76,7 @@ export function ProfileDropdown({ userName, profileImage, menuItems, LinkCompone
   );
 }
 
-/**
+/*
  * ============================================
  * Helper Components
  * ============================================
