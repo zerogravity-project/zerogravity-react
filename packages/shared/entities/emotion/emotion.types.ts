@@ -40,3 +40,57 @@ export type EmotionColor = (typeof EMOTION_COLORS)[number];
 
 /** Reason category derived from EMOTION_REASONS */
 export type EmotionReason = (typeof EMOTION_REASONS)[number];
+
+/*
+ * ============================================
+ * Style Types
+ * ============================================
+ */
+
+/** Slider appearance styling */
+export interface EmotionSliderStyle {
+  ring: string;
+  ringOffset: string;
+}
+
+/** 3D planet shader parameters (excluding colors) */
+export interface EmotionPlanetParams {
+  positionFrequency: number;
+  timeFrequency: number;
+  warpPositionFrequency: number;
+  warpTimeFrequency: number;
+  warpStrength: number;
+  metalness: number;
+  roughness: number;
+}
+
+/** Full planet style including colors */
+export interface EmotionPlanetStyle extends EmotionPlanetParams {
+  colorA: string;
+  colorB: string;
+}
+
+/*
+ * ============================================
+ * Composite Types
+ * ============================================
+ */
+
+/** Emotion step configuration with styling for slider and planet */
+export interface EmotionStep {
+  /** Unique emotion identifier */
+  id: EmotionId;
+  /** Internal reference key */
+  key: EmotionKey;
+  /** Display label */
+  type: EmotionType;
+  /** Color theme */
+  color: EmotionColor;
+  /** Corresponding slider position */
+  sliderValue: EmotionSliderValue;
+  /** Visual styling configuration */
+  style: {
+    slider: EmotionSliderStyle;
+    planet: EmotionPlanetStyle;
+  };
+}

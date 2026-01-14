@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'motion/react';
 
-import { EMOTION_STEPS } from '../constants/emotion.constants';
+import { EMOTION_STEPS } from '../../../../entities/emotion';
 
 /*
  * ============================================

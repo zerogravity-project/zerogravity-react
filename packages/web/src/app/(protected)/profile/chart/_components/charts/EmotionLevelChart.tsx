@@ -1,9 +1,7 @@
 'use client';
 
 import type { ActiveElement, ChartEvent, TooltipItem, TooltipModel } from 'chart.js';
-import { Chart } from 'chart.js/auto';
 import type { EventContext } from 'chartjs-plugin-annotation';
-import annotationPlugin from 'chartjs-plugin-annotation';
 import { useEffect, useMemo, useRef } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
@@ -11,6 +9,7 @@ import { EMOTION_COLORS_MAP, EMOTION_COLORS_MAP_ALPHA } from '@zerogravity/share
 
 import { useChartLevelQuery } from '@/services/chart/chart.query';
 
+import { Chart } from '../../_config/chartSetup';
 import { CHART_GRID_COLOR } from '../../_constants/chart.constants';
 import { useChart } from '../../_contexts/ChartContext';
 import {
@@ -23,9 +22,6 @@ import {
 } from '../../_utils/chartUtils';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
-
-// Register annotation plugin
-Chart.register(annotationPlugin);
 
 /*
  * ============================================

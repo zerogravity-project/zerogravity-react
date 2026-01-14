@@ -6,8 +6,7 @@ import { Badge, Button, Heading, Text } from '@radix-ui/themes';
 import { AnimatePresence, motion } from 'motion/react';
 import { useRef } from 'react';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
-import type { EmotionId, EmotionReason } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { formatDateString, isSameDay } from '@zerogravity/shared/utils';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';

@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation';
 import { Badge, Button, Heading, Text } from '@radix-ui/themes';
 import { isToday } from 'date-fns';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import { useCreateEmotionRecordMutation, useUpdateEmotionRecordMutation } from '@/services/emotion/emotion.query';

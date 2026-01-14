@@ -1,6 +1,6 @@
 'use client';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
 /*
@@ -57,7 +57,7 @@ export default function DesktopCalendarCell({
       <div className="absolute top-1/2 left-1/2 z-99 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center">
         <svg width="100%" height="100%" viewBox="0 0 80 80" className="pointer-events-none">
           {/* Emotion circle background */}
-          {!isEmpty && <circle cx="40" cy="40" r="38" fill={`var(--${EMOTION_STEPS[dailyEmotionId].color}-9)`} />}
+          {!isEmpty && <circle cx="40" cy="40" r="38" fill={`var(--${EMOTION_COLORS[dailyEmotionId]}-9)`} />}
           <text
             x="40"
             y="40"

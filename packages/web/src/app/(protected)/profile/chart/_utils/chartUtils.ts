@@ -5,8 +5,7 @@
 
 import { addDays, addMonths, format, getDaysInMonth, setDate } from 'date-fns';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
-import { EMOTION_COLORS, EMOTION_COLORS_MAP } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_COLORS, EMOTION_COLORS_MAP, EMOTION_TYPES } from '@zerogravity/shared/entities/emotion';
 
 import { ChartPeriod, WEEK_LABELS, YEAR_LABELS } from '@/services/chart/chart.dto';
 
@@ -24,7 +23,7 @@ import { CHART_GRID_COLOR, TOOLTIP_STYLES } from '../_constants/chart.constants'
  * @returns Emotion type label (e.g., "Happy", "Sad")
  */
 export function emotionValueToLabel(value: number): string {
-  return EMOTION_STEPS[value]?.type || '';
+  return EMOTION_TYPES[value] || '';
 }
 
 /**
@@ -37,7 +36,7 @@ export function generateEmotionRangeHtml(value: number): string {
   const ceilEmotion = Math.ceil(value);
   const isInteger = value === floorEmotion;
 
-  const floorType = EMOTION_STEPS[floorEmotion]?.type || '';
+  const floorType = EMOTION_TYPES[floorEmotion] || '';
   const floorColorKey = EMOTION_COLORS[floorEmotion];
   const floorColor = EMOTION_COLORS_MAP[floorColorKey as keyof typeof EMOTION_COLORS_MAP];
 
@@ -45,7 +44,7 @@ export function generateEmotionRangeHtml(value: number): string {
     return `<span style="color: ${floorColor};">${floorType}</span>`;
   }
 
-  const ceilType = EMOTION_STEPS[ceilEmotion]?.type || '';
+  const ceilType = EMOTION_TYPES[ceilEmotion] || '';
   const ceilColorKey = EMOTION_COLORS[ceilEmotion];
   const ceilColor = EMOTION_COLORS_MAP[ceilColorKey as keyof typeof EMOTION_COLORS_MAP];
 

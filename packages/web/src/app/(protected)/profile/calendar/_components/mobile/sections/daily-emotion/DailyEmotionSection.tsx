@@ -4,9 +4,10 @@ import { Badge, Button, Text } from '@radix-ui/themes';
 import { useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
-import { EMOTION_STEPS, EmotionPlanetNull, EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion';
+import { EmotionPlanetNull } from '@zerogravity/shared/components/ui/emotion/null';
+import { LazyEmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene-lazy';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
-import { EMOTION_COLORS, type EmotionId } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_COLORS, EMOTION_STEPS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 import { formatDateString } from '@zerogravity/shared/utils';
 
 import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
@@ -86,7 +87,7 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
       {/* Data state */}
       {!isLoading && !isEmpty && (
         <>
-          <EmotionPlanetScene emotionId={emotionId} />
+          <LazyEmotionPlanetScene emotionId={emotionId} />
           <Text color={emotionColor} className="!text-center !text-3xl transition-all duration-400">
             {EMOTION_STEPS[emotionId].type}
           </Text>

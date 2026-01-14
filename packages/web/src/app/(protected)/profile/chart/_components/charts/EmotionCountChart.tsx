@@ -1,7 +1,6 @@
 'use client';
 
 import type { ActiveElement, ChartEvent, TooltipModel } from 'chart.js';
-import { Chart } from 'chart.js/auto';
 import { useEffect, useMemo, useRef } from 'react';
 
 import {
@@ -14,6 +13,7 @@ import {
 
 import { useChartCountQuery } from '@/services/chart/chart.query';
 
+import { Chart } from '../../_config/chartSetup';
 import { CHART_GRID_COLOR } from '../../_constants/chart.constants';
 import { useChart } from '../../_contexts/ChartContext';
 import {

@@ -9,8 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
-import type { EmotionId, EmotionReason } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionRecordType } from '@/services/emotion/emotion.dto';
 
