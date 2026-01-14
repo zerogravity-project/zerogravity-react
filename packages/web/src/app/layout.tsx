@@ -3,8 +3,6 @@ import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
 
 import type { Metadata } from 'next';
 
-import ClientProviders from './_components/providers/ClientProviders';
-
 export interface CustomIconDescriptorType extends IconDescriptor {
   precedence?: string;
 }
@@ -46,6 +44,11 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Root layout
+ * Minimal - only html/body structure
+ * Providers are handled by route group layouts
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -53,9 +56,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body>
-        <ClientProviders>{children}</ClientProviders>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

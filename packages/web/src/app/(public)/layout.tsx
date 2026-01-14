@@ -1,21 +1,21 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
+import { ThemeProvider } from '@zerogravity/shared/components/providers';
 
 import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
 
-interface RootLayoutProps {
+interface PublicLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: Readonly<RootLayoutProps>) {
-  const pathname = usePathname();
-  const isTermsPage = pathname.startsWith('/terms');
-
+/**
+ * Public layout (/, /terms/*)
+ * Includes Theme for Radix UI components
+ * No Session, Query, or Modal providers needed
+ */
+export default async function PublicLayout({ children }: Readonly<PublicLayoutProps>) {
   return (
-    <>
-      <NavigationAdapter className="fixed top-0" background={isTermsPage} />
-      {children}
-    </>
+    <ThemeProvider>
+      <NavigationAdapter />
+      <main className="relative w-full">{children}</main>
+    </ThemeProvider>
   );
 }

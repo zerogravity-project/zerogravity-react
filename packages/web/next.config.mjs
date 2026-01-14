@@ -14,11 +14,16 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: [
       '@radix-ui/themes',
+      '@react-three/drei',
+      '@react-three/fiber',
+      '@tanstack/react-query',
+      'chart.js',
       'date-fns',
       'lodash',
       'lucide-react',
       'motion',
-      '@tanstack/react-query',
+      'react-chartjs-2',
+      'three',
     ],
   },
   webpack: config => {
