@@ -63,12 +63,14 @@ describe('useSquareResize', () => {
   };
 
   describe('initial state', () => {
+    /** Returns ref object */
     it('returns ref object', () => {
       const { result } = renderHook(() => useSquareResize());
       expect(result.current.ref).toBeDefined();
       expect(result.current.ref.current).toBeNull();
     });
 
+    /** Returns undefined squareSize initially */
     it('returns undefined squareSize initially', () => {
       const { result } = renderHook(() => useSquareResize());
       expect(result.current.squareSize).toBeUndefined();
@@ -76,6 +78,7 @@ describe('useSquareResize', () => {
   });
 
   describe('size calculation', () => {
+    /** Calculates min of width and height (landscape) */
     it('calculates min of width and height (landscape)', () => {
       const { result } = renderHook(() => useSquareResize());
 
@@ -107,6 +110,7 @@ describe('useSquareResize', () => {
       // The squareSize should be min(800, 600) = 600
     });
 
+    /** Calculates min of width and height (portrait) */
     it('calculates min of width and height (portrait)', () => {
       const { result } = renderHook(() => useSquareResize());
 
@@ -133,6 +137,7 @@ describe('useSquareResize', () => {
   });
 
   describe('options', () => {
+    /** Respects isResize: false option */
     it('respects isResize: false option', () => {
       const { result } = renderHook(() => useSquareResize({ isResize: false }));
 
@@ -162,6 +167,7 @@ describe('useSquareResize', () => {
       expect(result.current.squareSize).toBeUndefined();
     });
 
+    /** Uses default throttleMs of 100 */
     it('uses default throttleMs of 100', () => {
       // This is implicitly tested by the hook working correctly
       // The throttle delay is an implementation detail
@@ -169,6 +175,7 @@ describe('useSquareResize', () => {
       expect(result.current).toBeDefined();
     });
 
+    /** Accepts custom throttleMs option */
     it('accepts custom throttleMs option', () => {
       const { result } = renderHook(() => useSquareResize({ throttleMs: 200 }));
       expect(result.current).toBeDefined();
@@ -176,6 +183,7 @@ describe('useSquareResize', () => {
   });
 
   describe('cleanup', () => {
+    /** Disconnects ResizeObserver on unmount */
     it('disconnects ResizeObserver on unmount', () => {
       const { result, unmount } = renderHook(() => useSquareResize());
 
@@ -193,6 +201,7 @@ describe('useSquareResize', () => {
   });
 
   describe('return type', () => {
+    /** Returns object with ref and squareSize */
     it('returns object with ref and squareSize', () => {
       const { result } = renderHook(() => useSquareResize());
 

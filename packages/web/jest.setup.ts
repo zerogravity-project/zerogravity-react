@@ -41,19 +41,19 @@ jest.mock('next-auth/react', () => ({
 jest.mock('@radix-ui/themes');
 
 // Mock Terms content components
-jest.mock('@/app/terms/[type]/_components/AIAnalysisContent', () => ({
+jest.mock('@/app/(public)/terms/[type]/_components/AIAnalysisContent', () => ({
   AIAnalysisContent: () => 'AI Analysis Content',
 }));
 
-jest.mock('@/app/terms/[type]/_components/PrivacyPolicyContent', () => ({
+jest.mock('@/app/(public)/terms/[type]/_components/PrivacyPolicyContent', () => ({
   PrivacyPolicyContent: () => 'Privacy Policy Content',
 }));
 
-jest.mock('@/app/terms/[type]/_components/SensitiveDataContent', () => ({
+jest.mock('@/app/(public)/terms/[type]/_components/SensitiveDataContent', () => ({
   SensitiveDataContent: () => 'Sensitive Data Content',
 }));
 
-jest.mock('@/app/terms/[type]/_components/ServiceTermsContent', () => ({
+jest.mock('@/app/(public)/terms/[type]/_components/ServiceTermsContent', () => ({
   ServiceTermsContent: () => 'Service Terms Content',
 }));
 
