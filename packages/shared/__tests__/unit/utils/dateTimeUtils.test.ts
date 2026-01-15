@@ -16,11 +16,13 @@ import {
 
 describe('dateTimeUtils', () => {
   describe('getTodayString', () => {
+    /** Returns YYYY-MM-DD format */
     it('returns date in YYYY-MM-DD format', () => {
       const result = getTodayString();
       expect(result).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     });
 
+    /** Returns today's date */
     it('returns today date', () => {
       const result = getTodayString();
       const today = new Date();
@@ -30,11 +32,13 @@ describe('dateTimeUtils', () => {
   });
 
   describe('formatDateString', () => {
+    /** Formats date with default format */
     it('formats date to YYYY-MM-DD', () => {
       const date = new Date(2024, 0, 15); // January 15, 2024
       expect(formatDateString(date)).toBe('2024-01-15');
     });
 
+    /** Formats date with custom format */
     it('pads single digit month and day', () => {
       const date = new Date(2024, 2, 5); // March 5, 2024
       expect(formatDateString(date)).toBe('2024-03-05');
@@ -42,6 +46,7 @@ describe('dateTimeUtils', () => {
   });
 
   describe('getDateStringData', () => {
+    /** Returns year, month, day as strings */
     it('returns year, month, day, weekday', () => {
       const date = new Date(2024, 0, 15); // January 15, 2024 (Monday)
       const result = getDateStringData(date);
@@ -52,6 +57,7 @@ describe('dateTimeUtils', () => {
       expect(result.weekday).toBe('Monday');
     });
 
+    /** Pads single digit month and day */
     it('returns full month name in English', () => {
       const december = new Date(2024, 11, 25);
       expect(getDateStringData(december).month).toBe('December');
@@ -64,6 +70,7 @@ describe('dateTimeUtils', () => {
   });
 
   describe('getTimeStringData', () => {
+    /** Returns hours, minutes, seconds as strings */
     it('returns hours, minutes, seconds as padded strings', () => {
       const date = new Date(2024, 0, 15, 14, 30, 45);
       const result = getTimeStringData(date);
@@ -73,6 +80,7 @@ describe('dateTimeUtils', () => {
       expect(result.seconds).toBe('45');
     });
 
+    /** Pads single digit values */
     it('pads single digit values with leading zero', () => {
       const date = new Date(2024, 0, 15, 9, 5, 3);
       const result = getTimeStringData(date);
@@ -82,6 +90,7 @@ describe('dateTimeUtils', () => {
       expect(result.seconds).toBe('03');
     });
 
+    /** Handles midnight correctly */
     it('handles midnight correctly', () => {
       const midnight = new Date(2024, 0, 15, 0, 0, 0);
       const result = getTimeStringData(midnight);
@@ -93,24 +102,28 @@ describe('dateTimeUtils', () => {
   });
 
   describe('isSameDay', () => {
+    /** Returns true for same day */
     it('returns true for same day', () => {
       const date1 = new Date(2024, 0, 15, 10, 30);
       const date2 = new Date(2024, 0, 15, 23, 59);
       expect(isSameDay(date1, date2)).toBe(true);
     });
 
+    /** Returns false for different days */
     it('returns false for different days', () => {
       const date1 = new Date(2024, 0, 15);
       const date2 = new Date(2024, 0, 16);
       expect(isSameDay(date1, date2)).toBe(false);
     });
 
+    /** Returns false for different months */
     it('returns false for different months', () => {
       const date1 = new Date(2024, 0, 15);
       const date2 = new Date(2024, 1, 15);
       expect(isSameDay(date1, date2)).toBe(false);
     });
 
+    /** Returns false for different years */
     it('returns false for different years', () => {
       const date1 = new Date(2024, 0, 15);
       const date2 = new Date(2025, 0, 15);
@@ -119,12 +132,14 @@ describe('dateTimeUtils', () => {
   });
 
   describe('getWeekDates', () => {
+    /** Returns 7 dates */
     it('returns array of 7 dates', () => {
       const date = new Date(2024, 0, 15);
       const result = getWeekDates(date);
       expect(result).toHaveLength(7);
     });
 
+    /** Starts from Sunday */
     it('starts from Sunday', () => {
       const wednesday = new Date(2024, 0, 17); // January 17, 2024 (Wednesday)
       const result = getWeekDates(wednesday);
@@ -142,6 +157,7 @@ describe('dateTimeUtils', () => {
       }
     });
 
+    /** Ends on Saturday */
     it('ends on Saturday', () => {
       const date = new Date(2024, 0, 15);
       const result = getWeekDates(date);

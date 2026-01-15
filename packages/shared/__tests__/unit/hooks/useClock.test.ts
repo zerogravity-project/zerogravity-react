@@ -37,11 +37,13 @@ describe('useClock', () => {
     callbacks.forEach(cb => cb(performance.now()));
   };
 
+  /** Returns null initially (SSR safety) */
   it('returns null initially (SSR safety)', () => {
     const { result } = renderHook(() => useClock());
     expect(result.current).toBeNull();
   });
 
+  /** Returns Date object after first RAF tick */
   it('returns Date object after first RAF tick', () => {
     const { result } = renderHook(() => useClock());
 
@@ -52,6 +54,7 @@ describe('useClock', () => {
     expect(result.current).toBeInstanceOf(Date);
   });
 
+  /** Updates time on subsequent RAF ticks */
   it('updates time on subsequent RAF ticks', () => {
     const { result } = renderHook(() => useClock());
 
@@ -71,11 +74,13 @@ describe('useClock', () => {
     expect(result.current).not.toBe(firstDate);
   });
 
+  /** Calls requestAnimationFrame on mount */
   it('calls requestAnimationFrame on mount', () => {
     renderHook(() => useClock());
     expect(window.requestAnimationFrame).toHaveBeenCalled();
   });
 
+  /** Calls cancelAnimationFrame on unmount */
   it('calls cancelAnimationFrame on unmount', () => {
     const { unmount } = renderHook(() => useClock());
 
@@ -88,6 +93,7 @@ describe('useClock', () => {
     expect(window.cancelAnimationFrame).toHaveBeenCalled();
   });
 
+  /** Continues requesting animation frames while mounted */
   it('continues requesting animation frames while mounted', () => {
     renderHook(() => useClock());
 
