@@ -22,12 +22,14 @@ const config: Config = {
     '!src/**/__tests__/**',
   ],
   moduleDirectories: ['node_modules', '<rootDir>/'],
-  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
+  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/e2e/'],
+  modulePathIgnorePatterns: ['<rootDir>/.next/'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['@swc/jest', {}],
   },
   transformIgnorePatterns: ['/node_modules/', '^.+\\.module\\.(css|sass|scss)$'],
   coverageProvider: 'v8',
+  passWithNoTests: true,
 };
 
 export default config;
