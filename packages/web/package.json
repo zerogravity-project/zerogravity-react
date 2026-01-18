@@ -15,9 +15,7 @@
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "sync:boilerplate": "./scripts/sync-boilerplate.sh",
-    "sync:to-boilerplate": "./scripts/sync-to-boilerplate.sh"
+    "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.10",
@@ -55,8 +53,8 @@
     "three-custom-shader-material": "^6.3.7"
   },
   "devDependencies": {
-    "@playwright/test": "^1.56.1",
     "@next/bundle-analyzer": "^16.1.1",
+    "@playwright/test": "^1.56.1",
     "@swc/jest": "^0.2.39",
     "@tailwindcss/postcss": "^4.1.12",
     "@tanstack/react-query-devtools": "^5.82.0",
