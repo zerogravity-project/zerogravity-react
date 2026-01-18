@@ -18,17 +18,8 @@ import type {
   GetDiarySummaryParams,
   GetPeriodAnalysisParams,
 } from './ai.dto';
+import { AI_QUERY_KEY } from './ai.keys';
 import { aiService } from './ai.service';
-
-/*
- * ============================================
- * Query Keys
- * ============================================
- */
-export const AI_QUERY_KEY = {
-  PERIOD_ANALYSIS: 'aiPeriodAnalysis',
-  DIARY_SUMMARY: 'aiDiarySummary',
-} as const;
 
 /*
  * ============================================
