@@ -58,6 +58,7 @@ export default function Main() {
             width={isLg ? 1200 : 1500}
             height={isLg ? 1200 : 1500}
             onSceneLoaded={() => setIsLoaded(true)}
+            showPerf={true}
           />
         </div>
       </div>

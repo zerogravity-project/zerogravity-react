@@ -40,6 +40,14 @@ const DEFAULT_LARGE_SPARKLES_PROPS = {
   speed: 0.05,
 };
 
+/** LOD Subdivision Configuration */
+const LOD_SUBDIVISIONS = {
+  /** Desktop - High quality */
+  desktop: { large: 48, normal: 24 },
+  /** Mobile/Low-end - Performance mode */
+  performance: { large: 32, normal: 28 },
+} as const;
+
 /*
  * ============================================
  * Type Definitions
@@ -52,6 +60,8 @@ interface EmotionPlanetProps {
   environmentMapUrl?: string;
   isSparkles?: boolean;
   isLarge?: boolean;
+  /** Enable performance mode for mobile/low-end devices (reduces geometry complexity) */
+  performanceMode?: boolean;
 }
 
 /*
@@ -66,10 +76,20 @@ export function EmotionPlanet({
   environmentMapUrl = '/environment-maps/urban_alley_01_1k.hdr',
   isSparkles = true,
   isLarge = false,
+  performanceMode = false,
 }: EmotionPlanetProps) {
   /*
    * --------------------------------------------
-   * 1. Effects
+   * 1. Derived Values
+   * --------------------------------------------
+   */
+  /** Get subdivision count based on LOD settings */
+  const lodConfig = performanceMode ? LOD_SUBDIVISIONS.performance : LOD_SUBDIVISIONS.desktop;
+  const subdivisions = isLarge ? lodConfig.large : lodConfig.normal;
+
+  /*
+   * --------------------------------------------
+   * 2. Effects
    * --------------------------------------------
    */
   /** Notify parent when component is mounted (Suspense resolved) */
@@ -79,7 +99,7 @@ export function EmotionPlanet({
 
   /*
    * --------------------------------------------
-   * 2. Return
+   * 3. Return
    * --------------------------------------------
    */
   return (
@@ -99,7 +119,7 @@ export function EmotionPlanet({
       {/* Wobble Mesh */}
       <WobbleMesh
         radius={2.5}
-        subdivisions={isLarge ? 100 : 50}
+        subdivisions={subdivisions}
         positionFrequency={EMOTION_STEPS[emotionId].style.planet.positionFrequency}
         timeFrequency={EMOTION_STEPS[emotionId].style.planet.timeFrequency}
         warpPositionFrequency={EMOTION_STEPS[emotionId].style.planet.warpPositionFrequency}

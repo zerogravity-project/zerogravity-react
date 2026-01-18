@@ -6,8 +6,8 @@ uniform float uWarpPositionFrequency;
 uniform float uWarpTimeFrequency;
 uniform float uWarpStrength;
 
-uniform vec3 uMousePosition; // 새로 추가
-uniform float uHoverRadius; // 새로 추가
+uniform vec3 uMousePosition;
+uniform float uHoverRadius;
 
 attribute vec4 tangent;
 
@@ -20,10 +20,10 @@ float getWobble(vec3 position)
     position * uWarpPositionFrequency,
     uTime * uWarpTimeFrequency
   )) * uWarpStrength;
-  
+
   return simplexNoise4d(vec4(
-    warpedPosition * uPositionFrequency, // XYZ
-    uTime * uTimeFrequency       // W
+    warpedPosition * uPositionFrequency,
+    uTime * uTimeFrequency
   )) * uStrength;
 }
 
