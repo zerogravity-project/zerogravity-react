@@ -16,8 +16,8 @@ import { defineConfig, devices } from '@playwright/test';
 import path from 'path';
 
 /** Auth state file paths */
-const AUTH_FILE_NO_CONSENT = path.join(__dirname, 'packages/web/e2e/.auth/user-no-consent.json');
-const AUTH_FILE = path.join(__dirname, 'packages/web/e2e/.auth/user.json');
+const AUTH_FILE_NO_CONSENT = path.join(__dirname, 'e2e/.auth/user-no-consent.json');
+const AUTH_FILE = path.join(__dirname, 'e2e/.auth/user.json');
 
 /** Skip setup if auth files already exist (manual cookie auth) */
 const fs = require('fs');
@@ -25,7 +25,7 @@ const SKIP_AUTH_SETUP = fs.existsSync(AUTH_FILE_NO_CONSENT);
 const SKIP_CONSENT_SETUP = fs.existsSync(AUTH_FILE);
 
 export default defineConfig({
-  testDir: './packages/web/e2e',
+  testDir: './e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -54,7 +54,7 @@ export default defineConfig({
      */
     {
       name: 'setup-auth',
-      testMatch: /auth\.setup\.ts/,
+      testMatch: /setup\/auth\.setup\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         headless: false,
@@ -68,7 +68,7 @@ export default defineConfig({
      */
     {
       name: 'setup-consent',
-      testMatch: /consent\.setup\.ts/,
+      testMatch: /setup\/consent\.setup\.ts/,
       dependencies: SKIP_AUTH_SETUP ? [] : ['setup-auth'],
       use: {
         ...devices['Desktop Chrome'],

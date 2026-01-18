@@ -2,8 +2,9 @@
  * [Spaceout E2E Tests]
  * Section 7: Spaceout (Meditation)
  * - Onboarding flow (first 1-3 visits)
- * - Skip onboarding (4+ visits)
- * - Meditation start and timer
+ * - Skip onboarding (3+ visits)
+ * - Selection screen navigation
+ * - Video page playback
  */
 
 import { test, expect } from '@playwright/test';
@@ -23,15 +24,6 @@ test.describe('Spaceout Access', () => {
     // Should be on spaceout page
     await expect(page).toHaveURL(/\/spaceout/);
   });
-
-  /** Should display spaceout UI */
-  test('should display spaceout UI', async ({ page }) => {
-    await page.goto('/spaceout');
-    await page.waitForLoadState('networkidle');
-
-    // Should show some content
-    await expect(page.locator('body')).toBeVisible();
-  });
 });
 
 /*
@@ -42,197 +34,155 @@ test.describe('Spaceout Access', () => {
 
 test.describe('Spaceout Onboarding', () => {
   /** Should show onboarding message on first visit */
-  test.skip('should show onboarding on first visit', async ({ page }) => {
+  test('should show onboarding on first visit', async ({ page }) => {
     // Clear local storage to simulate first visit
     await page.goto('/spaceout');
     await page.evaluate(() => localStorage.clear());
     await page.reload();
+    await page.waitForLoadState('networkidle');
 
-    // Should show onboarding/intro message
-    const onboarding = page.locator('[data-testid="onboarding"], .onboarding, text=/welcome|시작|소개/i');
-    await expect(onboarding.first()).toBeVisible();
+    // Should show onboarding message (one of: Welcome to Spaceout, etc.)
+    const onboarding = page.getByText(/Welcome to Spaceout|track your emotions|clear your mind|Choose your path/i);
+    await expect(onboarding.first()).toBeVisible({ timeout: 10000 });
   });
 
-  /** Should show onboarding for 1-3 visits */
-  test.skip('should show onboarding for early visits', async ({ page }) => {
+  /** Should show onboarding for 1-3 visits (visits < 3 show onboarding) */
+  test('should show onboarding for early visits', async ({ page }) => {
     await page.goto('/spaceout');
 
-    // Set visit count to 2
+    // Set visit count to 1 (< 3 means onboarding shows)
     await page.evaluate(() => {
-      localStorage.setItem('spaceoutVisits', '2');
+      localStorage.setItem('spaceout_visit_count', '1');
     });
     await page.reload();
+    await page.waitForLoadState('networkidle');
 
-    // Should still show onboarding
-    const onboarding = page.locator('[data-testid="onboarding"], .onboarding');
-    await expect(onboarding.first()).toBeVisible();
+    // Should still show onboarding message
+    const onboarding = page.getByText(/Welcome to Spaceout|track your emotions|clear your mind|Choose your path/i);
+    await expect(onboarding.first()).toBeVisible({ timeout: 10000 });
   });
 });
 
 /*
  * ============================================
- * Skip Onboarding (4+ visits)
+ * Skip Onboarding (3+ visits)
  * ============================================
  */
 
 test.describe('Spaceout Skip Onboarding', () => {
-  /** Should skip onboarding after 4 visits */
-  test.skip('should skip onboarding after 4 visits', async ({ page }) => {
+  /** Should skip onboarding after 3+ visits (visits >= 3 skip onboarding) */
+  test('should skip onboarding after 3 visits', async ({ page }) => {
     await page.goto('/spaceout');
 
-    // Set visit count to 4+
+    // Set visit count to 3+ (>= 3 means onboarding skipped)
     await page.evaluate(() => {
-      localStorage.setItem('spaceoutVisits', '5');
+      localStorage.setItem('spaceout_visit_count', '3');
     });
     await page.reload();
+    await page.waitForLoadState('networkidle');
 
-    // Should go directly to selection/meditation
-    const onboarding = page.locator('[data-testid="onboarding"]');
-    await expect(onboarding).not.toBeVisible();
+    // Should show selection screen directly (Choose Your Path)
+    const selectionScreen = page.getByText('Choose Your Path');
+    await expect(selectionScreen).toBeVisible({ timeout: 5000 });
 
-    // Should show meditation options
-    const meditationUI = page.locator('[data-testid="meditation"], button, .meditation');
-    await expect(meditationUI.first()).toBeVisible();
+    // Should show action buttons
+    const videoButton = page.getByRole('button', { name: /Watch Calming Video/i });
+    await expect(videoButton).toBeVisible();
   });
 });
 
 /*
  * ============================================
- * Meditation Start
+ * Selection Screen Navigation
  * ============================================
  */
 
-test.describe('Meditation Start', () => {
+test.describe('Selection Screen Navigation', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/spaceout');
+
+    // Skip onboarding by setting visit count
+    await page.evaluate(() => {
+      localStorage.setItem('spaceout_visit_count', '10');
+    });
+    await page.reload();
     await page.waitForLoadState('networkidle');
+
+    // Wait for selection screen
+    await expect(page.getByText('Choose Your Path')).toBeVisible({ timeout: 5000 });
   });
 
-  /** Should have start button */
-  test('should have start button', async ({ page }) => {
-    // Find start/begin meditation button
-    const startButton = page.getByRole('button', { name: /시작|start|begin/i });
+  /** Should navigate to video page on Watch Calming Video click */
+  test('should navigate to video page', async ({ page }) => {
+    const videoButton = page.getByRole('button', { name: /Watch Calming Video/i });
+    await videoButton.click();
 
-    // Might need to skip onboarding first - either start button or body should be visible
-    await expect(startButton.or(page.locator('body'))).toBeVisible();
+    // Should navigate to /spaceout/video
+    await expect(page).toHaveURL(/\/spaceout\/video/);
   });
 
-  /** Should start meditation timer */
-  test.skip('should start timer on click', async ({ page }) => {
-    const startButton = page.getByRole('button', { name: /시작|start/i });
-    await startButton.click();
+  /** Should navigate to record page on Record Now click */
+  test('should navigate to record page', async ({ page }) => {
+    const recordButton = page.getByRole('button', { name: /Record Now/i });
+    await recordButton.click();
 
-    // Timer should appear
-    const timer = page.locator('[data-testid="timer"], .timer, text=/\\d+:\\d+/');
-    await expect(timer.first()).toBeVisible();
-  });
-
-  /** Should show animation during meditation */
-  test.skip('should show animation', async ({ page }) => {
-    const startButton = page.getByRole('button', { name: /시작|start/i });
-    await startButton.click();
-
-    // Should show visual animation (canvas or animated element)
-    const animation = page.locator('canvas, [data-testid="animation"], .animation');
-    await expect(animation.first()).toBeVisible();
+    // Should navigate to /record
+    await expect(page).toHaveURL(/\/record/);
   });
 });
 
 /*
  * ============================================
- * Meditation Options
+ * Video Page
  * ============================================
  */
 
-test.describe('Meditation Options', () => {
-  /** Should display meditation duration options */
-  test.skip('should show duration options', async ({ page }) => {
-    await page.goto('/spaceout');
-
-    // Should show duration selection (e.g., 1min, 3min, 5min)
-    const durationOptions = page.locator('[data-testid="duration"], button:has-text("분"), button:has-text("min")');
-    await expect(durationOptions.first()).toBeVisible();
-  });
-
-  /** Should select duration */
-  test.skip('should select duration', async ({ page }) => {
-    await page.goto('/spaceout');
-
-    const duration = page.getByRole('button', { name: /3.*분|3.*min/i });
-    if (await duration.isVisible()) {
-      await duration.click();
-
-      // Should be selected
-      await expect(duration)
-        .toHaveAttribute('data-selected', 'true')
-        .catch(() => {
-          // Or have active class
-        });
-    }
-  });
-});
-
-/*
- * ============================================
- * Responsive Tests
- * ============================================
- */
-
-test.describe('Spaceout Desktop', () => {
-  test.use({ viewport: { width: 1280, height: 800 } });
-
-  /** Should display spaceout on desktop */
-  test('should display spaceout on desktop', async ({ page }) => {
-    await page.goto('/spaceout');
+test.describe('Video Page', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/spaceout/video');
     await page.waitForLoadState('networkidle');
-
-    // Desktop layout should be visible
-    await expect(page.locator('body')).toBeVisible();
   });
 
-  /** Should have start button on desktop */
-  test('should have start button on desktop', async ({ page }) => {
-    await page.goto('/spaceout');
-    await page.waitForLoadState('networkidle');
-
-    const startButton = page.getByRole('button', { name: /시작|start|begin/i });
-
-    // Either start button or body should be visible
-    await expect(startButton.or(page.locator('body'))).toBeVisible();
-  });
-});
-
-test.describe('Spaceout Tablet', () => {
-  test.use({ viewport: { width: 768, height: 1024 } });
-
-  /** Should display spaceout on tablet */
-  test('should display spaceout on tablet', async ({ page }) => {
-    await page.goto('/spaceout');
-    await page.waitForLoadState('networkidle');
-
-    // Tablet layout should be visible
-    await expect(page.locator('body')).toBeVisible();
-  });
-});
-
-test.describe('Spaceout Mobile', () => {
-  test.use({ viewport: { width: 375, height: 667 } });
-
-  /** Should display spaceout on mobile */
-  test('should display spaceout on mobile', async ({ page }) => {
-    await page.goto('/spaceout');
-    await page.waitForLoadState('networkidle');
-
-    // Mobile layout should be visible
-    await expect(page.locator('body')).toBeVisible();
+  /** Should load video page */
+  test('should load video page', async ({ page }) => {
+    await expect(page).toHaveURL(/\/spaceout\/video/);
   });
 
-  /** Should be fullscreen friendly on mobile */
-  test('should be fullscreen friendly on mobile', async ({ page }) => {
-    await page.goto('/spaceout');
-    await page.waitForLoadState('networkidle');
+  /** Should display video element */
+  test('should display video element', async ({ page }) => {
+    const video = page.locator('video');
+    await expect(video).toBeVisible({ timeout: 5000 });
+  });
 
-    // Mobile should have optimized UI for fullscreen meditation
-    await expect(page.locator('body')).toBeVisible();
+  /** Should show sound activation overlay */
+  test('should show sound activation overlay', async ({ page }) => {
+    // Should show "Touch to enable sound" message
+    const soundGuide = page.getByText(/Touch to enable sound/i);
+    await expect(soundGuide).toBeVisible({ timeout: 5000 });
+  });
+
+  /** Should hide overlay after click */
+  test('should hide overlay after click', async ({ page }) => {
+    const soundGuide = page.getByText(/Touch to enable sound/i);
+    await expect(soundGuide).toBeVisible({ timeout: 5000 });
+
+    // Click to enable sound
+    await page.click('body');
+
+    // Overlay should disappear
+    await expect(soundGuide).not.toBeVisible({ timeout: 3000 });
+  });
+
+  /** Should navigate to record after all videos end */
+  test.skip('should navigate to record after videos end', async ({ page }) => {
+    // Note: Skipped - video playback timing is unreliable in E2E tests
+    // Videos: sun.mp4, mercury.mp4 → after both end → /record
+
+    // Click to start with sound
+    await page.click('body');
+
+    // Wait for videos to complete (this is flaky due to video loading times)
+    // After all videos end, should navigate to /record
+    await expect(page).toHaveURL(/\/record/, { timeout: 120000 });
   });
 });

@@ -41,12 +41,18 @@ export default auth((req: NextAuthRequest) => {
     return Response.redirect(new URL(callbackUrl, req.nextUrl.origin));
   }
 
-  // 3. Logged in user without consent - redirect to consent page
-  if (isLoggedIn && !isConsentPage) {
+  // 3. Consent check for logged in users
+  if (isLoggedIn) {
     const consents = req.auth?.user?.consents;
     const hasAllConsents = REQUIRED_CONSENTS.every(consent => consents?.[consent as keyof typeof consents] === true);
 
-    if (!hasAllConsents) {
+    // 3-1. Already consented user trying to access consent page → redirect to home
+    if (isConsentPage && hasAllConsents) {
+      return Response.redirect(new URL('/', req.nextUrl.origin));
+    }
+
+    // 3-2. User without consent trying to access protected route → redirect to consent
+    if (!isConsentPage && !hasAllConsents) {
       return Response.redirect(new URL('/consent', req.nextUrl.origin));
     }
   }

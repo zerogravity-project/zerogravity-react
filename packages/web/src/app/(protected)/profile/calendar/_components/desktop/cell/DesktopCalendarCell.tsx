@@ -47,6 +47,8 @@ export default function DesktopCalendarCell({
    */
   return (
     <div
+      data-testid={`calendar-day-${day}`}
+      data-today={isToday ? 'true' : undefined}
       onClick={!isDisabled ? onClick : undefined}
       className={cn(
         'relative flex h-full w-full items-center justify-center p-1 outline outline-[0.5px] outline-[var(--gray-3)]',

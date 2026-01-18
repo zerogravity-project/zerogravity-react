@@ -8,45 +8,28 @@
  * - Edit mode (editable within 24h)
  */
 
-import { test, expect, Locator } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-/**
+/*
  * ============================================
- * Helpers
+ * Record Type Selection
  * ============================================
  */
 
-/**
- * Slider values mapped to emotion levels (from emotion.constants.ts)
- * Level 0=0, 1=16, 2=33, 3=50, 4=67, 5=84, 6=100
- */
-const EMOTION_SLIDER_VALUES = [0, 16, 33, 50, 67, 84, 100] as const;
+test.describe('Record Type Selection', () => {
+  /** Should navigate to Daily flow on click */
+  test('should navigate to Daily flow', async ({ page }) => {
+    await page.goto('/record');
 
-/**
- * Set Radix UI Slider to a specific emotion level (0-6)
- * Uses keyboard navigation: Home/End for extremes, PageUp for ~10% jumps
- */
-async function setSliderValue(slider: Locator, level: number) {
-  await slider.focus();
-  if (level === 0) {
-    await slider.press('Home');
-  } else if (level === 6) {
-    await slider.press('End');
-  } else {
-    // Reset to 0 first
-    await slider.press('Home');
-    const targetValue = EMOTION_SLIDER_VALUES[level];
-    // Use PageUp for ~10% jumps (faster than ArrowRight)
-    const pageJumps = Math.floor(targetValue / 10);
-    const remaining = targetValue % 10;
-    for (let i = 0; i < pageJumps; i++) {
-      await slider.press('PageUp');
-    }
-    for (let i = 0; i < remaining; i++) {
-      await slider.press('ArrowRight');
-    }
-  }
-}
+    await page
+      .locator('button')
+      .filter({ hasText: /daily record/i })
+      .click();
+
+    // Should be on daily record page
+    await expect(page).toHaveURL(/\/record\/daily|\/record.*type=daily/i);
+  });
+});
 
 /*
  * ============================================
@@ -77,20 +60,25 @@ test.describe('Daily Step 1: Emotion Selection', () => {
     await expect(slider).toBeVisible();
   });
 
-  /** Should change planet/ring color with slider - SKIPPED: Slider manipulation slow/flaky */
-  test.skip('should update colors on slider change', async ({ page }) => {
+  /** Should show ring color on slider thumb when focused */
+  test('should show ring color on slider thumb', async ({ page }) => {
     const slider = page.getByRole('slider');
     await expect(slider).toBeVisible({ timeout: 10000 });
 
-    // Move through different levels
-    for (const level of [0, 3, 6]) {
-      await setSliderValue(slider, level);
-      await page.waitForTimeout(300);
-    }
+    // Get thumb element and focus it to trigger ring display
+    // Note: onFocus handler is on the Thumb, not the Root
+    const thumb = page.locator('[data-slot="slider-thumb"]');
+    await thumb.focus();
+    await page.waitForTimeout(200);
 
-    // Planet should still be visible
-    const canvas = page.locator('canvas');
-    await expect(canvas).toBeVisible();
+    // Check box-shadow on focused thumb
+    const boxShadow = await thumb.evaluate(el => getComputedStyle(el).boxShadow);
+
+    // When focused, should have multiple ring shadows (3 shadows = 2 commas)
+    // Unfocused has only 1 shadow, focused has 3 shadows with ring effect
+    // Note: exact px values may vary due to DPR scaling
+    const shadowCount = (boxShadow.match(/rgba?\(/g) || []).length;
+    expect(shadowCount).toBeGreaterThanOrEqual(3);
   });
 
   /** Should have next button enabled (default emotion is Neutral) */
@@ -98,29 +86,6 @@ test.describe('Daily Step 1: Emotion Selection', () => {
     // App starts with emotionId=3 (Neutral) as default, so button is already enabled
     const nextButton = page.getByRole('button', { name: /다음|next/i }).first();
     await expect(nextButton).toBeEnabled();
-  });
-
-  /** Should enable next button after selection - SKIPPED: Covered by 'enabled by default' test */
-  test.skip('should enable button after selection', async ({ page }) => {
-    const slider = page.getByRole('slider');
-    await expect(slider).toBeVisible({ timeout: 10000 });
-    await setSliderValue(slider, 5);
-
-    const nextButton = page.getByRole('button', { name: /다음|next/i }).first();
-    await expect(nextButton).toBeEnabled();
-  });
-
-  /** Should navigate to step 2 - SKIPPED: Covered by Step 2 tests */
-  test.skip('should navigate to step 2', async ({ page }) => {
-    const slider = page.getByRole('slider');
-    await expect(slider).toBeVisible({ timeout: 10000 });
-    await setSliderValue(slider, 5);
-
-    const nextButton = page.getByRole('button', { name: /다음|next/i }).first();
-    await nextButton.click();
-
-    // Should be on step 2 (reason selection)
-    await page.waitForLoadState('networkidle');
   });
 });
 
@@ -179,18 +144,6 @@ test.describe('Daily Step 2: Reason Selection', () => {
     await page.getByRole('button', { name: 'Work', exact: true }).click();
   });
 
-  /** Should allow custom reason input */
-  test('should allow custom reason input', async ({ page }) => {
-    const customInput = page.locator(
-      '[data-testid="custom-reason"], input[placeholder*="직접"], input[placeholder*="other"], textarea'
-    );
-
-    if (await customInput.first().isVisible()) {
-      await customInput.first().fill('나만의 이유');
-      await expect(customInput.first()).toHaveValue('나만의 이유');
-    }
-  });
-
   /** Should have Next button (NOT Submit - goes to diary) */
   test('should have next button for diary step', async ({ page }) => {
     // Daily Step 2 has "다음" button, not "제출"
@@ -207,12 +160,9 @@ test.describe('Daily Step 2: Reason Selection', () => {
 
 test.describe('Daily Step 3: Diary Entry', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to step 3
-    await page.goto('/record');
-    await page
-      .locator('button')
-      .filter({ hasText: /daily record/i })
-      .click();
+    // Navigate directly to /record/daily without date param to skip server-side fetch
+    // This ensures fresh state with no pre-selected data
+    await page.goto('/record/daily');
     await page.waitForLoadState('networkidle');
 
     // Wait for 3D canvas to load (scene ready)
@@ -231,12 +181,11 @@ test.describe('Daily Step 3: Diary Entry', () => {
     // Wait for Step 2 page
     await expect(page.getByText('Why did you feel this way?')).toBeVisible({ timeout: 15000 });
 
-    // Step 2 - select a reason and go next
+    // Step 2 - select a reason, wait for Next to be enabled, then click
     await page.getByRole('button', { name: 'Health' }).click();
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
+    const nextButton2 = page.getByRole('button', { name: /다음|next/i }).first();
+    await expect(nextButton2).toBeEnabled({ timeout: 5000 });
+    await nextButton2.click();
 
     // Wait for Step 3 (diary) page - textarea should appear
     await expect(page.locator('textarea')).toBeVisible({ timeout: 15000 });
@@ -246,16 +195,6 @@ test.describe('Daily Step 3: Diary Entry', () => {
   test('should display diary textarea', async ({ page }) => {
     const textarea = page.locator('textarea');
     await expect(textarea).toBeVisible({ timeout: 5000 });
-  });
-
-  /** Should display character count - SKIPPED: Feature not implemented */
-  test.skip('should show character count', async ({ page }) => {
-    const textarea = page.locator('textarea');
-    await textarea.fill('테스트 일기 내용입니다.');
-
-    // Should show character count indicator
-    const charCount = page.locator('text=/\\d+.*자|\\d+.*char/i');
-    await expect(charCount).toBeVisible();
   });
 
   /** Should allow empty diary submission */
@@ -268,7 +207,7 @@ test.describe('Daily Step 3: Diary Entry', () => {
   /** Should accept diary text */
   test('should accept diary input', async ({ page }) => {
     const textarea = page.locator('textarea');
-    const diaryText = '오늘은 좋은 하루였습니다. 많은 것을 배웠고 성장했습니다.';
+    const diaryText = 'Today was a good day. I learned a lot and grew as a person.';
 
     await textarea.fill(diaryText);
     await expect(textarea).toHaveValue(diaryText);
@@ -283,214 +222,200 @@ test.describe('Daily Step 3: Diary Entry', () => {
  */
 
 test.describe('Daily AI Prediction', () => {
+  const validText =
+    'Today was a really great day. I woke up in the morning and had a delicious cup of coffee. I listened to my favorite music on the way to work and had a wonderful time with my colleagues.';
+
   test.beforeEach(async ({ page }) => {
-    await page.goto('/record');
-    await page
-      .locator('button')
-      .filter({ hasText: /daily record/i })
-      .click();
+    // Navigate directly to /record/daily without date param to skip server-side fetch
+    await page.goto('/record/daily');
     await page.waitForLoadState('networkidle');
+
+    // Wait for scene to load
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeVisible({ timeout: 15000 });
+
+    // Click GeminiButton to go to AI Prediction step (GeminiButton is a div, not button)
+    // Desktop: "Use AI Prediction with Gemini", Mobile: "Skip and use..."
+    // Use exact: true to avoid matching "Skip and use AI Prediction with Gemini"
+    const geminiButton = page.getByText('Use AI Prediction with Gemini', { exact: true });
+    await expect(geminiButton).toBeVisible({ timeout: 5000 });
+    await geminiButton.click();
+
+    // Wait for AI Prediction step
+    await expect(page.getByRole('heading', { name: 'AI Prediction' })).toBeVisible({ timeout: 5000 });
   });
 
   /** Should show error when text is under 100 characters */
-  test.skip('should show min character error', async ({ page }) => {
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
+  test('should validate minimum character limit', async ({ page }) => {
+    const aiInput = page.locator('textarea');
+    await aiInput.fill('Short text');
 
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    // Should show error message
+    const errorMessage = page.getByText(/between 100 and 300 characters/i);
+    await expect(errorMessage).toBeVisible();
 
-      const aiInput = page.locator('textarea').first();
-      await aiInput.fill('짧은 텍스트');
-
-      // Should show minimum character error
-      const errorMin = page.locator('text=/100|최소|minimum/i');
-      await expect(errorMin).toBeVisible();
-    }
+    // Analyze button should be disabled
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await expect(analyzeButton).toBeDisabled();
   });
 
-  /** Should show error when text exceeds 300 characters */
-  test.skip('should show max character error', async ({ page }) => {
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
+  /** Should show character count */
+  test('should show character count', async ({ page }) => {
+    const aiInput = page.locator('textarea');
+    await aiInput.fill('Test text here.');
 
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    // Should show character count (e.g., "15 / 300")
+    const charCount = page.getByText(/\d+ \/ 300/);
+    await expect(charCount).toBeVisible();
+  });
 
-      const aiInput = page.locator('textarea').first();
-      await aiInput.fill('가'.repeat(350));
+  /** Should enable button with valid text (100-300 chars) */
+  test('should enable button with valid text', async ({ page }) => {
+    const aiInput = page.locator('textarea');
+    await aiInput.fill(validText);
 
-      // Should show maximum character error
-      const errorMax = page.locator('text=/300|최대|maximum/i');
-      await expect(errorMax).toBeVisible();
-    }
+    // Analyze button should be enabled
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await expect(analyzeButton).toBeEnabled();
   });
 
   /** Should show loading during AI request */
-  test.skip('should show loading on AI request', async ({ page }) => {
+  test('should show loading on AI request', async ({ page }) => {
     // Mock slow API response
     await page.route('**/ai/emotion-predictions', async route => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       route.fulfill({
         status: 200,
-        body: JSON.stringify({ emotionId: 5, reasons: ['work'] }),
+        body: JSON.stringify({ data: { emotionId: 5, reasons: ['WORK'] } }),
       });
     });
 
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    const aiInput = page.locator('textarea');
+    await aiInput.fill(validText);
 
-      const aiInput = page.locator('textarea').first();
-      await aiInput.fill(
-        '오늘 하루는 정말 기분이 좋았습니다. 회사에서 좋은 소식이 있었고 동료들과 즐거운 시간을 보냈습니다. 저녁에는 맛있는 음식도 먹었네요.'
-      );
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await analyzeButton.click();
 
-      const submitAi = page.getByRole('button', { name: /분석|analyze|예측/i });
-      if (await submitAi.isVisible()) {
-        await submitAi.click();
-
-        // Should show loading spinner
-        const loading = page.locator('[data-testid="ai-loading"], .spinner, .loading');
-        await expect(loading.first()).toBeVisible();
-      }
-    }
+    // Should show loading state (actual messages: "Collecting emotional stardust...", etc.)
+    const loading = page.getByText(/stardust|fragments|planet|feelings|universe|light/i);
+    await expect(loading.first()).toBeVisible({ timeout: 3000 });
   });
 
   /** Should display AI prediction result on success */
-  test.skip('should display AI result on success', async ({ page }) => {
+  test('should display AI result on success', async ({ page }) => {
+    // Mock API success
     await page.route('**/ai/emotion-predictions', route => {
       route.fulfill({
         status: 200,
-        body: JSON.stringify({ emotionId: 5, reasons: ['work', 'relationship'] }),
+        body: JSON.stringify({ data: { emotionId: 5, reasons: ['WORK', 'RELATIONSHIP'] } }),
       });
     });
 
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    const aiInput = page.locator('textarea');
+    await aiInput.fill(validText);
 
-      const aiInput = page.locator('textarea').first();
-      await aiInput.fill(
-        '오늘 하루는 정말 기분이 좋았습니다. 회사에서 좋은 소식이 있었고 동료들과 즐거운 시간을 보냈습니다. 저녁에는 맛있는 음식도 먹었네요.'
-      );
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await analyzeButton.click();
 
-      const submitAi = page.getByRole('button', { name: /분석|analyze|예측/i });
-      if (await submitAi.isVisible()) {
-        await submitAi.click();
-
-        // Should show AI result with emotion and reasons
-        const aiResult = page.locator('[data-testid="ai-result"], .prediction-result');
-        await expect(aiResult.first()).toBeVisible({ timeout: 5000 });
-      }
-    }
+    // Should show result
+    await expect(page.getByText(/result|prediction|emotion/i).first()).toBeVisible({ timeout: 10000 });
   });
 
-  /** Should show error on AI prediction failure */
-  test.skip('should show error on AI failure', async ({ page }) => {
+  /** Should show error on AI failure */
+  test('should show error on AI failure', async ({ page }) => {
+    // Mock API failure
     await page.route('**/ai/emotion-predictions', route => {
-      route.fulfill({
-        status: 500,
-        body: JSON.stringify({ error: 'AI service unavailable' }),
-      });
+      route.fulfill({ status: 500, body: JSON.stringify({ error: 'AI service unavailable' }) });
     });
 
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    const aiInput = page.locator('textarea');
+    await aiInput.fill(validText);
 
-      const aiInput = page.locator('textarea').first();
-      await aiInput.fill(
-        '오늘 하루는 정말 기분이 좋았습니다. 회사에서 좋은 소식이 있었고 동료들과 즐거운 시간을 보냈습니다. 저녁에는 맛있는 음식도 먹었네요.'
-      );
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await analyzeButton.click();
 
-      const submitAi = page.getByRole('button', { name: /분석|analyze|예측/i });
-      if (await submitAi.isVisible()) {
-        await submitAi.click();
-
-        // Should show error message
-        const errorMsg = page.locator('text=/실패|error|오류|failed/i');
-        await expect(errorMsg.first()).toBeVisible({ timeout: 5000 });
-      }
-    }
+    // Should show error message
+    const errorMessage = page.getByText(/error|failed/i);
+    await expect(errorMessage).toBeVisible({ timeout: 5000 });
   });
 
-  /** Should auto-fill diary on AI accept */
-  test.skip('should auto-fill diary on AI accept', async ({ page }) => {
+  /** Should navigate to diary step on Accept */
+  test('should navigate to diary step on accept', async ({ page }) => {
+    // Mock API success with prediction data
     await page.route('**/ai/emotion-predictions', route => {
       route.fulfill({
         status: 200,
-        body: JSON.stringify({ emotionId: 4, reasons: ['health'] }),
+        body: JSON.stringify({
+          data: {
+            suggestedEmotionId: 5,
+            suggestedReasons: ['Work', 'Health'],
+            refinedDiary: 'A refined version of my diary entry.',
+            analysisId: 'analysis-123',
+            confidence: 0.85,
+            reasoning: 'Based on your positive language and mentions of good experiences...',
+          },
+        }),
       });
     });
 
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    const aiInput = page.locator('textarea');
+    await aiInput.fill(validText);
 
-      const aiInput = page.locator('textarea').first();
-      const diaryText =
-        '오늘 하루는 정말 기분이 좋았습니다. 회사에서 좋은 소식이 있었고 동료들과 즐거운 시간을 보냈습니다. 저녁에는 맛있는 음식도 먹었네요.';
-      await aiInput.fill(diaryText);
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await analyzeButton.click();
 
-      const submitAi = page.getByRole('button', { name: /분석|analyze|예측/i });
-      if (await submitAi.isVisible()) {
-        await submitAi.click();
-        await page.waitForLoadState('networkidle');
+    // Wait for result screen with Accept button
+    const acceptButton = page.getByRole('button', { name: /Accept/i });
+    await expect(acceptButton).toBeVisible({ timeout: 10000 });
 
-        // Click accept button
-        const acceptButton = page.getByRole('button', { name: /수락|accept|적용/i });
-        if (await acceptButton.isVisible()) {
-          await acceptButton.click();
+    // Wait for UI to stabilize before clicking
+    await page.waitForTimeout(500);
 
-          // Should move to diary step with the text auto-filled
-          const diaryTextarea = page.locator('textarea');
-          await expect(diaryTextarea).toHaveValue(diaryText);
-        }
-      }
-    }
+    // Click Accept
+    await acceptButton.click();
+
+    // Should navigate to diary step (Daily FINAL_STEP = 'diary')
+    // Wait for URL to change to diary step
+    await expect(page).toHaveURL(/step=diary/, { timeout: 10000 });
+
+    // Diary step has textarea for diary entry
+    const diaryTextarea = page.locator('textarea');
+    await expect(diaryTextarea).toBeVisible({ timeout: 5000 });
   });
 
-  /** Should keep selection when AI rejected */
-  test.skip('should keep selection on AI reject', async ({ page }) => {
+  /** Should return to AI input on Reject */
+  test('should return to AI input on reject', async ({ page }) => {
+    // Mock API success
     await page.route('**/ai/emotion-predictions', route => {
       route.fulfill({
         status: 200,
-        body: JSON.stringify({ emotionId: 3, reasons: ['weather'] }),
+        body: JSON.stringify({
+          data: {
+            suggestedEmotionId: 5,
+            suggestedReasons: ['Work'],
+            analysisId: 'analysis-123',
+            confidence: 0.85,
+            reasoning: 'Based on your text...',
+          },
+        }),
       });
     });
 
-    // First select emotion manually
-    const slider = page.getByRole('slider');
-    await setSliderValue(slider, 5);
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
+    const aiInput = page.locator('textarea');
+    await aiInput.fill(validText);
 
-    // Trigger AI prediction
-    const aiButton = page.getByRole('button', { name: /ai|예측|predict/i });
-    if (await aiButton.isVisible()) {
-      await aiButton.click();
+    const analyzeButton = page.getByRole('button', { name: /Analyze with AI/i });
+    await analyzeButton.click();
 
-      const aiInput = page.locator('textarea').first();
-      await aiInput.fill(
-        '오늘 하루는 정말 기분이 좋았습니다. 회사에서 좋은 소식이 있었고 동료들과 즐거운 시간을 보냈습니다. 저녁에는 맛있는 음식도 먹었네요.'
-      );
+    // Wait for result screen
+    await expect(page.getByText('AI Analysis Complete')).toBeVisible({ timeout: 10000 });
 
-      const submitAi = page.getByRole('button', { name: /분석|analyze|예측/i });
-      if (await submitAi.isVisible()) {
-        await submitAi.click();
-        await page.waitForLoadState('networkidle');
+    // Click Back/Reject button (arrow_back icon)
+    const backButton = page.getByRole('button').filter({ has: page.locator('text=arrow_back') });
+    await backButton.click();
 
-        // Click reject button
-        const rejectButton = page.getByRole('button', { name: /거부|reject|취소|cancel/i });
-        if (await rejectButton.isVisible()) {
-          await rejectButton.click();
-
-          // Should keep original selection
-          await expect(page.locator('body')).toBeVisible();
-        }
-      }
-    }
+    // Should return to AI input (textarea visible again with AI Prediction heading)
+    await expect(page.getByRole('heading', { name: 'AI Prediction' })).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -502,275 +427,266 @@ test.describe('Daily AI Prediction', () => {
  */
 
 test.describe('Daily Submit', () => {
-  /** Navigate through all steps helper */
-  async function navigateToSubmit(page: import('@playwright/test').Page) {
-    await page.goto('/record');
-    await page
-      .locator('button')
-      .filter({ hasText: /daily record/i })
-      .click();
+  test.beforeEach(async ({ page }) => {
+    // Navigate directly to /record/daily without date param to skip server-side fetch
+    await page.goto('/record/daily');
     await page.waitForLoadState('networkidle');
 
-    // Step 1
-    const slider = page.getByRole('slider');
-    await setSliderValue(slider, 4);
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
-    await page.waitForLoadState('networkidle');
+    // Wait for 3D canvas to load
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeVisible({ timeout: 15000 });
 
-    // Step 2
-    await page.waitForTimeout(500);
-    const reasonButton = page.locator('button, [role="checkbox"]').filter({ hasText: /.+/ }).first();
-    await reasonButton.click();
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
-    await page.waitForLoadState('networkidle');
+    // Step 1 - use default emotion, click Next
+    const nextButton1 = page.getByRole('button', { name: /next|continue/i }).first();
+    await expect(nextButton1).toBeEnabled({ timeout: 5000 });
+    await nextButton1.click();
 
-    // Step 3 - diary is optional, submit button should be visible
-    await page.waitForTimeout(500);
-  }
+    // Wait for Step 2 (reason selection)
+    await expect(page.getByText('Why did you feel this way?')).toBeVisible({ timeout: 10000 });
+
+    // Step 2 - select reason, wait for Next to be enabled, then click
+    await page.getByRole('button', { name: 'Health' }).click();
+    const nextButton2 = page.getByRole('button', { name: /next|continue/i }).first();
+    await expect(nextButton2).toBeEnabled({ timeout: 5000 });
+    await nextButton2.click();
+
+    // Wait for Step 3 (diary)
+    await expect(page.locator('textarea')).toBeVisible({ timeout: 10000 });
+  });
 
   /** Should show loading on submit */
-  test.skip('should show loading on submit', async ({ page }) => {
+  test('should show loading on submit', async ({ page }) => {
     // Mock slow API response
     await page.route('**/emotions/records', async route => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       route.fulfill({ status: 201, body: JSON.stringify({ id: '123' }) });
     });
 
-    await navigateToSubmit(page);
-
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
+    const submitButton = page.getByRole('button', { name: /submit/i });
     await submitButton.click();
 
-    // Should show loading state
-    const loading = page.locator('[data-testid="submit-loading"], .spinner, .loading, button:has-text("loading")');
-    await expect(loading.first()).toBeVisible();
+    // Button should show loading state (disabled)
+    await expect(submitButton).toBeDisabled();
   });
 
   /** Should redirect to calendar on success */
-  test.skip('should redirect to calendar', async ({ page }) => {
+  test('should redirect to calendar', async ({ page }) => {
     await page.route('**/emotions/records', route => {
       route.fulfill({ status: 201, body: JSON.stringify({ id: '123' }) });
     });
 
-    await navigateToSubmit(page);
-
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
+    const submitButton = page.getByRole('button', { name: /submit/i });
     await submitButton.click();
 
     // Should redirect to profile/calendar
     await expect(page).toHaveURL(/\/profile|\/calendar/, { timeout: 10000 });
   });
 
-  /** Should show record in calendar after submit */
-  test.skip('should show record in calendar after submit', async ({ page }) => {
-    const today = new Date().toISOString().split('T')[0];
-
-    await page.route('**/emotions/records', route => {
-      route.fulfill({ status: 201, body: JSON.stringify({ id: '123', date: today }) });
-    });
-
-    await navigateToSubmit(page);
-
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
-    await submitButton.click();
-
-    // Wait for redirect
-    await expect(page).toHaveURL(/\/profile|\/calendar/, { timeout: 10000 });
-    await page.waitForLoadState('networkidle');
-
-    // Today's date should have an emotion indicator
-    const todayDate = new Date().getDate();
-    const calendarDay = page.locator(`text=/${todayDate}/`).first();
-    await expect(calendarDay).toBeVisible();
-  });
-
   /** Should show error on submit failure */
-  test.skip('should show error on submit failure', async ({ page }) => {
+  test('should show error on submit failure', async ({ page }) => {
     await page.route('**/emotions/records', route => {
       route.fulfill({ status: 500, body: JSON.stringify({ error: 'Server error' }) });
     });
 
-    await navigateToSubmit(page);
-
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
+    const submitButton = page.getByRole('button', { name: /submit/i });
     await submitButton.click();
 
     // Should show error message
-    const errorMsg = page.locator('text=/실패|error|오류|failed/i');
+    const errorMsg = page.getByText(/error|failed/i);
     await expect(errorMsg.first()).toBeVisible({ timeout: 5000 });
-  });
-
-  /** Should allow retry after failure */
-  test.skip('should allow retry after failure', async ({ page }) => {
-    let requestCount = 0;
-    await page.route('**/emotions/records', route => {
-      requestCount++;
-      if (requestCount === 1) {
-        route.fulfill({ status: 500, body: JSON.stringify({ error: 'Server error' }) });
-      } else {
-        route.fulfill({ status: 201, body: JSON.stringify({ id: '123' }) });
-      }
-    });
-
-    await navigateToSubmit(page);
-
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
-    await submitButton.click();
-
-    // Wait for error
-    await page.waitForTimeout(1000);
-
-    // Retry button or submit again
-    const retryButton = page.getByRole('button', { name: /재시도|retry|다시/i });
-    if (await retryButton.isVisible()) {
-      await retryButton.click();
-    } else {
-      await submitButton.click();
-    }
-
-    // Should succeed on retry
-    await expect(page).toHaveURL(/\/profile|\/calendar/, { timeout: 10000 });
   });
 });
 
 /*
  * ============================================
  * Edit Mode
- * PUT /emotions/records/{id} - within 24h
+ * Access via /record/daily?date=YYYY-MM-DD
+ * If record exists for that date → edit mode
  * ============================================
  */
 
 test.describe('Daily Edit Mode', () => {
+  const today = new Date().toISOString().split('T')[0];
+
   /** Should load existing data in edit mode */
-  test.skip('should load existing data', async ({ page }) => {
-    // Mock existing record data
-    await page.route('**/emotions/records/*', route => {
+  test('should load existing data', async ({ page }) => {
+    // Mock existing record for today
+    await page.route('**/emotions/records**', route => {
       route.fulfill({
         status: 200,
         body: JSON.stringify({
-          id: '123',
-          emotionId: 4,
-          reasons: ['work', 'health'],
-          diaryEntry: '기존 일기 내용입니다.',
+          data: {
+            daily: [
+              {
+                emotionRecordId: 123,
+                emotionId: 4,
+                reasons: ['WORK', 'HEALTH'],
+                diaryEntry: 'Existing diary content.',
+              },
+            ],
+            moment: [],
+          },
         }),
       });
     });
 
-    // Navigate to edit mode
-    await page.goto('/record/daily?edit=123');
+    // Navigate with date param (edit mode if record exists)
+    await page.goto(`/record/daily?date=${today}`);
     await page.waitForLoadState('networkidle');
 
-    // Should show pre-filled data
+    // Should show slider with pre-filled emotion
     const slider = page.getByRole('slider');
-    await expect(slider).toHaveValue('4');
-  });
-
-  /** Should allow navigation to any step */
-  test.skip('should allow jumping between steps', async ({ page }) => {
-    await page.goto('/record/daily?edit=123');
-    await page.waitForLoadState('networkidle');
-
-    // In edit mode, step indicators should be clickable
-    const stepIndicators = page.locator('[data-testid="step-indicator"], .step-dot, .step-button');
-
-    if ((await stepIndicators.count()) >= 3) {
-      // Click step 3 directly
-      await stepIndicators.nth(2).click();
-      await page.waitForTimeout(500);
-
-      // Should show diary textarea
-      const textarea = page.locator('textarea');
-      await expect(textarea).toBeVisible();
-
-      // Click step 1
-      await stepIndicators.nth(0).click();
-      await page.waitForTimeout(500);
-
-      // Should show emotion slider
-      const slider = page.getByRole('slider');
-      await expect(slider).toBeVisible();
-    }
+    await expect(slider).toBeVisible({ timeout: 15000 });
   });
 
   /** Should submit edit successfully */
-  test.skip('should submit edit', async ({ page }) => {
-    await page.route('**/emotions/records/*', route => {
+  test('should submit edit', async ({ page }) => {
+    // Mock PUT request for edit (GET uses real data or may be server-side fetched)
+    await page.route('**/emotions/records**', route => {
       if (route.request().method() === 'PUT') {
-        route.fulfill({ status: 200, body: JSON.stringify({ id: '123' }) });
+        route.fulfill({ status: 200, body: JSON.stringify({ data: { emotionRecordId: 123 } }) });
       } else {
-        route.fulfill({
-          status: 200,
-          body: JSON.stringify({ id: '123', emotionId: 4, reasons: ['work'] }),
-        });
+        route.continue();
       }
     });
 
-    await page.goto('/record/daily?edit=123');
+    await page.goto(`/record/daily?date=${today}`);
     await page.waitForLoadState('networkidle');
 
-    // Modify emotion
-    const slider = page.getByRole('slider');
-    await setSliderValue(slider, 6);
+    // Wait for canvas (Step 1: Emotion)
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeVisible({ timeout: 15000 });
 
-    // Navigate to submit
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
-    await page.waitForTimeout(500);
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
-    await page.waitForTimeout(500);
+    // Step 1 → Step 2
+    await page.getByRole('button', { name: /next/i }).first().click();
+    await page.waitForLoadState('networkidle');
 
-    // Submit edit
-    const submitButton = page.getByRole('button', { name: /수정|제출|submit|save/i });
+    // Step 2: Ensure at least one reason is selected
+    // Check if Next is disabled (no reason selected), then click Health
+    const nextButton2 = page.getByRole('button', { name: /next/i }).first();
+    if (await nextButton2.isDisabled()) {
+      const healthButton = page.getByRole('button', { name: 'Health' });
+      await healthButton.click();
+    }
+
+    // Step 2 → Step 3: Wait for Next to be enabled, then click
+    await expect(nextButton2).toBeEnabled({ timeout: 5000 });
+    await nextButton2.click();
+
+    // Step 3: Submit
+    const submitButton = page.getByRole('button', { name: /submit/i });
+    await expect(submitButton).toBeVisible({ timeout: 5000 });
     await submitButton.click();
 
     // Should redirect to calendar
     await expect(page).toHaveURL(/\/profile|\/calendar/, { timeout: 10000 });
   });
 
-  /** Should show error on edit failure */
-  test.skip('should show error on edit failure', async ({ page }) => {
-    await page.route('**/emotions/records/*', route => {
-      if (route.request().method() === 'PUT') {
-        route.fulfill({ status: 500, body: JSON.stringify({ error: 'Update failed' }) });
-      } else {
+  /** Should show loading on edit submit */
+  test('should show loading on edit', async ({ page }) => {
+    // Mock GET for existing record, slow PUT response
+    await page.route('**/emotions/records**', async route => {
+      if (route.request().method() === 'GET') {
         route.fulfill({
           status: 200,
-          body: JSON.stringify({ id: '123', emotionId: 4, reasons: ['work'] }),
+          body: JSON.stringify({
+            data: {
+              daily: [{ emotionRecordId: 123, emotionId: 4, reasons: ['Work'], diaryEntry: '' }],
+              moment: [],
+            },
+          }),
         });
+      } else if (route.request().method() === 'PUT') {
+        // Delay response to check loading state
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        route.fulfill({ status: 200, body: JSON.stringify({ data: { emotionRecordId: 123 } }) });
+      } else {
+        route.continue();
       }
     });
 
-    await page.goto('/record/daily?edit=123');
+    await page.goto(`/record/daily?date=${today}`);
     await page.waitForLoadState('networkidle');
 
-    // Navigate to submit
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
-    await page.waitForTimeout(500);
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
-    await page.waitForTimeout(500);
+    // Wait for canvas
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeVisible({ timeout: 15000 });
 
-    const submitButton = page.getByRole('button', { name: /수정|제출|submit/i });
+    // Step 1 → Step 2
+    await page.getByRole('button', { name: /next/i }).first().click();
+    await page.waitForLoadState('networkidle');
+
+    // Select an additional reason (Work is already selected from mock data)
+    const reasonButton = page.getByRole('button', { name: 'Health' });
+    if (await reasonButton.isVisible()) {
+      await reasonButton.click();
+    }
+
+    // Step 2 → Step 3: Wait for Next to be enabled, then click
+    const nextButton2 = page.getByRole('button', { name: /next/i }).first();
+    await expect(nextButton2).toBeEnabled({ timeout: 5000 });
+    await nextButton2.click();
+
+    // Click submit
+    const submitButton = page.getByRole('button', { name: /submit/i });
+    await expect(submitButton).toBeVisible({ timeout: 5000 });
+    await submitButton.click();
+
+    // Button should show loading state (disabled)
+    await expect(submitButton).toBeDisabled();
+  });
+
+  /** Should show error on edit failure */
+  test('should show error on edit failure', async ({ page }) => {
+    // Mock GET success, PUT failure
+    await page.route('**/emotions/records**', route => {
+      if (route.request().method() === 'GET') {
+        route.fulfill({
+          status: 200,
+          body: JSON.stringify({
+            data: {
+              daily: [{ emotionRecordId: 123, emotionId: 4, reasons: ['Work'], diaryEntry: 'Test diary' }],
+              moment: [],
+            },
+          }),
+        });
+      } else if (route.request().method() === 'PUT') {
+        route.fulfill({ status: 500, body: JSON.stringify({ error: 'Update failed' }) });
+      } else {
+        route.continue();
+      }
+    });
+
+    await page.goto(`/record/daily?date=${today}`);
+    await page.waitForLoadState('networkidle');
+
+    // Wait for canvas (edit mode with existing data)
+    const canvas = page.locator('canvas');
+    await expect(canvas).toBeVisible({ timeout: 15000 });
+
+    // Step 1 → Step 2: Click Next
+    const nextButton = page.getByRole('button', { name: /next|continue/i }).first();
+    await expect(nextButton).toBeVisible({ timeout: 5000 });
+    await nextButton.click();
+
+    // Step 2: Select a reason button
+    await page.waitForTimeout(500);
+    const reasonButton = page.getByRole('button', { name: /work|family|health|relationship|finance|etc/i }).first();
+    await expect(reasonButton).toBeVisible({ timeout: 5000 });
+    await reasonButton.click();
+
+    // Step 2 → Step 3: Wait for Next to be enabled, then click
+    await expect(nextButton).toBeEnabled({ timeout: 5000 });
+    await nextButton.click();
+
+    // Step 3: Submit
+    await page.waitForTimeout(500);
+    const submitButton = page.getByRole('button', { name: /submit/i });
+    await expect(submitButton).toBeVisible({ timeout: 5000 });
     await submitButton.click();
 
     // Should show error message
-    const errorMsg = page.locator('text=/실패|error|오류|failed/i');
+    const errorMsg = page.getByText(/error|failed/i);
     await expect(errorMsg.first()).toBeVisible({ timeout: 5000 });
   });
 });
@@ -782,27 +698,28 @@ test.describe('Daily Edit Mode', () => {
  */
 
 test.describe('Daily Edge Cases', () => {
-  /** Should handle ?date= query parameter */
-  test.skip('should handle date parameter', async ({ page }) => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const dateStr = yesterday.toISOString().split('T')[0];
-
-    await page.goto(`/record/daily?date=${dateStr}`);
-
-    // Should show the specified date
-    await expect(page.locator(`text=/${yesterday.getDate()}/`)).toBeVisible();
-  });
-
-  /** Should handle dates older than 24h */
-  test.skip('should restrict old date recording', async ({ page }) => {
+  /** Should not allow access to dates older than allowed range */
+  test('should restrict old date recording', async ({ page }) => {
     const oldDate = new Date();
     oldDate.setDate(oldDate.getDate() - 3);
     const dateStr = oldDate.toISOString().split('T')[0];
 
     await page.goto(`/record/daily?date=${dateStr}`);
+    await page.waitForLoadState('networkidle');
 
-    // Should show restriction or redirect
+    // Should redirect away from record page OR show restriction message
+    // If still on record page, check for restriction message
+    const currentUrl = page.url();
+    const isStillOnRecordPage = currentUrl.includes('/record/daily');
+
+    if (isStillOnRecordPage) {
+      // If accessible, should at least show a restriction message
+      const restriction = page.getByText(/cannot|restricted|not allowed|expired|과거|수정/i);
+      await expect(restriction).toBeVisible({ timeout: 5000 });
+    } else {
+      // Should have redirected (this is the expected behavior)
+      expect(currentUrl).not.toContain(`/record/daily?date=${dateStr}`);
+    }
   });
 });
 
@@ -893,11 +810,8 @@ test.describe('Record Daily Mobile', () => {
 
   /** Should display diary textarea on mobile */
   test('should display diary input on mobile', async ({ page }) => {
-    await page.goto('/record');
-    await page
-      .locator('button')
-      .filter({ hasText: /daily record/i })
-      .click();
+    // Navigate directly to /record/daily without date param to skip server-side fetch
+    await page.goto('/record/daily');
     await page.waitForLoadState('networkidle');
 
     // Wait for 3D canvas to load (scene ready)
@@ -918,10 +832,11 @@ test.describe('Record Daily Mobile', () => {
 
     // Step 2 - select a reason
     await page.getByRole('button', { name: 'Health' }).click();
-    await page
-      .getByRole('button', { name: /다음|next/i })
-      .first()
-      .click();
+
+    // Wait for Next button to be enabled after reason selection
+    const nextButton2 = page.getByRole('button', { name: /다음|next/i }).first();
+    await expect(nextButton2).toBeEnabled({ timeout: 5000 });
+    await nextButton2.click();
 
     // Diary textarea should be visible on mobile
     const textarea = page.locator('textarea, [data-testid="diary-input"]');

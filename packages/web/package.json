@@ -13,6 +13,9 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
     "sync:boilerplate": "./scripts/sync-boilerplate.sh",
     "sync:to-boilerplate": "./scripts/sync-to-boilerplate.sh"
   },
@@ -52,6 +55,7 @@
     "three-custom-shader-material": "^6.3.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.1",
     "@next/bundle-analyzer": "^16.1.1",
     "@swc/jest": "^0.2.39",
     "@tailwindcss/postcss": "^4.1.12",

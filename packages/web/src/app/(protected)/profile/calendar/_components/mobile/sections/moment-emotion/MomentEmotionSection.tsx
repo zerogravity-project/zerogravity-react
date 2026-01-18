@@ -52,7 +52,7 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
         <Heading as="h2" size="4" weight="medium">
           Moment Emotion
         </Heading>
-        <Link href={`/record/daily?date=${selectedDateString}`}>
+        <Link href={`/record/moment?date=${selectedDateString}`}>
           <Button variant="soft" radius="full" className="!cursor-pointer">
             Add
           </Button>
