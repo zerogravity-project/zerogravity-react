@@ -30,9 +30,9 @@
     "test:shared:watch": "pnpm --filter @zerogravity/shared test",
     "test:shared:coverage": "pnpm --filter @zerogravity/shared test:coverage",
     "test:all": "pnpm test:shared && pnpm test:web",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
+    "test:e2e": "pnpm --filter web test:e2e",
+    "test:e2e:ui": "pnpm --filter web test:e2e:ui",
+    "test:e2e:headed": "pnpm --filter web test:e2e:headed",
     "start:web": "pnpm --filter web start",
     "start:extension": "pnpm --filter extension start",
     "start:all": "pnpm -r start"
@@ -40,7 +40,6 @@
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
-    "@playwright/test": "^1.56.1",
     "@typescript-eslint/eslint-plugin": "^8.36.0",
     "@typescript-eslint/parser": "^8.36.0",
     "autoprefixer": "^10.4.21",
@@ -55,7 +54,6 @@
     "gitmoji-cli": "^9.7.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
-    "playwright": "^1.56.1",
     "postcss": "^8.5.6",
     "prettier": "3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.14",

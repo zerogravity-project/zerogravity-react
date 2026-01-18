@@ -190,7 +190,7 @@ test.describe('Nav Profile Display', () => {
   });
 
   /** Should handle profile error gracefully (SSR) */
-  test.skip('should handle profile error', async ({ page }) => {
+  test('should handle profile error', async ({ page }) => {
     // Mock profile API failure
     await page.route('**/users/me', route => {
       route.fulfill({ status: 500, body: JSON.stringify({ error: 'Server error' }) });
@@ -215,28 +215,44 @@ test.describe('Nav Profile Display', () => {
  */
 
 test.describe('Navigation Links', () => {
+  /** Helper to open dropdown menu */
+  async function openDropdownMenu(page: import('@playwright/test').Page) {
+    const menuTrigger = page.locator('[aria-haspopup="menu"]').first();
+    await expect(menuTrigger).toBeVisible({ timeout: 5000 });
+    await menuTrigger.click();
+
+    // Wait for dropdown content to appear
+    const dropdownContent = page.locator('[role="menu"]');
+    await expect(dropdownContent).toBeVisible({ timeout: 3000 });
+  }
+
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
   });
 
-  /** Should have link to Record */
-  test('should have record link', async ({ page }) => {
-    // Find record link in nav (might be in dropdown/drawer)
-    const recordLink = page.getByRole('link', { name: /record|기록/i });
-    await expect(recordLink.first().or(page.locator('body'))).toBeVisible();
+  /** Should have link to Calendar (in profile dropdown) */
+  test('should have calendar link', async ({ page }) => {
+    await openDropdownMenu(page);
+
+    const calendarItem = page.getByRole('menuitem', { name: /calendar/i });
+    await expect(calendarItem).toBeVisible({ timeout: 3000 });
   });
 
-  /** Should have link to Profile */
-  test('should have profile link', async ({ page }) => {
-    const profileLink = page.getByRole('link', { name: /profile|프로필/i });
-    await expect(profileLink.first().or(page.locator('body'))).toBeVisible();
+  /** Should have link to Chart (in profile dropdown) */
+  test('should have chart link', async ({ page }) => {
+    await openDropdownMenu(page);
+
+    const chartItem = page.getByRole('menuitem', { name: /chart/i });
+    await expect(chartItem).toBeVisible({ timeout: 3000 });
   });
 
-  /** Should have link to Spaceout */
-  test('should have spaceout link', async ({ page }) => {
-    const spaceoutLink = page.getByRole('link', { name: /spaceout|명상/i });
-    await expect(spaceoutLink.first().or(page.locator('body'))).toBeVisible();
+  /** Should have link to Setting (in profile dropdown) */
+  test('should have setting link', async ({ page }) => {
+    await openDropdownMenu(page);
+
+    const settingItem = page.getByRole('menuitem', { name: /setting/i });
+    await expect(settingItem).toBeVisible({ timeout: 3000 });
   });
 });
 
@@ -247,6 +263,7 @@ test.describe('Navigation Links', () => {
  */
 
 test.describe('Tablet Navigation', () => {
+  // Tablet (768px) shows desktop dropdown, not hamburger (breakpoint is 640px)
   test.use({ viewport: { width: 768, height: 1024 } });
 
   test.beforeEach(async ({ page }) => {
@@ -260,28 +277,21 @@ test.describe('Tablet Navigation', () => {
     await expect(nav.first()).toBeVisible();
   });
 
-  /** Should show appropriate menu style for tablet */
+  /** Should show dropdown menu on tablet (width >= 640px shows desktop style) */
   test('should show tablet menu style', async ({ page }) => {
-    // Tablet may show hamburger or hybrid menu
-    const menuButton = page.locator('[data-testid="menu-button"], button[aria-label*="menu" i], .hamburger');
-    const menuTrigger = page.locator('[data-testid="menu-trigger"], [aria-haspopup="menu"]');
-
-    // Either should exist for tablet navigation, or page should just load
-    await expect(menuButton.first().or(menuTrigger.first()).or(page.locator('body'))).toBeVisible();
+    // At 768px, desktop dropdown is shown (useIsSm breakpoint is 640px)
+    const menuTrigger = page.locator('[aria-haspopup="menu"]');
+    await expect(menuTrigger.first()).toBeVisible({ timeout: 5000 });
   });
 
-  /** Should open menu on tablet */
+  /** Should open dropdown menu on tablet */
   test('should open menu on tablet', async ({ page }) => {
-    const menuButton = page
-      .locator('[data-testid="menu-button"], [data-testid="menu-trigger"], button[aria-label*="menu" i]')
-      .first();
+    const menuTrigger = page.locator('[aria-haspopup="menu"]').first();
+    await expect(menuTrigger).toBeVisible({ timeout: 5000 });
+    await menuTrigger.click();
 
-    if (await menuButton.isVisible()) {
-      await menuButton.click();
-
-      // Menu should open (drawer or dropdown)
-      const menu = page.locator('[role="menu"], [role="dialog"], .drawer, .dropdown');
-      await expect(menu.first()).toBeVisible({ timeout: 2000 });
-    }
+    // Dropdown menu should open
+    const menu = page.locator('[role="menu"]');
+    await expect(menu).toBeVisible({ timeout: 3000 });
   });
 });
