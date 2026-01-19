@@ -19,31 +19,35 @@ const DEFAULT_LIGHT_PROPS = {
   color: '#ffffff',
   intensity: 5,
   position: [0.25, 2, -2.25],
-  castShadow: true,
-  shadowMapSize: [1024, 1024],
   shadowCameraFar: 15,
   shadowNormalBias: 0.05,
-};
+} as const;
 
-/** Default Sparkles Properties */
-const DEFAULT_SPARKLES_PROPS = {
-  count: 50,
-  scale: 7,
-  size: 6,
-  speed: 0.4,
-};
+/** Shadow Configuration by Performance Mode */
+const SHADOW_CONFIG = {
+  /** Desktop - High quality shadows */
+  desktop: { enabled: true, mapSize: [512, 512] as [number, number] },
+  /** Mobile - Shadows disabled for performance */
+  performance: { enabled: false, mapSize: [256, 256] as [number, number] },
+} as const;
 
-const DEFAULT_LARGE_SPARKLES_PROPS = {
-  count: 50,
-  scale: 7,
-  size: 8,
-  speed: 0.05,
-};
+/** Sparkles Configuration */
+const SPARKLES_CONFIG = {
+  desktop: {
+    normal: { count: 50, scale: 7, size: 6, speed: 0.4 },
+    large: { count: 50, scale: 7, size: 8, speed: 0.05 },
+  },
+  /** Mobile - Reduced sparkles for performance */
+  performance: {
+    normal: { count: 25, scale: 7, size: 6, speed: 0.4 },
+    large: { count: 25, scale: 7, size: 8, speed: 0.05 },
+  },
+} as const;
 
 /** LOD Subdivision Configuration */
 const LOD_SUBDIVISIONS = {
   /** Desktop - High quality */
-  desktop: { large: 48, normal: 24 },
+  desktop: { large: 48, normal: 32 },
   /** Mobile/Low-end - Performance mode */
   performance: { large: 32, normal: 28 },
 } as const;
@@ -73,7 +77,7 @@ interface EmotionPlanetProps {
 export function EmotionPlanet({
   emotionId,
   onLoaded,
-  environmentMapUrl = '/environment-maps/urban_alley_01_1k.hdr',
+  environmentMapUrl = '/environment-maps/urban_alley_01_512.hdr',
   isSparkles = true,
   isLarge = false,
   performanceMode = false,
@@ -83,9 +87,17 @@ export function EmotionPlanet({
    * 1. Derived Values
    * --------------------------------------------
    */
+  const configKey = performanceMode ? 'performance' : 'desktop';
+
   /** Get subdivision count based on LOD settings */
-  const lodConfig = performanceMode ? LOD_SUBDIVISIONS.performance : LOD_SUBDIVISIONS.desktop;
+  const lodConfig = LOD_SUBDIVISIONS[configKey];
   const subdivisions = isLarge ? lodConfig.large : lodConfig.normal;
+
+  /** Get shadow configuration */
+  const shadowConfig = SHADOW_CONFIG[configKey];
+
+  /** Get sparkles configuration */
+  const sparklesConfig = SPARKLES_CONFIG[configKey][isLarge ? 'large' : 'normal'];
 
   /*
    * --------------------------------------------
@@ -111,8 +123,8 @@ export function EmotionPlanet({
         color={DEFAULT_LIGHT_PROPS.color}
         intensity={DEFAULT_LIGHT_PROPS.intensity}
         position={DEFAULT_LIGHT_PROPS.position as [number, number, number]}
-        castShadow
-        shadow-mapSize={DEFAULT_LIGHT_PROPS.shadowMapSize}
+        castShadow={shadowConfig.enabled}
+        shadow-mapSize={shadowConfig.mapSize}
         shadow-camera-far={DEFAULT_LIGHT_PROPS.shadowCameraFar}
         shadow-normalBias={DEFAULT_LIGHT_PROPS.shadowNormalBias}
       />
@@ -132,10 +144,10 @@ export function EmotionPlanet({
       />
       {isSparkles && (
         <Sparkles
-          count={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.count : DEFAULT_SPARKLES_PROPS.count}
-          scale={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.scale : DEFAULT_SPARKLES_PROPS.scale}
-          size={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.size : DEFAULT_SPARKLES_PROPS.size}
-          speed={isLarge ? DEFAULT_LARGE_SPARKLES_PROPS.speed : DEFAULT_SPARKLES_PROPS.speed}
+          count={sparklesConfig.count}
+          scale={sparklesConfig.scale}
+          size={sparklesConfig.size}
+          speed={sparklesConfig.speed}
         />
       )}
       {/* Controller */}

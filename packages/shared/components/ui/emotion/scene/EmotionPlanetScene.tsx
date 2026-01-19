@@ -171,20 +171,21 @@ export function EmotionPlanetScene({
             frameloop={isFreeze ? 'never' : 'always'}
             resize={{ offsetSize: true }}
             style={{ width: resolvedWidth, height: resolvedHeight }}
-            shadows
+            shadows={!shouldUsePerformanceMode}
             camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
             gl={{
               alpha: true,
               toneMapping: THREE.ACESFilmicToneMapping,
               toneMappingExposure: 1,
               powerPreference: 'high-performance',
-              precision: 'highp',
+              precision: shouldUsePerformanceMode ? 'mediump' : 'highp',
               preserveDrawingBuffer: false,
               logarithmicDepthBuffer: false,
+              antialias: !shouldUsePerformanceMode,
             }}
-            dpr={[1, 2]}
+            dpr={shouldUsePerformanceMode ? [0.75, 1.5] : [1, 2]}
             onCreated={({ gl }) => {
-              gl.shadowMap.enabled = true;
+              gl.shadowMap.enabled = !shouldUsePerformanceMode;
               gl.shadowMap.type = THREE.PCFSoftShadowMap;
             }}
           >
