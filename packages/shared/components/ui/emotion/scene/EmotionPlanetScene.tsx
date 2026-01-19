@@ -3,8 +3,10 @@
 import { Suspense, useEffect, useState } from 'react';
 
 import { Canvas } from '@react-three/fiber';
+import { Perf } from 'r3f-perf';
 import * as THREE from 'three';
 
+import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import { useSquareResize } from '../../../../hooks/useSquareResize';
 import { cn } from '../../../../utils/styleUtils';
 import { EmotionPlanetGlow } from '../decorations/EmotionPlanetGlow';
@@ -32,6 +34,11 @@ interface EmotionPlanetSceneProps {
   isResize?: boolean;
   isLarge?: boolean;
 
+  /** Show r3f-perf performance monitor (dev mode) */
+  showPerf?: boolean;
+  /** Force performance mode (auto-detected on mobile if not specified) */
+  performanceMode?: boolean;
+
   delay?: number;
   onSceneLoaded?: () => void;
 
@@ -56,6 +63,8 @@ export function EmotionPlanetScene({
   isLoadingShowText = true,
   isResize = true,
   isLarge = false,
+  showPerf = false,
+  performanceMode,
   delay = 0,
   onSceneLoaded,
   className,
@@ -74,10 +83,19 @@ export function EmotionPlanetScene({
    * --------------------------------------------
    */
   const { ref: containerRef, squareSize } = useSquareResize({ isResize: width && height ? false : isResize });
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   /*
    * --------------------------------------------
-   * 3. Helper Functions
+   * 3. Derived Values (Performance)
+   * --------------------------------------------
+   */
+  /** Use performance mode if explicitly set, or auto-detect on mobile */
+  const shouldUsePerformanceMode = performanceMode ?? isMobile;
+
+  /*
+   * --------------------------------------------
+   * 4. Helper Functions
    * --------------------------------------------
    */
   /** Calculate display size based on dimension and square size */
@@ -98,7 +116,7 @@ export function EmotionPlanetScene({
 
   /*
    * --------------------------------------------
-   * 4. Derived Values
+   * 5. Derived Values
    * --------------------------------------------
    */
   const resolvedWidth = width || squareSize || '100%';
@@ -110,7 +128,7 @@ export function EmotionPlanetScene({
 
   /*
    * --------------------------------------------
-   * 5. Event Handlers
+   * 6. Event Handlers
    * --------------------------------------------
    */
   /** Handle planet loaded event */
@@ -121,7 +139,7 @@ export function EmotionPlanetScene({
 
   /*
    * --------------------------------------------
-   * 6. Effects
+   * 7. Effects
    * --------------------------------------------
    */
   /** Handle delay for canvas rendering */
@@ -137,7 +155,7 @@ export function EmotionPlanetScene({
 
   /*
    * --------------------------------------------
-   * 7. Return
+   * 8. Return
    * --------------------------------------------
    */
   return (
@@ -170,6 +188,9 @@ export function EmotionPlanetScene({
               gl.shadowMap.type = THREE.PCFSoftShadowMap;
             }}
           >
+            {/* Performance Monitor (dev mode) */}
+            {showPerf && <Perf position="bottom-right" />}
+
             <Suspense fallback={null}>
               <EmotionPlanet
                 onLoaded={handleLoaded}
@@ -177,6 +198,7 @@ export function EmotionPlanetScene({
                 environmentMapUrl={environmentMapUrl}
                 isSparkles={isSparkles}
                 isLarge={isLarge}
+                performanceMode={shouldUsePerformanceMode}
               />
             </Suspense>
           </Canvas>

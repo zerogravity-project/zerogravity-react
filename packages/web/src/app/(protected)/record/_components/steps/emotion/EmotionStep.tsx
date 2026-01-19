@@ -55,6 +55,7 @@ export default function EmotionStep() {
           emotionId={emotionValueToStepIndex}
           width="100%"
           onSceneLoaded={() => setIsSceneLoaded(true)}
+          showPerf={true}
         />
         <Text
           color={EMOTION_STEPS[emotionValueToStepIndex].color}
