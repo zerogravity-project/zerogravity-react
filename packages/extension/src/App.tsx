@@ -4,7 +4,7 @@ import { Button } from '@radix-ui/themes';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { Clock } from '@zerogravity/shared/components/ui/clock';
-import { LazyEmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene-lazy';
+import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Footer } from '@zerogravity/shared/components/ui/footer';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { PageLoading } from '@zerogravity/shared/components/ui/loading';
@@ -60,7 +60,7 @@ function App() {
 
       <div className={cn('absolute inset-0 z-3 mt-44 flex w-full justify-center', isLg ? 'mt-44' : 'mt-48')}>
         <div className={cn(isLg ? 'h-[1200px] w-[1200px]' : 'h-[1500px] w-[1500px]')}>
-          <LazyEmotionPlanetScene
+          <EmotionPlanetScene
             emotionId={EMOTION_COLORS.indexOf(accentColor as EmotionColor)}
             isSparkles={true}
             isGlow={true}

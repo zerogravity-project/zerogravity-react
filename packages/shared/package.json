@@ -18,10 +18,6 @@
       "types": "./dist/components/ui/emotion/scene/index.d.ts",
       "import": "./dist/components/ui/emotion/scene/index.js"
     },
-    "./components/ui/emotion/scene-lazy": {
-      "types": "./dist/components/ui/emotion/scene-lazy/index.d.ts",
-      "import": "./dist/components/ui/emotion/scene-lazy/index.js"
-    },
     "./components/ui/emotion/decorations": {
       "types": "./dist/components/ui/emotion/decorations/index.d.ts",
       "import": "./dist/components/ui/emotion/decorations/index.js"

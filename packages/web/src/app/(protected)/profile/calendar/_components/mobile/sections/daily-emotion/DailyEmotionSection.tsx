@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { EmotionPlanetNull } from '@zerogravity/shared/components/ui/emotion/null';
-import { LazyEmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene-lazy';
+import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_COLORS, EMOTION_STEPS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 import { formatDateString } from '@zerogravity/shared/utils';
@@ -87,7 +87,7 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
       {/* Data state */}
       {!isLoading && !isEmpty && (
         <>
-          <LazyEmotionPlanetScene emotionId={emotionId} />
+          <EmotionPlanetScene emotionId={emotionId} />
           <Text color={emotionColor} className="!text-center !text-3xl transition-all duration-400">
             {EMOTION_STEPS[emotionId].type}
           </Text>

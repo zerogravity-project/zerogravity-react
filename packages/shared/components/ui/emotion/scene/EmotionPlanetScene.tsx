@@ -1,10 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-
-import { Canvas } from '@react-three/fiber';
-import { Perf } from 'r3f-perf';
-import * as THREE from 'three';
+import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import { useSquareResize } from '../../../../hooks/useSquareResize';
@@ -12,7 +8,15 @@ import { cn } from '../../../../utils/styleUtils';
 import { EmotionPlanetGlow } from '../decorations/EmotionPlanetGlow';
 import { EmotionPlanetLoading } from '../decorations/EmotionPlanetLoading';
 
-import { EmotionPlanet } from './EmotionPlanet';
+/*
+ * ============================================
+ * Lazy Import (R3F bundle separation)
+ * ============================================
+ */
+
+const LazyEmotionPlanetCanvas = lazy(() =>
+  import('./EmotionPlanetCanvas').then(mod => ({ default: mod.EmotionPlanetCanvas }))
+);
 
 /*
  * ============================================
@@ -164,49 +168,25 @@ export function EmotionPlanetScene({
       className={cn('relative h-full w-full', !width && !height && 'aspect-square', className)}
       style={{ width, height }}
     >
-      {/* 3D Canvas */}
+      {/* 3D Canvas (lazy loaded) */}
       {showCanvas && (
-        <div className="absolute inset-0 z-1 grid h-full w-full place-items-center">
-          <Canvas
-            frameloop={isFreeze ? 'never' : 'always'}
-            resize={{ offsetSize: true }}
-            style={{ width: resolvedWidth, height: resolvedHeight }}
-            shadows={!shouldUsePerformanceMode}
-            camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
-            gl={{
-              alpha: true,
-              toneMapping: THREE.ACESFilmicToneMapping,
-              toneMappingExposure: 1,
-              powerPreference: 'high-performance',
-              precision: shouldUsePerformanceMode ? 'mediump' : 'highp',
-              preserveDrawingBuffer: false,
-              logarithmicDepthBuffer: false,
-              antialias: !shouldUsePerformanceMode,
-            }}
-            dpr={shouldUsePerformanceMode ? [0.75, 1.5] : [1, 2]}
-            onCreated={({ gl }) => {
-              gl.shadowMap.enabled = !shouldUsePerformanceMode;
-              gl.shadowMap.type = THREE.PCFSoftShadowMap;
-            }}
-          >
-            {/* Performance Monitor (dev mode) */}
-            {showPerf && <Perf position="bottom-right" />}
-
-            <Suspense fallback={null}>
-              <EmotionPlanet
-                onLoaded={handleLoaded}
-                emotionId={emotionId}
-                environmentMapUrl={environmentMapUrl}
-                isSparkles={isSparkles}
-                isLarge={isLarge}
-                performanceMode={shouldUsePerformanceMode}
-              />
-            </Suspense>
-          </Canvas>
-        </div>
+        <Suspense fallback={null}>
+          <LazyEmotionPlanetCanvas
+            emotionId={emotionId}
+            width={resolvedWidth}
+            height={resolvedHeight}
+            environmentMapUrl={environmentMapUrl}
+            isFreeze={isFreeze}
+            isSparkles={isSparkles}
+            isLarge={isLarge}
+            performanceMode={shouldUsePerformanceMode}
+            showPerf={showPerf}
+            onLoaded={handleLoaded}
+          />
+        </Suspense>
       )}
 
-      {/* Glow Effect */}
+      {/* Glow Effect (NOT lazy - renders immediately) */}
       {isGlow && (
         <EmotionPlanetGlow
           emotionId={emotionId}
@@ -217,7 +197,7 @@ export function EmotionPlanetScene({
         />
       )}
 
-      {/* Loading Indicator */}
+      {/* Loading Indicator (NOT lazy - renders immediately) */}
       {!isLarge && (
         <EmotionPlanetLoading
           emotionId={emotionId}

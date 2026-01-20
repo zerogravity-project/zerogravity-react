@@ -3,7 +3,7 @@
 import { Button, Heading, Text } from '@radix-ui/themes';
 import { useState } from 'react';
 
-import { LazyEmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene-lazy';
+import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
@@ -51,7 +51,7 @@ export default function EmotionStep() {
 
       {/* Emotion Visual */}
       <div className="mb-16 flex h-full min-h-[160px] w-full flex-col items-center">
-        <LazyEmotionPlanetScene
+        <EmotionPlanetScene
           emotionId={emotionValueToStepIndex}
           width="100%"
           onSceneLoaded={() => setIsSceneLoaded(true)}

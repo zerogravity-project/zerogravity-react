@@ -60,7 +60,7 @@ const LOD_SUBDIVISIONS = {
 
 interface EmotionPlanetProps {
   emotionId: number;
-  onLoaded: () => void;
+  onLoaded?: () => void;
   environmentMapUrl?: string;
   isSparkles?: boolean;
   isLarge?: boolean;
@@ -106,7 +106,7 @@ export function EmotionPlanet({
    */
   /** Notify parent when component is mounted (Suspense resolved) */
   useEffect(() => {
-    onLoaded();
+    onLoaded?.();
   }, [onLoaded]);
 
   /*
