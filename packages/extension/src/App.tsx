@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { Button } from '@radix-ui/themes';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
@@ -7,7 +5,6 @@ import { Clock } from '@zerogravity/shared/components/ui/clock';
 import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Footer } from '@zerogravity/shared/components/ui/footer';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
-import { PageLoading } from '@zerogravity/shared/components/ui/loading';
 import { EMOTION_COLORS, type EmotionColor } from '@zerogravity/shared/entities/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
@@ -23,14 +20,7 @@ import { NavigationAdapter } from './components/navigation/NavigationAdapter';
 function App() {
   /*
    * --------------------------------------------
-   * 1. States
-   * --------------------------------------------
-   */
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  /*
-   * --------------------------------------------
-   * 2. Custom Hooks
+   * 1. Custom Hooks
    * --------------------------------------------
    */
   const { accentColor } = useTheme();
@@ -53,8 +43,6 @@ function App() {
    */
   return (
     <div className="pt-topnav-height relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
-      <PageLoading isLoaded={isLoaded} />
-
       {/* Navigation */}
       <NavigationAdapter className="fixed top-0" />
 
@@ -67,7 +55,6 @@ function App() {
             isLarge={true}
             width={isLg ? 1200 : 1500}
             height={isLg ? 1200 : 1500}
-            onSceneLoaded={() => setIsLoaded(true)}
           />
         </div>
       </div>

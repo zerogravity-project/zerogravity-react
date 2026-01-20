@@ -122,7 +122,6 @@ export function WobbleMesh({
 
   /** Animate uniforms every frame */
   useFrame(({ clock }) => {
-    // Update time for animation
     uniforms.uTime.value = clock.getElapsedTime();
 
     // Lerp speed: lower = smoother/slower (recommended: 0.02 ~ 0.1)
