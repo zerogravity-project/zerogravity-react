@@ -2,6 +2,8 @@
 
 import { lazy, Suspense, useEffect, useState } from 'react';
 
+import { AnimatePresence, motion } from 'motion/react';
+
 import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import { useSquareResize } from '../../../../hooks/useSquareResize';
 import { cn } from '../../../../utils/styleUtils';
@@ -218,39 +220,35 @@ export function EmotionPlanetScene({
         </Suspense>
       )}
 
-      {/* Static Placeholder Image (prevents layout shift) */}
-      {loadingFallback === 'placeholder' && (
-        <div
-          className={cn(
-            'absolute inset-0 z-2 flex items-center justify-center transition-opacity duration-500',
-            isLoaded && !isLoading ? 'pointer-events-none opacity-0' : 'opacity-100'
-          )}
-        >
-          <img
-            src={`/images/emotions/first-frame/emotion-${emotionId}-512.webp`}
-            srcSet={`
-              /images/emotions/first-frame/emotion-${emotionId}-512.webp 512w,
-              /images/emotions/first-frame/emotion-${emotionId}-1024.webp 1024w,
-              /images/emotions/first-frame/emotion-${emotionId}-1500.webp 1500w
-            `}
-            sizes="(max-width: 768px) 512px, (max-width: 1200px) 1024px, 1500px"
-            alt={`Emotion ${emotionId}`}
-            className="pointer-events-none h-full w-full object-contain select-none"
-            style={{ width: displayWidth, height: displayHeight }}
-            draggable={false}
-          />
-        </div>
-      )}
+      {/* Static Placeholder Image (prevents layout shift, unmounts after fade) */}
+      <AnimatePresence>
+        {loadingFallback === 'placeholder' && (!isLoaded || isLoading) && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="pointer-events-none absolute inset-0 z-2 flex items-center justify-center"
+          >
+            <img
+              src={`/images/emotions/first-frame/emotion-${emotionId}-512.webp`}
+              srcSet={`
+                /images/emotions/first-frame/emotion-${emotionId}-512.webp 512w,
+                /images/emotions/first-frame/emotion-${emotionId}-1024.webp 1024w,
+                /images/emotions/first-frame/emotion-${emotionId}-1500.webp 1500w
+              `}
+              sizes="(max-width: 768px) 512px, (max-width: 1200px) 1024px, 1500px"
+              alt={`Emotion ${emotionId}`}
+              className="pointer-events-none h-full w-full object-contain select-none"
+              style={{ width: displayWidth, height: displayHeight }}
+              draggable={false}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Glow Effect (NOT lazy - renders immediately) */}
       {isGlow && (
-        <EmotionPlanetGlow
-          emotionId={emotionId}
-          isVisible={isLoaded}
-          width={displayWidth}
-          height={displayHeight}
-          isLarge={isLarge}
-        />
+        <EmotionPlanetGlow emotionId={emotionId} isVisible={isLoaded} width={displayWidth} height={displayHeight} />
       )}
 
       {/* Loading Indicator (alternative to placeholder image) */}
