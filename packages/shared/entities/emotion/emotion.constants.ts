@@ -3,7 +3,30 @@
  * Core constants for emotion entity
  */
 
+import { CDN_BASE_URL } from '../../config/cdn.constants';
+
 import type { EmotionId, EmotionPlanetParams, EmotionStep } from './emotion.types';
+
+/*
+ * ============================================
+ * CDN Image URLs
+ * ============================================
+ */
+
+/** CDN paths for emotion planet images */
+export const EMOTION_IMAGE_URLS = {
+  /** First-frame placeholder images for 3D loading */
+  firstFrame: (emotionId: number, size: 512 | 1024 | 1500) =>
+    `${CDN_BASE_URL}/images/emotions/first-frame/emotion-${emotionId}-${size}.webp`,
+
+  /** Thumbnail images for static display */
+  thumbnail: (emotionId: number, size: 256 = 256) =>
+    `${CDN_BASE_URL}/images/emotions/thumbnail/emotion-${emotionId}-${size}.webp`,
+
+  /** HDR environment map for 3D scene */
+  environmentMap: (resolution: '512' | '1k' = '512') =>
+    `${CDN_BASE_URL}/environment-maps/urban_alley_01_${resolution}.hdr`,
+} as const;
 
 /** Internal keys for emotion levels */
 export const EMOTION_KEYS = [

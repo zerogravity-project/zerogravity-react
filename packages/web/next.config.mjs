@@ -11,6 +11,15 @@ const withVanillaExtract = createVanillaExtractPlugin();
 const nextConfig = {
   output: 'standalone',
   transpilePackages: ['@zerogravity/shared'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'axp1udgkvclx.objectstorage.ap-chuncheon-1.oci.customer-oci.com',
+        pathname: '/n/axp1udgkvclx/b/zerogravity-static/o/**',
+      },
+    ],
+  },
   experimental: {
     optimizePackageImports: [
       '@radix-ui/themes',

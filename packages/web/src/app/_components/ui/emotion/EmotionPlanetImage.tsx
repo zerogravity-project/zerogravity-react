@@ -6,7 +6,7 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 
 import { EmotionPlanetGlow } from '@zerogravity/shared/components/ui/emotion/decorations';
-import type { EmotionId } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_IMAGE_URLS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 import { useSquareResize } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
@@ -73,13 +73,14 @@ export function EmotionPlanetImage({
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <Image
-        src={`/images/emotions/thumbnail/emotion-${emotionId}-256.webp`}
+        src={EMOTION_IMAGE_URLS.thumbnail(emotionId)}
         alt={`emotion-${emotionId}`}
         width={width}
         height={height}
         className={cn('relative z-10', className)}
         fill={fill}
         onLoad={() => setIsLoaded(true)}
+        unoptimized
         {...props}
       />
 

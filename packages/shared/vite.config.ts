@@ -38,6 +38,7 @@ export default defineConfig({
         'components/providers/index': path.resolve(__dirname, 'components/providers/index.ts'),
         'hooks/index': path.resolve(__dirname, 'hooks/index.ts'),
         'utils/index': path.resolve(__dirname, 'utils/index.ts'),
+        'config/index': path.resolve(__dirname, 'config/index.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,

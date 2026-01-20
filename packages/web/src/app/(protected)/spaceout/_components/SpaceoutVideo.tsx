@@ -5,7 +5,17 @@ import { useRouter } from 'next/navigation';
 import { Text } from '@radix-ui/themes';
 import { useEffect, useRef, useState } from 'react';
 
+import { CDN_BASE_URL } from '@zerogravity/shared/config';
 import { cn } from '@zerogravity/shared/utils';
+
+/*
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
+/** Default video URLs from CDN */
+const DEFAULT_VIDEOS = [`${CDN_BASE_URL}/videos/sun.mp4`, `${CDN_BASE_URL}/videos/mercury.mp4`];
 
 /*
  * ============================================
@@ -32,7 +42,7 @@ interface SpaceoutVideoProps {
  */
 
 export default function SpaceoutVideo({
-  videos = ['/videos/sun.mp4', '/videos/mercury.mp4'],
+  videos = DEFAULT_VIDEOS,
   poster,
   autoPlay = true,
   loop = false,
