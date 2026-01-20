@@ -1,12 +1,11 @@
-/* eslint-disable import/order */
 'use client';
 
-import { useFrame } from '@react-three/fiber';
 import { useEffect, useMemo, useRef } from 'react';
+
+import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import CustomShaderMaterial from 'three-custom-shader-material';
-import CSMVanilla from 'three-custom-shader-material/vanilla';
 import { mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
+import CustomShaderMaterial from 'three-custom-shader-material';
 
 import simplexNoise4d from '../shaders/includes/simplexNoise4d.glsl';
 import wobbleFragmentShader from '../shaders/wobble/fragment.glsl';
@@ -89,7 +88,6 @@ export function WobbleMesh({
       uTime: new THREE.Uniform(0),
       uPositionFrequency: new THREE.Uniform(0),
       uTimeFrequency: new THREE.Uniform(0),
-      uStrength: new THREE.Uniform(0),
       uWarpPositionFrequency: new THREE.Uniform(0),
       uWarpTimeFrequency: new THREE.Uniform(0),
       uWarpStrength: new THREE.Uniform(0),
@@ -105,12 +103,10 @@ export function WobbleMesh({
     return `${simplexNoise4d}\n${wobbleVertexShader}`;
   }, []);
 
-  /** Geometry with computed tangents for shader */
+  /** Merged geometry for optimized rendering */
   const geometry = useMemo<THREE.BufferGeometry>(() => {
     const base = new THREE.IcosahedronGeometry(radius, subdivisions);
-    const merged = mergeVertices(base) as THREE.BufferGeometry;
-    merged.computeTangents();
-    return merged;
+    return mergeVertices(base) as THREE.BufferGeometry;
   }, [radius, subdivisions]);
 
   /*
@@ -167,7 +163,7 @@ export function WobbleMesh({
    */
   return (
     <mesh ref={meshRef} geometry={geometry} castShadow receiveShadow>
-      {/* Custom shader material with wobble effect */}
+      {/* Custom shader material with noise-based color pattern */}
       <CustomShaderMaterial
         ref={node => {
           materialRef.current = node as THREE.MeshPhysicalMaterial | null;
@@ -185,20 +181,6 @@ export function WobbleMesh({
         iridescence={DEFAULT_MATERIAL_PROPS.iridescence}
         iridescenceIOR={DEFAULT_MATERIAL_PROPS.iridescenceIOR}
         iridescenceThicknessRange={DEFAULT_MATERIAL_PROPS.iridescenceThicknessRange as [number, number]}
-      />
-      {/* Custom depth material for shadows (reflects wobble deformation) */}
-      <primitive
-        attach="customDepthMaterial"
-        object={useMemo(
-          () =>
-            new CSMVanilla({
-              baseMaterial: THREE.MeshDepthMaterial,
-              vertexShader: composedVertexShader,
-              uniforms,
-              depthPacking: THREE.RGBADepthPacking,
-            }),
-          [composedVertexShader, uniforms]
-        )}
       />
     </mesh>
   );
