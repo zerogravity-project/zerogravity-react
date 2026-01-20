@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { Canvas } from '@react-three/fiber';
 import { Perf } from 'r3f-perf';
@@ -53,13 +53,40 @@ export function EmotionPlanetCanvas({
 }: EmotionPlanetCanvasProps) {
   /*
    * --------------------------------------------
-   * 1. Return
+   * 1. States
+   * --------------------------------------------
+   */
+  const [isTabVisible, setIsTabVisible] = useState(true);
+
+  /*
+   * --------------------------------------------
+   * 2. Effects
+   * --------------------------------------------
+   */
+  /** Pause render loop when tab is not visible (saves CPU/GPU) */
+  useEffect(() => {
+    const handleVisibilityChange = () => setIsTabVisible(!document.hidden);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, []);
+
+  /*
+   * --------------------------------------------
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+  /** Stop rendering when frozen or tab is hidden */
+  const shouldPauseRendering = isFreeze || !isTabVisible;
+
+  /*
+   * --------------------------------------------
+   * 4. Return
    * --------------------------------------------
    */
   return (
     <div className="absolute inset-0 z-1 grid h-full w-full place-items-center">
       <Canvas
-        frameloop={isFreeze ? 'never' : 'always'}
+        frameloop={shouldPauseRendering ? 'never' : 'always'}
         resize={{ offsetSize: true }}
         style={{ width, height }}
         shadows={!performanceMode}
