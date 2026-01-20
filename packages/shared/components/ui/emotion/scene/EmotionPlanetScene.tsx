@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 
 import { AnimatePresence, motion } from 'motion/react';
 
+import { EMOTION_IMAGE_URLS } from '../../../../entities/emotion';
 import { useMediaQuery } from '../../../../hooks/useMediaQuery';
 import { useSquareResize } from '../../../../hooks/useSquareResize';
 import { cn } from '../../../../utils/styleUtils';
@@ -230,11 +231,11 @@ export function EmotionPlanetScene({
             className="pointer-events-none absolute inset-0 z-2 flex items-center justify-center"
           >
             <img
-              src={`/images/emotions/first-frame/emotion-${emotionId}-512.webp`}
+              src={EMOTION_IMAGE_URLS.firstFrame(emotionId, 512)}
               srcSet={`
-                /images/emotions/first-frame/emotion-${emotionId}-512.webp 512w,
-                /images/emotions/first-frame/emotion-${emotionId}-1024.webp 1024w,
-                /images/emotions/first-frame/emotion-${emotionId}-1500.webp 1500w
+                ${EMOTION_IMAGE_URLS.firstFrame(emotionId, 512)} 512w,
+                ${EMOTION_IMAGE_URLS.firstFrame(emotionId, 1024)} 1024w,
+                ${EMOTION_IMAGE_URLS.firstFrame(emotionId, 1500)} 1500w
               `}
               sizes="(max-width: 768px) 512px, (max-width: 1200px) 1024px, 1500px"
               alt={`Emotion ${emotionId}`}

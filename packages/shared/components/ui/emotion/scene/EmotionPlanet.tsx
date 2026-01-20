@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 
 import { Environment, OrbitControls, Sparkles } from '@react-three/drei';
 
-import { EMOTION_STEPS } from '../../../../entities/emotion';
+import { EMOTION_IMAGE_URLS, EMOTION_STEPS } from '../../../../entities/emotion';
 
 import { WobbleMesh } from './objects/WobbleMesh';
 
@@ -67,7 +67,7 @@ interface EmotionPlanetProps {
 export function EmotionPlanet({
   emotionId,
   onLoaded,
-  environmentMapUrl = '/environment-maps/urban_alley_01_512.hdr',
+  environmentMapUrl = EMOTION_IMAGE_URLS.environmentMap('512'),
   isSparkles = true,
   isLarge = false,
   performanceMode = false,

@@ -58,6 +58,10 @@
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js"
     },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js"
+    },
     "./styles": "./styles/globals.css"
   },
   "scripts": {
