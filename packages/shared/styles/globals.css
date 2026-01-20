@@ -1,6 +1,6 @@
 /* Import Fonts */
 @import url('https://use.typekit.net/nrd4ucj.css');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block');
+/* Material Symbols loaded via Next.js metadata in layout.tsx */
 
 /* Import Tailwind CSS and Radix UI Themes */
 @import 'tailwindcss';

@@ -19,22 +19,12 @@ const DEFAULT_LIGHT_PROPS = {
   color: '#ffffff',
   intensity: 5,
   position: [0.25, 2, -2.25],
-  shadowCameraFar: 15,
-  shadowNormalBias: 0.05,
-} as const;
-
-/** Shadow Configuration by Performance Mode */
-const SHADOW_CONFIG = {
-  /** Desktop - High quality shadows */
-  desktop: { enabled: true, mapSize: [512, 512] as [number, number] },
-  /** Mobile - Shadows disabled for performance */
-  performance: { enabled: false, mapSize: [256, 256] as [number, number] },
 } as const;
 
 /** Sparkles Configuration */
 const SPARKLES_CONFIG = {
   desktop: {
-    normal: { count: 50, scale: 7, size: 6, speed: 0.4 },
+    normal: { count: 30, scale: 7, size: 6, speed: 0.4 },
     large: { count: 50, scale: 7, size: 8, speed: 0.05 },
   },
   /** Mobile - Reduced sparkles for performance */
@@ -93,9 +83,6 @@ export function EmotionPlanet({
   const lodConfig = LOD_SUBDIVISIONS[configKey];
   const subdivisions = isLarge ? lodConfig.large : lodConfig.normal;
 
-  /** Get shadow configuration */
-  const shadowConfig = SHADOW_CONFIG[configKey];
-
   /** Get sparkles configuration */
   const sparklesConfig = SPARKLES_CONFIG[configKey][isLarge ? 'large' : 'normal'];
 
@@ -123,10 +110,6 @@ export function EmotionPlanet({
         color={DEFAULT_LIGHT_PROPS.color}
         intensity={DEFAULT_LIGHT_PROPS.intensity}
         position={DEFAULT_LIGHT_PROPS.position as [number, number, number]}
-        castShadow={shadowConfig.enabled}
-        shadow-mapSize={shadowConfig.mapSize}
-        shadow-camera-far={DEFAULT_LIGHT_PROPS.shadowCameraFar}
-        shadow-normalBias={DEFAULT_LIGHT_PROPS.shadowNormalBias}
       />
       {/* Wobble Mesh */}
       <WobbleMesh

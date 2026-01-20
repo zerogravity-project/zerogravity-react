@@ -72,7 +72,7 @@ export function EmotionPlanetGlow({ emotionId, isVisible, width, height }: Emoti
             style={{
               width: resolvedWidth,
               height: resolvedHeight,
-              backgroundColor: 'transparent',
+              backgroundColor: `var(--${color}-a4)`,
               boxShadow: `
                 0 0 50px 20px var(--${color}-a3),
                 0 0 90px 40px var(--${color}-a2),

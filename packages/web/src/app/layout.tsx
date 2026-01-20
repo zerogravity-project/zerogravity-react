@@ -56,6 +56,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head suppressHydrationWarning>
+        {/* Preconnect to TypeKit for faster font loading */}
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+      </head>
       <body>{children}</body>
     </html>
   );

@@ -89,7 +89,7 @@ export function EmotionPlanetCanvas({
         frameloop={shouldPauseRendering ? 'never' : 'always'}
         resize={{ offsetSize: true }}
         style={{ width, height }}
-        shadows={!performanceMode}
+        shadows={false}
         camera={{ position: [0, 0, -25], fov: 15, near: 0.1, far: 100 }}
         gl={{
           alpha: true,
@@ -99,12 +99,11 @@ export function EmotionPlanetCanvas({
           precision: performanceMode ? 'mediump' : 'highp',
           preserveDrawingBuffer: false,
           logarithmicDepthBuffer: false,
-          antialias: !performanceMode,
+          antialias: true,
         }}
         dpr={performanceMode ? [0.75, 1.5] : [1, 2]}
         onCreated={({ gl }) => {
-          gl.shadowMap.enabled = !performanceMode;
-          gl.shadowMap.type = THREE.PCFSoftShadowMap;
+          gl.shadowMap.enabled = false;
         }}
       >
         {/* Performance Monitor (dev mode) */}
