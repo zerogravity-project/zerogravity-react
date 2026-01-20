@@ -73,7 +73,7 @@ export function EmotionPlanetImage({
       transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       <Image
-        src={`/images/emotions/emotion-${emotionId}.webp`}
+        src={`/images/emotions/thumbnail/emotion-${emotionId}.webp`}
         alt={`emotion-${emotionId}`}
         width={width}
         height={height}
