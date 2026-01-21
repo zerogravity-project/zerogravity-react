@@ -1,6 +1,6 @@
-/* Import Fonts */
-@import url('https://use.typekit.net/nrd4ucj.css');
-/* Material Symbols loaded via Next.js metadata in layout.tsx */
+/* Fonts loaded via HTML <link> tags in each app for better performance */
+/* - Next.js: layout.tsx metadata/head */
+/* - Extension: index.html */
 
 /* Import Tailwind CSS and Radix UI Themes */
 @import 'tailwindcss';

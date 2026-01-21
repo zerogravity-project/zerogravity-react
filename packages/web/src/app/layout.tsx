@@ -57,8 +57,10 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head suppressHydrationWarning>
-        {/* Preconnect to TypeKit for faster font loading */}
+        {/* Font preconnects */}
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        {/* TypeKit (Helvetica Neue LT Pro) */}
+        <link rel="stylesheet" href="https://use.typekit.net/nrd4ucj.css" />
       </head>
       <body>{children}</body>
     </html>
