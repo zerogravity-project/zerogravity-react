@@ -7,6 +7,7 @@ import { endOfMonth, format, isAfter, startOfMonth } from 'date-fns';
 import { LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
+import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
 import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
 import { DAYS_OF_WEEK } from '../../_constants/calendar.constants';
@@ -50,18 +51,36 @@ export default function DesktopCalendar() {
   const month = getMonth();
   const { daysInMonth, emptyCellsBefore: emptyBefore, emptyCellsAfter: emptyAfter } = getMonthDaysInfo();
 
+  /** Current viewing month range (for calendar grid) */
   const currentMonthDate = new Date(year, month);
-  const monthStart = startOfMonth(currentMonthDate);
-  const monthEnd = endOfMonth(currentMonthDate);
+  const currentMonthStart = startOfMonth(currentMonthDate);
+  const currentMonthEnd = endOfMonth(currentMonthDate);
+
+  /** Selected date's month range (for drawer detail) */
+  const selectedMonthStart = startOfMonth(selectedDate);
+  const selectedMonthEnd = endOfMonth(selectedDate);
 
   /*
    * --------------------------------------------
    * 4. Query Hooks
    * --------------------------------------------
    */
-  const { data: currentMonthEmotionRecords, isLoading: isMonthDataLoading } = useGetEmotionRecordsQuery({
-    startDateTime: format(monthStart, "yyyy-MM-dd'T'HH:mm:ss"),
-    endDateTime: format(monthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+
+  /** Current month data - for calendar grid display */
+  const {
+    data: currentMonthRecords,
+    isLoading: isCurrentMonthLoading,
+    isError: isCurrentMonthError,
+    refetch: refetchCurrentMonth,
+  } = useGetEmotionRecordsQuery({
+    startDateTime: format(currentMonthStart, "yyyy-MM-dd'T'HH:mm:ss"),
+    endDateTime: format(currentMonthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+  });
+
+  /** Selected date's month data - for drawer detail (uses cache if same month) */
+  const { data: selectedMonthRecords } = useGetEmotionRecordsQuery({
+    startDateTime: format(selectedMonthStart, "yyyy-MM-dd'T'HH:mm:ss"),
+    endDateTime: format(selectedMonthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
 
   /*
@@ -71,13 +90,13 @@ export default function DesktopCalendar() {
    */
   const selectedDateString = format(selectedDate, 'yyyy-MM-dd');
 
-  /** Daily emotion record for selected date */
-  const selectedDailyRecord = currentMonthEmotionRecords?.data?.daily.find(
+  /** Daily emotion record for selected date (from selected month's data) */
+  const selectedDailyRecord = selectedMonthRecords?.data?.daily.find(
     record => format(record.createdAt, 'yyyy-MM-dd') === selectedDateString
   );
 
-  /** Moment emotion records for selected date */
-  const selectedMomentRecords = currentMonthEmotionRecords?.data?.moment.filter(
+  /** Moment emotion records for selected date (from selected month's data) */
+  const selectedMomentRecords = selectedMonthRecords?.data?.moment.filter(
     record => format(record.createdAt, 'yyyy-MM-dd') === selectedDateString
   );
 
@@ -109,17 +128,19 @@ export default function DesktopCalendar() {
     const day = i + 1;
     const date = new Date(year, month, day);
     const isAfterToday = isAfter(date, new Date());
-    const dailyEmotionId = currentMonthEmotionRecords?.data?.daily.find(
+    const dailyEmotionId = currentMonthRecords?.data?.daily.find(
       record => format(record.createdAt, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
     )?.emotionId;
 
     return (
       <DesktopCalendarCell
-        key={day}
+        key={date.toISOString()}
         day={day}
+        month={month}
+        year={year}
         isToday={isToday(date)}
         isAfterToday={isAfterToday}
-        isLoading={isMonthDataLoading}
+        isLoading={isCurrentMonthLoading}
         dailyEmotionId={dailyEmotionId}
         onClick={() => handleCellClick(date)}
       />
@@ -163,10 +184,13 @@ export default function DesktopCalendar() {
             </div>
 
             {/* Calendar grid - Takes remaining height */}
-            <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-7">
+            <div className="relative grid min-h-0 flex-1 auto-rows-fr grid-cols-7">
               {emptyCellsBefore}
               {dayCells}
               {emptyCellsAfterMonth}
+
+              {/* Current Month Error State - Overlay */}
+              {isCurrentMonthError && <QueryErrorState onRetry={refetchCurrentMonth} overlay />}
             </div>
           </div>
         </motion.div>

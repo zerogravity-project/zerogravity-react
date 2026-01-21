@@ -9,6 +9,7 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { useCreateEmotionRecordMutation, useUpdateEmotionRecordMutation } from '@/services/emotion/emotion.query';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
@@ -28,6 +29,7 @@ export default function DiaryStep() {
    * --------------------------------------------
    */
   const router = useRouter();
+  const { openAlertModal } = useModal();
   const { date, emotionId, emotionReasons, diaryEntry, prevStep, emotionRecordId } = useEmotionRecordContext();
 
   /*
@@ -40,7 +42,11 @@ export default function DiaryStep() {
       router.push('/profile/calendar');
     },
     onError: error => {
-      console.error('Failed to create emotion record:', error);
+      console.error('[DiaryStep] Failed to create emotion record:', error);
+      openAlertModal({
+        title: 'Save Failed',
+        description: error.response?.data?.message || 'Failed to save your emotion record. Please try again.',
+      });
     },
   });
 
@@ -49,7 +55,11 @@ export default function DiaryStep() {
       router.push('/profile/calendar');
     },
     onError: error => {
-      console.error('Failed to update emotion record:', error);
+      console.error('[DiaryStep] Failed to update emotion record:', error);
+      openAlertModal({
+        title: 'Update Failed',
+        description: error.response?.data?.message || 'Failed to update your emotion record. Please try again.',
+      });
     },
   });
 

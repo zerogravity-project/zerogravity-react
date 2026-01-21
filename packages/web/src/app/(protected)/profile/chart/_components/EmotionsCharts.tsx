@@ -28,7 +28,7 @@ export function EmotionsCharts() {
    */
   return (
     <LayoutGroup>
-      <section className="mobile:p-5.5 h-full w-full flex-1 bg-[var(--background-dark)]">
+      <section className="mobile:p-5.5 hide-scrollbar h-full w-full flex-1 overflow-x-hidden bg-[var(--background-dark)]">
         <div className="flex h-full w-full flex-col">
           <EmotionChartsHeader setIsDrawerOpen={setIsDrawerOpen} />
           <ChartLayout />

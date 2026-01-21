@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Button, Heading, Text } from '@radix-ui/themes';
+import { motion } from 'motion/react';
 
 import { formatDateString } from '@zerogravity/shared/utils';
 
@@ -68,12 +69,15 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
       ) : (
         <ul className="flex w-full flex-col items-center">
           {emotionRecords?.map((record, index) => (
-            <MomentEmotionList
-              key={index}
-              emotionId={record.emotionId}
-              time={record.createdAt}
-              reasons={record.reasons}
-            />
+            <motion.div
+              key={record.createdAt}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25, delay: index * 0.05 }}
+              className="w-full"
+            >
+              <MomentEmotionList emotionId={record.emotionId} time={record.createdAt} reasons={record.reasons} />
+            </motion.div>
           ))}
         </ul>
       )}

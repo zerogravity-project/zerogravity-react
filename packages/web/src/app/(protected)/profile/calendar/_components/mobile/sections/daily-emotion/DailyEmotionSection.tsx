@@ -23,7 +23,6 @@ import EmotionDetailDrawer from '../../drawers/EmotionDetailDrawer';
 
 interface DailyEmotionSectionProps {
   emotionRecords?: EmotionRecordDetail;
-  isLoading?: boolean;
 }
 
 /*
@@ -32,7 +31,7 @@ interface DailyEmotionSectionProps {
  * ============================================
  */
 
-export default function DailyEmotionSection({ emotionRecords, isLoading = false }: DailyEmotionSectionProps) {
+export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSectionProps) {
   /*
    * --------------------------------------------
    * 1. External Hooks
@@ -66,11 +65,8 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
    */
   return (
     <section className="flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pb-9">
-      {/* Loading state */}
-      {isLoading && <div className="flex h-[458px] w-full items-center justify-center" />}
-
       {/* Empty state */}
-      {!isLoading && isEmpty && (
+      {isEmpty && (
         <>
           <EmotionPlanetNull emotionId={accentEmotionId} />
           <Link
@@ -85,7 +81,7 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
       )}
 
       {/* Data state */}
-      {!isLoading && !isEmpty && (
+      {!isEmpty && (
         <>
           <EmotionPlanetScene emotionId={emotionId} />
           <Text color={emotionColor} className="!text-center !text-3xl transition-all duration-400">
@@ -110,7 +106,7 @@ export default function DailyEmotionSection({ emotionRecords, isLoading = false 
         </>
       )}
 
-      {!isLoading && !isEmpty && (
+      {!isEmpty && (
         <EmotionDetailDrawer
           isOpen={isDrawerOpen}
           onClose={() => setIsDrawerOpen(false)}

@@ -4,6 +4,7 @@ import { Button, Dialog, Text } from '@radix-ui/themes';
 import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { useLogoutMutation } from '@/services/auth/auth.query';
 import { useDeleteUserMutation, useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
@@ -25,6 +26,7 @@ export default function SettingsPageClient() {
    * --------------------------------------------
    */
   const { data: session, update: updateSession } = useSession();
+  const { openAlertModal } = useModal();
 
   /*
    * --------------------------------------------
@@ -52,7 +54,10 @@ export default function SettingsPageClient() {
     },
     onError: error => {
       console.error('[Settings] Failed to update consent:', error);
-      alert('Failed to update consent. Please try again.');
+      openAlertModal({
+        title: 'Update Failed',
+        description: error.response?.data?.message || 'Failed to update consent. Please try again.',
+      });
     },
   });
 
@@ -62,7 +67,10 @@ export default function SettingsPageClient() {
     },
     onError: error => {
       console.error('[Settings] Failed to logout:', error);
-      alert('Failed to logout. Please try again.');
+      openAlertModal({
+        title: 'Logout Failed',
+        description: error.response?.data?.message || 'Failed to logout. Please try again.',
+      });
     },
   });
 
@@ -72,7 +80,10 @@ export default function SettingsPageClient() {
     },
     onError: error => {
       console.error('[Settings] Failed to delete user:', error);
-      alert('Failed to delete user. Please try again.');
+      openAlertModal({
+        title: 'Delete Failed',
+        description: error.response?.data?.message || 'Failed to delete account. Please try again.',
+      });
     },
   });
 
