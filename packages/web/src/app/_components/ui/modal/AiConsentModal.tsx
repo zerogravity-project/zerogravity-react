@@ -33,7 +33,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
    * --------------------------------------------
    */
   const { update: updateSession } = useSession();
-  const { closeModal } = useModal();
+  const { closeModal, openAlertModal } = useModal();
 
   /*
    * --------------------------------------------
@@ -58,6 +58,11 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
     },
     onError: error => {
       console.error('[AiConsentModal] Failed to update consent:', error);
+      closeModal(); // Close AiConsentModal first
+      openAlertModal({
+        title: 'Update Failed',
+        description: error.response?.data?.message || 'Failed to update consent. Please try again.',
+      });
     },
   });
 

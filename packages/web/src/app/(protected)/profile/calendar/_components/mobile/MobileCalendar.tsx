@@ -1,5 +1,8 @@
 import { endOfWeek, format, startOfWeek } from 'date-fns';
 
+import { cn } from '@zerogravity/shared/utils';
+
+import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
 import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
 import { useCalendar } from '../../_contexts/CalendarContext';
@@ -43,13 +46,22 @@ export default function MobileCalendar() {
    */
 
   /** Current week data - for header date display */
-  const { data: currentWeekRecords, isLoading: isCurrentWeekLoading } = useGetEmotionRecordsQuery({
+  const {
+    data: currentWeekRecords,
+    isLoading: isCurrentWeekLoading,
+    isError: isCurrentWeekError,
+    refetch: refetchCurrentWeek,
+  } = useGetEmotionRecordsQuery({
     startDateTime: format(currentWeekStart, "yyyy-MM-dd'T'HH:mm:ss"),
     endDateTime: format(currentWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
 
   /** Selected date's week data - for detail display (uses cache if same week) */
-  const { data: selectedWeekRecords, isLoading: isSelectedWeekLoading } = useGetEmotionRecordsQuery({
+  const {
+    data: selectedWeekRecords,
+    isError: isSelectedWeekError,
+    refetch: refetchSelectedWeek,
+  } = useGetEmotionRecordsQuery({
     startDateTime: format(selectedWeekStart, "yyyy-MM-dd'T'HH:mm:ss"),
     endDateTime: format(selectedWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
   });
@@ -76,12 +88,23 @@ export default function MobileCalendar() {
    * --------------------------------------------
    */
   return (
-    <div className="flex w-full flex-col items-center">
-      <div className="flex w-full flex-col items-center bg-[var(--background-dark)]">
-        <CalendarHeader emotionRecords={currentWeekRecords?.data} isLoading={isCurrentWeekLoading} />
-        <DailyEmotionSection emotionRecords={selectedDateDailyEmotionRecords} isLoading={isSelectedWeekLoading} />
+    <div className="hide-scrollbar flex min-h-[calc(100dvh-var(--spacing-topnav-height))] w-full flex-col items-center overflow-x-hidden">
+      <div
+        className={cn('flex w-full flex-col items-center bg-[var(--background-dark)]', isSelectedWeekError && 'flex-1')}
+      >
+        <CalendarHeader
+          emotionRecords={currentWeekRecords?.data}
+          isLoading={isCurrentWeekLoading}
+          isError={isCurrentWeekError}
+          onRetry={refetchCurrentWeek}
+        />
+        {/* Error state */}
+        {isSelectedWeekError && <QueryErrorState onRetry={refetchSelectedWeek} />}
+        {/* Content - Daily Emotion Section */}
+        {!isSelectedWeekError && <DailyEmotionSection emotionRecords={selectedDateDailyEmotionRecords} />}
       </div>
-      <MomentEmotionSection emotionRecords={selectedDateMomentEmotionRecords} />
+      {/* Content - Moment Emotion Section */}
+      {!isSelectedWeekError && <MomentEmotionSection emotionRecords={selectedDateMomentEmotionRecords} />}
     </div>
   );
 }

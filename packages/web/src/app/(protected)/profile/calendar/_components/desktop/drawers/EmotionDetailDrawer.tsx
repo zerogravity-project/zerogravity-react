@@ -99,7 +99,7 @@ export default function EmotionDetailDrawer({
 
   const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
+    : 'top-topnav-height fixed right-0 z-101 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
   /*
    * --------------------------------------------

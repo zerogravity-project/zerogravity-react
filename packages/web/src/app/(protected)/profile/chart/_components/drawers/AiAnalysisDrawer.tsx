@@ -7,6 +7,7 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
+import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
 import { useScroll } from '@/app/_hooks/useScroll';
 import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
 
@@ -106,7 +107,12 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
    * 4. Query Hooks
    * --------------------------------------------
    */
-  const { data: periodAnalysisData, isLoading } = usePeriodAnalysisQuery(
+  const {
+    data: periodAnalysisData,
+    isLoading,
+    isError,
+    refetch,
+  } = usePeriodAnalysisQuery(
     {
       period: timePeriod,
       startDate: startDate,
@@ -137,7 +143,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
   const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
+    : 'top-topnav-height fixed right-0 z-101 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
   const startDateLabel = periodAnalysisData?.data.startDate
     ? format(new Date(periodAnalysisData.data.startDate), 'MMM d')
@@ -185,8 +191,12 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
             {/* Scrollable Content */}
             <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto pb-5">
+              {/* Loading state */}
               {isLoading && <ContentSkeleton />}
-              {!isLoading && (
+              {/* Error state */}
+              {!isLoading && isError && <QueryErrorState onRetry={refetch} />}
+              {/* Content */}
+              {!isLoading && !isError && (
                 <div className="flex flex-col gap-6 p-4">
                   <Blockquote size="2">{periodAnalysisData?.data.summary.overview}</Blockquote>
                   <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">

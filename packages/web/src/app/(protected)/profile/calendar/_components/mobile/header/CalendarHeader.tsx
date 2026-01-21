@@ -1,5 +1,6 @@
-import { Button, Heading, Text } from '@radix-ui/themes';
+import { Button, Callout, Heading, Text } from '@radix-ui/themes';
 import { format, isAfter } from 'date-fns';
+import { motion } from 'motion/react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
@@ -19,6 +20,8 @@ import { useCalendar } from '../../../_contexts/CalendarContext';
 interface CalendarHeaderProps {
   emotionRecords?: GetEmotionRecordsResponse;
   isLoading?: boolean;
+  isError?: boolean;
+  onRetry?: () => void;
 }
 
 /*
@@ -27,7 +30,12 @@ interface CalendarHeaderProps {
  * ============================================
  */
 
-export default function CalendarHeader({ emotionRecords, isLoading = false }: CalendarHeaderProps) {
+export default function CalendarHeader({
+  emotionRecords,
+  isLoading = false,
+  isError = false,
+  onRetry,
+}: CalendarHeaderProps) {
   /*
    * --------------------------------------------
    * 1. External Hooks
@@ -51,6 +59,37 @@ export default function CalendarHeader({ emotionRecords, isLoading = false }: Ca
    */
   return (
     <header className="mb-6 flex w-full flex-col items-center px-5 pt-6">
+      {/* Error Callout */}
+      <motion.div
+        initial={false}
+        animate={{ gridTemplateRows: isError ? '1fr' : '0fr' }}
+        transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+        className="grid w-full"
+      >
+        <div className="overflow-hidden">
+          <motion.div
+            initial={false}
+            animate={{ opacity: isError ? 1 : 0 }}
+            transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+          >
+            <Callout.Root color="red" className="!mb-4 !flex !w-full !items-center !justify-between">
+              <div className="flex items-center gap-2">
+                <Callout.Icon>
+                  <Icon size={16}>error</Icon>
+                </Callout.Icon>
+                <Callout.Text>Failed to load emotion data</Callout.Text>
+              </div>
+              {onRetry && (
+                <Button size="1" variant="soft" color="red" onClick={onRetry} className="!cursor-pointer">
+                  Retry
+                </Button>
+              )}
+            </Callout.Root>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Selected Week & Navigation */}
       <div className="mb-4 flex w-full items-center justify-between">
         <Heading size="6" weight="medium">
           {monthName}
@@ -103,7 +142,6 @@ export default function CalendarHeader({ emotionRecords, isLoading = false }: Ca
 
       <div className="grid w-full grid-cols-7 place-items-center">
         {weekDates.map((date, index) => {
-          // const isTodayDate = isToday(date);
           const isAfterToday = isAfter(date, new Date());
           const isSelectedDate = isSelected(date);
           const dailyEmotionId = emotionRecords?.daily.find(
@@ -112,18 +150,24 @@ export default function CalendarHeader({ emotionRecords, isLoading = false }: Ca
           const isEmpty = dailyEmotionId === undefined;
 
           return (
-            <div key={index} className="relative flex items-center justify-center">
+            <motion.div
+              key={date.toISOString()}
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 20, delay: index * 0.02 }}
+              className="relative flex items-center justify-center"
+            >
               <Button
                 size="3"
                 onClick={() => setSelectedDate(date)}
                 variant={!isEmpty ? (isSelectedDate ? 'solid' : 'soft') : 'soft'}
                 color={isEmpty ? (isSelectedDate ? undefined : 'gray') : EMOTION_COLORS[dailyEmotionId]}
                 className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`, isEmpty && '!bg-transparent')}
-                disabled={isAfterToday || isLoading}
+                disabled={isAfterToday || isLoading || isError}
               >
                 {date.getDate()}
               </Button>
-            </div>
+            </motion.div>
           );
         })}
       </div>

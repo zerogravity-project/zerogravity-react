@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from 'motion/react';
+
 import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
@@ -11,6 +13,8 @@ import { cn } from '@zerogravity/shared/utils';
 
 interface DesktopCalendarCellProps {
   day: number;
+  month: number;
+  year: number;
   isToday: boolean;
   isAfterToday: boolean;
   isLoading?: boolean;
@@ -26,6 +30,8 @@ interface DesktopCalendarCellProps {
 
 export default function DesktopCalendarCell({
   day,
+  month,
+  year,
   isToday,
   isAfterToday,
   isLoading = false,
@@ -59,7 +65,18 @@ export default function DesktopCalendarCell({
       <div className="absolute top-1/2 left-1/2 z-99 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center">
         <svg width="100%" height="100%" viewBox="0 0 80 80" className="pointer-events-none">
           {/* Emotion circle background */}
-          {!isEmpty && <circle cx="40" cy="40" r="38" fill={`var(--${EMOTION_COLORS[dailyEmotionId]}-9)`} />}
+          {!isEmpty && (
+            <motion.circle
+              key={`${year}-${month}-${day}`}
+              cx="40"
+              cy="40"
+              r="38"
+              fill={`var(--${EMOTION_COLORS[dailyEmotionId]}-9)`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+            />
+          )}
           <text
             x="40"
             y="40"

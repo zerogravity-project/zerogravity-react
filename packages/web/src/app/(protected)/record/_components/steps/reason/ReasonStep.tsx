@@ -9,6 +9,7 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { useCreateEmotionRecordMutation } from '@/services/emotion/emotion.query';
 
 import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
@@ -29,6 +30,7 @@ export default function ReasonStep() {
    * --------------------------------------------
    */
   const router = useRouter();
+  const { openAlertModal } = useModal();
   const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
 
   /*
@@ -41,7 +43,11 @@ export default function ReasonStep() {
       router.push('/profile/calendar');
     },
     onError: error => {
-      console.error('Failed to create emotion record:', error);
+      console.error('[ReasonStep] Failed to create emotion record:', error);
+      openAlertModal({
+        title: 'Save Failed',
+        description: error.response?.data?.message || 'Failed to save your emotion record. Please try again.',
+      });
     },
   });
 
