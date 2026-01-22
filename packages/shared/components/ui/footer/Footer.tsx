@@ -59,7 +59,9 @@ export function Footer({ className, LinkComponent = DefaultLink }: FooterProps) 
             </li>
 
             {index !== FOOTER_MENU_ITEMS.length - 1 && (
-              <div className="mt-[3px] h-[3px] w-[3px] flex-shrink-0 rounded-[9999px] bg-[var(--gray-8)]" />
+              <li aria-hidden="true" role="presentation">
+                <div className="mt-[3px] h-[3px] w-[3px] flex-shrink-0 rounded-[9999px] bg-[var(--gray-8)]" />
+              </li>
             )}
           </Fragment>
         ))}

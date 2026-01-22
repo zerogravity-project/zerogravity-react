@@ -38,7 +38,9 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
       <TanstackQueryProvider>
         <ThemeProvider>
           <ModalProvider>
-            <main className="relative w-full">{children}</main>
+            <main id="main-content" className="relative w-full">
+              {children}
+            </main>
             {/* Global state-based modals */}
             <AlertModal />
             <ConfirmModal />

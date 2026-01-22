@@ -73,6 +73,19 @@ button {
     'opsz' 24;
 }
 
+/* Screen Reader Only (Tailwind v4 compatible) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* Hide Scrollbar */
 .hide-scrollbar {
   scrollbar-width: none;
@@ -87,4 +100,27 @@ button {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessibility: Focus Visible Styles */
+:focus-visible {
+  outline: 2px solid var(--accent-9);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline (use focus-visible instead) */
+:focus:not(:focus-visible) {
+  outline: none;
 }

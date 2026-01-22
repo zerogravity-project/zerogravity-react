@@ -6,6 +6,8 @@ import { Canvas } from '@react-three/fiber';
 import { Perf } from 'r3f-perf';
 import * as THREE from 'three';
 
+import { EMOTION_TYPES } from '../../../../entities/emotion';
+
 import { EmotionPlanet } from './EmotionPlanet';
 
 /*
@@ -84,7 +86,11 @@ export function EmotionPlanetCanvas({
    * --------------------------------------------
    */
   return (
-    <div className="absolute inset-0 z-1 grid h-full w-full place-items-center">
+    <div
+      role="img"
+      aria-label={`3D ${EMOTION_TYPES[emotionId]} emotion planet visualization`}
+      className="absolute inset-0 z-1 grid h-full w-full place-items-center"
+    >
       <Canvas
         frameloop={shouldPauseRendering ? 'never' : 'always'}
         resize={{ offsetSize: true }}

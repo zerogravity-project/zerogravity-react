@@ -7,7 +7,7 @@ import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
 import { useCalendar } from '../../_contexts/CalendarContext';
 
-import CalendarHeader from './header/CalendarHeader';
+import MobileCalendarHeader from './header/MobileCalendarHeader';
 import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
@@ -92,7 +92,7 @@ export default function MobileCalendar() {
       <div
         className={cn('flex w-full flex-col items-center bg-[var(--background-dark)]', isSelectedWeekError && 'flex-1')}
       >
-        <CalendarHeader
+        <MobileCalendarHeader
           emotionRecords={currentWeekRecords?.data}
           isLoading={isCurrentWeekLoading}
           isError={isCurrentWeekError}

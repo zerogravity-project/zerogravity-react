@@ -146,6 +146,7 @@ export default function AiPredictionInput({
           className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
           size="4"
           radius="none"
+          aria-label="Go to previous step"
         >
           <Icon>arrow_back</Icon>
         </Button>

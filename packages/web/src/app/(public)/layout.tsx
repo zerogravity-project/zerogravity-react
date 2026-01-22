@@ -15,7 +15,9 @@ export default async function PublicLayout({ children }: Readonly<PublicLayoutPr
   return (
     <ThemeProvider>
       <NavigationAdapter />
-      <main className="relative w-full">{children}</main>
+      <main id="main-content" className="relative w-full">
+        {children}
+      </main>
     </ThemeProvider>
   );
 }

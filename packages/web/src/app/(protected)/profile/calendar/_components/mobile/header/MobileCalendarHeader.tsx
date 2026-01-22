@@ -3,7 +3,7 @@ import { format, isAfter } from 'date-fns';
 import { motion } from 'motion/react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
-import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_COLORS, EMOTION_TYPES } from '@zerogravity/shared/entities/emotion';
 import { cn, getWeekDates } from '@zerogravity/shared/utils';
 
 import { GetEmotionRecordsResponse } from '@/services/emotion/emotion.dto';
@@ -17,7 +17,7 @@ import { useCalendar } from '../../../_contexts/CalendarContext';
  * ============================================
  */
 
-interface CalendarHeaderProps {
+interface MobileCalendarHeaderProps {
   emotionRecords?: GetEmotionRecordsResponse;
   isLoading?: boolean;
   isError?: boolean;
@@ -30,12 +30,12 @@ interface CalendarHeaderProps {
  * ============================================
  */
 
-export default function CalendarHeader({
+export default function MobileCalendarHeader({
   emotionRecords,
   isLoading = false,
   isError = false,
   onRetry,
-}: CalendarHeaderProps) {
+}: MobileCalendarHeaderProps) {
   /*
    * --------------------------------------------
    * 1. External Hooks
@@ -102,6 +102,7 @@ export default function CalendarHeader({
               color="gray"
               onClick={goToPreviousWeek}
               disabled={isLoading}
+              aria-label="Previous week"
               className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
             >
               <Icon>chevron_left</Icon>
@@ -112,6 +113,7 @@ export default function CalendarHeader({
               color="gray"
               onClick={goToNextWeek}
               disabled={isLoading}
+              aria-label="Next week"
               className="!w-8 !cursor-pointer !rounded-l-none"
             >
               <Icon>chevron_right</Icon>
@@ -141,13 +143,19 @@ export default function CalendarHeader({
       </div>
 
       <div className="grid w-full grid-cols-7 place-items-center">
-        {weekDates.map((date, index) => {
+        {weekDates.map((date: Date, index: number) => {
           const isAfterToday = isAfter(date, new Date());
           const isSelectedDate = isSelected(date);
           const dailyEmotionId = emotionRecords?.daily.find(
             record => format(record.createdAt, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
           )?.emotionId;
           const isEmpty = dailyEmotionId === undefined;
+
+          const isToday = format(date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd');
+          const dateLabel = format(date, 'M/d/yyyy');
+          const todayLabel = isToday ? ' (today)' : '';
+          const emotionLabel = !isEmpty ? `, ${EMOTION_TYPES[dailyEmotionId]}` : '';
+          const ariaLabel = `${dateLabel}${todayLabel}${emotionLabel}`;
 
           return (
             <motion.div
@@ -162,8 +170,12 @@ export default function CalendarHeader({
                 onClick={() => setSelectedDate(date)}
                 variant={!isEmpty ? (isSelectedDate ? 'solid' : 'soft') : 'soft'}
                 color={isEmpty ? (isSelectedDate ? undefined : 'gray') : EMOTION_COLORS[dailyEmotionId]}
-                className={cn(`!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal`, isEmpty && '!bg-transparent')}
+                className={cn(
+                  '!h-9 !w-9 !rounded-[9999px] !p-0 !font-normal !transition-colors',
+                  isEmpty && '!bg-transparent'
+                )}
                 disabled={isAfterToday || isLoading || isError}
+                aria-label={ariaLabel}
               >
                 {date.getDate()}
               </Button>

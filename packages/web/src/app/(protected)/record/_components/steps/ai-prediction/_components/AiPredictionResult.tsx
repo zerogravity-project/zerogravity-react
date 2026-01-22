@@ -162,6 +162,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
           color={emotionColor}
           size="4"
           radius="none"
+          aria-label="Reject and go back"
         >
           <Icon>arrow_back</Icon>
         </Button>

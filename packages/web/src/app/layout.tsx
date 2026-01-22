@@ -62,7 +62,16 @@ export default function RootLayout({
         {/* TypeKit (Helvetica Neue LT Pro) */}
         <link rel="stylesheet" href="https://use.typekit.net/nrd4ucj.css" />
       </head>
-      <body>{children}</body>
+      <body>
+        {/* Skip Link for keyboard accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-md focus:bg-[var(--accent-9)] focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+        >
+          Skip to main content
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

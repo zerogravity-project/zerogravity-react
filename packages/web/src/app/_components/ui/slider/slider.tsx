@@ -26,6 +26,10 @@ interface SliderProps extends React.ComponentProps<typeof SliderPrimitive.Root> 
   colors: SliderColorTokens;
   onValueCommit?: (values: number[]) => void;
   className?: string;
+  /** Accessible label for the slider */
+  'aria-label'?: string;
+  /** Human-readable value text (e.g., "Happy" instead of "67") */
+  'aria-valuetext'?: string;
 }
 
 /*

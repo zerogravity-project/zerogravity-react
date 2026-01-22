@@ -2,7 +2,7 @@
 
 import { motion } from 'motion/react';
 
-import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
+import { EMOTION_COLORS, EMOTION_TYPES } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
 /*
@@ -46,18 +46,29 @@ export default function DesktopCalendarCell({
   const isEmpty = dailyEmotionId === undefined;
   const isDisabled = isAfterToday || isLoading;
 
+  /** Accessible label for screen readers */
+  const ariaLabel = (() => {
+    const dateStr = `${month}/${day}/${year}`;
+    const todayStr = isToday ? ' (today)' : '';
+    const emotionStr = !isEmpty ? `, ${EMOTION_TYPES[dailyEmotionId]}` : '';
+    return `${dateStr}${todayStr}${emotionStr}`;
+  })();
+
   /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------
    */
   return (
-    <div
+    <button
+      type="button"
       data-testid={`calendar-day-${day}`}
       data-today={isToday ? 'true' : undefined}
       onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
+      aria-label={ariaLabel}
       className={cn(
-        'relative flex h-full w-full items-center justify-center p-1 outline outline-[0.5px] outline-[var(--gray-3)]',
+        'relative flex h-full w-full items-center justify-center bg-transparent p-1 outline outline-[0.5px] outline-[var(--gray-3)]',
         isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:!bg-[var(--gray-a3)]'
       )}
     >
@@ -84,6 +95,7 @@ export default function DesktopCalendarCell({
             dominantBaseline="central"
             fontSize="36"
             fontWeight="200"
+            className="transition-colors"
             fill={
               isAfterToday
                 ? 'var(--gray-a6)'
@@ -100,6 +112,6 @@ export default function DesktopCalendarCell({
           </text>
         </svg>
       </div>
-    </div>
+    </button>
   );
 }

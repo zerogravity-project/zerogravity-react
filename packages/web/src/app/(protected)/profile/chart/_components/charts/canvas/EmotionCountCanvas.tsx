@@ -258,7 +258,7 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
       transition={{ duration: 0.3, ease: 'easeOut' }}
       className="h-full w-full"
     >
-      <canvas ref={chartRef} className="h-full w-full" />
+      <canvas ref={chartRef} role="img" aria-label="Emotion record count chart by period" className="h-full w-full" />
     </motion.div>
   );
 }

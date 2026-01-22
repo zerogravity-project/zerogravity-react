@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { Badge, Button, Heading, Text } from '@radix-ui/themes';
 import { AnimatePresence, motion } from 'motion/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { formatDateString, isSameDay } from '@zerogravity/shared/utils';
@@ -69,7 +69,23 @@ export default function EmotionDetailDrawer({
 
   /*
    * --------------------------------------------
-   * 4. Derived Values
+   * 4. Effects
+   * --------------------------------------------
+   */
+  /** Close drawer on Escape key press */
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  /*
+   * --------------------------------------------
+   * 5. Derived Values
    * --------------------------------------------
    */
   const selectedDateString = formatDateString(selectedDate);
@@ -78,7 +94,7 @@ export default function EmotionDetailDrawer({
 
   /*
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return (
@@ -103,6 +119,7 @@ export default function EmotionDetailDrawer({
             transition={{ type: 'spring', damping: 25, stiffness: 180 }}
             role="dialog"
             aria-modal="true"
+            aria-label="Emotion details"
             className="fixed top-0 right-0 z-9999 h-[100dvh] w-[100dvw] bg-[var(--gray-1)]"
           >
             <div className="flex h-full flex-col">

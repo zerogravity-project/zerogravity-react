@@ -110,6 +110,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               color="gray"
               onClick={goToPreviousPeriod}
               disabled={!canGoPrevious}
+              aria-label="Previous period"
               className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
             >
               <Icon>chevron_left</Icon>
@@ -120,6 +121,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               color="gray"
               onClick={goToNextPeriod}
               disabled={!canGoNext}
+              aria-label="Next period"
               className="!w-8 !cursor-pointer !rounded-l-none"
             >
               <Icon>chevron_right</Icon>
@@ -131,7 +133,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
           <Callout.Root color="gray">
             {/* AI Analysis Button */}
             <GeminiButton onClick={handleOpenAiAnalysisDrawer} className="gap-3">
-              Discover insights from your emotions with AI analysis.
+              Discover your emotion insights with AI analysis.
             </GeminiButton>
           </Callout.Root>
         </div>
@@ -170,6 +172,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               onClick={goToPreviousPeriod}
               className="!h-7 !w-7 !cursor-pointer !rounded-r-none !border-r-0"
               disabled={!canGoPrevious}
+              aria-label="Previous period"
             >
               <Icon size={20}>chevron_left</Icon>
             </Button>
@@ -182,6 +185,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               onClick={goToNextPeriod}
               className="!h-7 !w-7 !cursor-pointer !rounded-l-none"
               disabled={!canGoNext}
+              aria-label="Next period"
             >
               <Icon size={20}>chevron_right</Icon>
             </Button>
@@ -191,7 +195,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
 
       <Callout.Root color="gray">
         <GeminiButton onClick={handleOpenAiAnalysisDrawer} className="gap-3">
-          Discover insights from your emotions with AI analysis.
+          Discover your emotion insights with AI analysis.
         </GeminiButton>
       </Callout.Root>
     </header>

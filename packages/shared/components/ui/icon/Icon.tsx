@@ -22,6 +22,7 @@ interface IconProps {
 export function Icon({ children, size, color, className }: IconProps) {
   return (
     <span
+      aria-hidden="true"
       className={cn('material-symbols-outlined', className)}
       style={{
         fontSize: size,
