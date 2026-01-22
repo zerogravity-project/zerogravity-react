@@ -46,7 +46,11 @@ function App() {
       {/* Navigation */}
       <NavigationAdapter className="fixed top-0" />
 
-      <div className={cn('absolute inset-0 z-3 mt-44 flex w-full justify-center', isLg ? 'mt-44' : 'mt-48')}>
+      {/* Decorative Background */}
+      <div
+        aria-hidden="true"
+        className={cn('absolute inset-0 z-3 mt-44 flex w-full justify-center', isLg ? 'mt-44' : 'mt-48')}
+      >
         <div className={cn(isLg ? 'h-[1200px] w-[1200px]' : 'h-[1500px] w-[1500px]')}>
           <EmotionPlanetScene
             emotionId={EMOTION_COLORS.indexOf(accentColor as EmotionColor)}
@@ -60,19 +64,21 @@ function App() {
       </div>
 
       {/* Main Content */}
-      <Clock />
+      <main className="contents">
+        <Clock />
 
-      <div className="absolute bottom-16 left-[50%] z-5 translate-x-[-50%] max-[1025px]:bottom-28">
-        <Button
-          size="4"
-          variant="surface"
-          radius="full"
-          onClick={handleSpaceoutClick}
-          className="!font-normal !text-nowrap hover:!opacity-80"
-        >
-          Start Spaceout <Icon>arrow_forward</Icon>
-        </Button>
-      </div>
+        <div className="absolute bottom-16 left-[50%] z-5 translate-x-[-50%] max-[1025px]:bottom-28">
+          <Button
+            size="4"
+            variant="surface"
+            radius="full"
+            onClick={handleSpaceoutClick}
+            className="!font-normal !text-nowrap hover:!opacity-80"
+          >
+            Start Spaceout <Icon>arrow_forward</Icon>
+          </Button>
+        </div>
+      </main>
 
       {/* Footer */}
       <Footer />

@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'motion/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import type { EmotionId, EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
@@ -75,7 +75,23 @@ export default function EmotionDetailDrawer({
 
   /*
    * --------------------------------------------
-   * 4. Derived Values
+   * 4. Effects
+   * --------------------------------------------
+   */
+  /** Close drawer on Escape key press */
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  /*
+   * --------------------------------------------
+   * 5. Derived Values
    * --------------------------------------------
    */
   const selectedDateString = formatDateString(selectedDate);
@@ -103,7 +119,7 @@ export default function EmotionDetailDrawer({
 
   /*
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return (
@@ -115,6 +131,7 @@ export default function EmotionDetailDrawer({
           className={wrapperClassName}
           role="dialog"
           aria-modal="true"
+          aria-label="Emotion details"
         >
           <div className="relative flex h-full w-[300px] flex-col border-l border-[var(--gray-3)] bg-[var(--gray-1)]">
             {/* Header - Fixed */}

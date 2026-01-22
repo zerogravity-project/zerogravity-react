@@ -53,6 +53,8 @@ export default function EmotionSlider() {
           ringOffset: EMOTION_STEPS[emotionValueToStepIndex].style.slider.ringOffset,
         }}
         onValueCommit={handleValueCommit}
+        aria-label="Emotion level selector"
+        aria-valuetext={EMOTION_STEPS[emotionValueToStepIndex].type}
       />
       <div className="flex w-full items-center justify-between px-2">
         <Text color="gray" size="1">

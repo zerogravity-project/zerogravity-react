@@ -1,7 +1,7 @@
 import { Blockquote, Text } from '@radix-ui/themes';
 import { format } from 'date-fns';
 import { AnimatePresence, motion } from 'motion/react';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsLg } from '@zerogravity/shared/hooks';
@@ -122,7 +122,23 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
   /*
    * --------------------------------------------
-   * 5. Derived Values
+   * 5. Effects
+   * --------------------------------------------
+   */
+  /** Close drawer on Escape key press */
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  /*
+   * --------------------------------------------
+   * 6. Derived Values
    * --------------------------------------------
    */
 
@@ -155,7 +171,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
   /*
    * --------------------------------------------
-   * 6. Return
+   * 7. Return
    * --------------------------------------------
    */
   return (
@@ -167,6 +183,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
           className={wrapperClassName}
           role="dialog"
           aria-modal="true"
+          aria-label="AI analysis"
         >
           <div className="relative flex h-full w-[360px] flex-col border-l border-[var(--gray-3)] bg-[var(--gray-1)]">
             {/* Header - Fixed */}

@@ -18,7 +18,9 @@ export default async function AuthLayout({ children }: Readonly<AuthLayoutProps>
     <ThemeProvider>
       <ModalProvider>
         <NavigationAdapter />
-        <main className="relative w-full">{children}</main>
+        <main id="main-content" className="relative w-full">
+          {children}
+        </main>
         <AlertModal />
       </ModalProvider>
     </ThemeProvider>

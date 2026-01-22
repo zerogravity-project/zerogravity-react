@@ -357,7 +357,7 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
       transition={{ duration: 0.3, ease: 'easeOut' }}
       className="h-full w-full"
     >
-      <canvas ref={chartRef} className="h-full w-full" />
+      <canvas ref={chartRef} role="img" aria-label="Emotion level chart by period" className="h-full w-full" />
     </motion.div>
   );
 }

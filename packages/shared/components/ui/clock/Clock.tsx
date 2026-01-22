@@ -40,15 +40,20 @@ export const Clock = ({ className }: ClockProps) => {
    * 3. Return
    * --------------------------------------------
    */
+  /** Format time string for screen readers (e.g., "10:30:45") */
+  const ariaTimeLabel = timeData ? `${timeData.hours}:${timeData.minutes}:${timeData.seconds}` : 'Loading time';
+
   return (
     <div
+      role="timer"
+      aria-label={`Current time: ${ariaTimeLabel}`}
       className={cn(
         'relative flex w-full flex-col items-center pt-[7dvh] select-none lg:pt-[1dvh] 2xl:!pt-0',
         className
       )}
     >
-      {/* Time Display */}
-      <div className="z-1 flex w-full items-center justify-center overflow-hidden">
+      {/* Time Display (hidden from screen readers - aria-label provides accessible name) */}
+      <div aria-hidden="true" className="z-1 flex w-full items-center justify-center overflow-hidden">
         <span className="text-[27.9dvw] leading-[0.9] font-extralight text-[var(--accent-a9)] 2xl:leading-[0.8]">
           {timeData ? timeData.hours : '00'}:{timeData ? timeData.minutes : '00'}:{timeData ? timeData.seconds : '00'}
         </span>

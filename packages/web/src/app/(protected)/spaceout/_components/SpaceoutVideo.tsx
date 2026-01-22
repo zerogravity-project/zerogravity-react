@@ -16,8 +16,19 @@ import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
  * ============================================
  */
 
-/** Default video URLs from CDN */
-const DEFAULT_VIDEOS = [`${CDN_BASE_URL}/videos/sun.mp4`, `${CDN_BASE_URL}/videos/mercury.mp4`];
+/** Default spaceout videos with accessibility descriptions */
+const DEFAULT_VIDEOS = [
+  {
+    url: `${CDN_BASE_URL}/videos/sun.mp4`,
+    description:
+      'A surreal ASMR video of the Sun being sliced in half, revealing molten lava-like material flowing inside.',
+  },
+  {
+    url: `${CDN_BASE_URL}/videos/mercury.mp4`,
+    description:
+      'A surreal ASMR video of a Mercury-like planet being sliced open, revealing a metallic core while sandy particles fall from its rough surface.',
+  },
+];
 
 /*
  * ============================================
@@ -25,8 +36,13 @@ const DEFAULT_VIDEOS = [`${CDN_BASE_URL}/videos/sun.mp4`, `${CDN_BASE_URL}/video
  * ============================================
  */
 
+interface SpaceoutVideo {
+  url: string;
+  description: string;
+}
+
 interface SpaceoutVideoProps {
-  videos?: string[];
+  videos?: SpaceoutVideo[];
   poster?: string;
   autoPlay?: boolean;
   loop?: boolean;
@@ -143,15 +159,30 @@ export default function SpaceoutVideo({
    */
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label="Click to enable sound"
       className={cn('relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]', className)}
       onClick={handleUserInteraction}
+      onKeyDown={e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          handleUserInteraction();
+        }
+      }}
       onTouchStart={handleUserInteraction}
     >
+      {/* Screen reader description for ambient video content */}
+      <p id="spaceout-video-description" className="sr-only">
+        {currentVideo.description}
+      </p>
+
+      {/* eslint-disable-next-line jsx-a11y/media-has-caption -- Ambient meditation video without speech */}
       <video
         ref={videoRef}
-        key={`${currentVideoIndex}-${retryKey}`} // Change key to force reload video
+        key={`${currentVideoIndex}-${retryKey}`}
         className="absolute inset-0 h-full w-full object-cover"
-        src={currentVideo}
+        src={currentVideo.url}
         poster={poster}
         autoPlay={autoPlay}
         loop={loop}
@@ -159,6 +190,7 @@ export default function SpaceoutVideo({
         controls={controls}
         playsInline
         preload="auto"
+        aria-describedby="spaceout-video-description"
         onLoadStart={onLoadStart}
         onLoadedData={onLoadedData}
         onEnded={handleVideoEnd}

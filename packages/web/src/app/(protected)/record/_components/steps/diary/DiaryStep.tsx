@@ -144,6 +144,7 @@ export default function DiaryStep() {
           color={EMOTION_STEPS[emotionId].color}
           size="4"
           radius="none"
+          aria-label="Go to previous step"
         >
           <Icon>arrow_back</Icon>
         </Button>

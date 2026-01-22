@@ -107,77 +107,79 @@ export function Navigation({
    * --------------------------------------------
    */
   return (
-    <NavigationMenu.Root
-      className={cn(
-        'h-topnav-height relative z-[2000] flex w-full flex-1 items-center justify-between px-5 sm:px-6',
-        background && `bg-[var(--gray-1)]`,
-        border && 'border-b border-[var(--gray-3)]',
-        className
-      )}
-    >
-      <div className="flex items-center gap-4">
-        {/* Logo */}
-        <RadixLink asChild>
-          <LinkComponent href="/">
-            <Logo />
-          </LinkComponent>
-        </RadixLink>
-      </div>
-
-      {/* Date */}
-      <div className="flex flex-shrink-0 items-center gap-12">
-        {dateData && (
-          <div className="hidden h-8 items-center justify-center overflow-hidden sm:flex">
-            <span className="text-sm leading-[0.9] text-[var(--gray-a10)]">
-              {dateData.year} · {dateData.month} · {dateData.day} · {dateData.weekday}
-            </span>
-          </div>
+    <header className="contents">
+      <NavigationMenu.Root
+        className={cn(
+          'h-topnav-height relative z-[2000] flex w-full flex-1 items-center justify-between px-5 sm:px-6',
+          background && `bg-[var(--gray-1)]`,
+          border && 'border-b border-[var(--gray-3)]',
+          className
         )}
-
-        {/* Profile */}
-        {isAuthenticated && (
-          <>
-            {!isSm && (
-              <ProfileDropdown
-                userName={userName}
-                profileImage={profileImage}
-                className="max-mobile:hidden"
-                menuItems={menuItems}
-                LinkComponent={LinkComponent}
-              />
-            )}
-            {isSm && (
-              <>
-                {/* Hamburger Menu */}
-                <button
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] focus:bg-[var(--gray-a3)] focus:outline-none"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                  aria-label="Toggle menu"
-                  type="button"
-                >
-                  <Icon color="accent">{isMenuOpen ? 'close' : 'menu'}</Icon>
-                </button>
-                <Suspense fallback={null}>
-                  <LazyMenuDrawer
-                    isOpen={isMenuOpen}
-                    user={user}
-                    currentPath={currentPath}
-                    menuItems={menuItems}
-                    LinkComponent={LinkComponent}
-                  />
-                </Suspense>
-              </>
-            )}
-          </>
-        )}
-        {!isAuthenticated && (
+      >
+        <div className="flex items-center gap-4">
+          {/* Logo */}
           <RadixLink asChild>
-            <LinkComponent href="/login">
-              <div className="flex h-8 items-center justify-center text-sm">Login</div>
+            <LinkComponent href="/" aria-label="ZeroGravity Home">
+              <Logo />
             </LinkComponent>
           </RadixLink>
-        )}
-      </div>
-    </NavigationMenu.Root>
+        </div>
+
+        {/* Date */}
+        <div className="flex flex-shrink-0 items-center gap-12">
+          {dateData && (
+            <div className="hidden h-8 items-center justify-center overflow-hidden sm:flex">
+              <span className="text-sm leading-[0.9] text-[var(--gray-a10)]">
+                {dateData.year} · {dateData.month} · {dateData.day} · {dateData.weekday}
+              </span>
+            </div>
+          )}
+
+          {/* Profile */}
+          {isAuthenticated && (
+            <>
+              {!isSm && (
+                <ProfileDropdown
+                  userName={userName}
+                  profileImage={profileImage}
+                  className="max-mobile:hidden"
+                  menuItems={menuItems}
+                  LinkComponent={LinkComponent}
+                />
+              )}
+              {isSm && (
+                <>
+                  {/* Hamburger Menu */}
+                  <button
+                    className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] focus:bg-[var(--gray-a3)] focus:outline-none"
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label="Toggle menu"
+                    type="button"
+                  >
+                    <Icon color="accent">{isMenuOpen ? 'close' : 'menu'}</Icon>
+                  </button>
+                  <Suspense fallback={null}>
+                    <LazyMenuDrawer
+                      isOpen={isMenuOpen}
+                      user={user}
+                      currentPath={currentPath}
+                      menuItems={menuItems}
+                      LinkComponent={LinkComponent}
+                    />
+                  </Suspense>
+                </>
+              )}
+            </>
+          )}
+          {!isAuthenticated && (
+            <RadixLink asChild>
+              <LinkComponent href="/login">
+                <div className="flex h-8 items-center justify-center text-sm">Login</div>
+              </LinkComponent>
+            </RadixLink>
+          )}
+        </div>
+      </NavigationMenu.Root>
+    </header>
   );
 }

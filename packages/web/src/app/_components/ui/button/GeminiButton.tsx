@@ -36,7 +36,12 @@ export default function GeminiButton({
   className,
 }: GeminiButtonProps) {
   return (
-    <div onClick={onClick} className={cn('flex items-center justify-center gap-2', className)}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn('inline-flex cursor-pointer items-center justify-center gap-2 bg-transparent', className)}
+      aria-label="View AI analysis"
+    >
       <GeminiLogo width={logoSize} />
 
       <Text size={textSize} className="cursor-pointer" color="gray" weight="light">
@@ -70,6 +75,6 @@ export default function GeminiButton({
           {children}
         </motion.span>
       </Text>
-    </div>
+    </button>
   );
 }

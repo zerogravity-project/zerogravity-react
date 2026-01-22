@@ -48,7 +48,7 @@ export function TopAppBar({
       )}
     >
       <div className="flex items-center gap-1">
-        <button className="flex h-8 w-8 cursor-pointer items-center justify-center" onClick={onClick}>
+        <button aria-label={text} className="flex h-8 w-8 cursor-pointer items-center justify-center" onClick={onClick}>
           <Icon>{icon}</Icon>
         </button>
         <Text>{text}</Text>
