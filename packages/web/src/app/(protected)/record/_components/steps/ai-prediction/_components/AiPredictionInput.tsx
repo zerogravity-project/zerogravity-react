@@ -122,10 +122,13 @@ export default function AiPredictionInput({
             radius="full"
             className="!h-full !w-full !shadow-none [&_textarea]:!px-5 [&_textarea]:!py-3.5"
             color={!isValid && isFocused ? 'red' : undefined}
+            aria-required="true"
+            aria-describedby="ai-input-hint"
+            aria-invalid={!isValid && isFocused}
           />
 
           {!isValid && isFocused && (
-            <Text color="red" size="1" className="absolute bottom-4.5 left-5 pr-[100px]">
+            <Text id="ai-input-hint" color="red" size="1" className="absolute bottom-4.5 left-5 pr-[100px]">
               &#8251; Text has to be between 100 and 300 characters
             </Text>
           )}
