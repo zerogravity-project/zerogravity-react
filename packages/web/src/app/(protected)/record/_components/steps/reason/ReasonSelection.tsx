@@ -43,7 +43,11 @@ export default function ReasonSelection() {
    */
   return (
     <div className="max-mobile:px-5 flex w-full flex-1 flex-col items-center pt-10 pb-12">
-      <div className="flex w-full max-w-[480px] flex-wrap gap-3">
+      <div
+        role="group"
+        aria-label="Select reasons for your emotion (required)"
+        className="flex w-full max-w-[480px] flex-wrap gap-3"
+      >
         {EMOTION_REASONS.map(reason => (
           <Button
             key={reason}
@@ -53,6 +57,7 @@ export default function ReasonSelection() {
             size="2"
             radius="full"
             className="!w-fit !cursor-pointer"
+            aria-pressed={emotionReason.includes(reason)}
           >
             {reason}
           </Button>
