@@ -132,22 +132,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // Set expiration time (15 minutes from now)
             token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
           } else {
-            console.error('[JWT Callback] Backend verification failed:', {
-              status: response.status,
-              statusText: response.statusText,
-              requestUrl: `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/verify`,
-              requestBody: {
-                provider: account.provider.toUpperCase(),
-                providerId: account.providerAccountId,
-                email: user.email,
-                name: user.name,
-              },
-            });
+            console.error('[JWT Callback] Backend verification failed:', response.status);
             // Throw error to prevent login - NextAuth will redirect to login with error
             throw new Error('BackendVerificationFailed');
           }
-        } catch (error) {
-          console.error('[JWT Callback] Error:', error);
+        } catch {
+          console.error('[JWT Callback] Backend connection error');
           // Throw error to prevent login
           throw new Error('BackendConnectionError');
         }
@@ -169,8 +159,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.refreshToken = refreshedData.refreshToken;
             token.backendJwtExpiresAt = refreshedData.expiresAt;
             return token;
-          } catch (error) {
-            console.error('[JWT Callback] Waiting for refresh failed:', error);
+          } catch {
+            console.error('[JWT Callback] Waiting for refresh failed');
             token.error = 'RefreshTokenExpired';
             return token;
           }
@@ -198,16 +188,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 expiresAt: Date.now() + 15 * 60 * 1000,
               };
             } else {
-              const errorText = await response.text();
-              console.error('[JWT Callback] Token refresh failed:', {
-                status: response.status,
-                statusText: response.statusText,
-                body: errorText,
-              });
+              console.error('[JWT Callback] Token refresh failed:', response.status);
               throw new Error('RefreshTokenExpired');
             }
           } catch (error) {
-            console.error('[JWT Callback] Token refresh error:', error);
+            console.error('[JWT Callback] Token refresh error');
             throw error;
           } finally {
             isRefreshing = false;
@@ -220,8 +205,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           token.backendJwt = refreshedData.accessToken;
           token.refreshToken = refreshedData.refreshToken;
           token.backendJwtExpiresAt = refreshedData.expiresAt;
-        } catch (error) {
-          console.error('[JWT Callback] Token refresh error:', error);
+        } catch {
+          console.error('[JWT Callback] Token refresh error');
           token.error = 'RefreshTokenExpired';
         }
       }
