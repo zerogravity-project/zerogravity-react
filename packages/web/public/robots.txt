@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Allow: /login
+Allow: /terms/
+
+Disallow: /api/
+Disallow: /record/
+Disallow: /profile/
+Disallow: /spaceout/
+Disallow: /consent/
+
+Sitemap: https://www.zerogv.com/sitemap.xml
