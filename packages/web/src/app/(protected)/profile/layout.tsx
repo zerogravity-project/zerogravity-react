@@ -1,19 +1,24 @@
 import { ReactNode } from 'react';
 
+import { DesktopMenu } from '@/app/_components/ui/menu/desktop/DesktopMenu';
 import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
-
-import { ProfileLayoutClient } from './_components/ProfileLayoutClient';
 
 /**
  * Profile layout (Server Component)
  * Includes NavigationAdapter with background + border
- * Wraps content with ProfileLayoutClient for responsive menu
+ * Desktop: Side menu + content
+ * Mobile: Content only (menu is in Navigation drawer)
  */
 export default async function ProfileLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <NavigationAdapter background border />
-      <ProfileLayoutClient>{children}</ProfileLayoutClient>
+      <div className="pt-topnav-height flex h-[100dvh] w-[100dvw]">
+        <div className="flex h-full w-[256px] flex-shrink-0 max-lg:hidden">
+          <DesktopMenu className="border-r border-[var(--gray-3)]" />
+        </div>
+        {children}
+      </div>
     </>
   );
 }

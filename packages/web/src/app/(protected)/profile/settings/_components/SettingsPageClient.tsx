@@ -147,7 +147,7 @@ export default function SettingsPageClient() {
    * --------------------------------------------
    */
   return (
-    <div className="flex h-full w-full flex-1 flex-col gap-7 overflow-y-auto px-6 pt-6 pb-10 md:p-8">
+    <div className="hide-scrollbar flex h-full w-full flex-1 flex-col gap-7 overflow-y-auto px-6 pt-6 pb-10 md:p-8">
       {/* Profile Settings Section */}
       <SettingSection title="Profile">
         <SettingField label="Display Name" value={displayName} />
