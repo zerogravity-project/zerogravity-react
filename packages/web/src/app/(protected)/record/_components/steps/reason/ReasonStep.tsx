@@ -2,9 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button, Heading, Text } from '@radix-ui/themes';
+import { Heading, Text } from '@radix-ui/themes';
 import { isToday } from 'date-fns';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
@@ -38,7 +39,11 @@ export default function ReasonStep() {
    * 2. Query Hooks
    * --------------------------------------------
    */
-  const { mutate: createEmotionRecord, isPending: isCreatingEmotionRecord } = useCreateEmotionRecordMutation({
+  const {
+    mutate: createEmotionRecord,
+    isPending: isCreatingEmotionRecord,
+    isSuccess: isCreateSuccess,
+  } = useCreateEmotionRecordMutation({
     onSuccess: () => {
       router.push('/profile/calendar');
     },
@@ -110,7 +115,7 @@ export default function ReasonStep() {
         </GeminiButton>
 
         <div className="flex w-full items-center gap-3">
-          <Button
+          <MotionButton
             onClick={prevStep}
             variant="surface"
             className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
@@ -120,20 +125,20 @@ export default function ReasonStep() {
             aria-label="Go to previous step"
           >
             <Icon>arrow_back</Icon>
-          </Button>
+          </MotionButton>
           <div className="w-full">
-            <Button
+            <MotionButton
               onClick={isFinalStep ? handleSubmit : nextStep}
               className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
               color={EMOTION_STEPS[emotionId].color}
               size="4"
               radius="none"
-              disabled={!canGoNext || isCreatingEmotionRecord}
+              disabled={!canGoNext || isCreatingEmotionRecord || isCreateSuccess}
               loading={isCreatingEmotionRecord}
             >
               {isFinalStep ? 'Submit' : 'Next'}
               <Icon>{isFinalStep ? 'check' : 'arrow_forward'}</Icon>
-            </Button>
+            </MotionButton>
           </div>
         </div>
 

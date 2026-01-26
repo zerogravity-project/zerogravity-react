@@ -2,10 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { Button } from '@radix-ui/themes';
 import { signIn } from 'next-auth/react';
 import { useEffect } from 'react';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
@@ -80,7 +80,7 @@ export default function LoginButtons() {
    */
   return (
     <div className="flex flex-col gap-4">
-      <Button
+      <MotionButton
         color="amber"
         size={isMobile ? '4' : '3'}
         variant="soft"
@@ -90,9 +90,9 @@ export default function LoginButtons() {
         }}
       >
         Login With Kakao
-      </Button>
+      </MotionButton>
 
-      <Button
+      <MotionButton
         color="blue"
         size={isMobile ? '4' : '3'}
         variant="soft"
@@ -102,7 +102,7 @@ export default function LoginButtons() {
         }}
       >
         Login With Google
-      </Button>
+      </MotionButton>
     </div>
   );
 }

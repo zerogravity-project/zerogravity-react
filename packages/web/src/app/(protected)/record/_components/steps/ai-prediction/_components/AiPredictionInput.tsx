@@ -1,9 +1,10 @@
 'use client';
 
-import { Button, Heading, Text, TextArea } from '@radix-ui/themes';
+import { Heading, Text, TextArea } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useCallback, useState } from 'react';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
@@ -143,7 +144,7 @@ export default function AiPredictionInput({
 
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
-        <Button
+        <MotionButton
           onClick={() => goToStep('emotion')}
           variant="surface"
           className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
@@ -152,9 +153,9 @@ export default function AiPredictionInput({
           aria-label="Go to previous step"
         >
           <Icon>arrow_back</Icon>
-        </Button>
+        </MotionButton>
         <div className="w-full">
-          <Button
+          <MotionButton
             className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
             size="4"
             radius="none"
@@ -163,7 +164,7 @@ export default function AiPredictionInput({
           >
             Analyze with AI
             <Icon>auto_awesome</Icon>
-          </Button>
+          </MotionButton>
         </div>
       </div>
     </>

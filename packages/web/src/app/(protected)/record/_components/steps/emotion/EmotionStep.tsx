@@ -1,8 +1,9 @@
 'use client';
 
-import { Button, Heading, Text } from '@radix-ui/themes';
+import { Heading, Text } from '@radix-ui/themes';
 import { useState } from 'react';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
@@ -66,7 +67,7 @@ export default function EmotionStep() {
       </div>
 
       {/* Emotion Slider */}
-      <EmotionSlider />
+      <EmotionSlider disabled={!isSceneLoaded} />
 
       {/* Next Button */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
@@ -74,7 +75,7 @@ export default function EmotionStep() {
           Skip and use AI Prediction with Gemini
         </GeminiButton>
         <div className="w-full">
-          <Button
+          <MotionButton
             onClick={nextStep}
             className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
             color={EMOTION_STEPS[emotionValueToStepIndex].color}
@@ -83,7 +84,7 @@ export default function EmotionStep() {
           >
             Next
             <Icon>arrow_forward</Icon>
-          </Button>
+          </MotionButton>
         </div>
 
         <GeminiButton isLoaded={isSceneLoaded} className="max-mobile:!hidden" onClick={() => goToStep('ai-prediction')}>

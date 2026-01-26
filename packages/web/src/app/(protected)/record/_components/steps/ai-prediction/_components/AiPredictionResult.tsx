@@ -1,8 +1,9 @@
 'use client';
 
-import { Badge, Button, Heading, ScrollArea, Text } from '@radix-ui/themes';
+import { Badge, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { useCallback } from 'react';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
@@ -148,7 +149,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
 
       {/* Action Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
-        <Button
+        <MotionButton
           onClick={handleReject}
           variant="surface"
           className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
@@ -158,9 +159,9 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
           aria-label="Reject and go back"
         >
           <Icon>arrow_back</Icon>
-        </Button>
+        </MotionButton>
         <div className="w-full">
-          <Button
+          <MotionButton
             onClick={handleAccept}
             className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
             color={emotionColor}
@@ -169,7 +170,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
           >
             Accept
             <Icon>check</Icon>
-          </Button>
+          </MotionButton>
         </div>
       </div>
     </>

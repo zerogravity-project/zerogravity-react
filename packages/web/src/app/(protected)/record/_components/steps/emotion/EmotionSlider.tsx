@@ -8,11 +8,21 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 /*
  * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+interface EmotionSliderProps {
+  disabled?: boolean;
+}
+
+/*
+ * ============================================
  * Component
  * ============================================
  */
 
-export default function EmotionSlider() {
+export default function EmotionSlider({ disabled = false }: EmotionSliderProps) {
   /*
    * --------------------------------------------
    * 1. External Hooks
@@ -53,6 +63,7 @@ export default function EmotionSlider() {
           ringOffset: EMOTION_STEPS[emotionValueToStepIndex].style.slider.ringOffset,
         }}
         onValueCommit={handleValueCommit}
+        disabled={disabled}
         aria-label="Emotion level selector"
         aria-valuetext={EMOTION_STEPS[emotionValueToStepIndex].type}
       />

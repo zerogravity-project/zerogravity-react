@@ -2,9 +2,10 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Badge, Button, Heading, Text } from '@radix-ui/themes';
+import { Badge, Heading, Text } from '@radix-ui/themes';
 import { isToday } from 'date-fns';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
@@ -37,7 +38,11 @@ export default function DiaryStep() {
    * 2. Query Hooks
    * --------------------------------------------
    */
-  const { mutate: createEmotionRecord, isPending: isCreatingEmotionRecord } = useCreateEmotionRecordMutation({
+  const {
+    mutate: createEmotionRecord,
+    isPending: isCreatingEmotionRecord,
+    isSuccess: isCreateSuccess,
+  } = useCreateEmotionRecordMutation({
     onSuccess: () => {
       router.push('/profile/calendar');
     },
@@ -50,7 +55,11 @@ export default function DiaryStep() {
     },
   });
 
-  const { mutate: updateEmotionRecord, isPending: isUpdatingEmotionRecord } = useUpdateEmotionRecordMutation({
+  const {
+    mutate: updateEmotionRecord,
+    isPending: isUpdatingEmotionRecord,
+    isSuccess: isUpdateSuccess,
+  } = useUpdateEmotionRecordMutation({
     onSuccess: () => {
       router.push('/profile/calendar');
     },
@@ -137,7 +146,7 @@ export default function DiaryStep() {
 
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
-        <Button
+        <MotionButton
           onClick={prevStep}
           variant="surface"
           className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
@@ -147,20 +156,20 @@ export default function DiaryStep() {
           aria-label="Go to previous step"
         >
           <Icon>arrow_back</Icon>
-        </Button>
+        </MotionButton>
         <div className="w-full">
-          <Button
+          <MotionButton
             onClick={handleSubmit}
             className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
             color={EMOTION_STEPS[emotionId].color}
             size="4"
             radius="none"
             loading={isCreatingEmotionRecord || isUpdatingEmotionRecord}
-            disabled={isCreatingEmotionRecord || isUpdatingEmotionRecord}
+            disabled={isCreatingEmotionRecord || isUpdatingEmotionRecord || isCreateSuccess || isUpdateSuccess}
           >
             Submit
             <Icon>check</Icon>
-          </Button>
+          </MotionButton>
         </div>
       </div>
     </>

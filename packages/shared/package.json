@@ -10,6 +10,10 @@
       "types": "./dist/entities/emotion/index.d.ts",
       "import": "./dist/entities/emotion/index.js"
     },
+    "./components/ui/button": {
+      "types": "./dist/components/ui/button/index.d.ts",
+      "import": "./dist/components/ui/button/index.js"
+    },
     "./components/ui/clock": {
       "types": "./dist/components/ui/clock/index.d.ts",
       "import": "./dist/components/ui/clock/index.js"
