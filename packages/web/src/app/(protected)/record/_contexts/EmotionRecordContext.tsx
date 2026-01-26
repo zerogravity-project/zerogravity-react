@@ -25,6 +25,14 @@ export type MainStep = 'emotion' | 'reason' | 'diary';
 export type OptionalStep = 'ai-prediction';
 export type RecordStep = MainStep | OptionalStep;
 
+/** AI prediction data to apply */
+export interface AiPredictionData {
+  suggestedEmotionId: EmotionId;
+  suggestedReasons: EmotionReason[];
+  refinedDiary: string;
+  analysisId: string;
+}
+
 /*
  * ============================================================
  * Constants: Step Configuration
@@ -82,6 +90,9 @@ interface EmotionRecordContextType {
   setEmotionReasons: (emotionReason: EmotionReason[]) => void;
   setDiaryEntry: (diaryEntry: string) => void;
   setAiAnalysisId: (aiAnalysisId: string) => void;
+
+  /** AI prediction */
+  applyAiPrediction: (data: AiPredictionData) => void;
 }
 
 export const EmotionRecordContext = createContext<EmotionRecordContextType | undefined>(undefined);
@@ -304,6 +315,27 @@ export const EmotionRecordProvider = ({
     }
   }, [currentStep, goToStep]);
 
+  /** Apply AI prediction data and navigate to final step (skips validation) */
+  const applyAiPrediction = useCallback(
+    (data: AiPredictionData) => {
+      // Apply all AI prediction data
+      setEmotionId(data.suggestedEmotionId);
+      setEmotionReasons(data.suggestedReasons);
+      setAiAnalysisId(data.analysisId);
+
+      // Only set diary entry for daily records (moment records don't have diary step)
+      if (emotionRecordType === 'daily') {
+        setDiaryEntry(data.refinedDiary);
+      }
+
+      // Navigate directly to final step (no validation needed - AI data is already valid)
+      const finalStep = FINAL_STEP[emotionRecordType];
+      setCurrentStep(finalStep);
+      router.replace(buildUrl(finalStep), { scroll: false });
+    },
+    [emotionRecordType, router, buildUrl]
+  );
+
   /*
    * ------------------------------------------------------------
    * 7. useEffect Hooks
@@ -360,6 +392,7 @@ export const EmotionRecordProvider = ({
         setEmotionReasons,
         setDiaryEntry,
         setAiAnalysisId,
+        applyAiPrediction,
       }}
     >
       {children}

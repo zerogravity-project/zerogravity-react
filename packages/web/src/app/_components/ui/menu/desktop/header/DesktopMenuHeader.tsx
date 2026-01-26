@@ -1,7 +1,6 @@
-'use client';
-
 import { Avatar, Text } from '@radix-ui/themes';
-import { useSession } from 'next-auth/react';
+
+import { auth } from '@/lib/auth';
 
 /*
  * ============================================
@@ -9,13 +8,13 @@ import { useSession } from 'next-auth/react';
  * ============================================
  */
 
-export function DesktopMenuHeader() {
+export async function DesktopMenuHeader() {
   /*
    * --------------------------------------------
-   * 1. External Hooks
+   * 1. Server Data Fetching
    * --------------------------------------------
    */
-  const { data: session } = useSession();
+  const session = await auth();
 
   /*
    * --------------------------------------------

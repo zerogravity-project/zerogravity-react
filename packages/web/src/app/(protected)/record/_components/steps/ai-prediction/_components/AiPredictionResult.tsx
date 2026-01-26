@@ -10,7 +10,7 @@ import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import type { EmotionPredictionResponse } from '@/services/ai/ai.dto';
 
-import { FINAL_STEP, useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
+import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
 /*
  * ============================================
@@ -35,8 +35,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
    * 1. External Hooks
    * --------------------------------------------
    */
-  const { setEmotionId, setDiaryEntry, setEmotionReasons, setAiAnalysisId, goToStep, emotionRecordType } =
-    useEmotionRecordContext();
+  const { applyAiPrediction } = useEmotionRecordContext();
 
   /*
    * --------------------------------------------
@@ -46,24 +45,18 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
 
   /** Accept AI suggestion and apply to emotion record */
   const handleAccept = useCallback(() => {
-    // Apply AI suggestions to EmotionRecordContext
-    if (predictionData.suggestedEmotionId) {
-      setEmotionId(predictionData.suggestedEmotionId as EmotionId);
-    }
-    if (predictionData.suggestedReasons && predictionData.suggestedReasons.length > 0) {
-      setEmotionReasons(predictionData.suggestedReasons as EmotionReason[]);
+    if (!predictionData.suggestedEmotionId || !predictionData.suggestedReasons) {
+      return;
     }
 
-    if (predictionData.refinedDiary) {
-      setDiaryEntry(predictionData.refinedDiary);
-    }
-    setAiAnalysisId(predictionData.analysisId);
-
-    // Go to Final Step
-    if (predictionData.suggestedEmotionId) {
-      goToStep(FINAL_STEP[emotionRecordType]);
-    }
-  }, [predictionData, setEmotionId, setEmotionReasons, setDiaryEntry, setAiAnalysisId, goToStep, emotionRecordType]);
+    // Apply AI prediction and navigate to final step
+    applyAiPrediction({
+      suggestedEmotionId: predictionData.suggestedEmotionId as EmotionId,
+      suggestedReasons: predictionData.suggestedReasons as EmotionReason[],
+      refinedDiary: predictionData.refinedDiary,
+      analysisId: predictionData.analysisId,
+    });
+  }, [predictionData, applyAiPrediction]);
 
   /** Reject AI suggestion and go back to manual selection */
   const handleReject = useCallback(() => {

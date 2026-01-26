@@ -26,7 +26,7 @@ export default function SettingsPageClient() {
    * --------------------------------------------
    */
   const { data: session, update: updateSession } = useSession();
-  const { openAlertModal } = useModal();
+  const { openAlertModal, openConfirmModal } = useModal();
 
   /*
    * --------------------------------------------
@@ -129,6 +129,18 @@ export default function SettingsPageClient() {
     });
   };
 
+  /** Handle delete account with confirmation */
+  const handleDeleteAccount = () => {
+    openConfirmModal({
+      title: 'Delete Account',
+      description:
+        'Are you sure you want to delete your account? All your emotion records and data will be permanently deleted. This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      onConfirm: () => deleteUser(),
+    });
+  };
+
   /*
    * --------------------------------------------
    * 6. Return
@@ -183,7 +195,7 @@ export default function SettingsPageClient() {
           buttonText="Delete"
           variant="soft"
           color="red"
-          onClick={() => deleteUser()}
+          onClick={handleDeleteAccount}
         />
       </SettingSection>
 
