@@ -77,12 +77,14 @@ interface EmotionRecordContextType {
 
   /** Step navigation */
   currentStep: RecordStep;
+  displayStep: RecordStep; // Step for UI rendering (updates after exit animation)
   canGoNext: boolean;
   canGoToStep: (step: RecordStep) => boolean;
   isFinalStep: boolean;
   goToStep: (step: RecordStep) => void;
   nextStep: () => void;
   prevStep: () => void;
+  onStepExitComplete: () => void; // Call when step exit animation completes
 
   /** Setters */
   setEmotionId: (emotionId: EmotionId) => void;
@@ -175,6 +177,12 @@ export const EmotionRecordProvider = ({
   const initialStep = (searchParams.get('step') as RecordStep) || 'emotion';
   const [currentStep, setCurrentStep] = useState<RecordStep>(initialStep);
 
+  /**
+   * Display step for UI rendering - updates after exit animation completes.
+   * This prevents UI flickering (button text, colors) during step transitions.
+   */
+  const [displayStep, setDisplayStep] = useState<RecordStep>(initialStep);
+
   /*
    * ------------------------------------------------------------
    * 3. Derived Values
@@ -192,9 +200,12 @@ export const EmotionRecordProvider = ({
    * ------------------------------------------------------------
    */
 
-  /** Validation for next button */
+  /**
+   * Validation for next button - based on displayStep to prevent flickering.
+   * Uses displayStep so button state doesn't change during exit animation.
+   */
   const canGoNext = useMemo(() => {
-    switch (currentStep) {
+    switch (displayStep) {
       case 'emotion':
         return isEmotionValid;
       case 'reason':
@@ -204,7 +215,7 @@ export const EmotionRecordProvider = ({
       default:
         return false;
     }
-  }, [currentStep, isEmotionValid, isReasonValid, isDiaryValid]);
+  }, [displayStep, isEmotionValid, isReasonValid, isDiaryValid]);
 
   /** Check if can navigate to target step (all previous steps valid) */
   const canGoToStep = useCallback(
@@ -234,10 +245,13 @@ export const EmotionRecordProvider = ({
     [isEmotionValid, isReasonValid, isDiaryValid]
   );
 
-  /** Check if current step is the final step for the current record type */
+  /**
+   * Check if current step is the final step for the current record type.
+   * Uses displayStep to prevent button text flickering during exit animation.
+   */
   const isFinalStep = useMemo(() => {
-    return currentStep === FINAL_STEP[emotionRecordType];
-  }, [currentStep, emotionRecordType]);
+    return displayStep === FINAL_STEP[emotionRecordType];
+  }, [displayStep, emotionRecordType]);
 
   /*
    * ------------------------------------------------------------
@@ -336,6 +350,14 @@ export const EmotionRecordProvider = ({
     [emotionRecordType, router, buildUrl]
   );
 
+  /**
+   * Callback to sync displayStep after exit animation completes.
+   * Called from AnimatePresence onExitComplete in EmotionRecord component.
+   */
+  const onStepExitComplete = useCallback(() => {
+    setDisplayStep(currentStep);
+  }, [currentStep]);
+
   /*
    * ------------------------------------------------------------
    * 7. useEffect Hooks
@@ -381,12 +403,14 @@ export const EmotionRecordProvider = ({
         emotionValueToStepIndex,
         emotionSliderValue,
         currentStep,
+        displayStep,
         canGoNext,
         canGoToStep,
         isFinalStep,
         goToStep,
         nextStep,
         prevStep,
+        onStepExitComplete,
         setEmotionId,
         setEmotionSliderValue,
         setEmotionReasons,
