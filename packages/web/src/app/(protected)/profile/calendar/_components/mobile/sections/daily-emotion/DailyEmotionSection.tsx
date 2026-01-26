@@ -1,9 +1,10 @@
 import Link from 'next/link';
 
-import { Badge, Button, Text } from '@radix-ui/themes';
+import { Badge, Text } from '@radix-ui/themes';
 import { useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { EmotionPlanetNull } from '@zerogravity/shared/components/ui/emotion/null';
 import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -73,9 +74,9 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
             href={`/record/daily?date=${selectedDateString}`}
             className="z-1 mt-6 flex w-full flex-col items-center"
           >
-            <Button color={emotionColor} variant="solid" size="4" className="!w-full !gap-[6px] !font-normal">
+            <MotionButton color={emotionColor} variant="solid" size="4" className="!w-full !gap-[6px] !font-normal">
               <Icon size={20}>add</Icon> Add Daily Emotion
-            </Button>
+            </MotionButton>
           </Link>
         </>
       )}
@@ -94,7 +95,7 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
               </Badge>
             ))}
           </div>
-          <Button
+          <MotionButton
             color="gray"
             variant="soft"
             size="4"
@@ -102,7 +103,7 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
             onClick={() => setIsDrawerOpen(true)}
           >
             See Detail
-          </Button>
+          </MotionButton>
         </>
       )}
 

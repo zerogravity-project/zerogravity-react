@@ -3,9 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { Button } from '@radix-ui/themes';
-
 import { useTheme } from '@zerogravity/shared/components/providers';
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Clock } from '@zerogravity/shared/components/ui/clock';
 import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import { Footer } from '@zerogravity/shared/components/ui/footer';
@@ -60,7 +59,7 @@ export default function Main() {
         <Clock />
 
         <div className="absolute bottom-16 left-[50%] z-5 translate-x-[-50%] max-[1025px]:bottom-28">
-          <Button
+          <MotionButton
             size="4"
             variant="surface"
             radius="full"
@@ -68,7 +67,7 @@ export default function Main() {
             className="!font-normal !text-nowrap hover:!opacity-80"
           >
             Start Spaceout <Icon>arrow_forward</Icon>
-          </Button>
+          </MotionButton>
         </div>
       </main>
 

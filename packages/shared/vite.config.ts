@@ -23,6 +23,7 @@ export default defineConfig({
     lib: {
       entry: {
         'entities/emotion/index': path.resolve(__dirname, 'entities/emotion/index.ts'),
+        'components/ui/button/index': path.resolve(__dirname, 'components/ui/button/index.ts'),
         'components/ui/clock/index': path.resolve(__dirname, 'components/ui/clock/index.ts'),
         'components/ui/emotion/scene/index': path.resolve(__dirname, 'components/ui/emotion/scene/index.ts'),
         'components/ui/emotion/decorations/index': path.resolve(
