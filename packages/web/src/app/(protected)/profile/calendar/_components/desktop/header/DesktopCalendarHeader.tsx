@@ -46,7 +46,7 @@ export default function DesktopCalendarHeader() {
             color="gray"
             onClick={goToPreviousMonth}
             aria-label="Previous month"
-            className="!h-7 !w-7 !cursor-pointer !rounded-r-none !border-r-0"
+            className="!h-7 !w-7 !rounded-r-none !border-r-0"
           >
             <Icon size={20}>chevron_left</Icon>
           </Button>
@@ -58,20 +58,14 @@ export default function DesktopCalendarHeader() {
             color="gray"
             onClick={goToNextMonth}
             aria-label="Next month"
-            className="!h-7 !w-7 !cursor-pointer !rounded-l-none"
+            className="!h-7 !w-7 !rounded-l-none"
           >
             <Icon size={20}>chevron_right</Icon>
           </Button>
         </div>
 
         {/* Today Button */}
-        <Button
-          size="2"
-          variant="surface"
-          color="gray"
-          onClick={goToToday}
-          className="!h-7 !cursor-pointer !px-[10px] !text-[13px]"
-        >
+        <Button size="2" variant="surface" color="gray" onClick={goToToday} className="!h-7 !px-[10px] !text-[13px]">
           Today
         </Button>
       </div>
@@ -83,19 +77,19 @@ export default function DesktopCalendarHeader() {
       {/* Add Daily Emotion Button */}
       <DropdownMenu.Root>
         <DropdownMenu.Trigger>
-          <Button size="2" onClick={goToToday} className="!h-7 !cursor-pointer !gap-[3px] !pr-[10px] !pl-[6px]">
+          <Button size="2" onClick={goToToday} className="!h-7 !gap-[3px] !pr-[10px] !pl-[6px]">
             <Icon size={18}>add</Icon>
             Today
           </Button>
         </DropdownMenu.Trigger>
         <DropdownMenu.Content>
           <Link href={`/record/daily?date=${today}`}>
-            <DropdownMenu.Item color="gray" className="!cursor-pointer !text-[13px]">
+            <DropdownMenu.Item color="gray" className="!text-[13px]">
               Add Daily Emotion
             </DropdownMenu.Item>
           </Link>
           <Link href={`/record/moment?date=${today}`}>
-            <DropdownMenu.Item color="gray" className="!cursor-pointer !text-[13px]">
+            <DropdownMenu.Item color="gray" className="!text-[13px]">
               Add Moment Emotion
             </DropdownMenu.Item>
           </Link>

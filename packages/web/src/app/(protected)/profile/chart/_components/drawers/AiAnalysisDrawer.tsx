@@ -1,6 +1,6 @@
 import { Blockquote, Text } from '@radix-ui/themes';
 import { format } from 'date-fns';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -177,8 +177,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.aside
-          layout={isOverLargeScreen}
+        <m.aside
           {...wrapperAnimation}
           className={wrapperClassName}
           role="dialog"
@@ -231,7 +230,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
               {isScrollable && !isScrollAtBottom && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -241,7 +240,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
               )}
             </div>
           </div>
-        </motion.aside>
+        </m.aside>
       )}
     </AnimatePresence>
   );

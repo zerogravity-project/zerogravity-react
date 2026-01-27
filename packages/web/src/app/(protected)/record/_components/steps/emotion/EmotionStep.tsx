@@ -56,7 +56,6 @@ export default function EmotionStep() {
           emotionId={emotionValueToStepIndex}
           width="100%"
           onSceneLoaded={() => setIsSceneLoaded(true)}
-          showPerf={true}
         />
         <Text
           color={EMOTION_STEPS[emotionValueToStepIndex].color}
@@ -72,12 +71,12 @@ export default function EmotionStep() {
       {/* Next Button */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
         <GeminiButton isLoaded={isSceneLoaded} className="mobile:!hidden" onClick={() => goToStep('ai-prediction')}>
-          Skip and use AI Prediction with Gemini
+          Use AI Prediction with Gemini
         </GeminiButton>
         <div className="w-full">
           <MotionButton
             onClick={nextStep}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
             color={EMOTION_STEPS[emotionValueToStepIndex].color}
             size="4"
             radius="none"

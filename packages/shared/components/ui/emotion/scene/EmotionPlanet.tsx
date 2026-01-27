@@ -56,6 +56,8 @@ interface EmotionPlanetProps {
   isLarge?: boolean;
   /** Enable performance mode for mobile/low-end devices (reduces geometry complexity) */
   performanceMode?: boolean;
+  /** Pause animation at current state (time accumulation stops) */
+  isPaused?: boolean;
 }
 
 /*
@@ -71,6 +73,7 @@ export function EmotionPlanet({
   isSparkles = true,
   isLarge = false,
   performanceMode = false,
+  isPaused = false,
 }: EmotionPlanetProps) {
   /*
    * --------------------------------------------
@@ -124,6 +127,7 @@ export function EmotionPlanet({
         roughness={EMOTION_STEPS[emotionId].style.planet.roughness}
         colorA={EMOTION_STEPS[emotionId].style.planet.colorA}
         colorB={EMOTION_STEPS[emotionId].style.planet.colorB}
+        isPaused={isPaused}
       />
       {isSparkles && (
         <Sparkles

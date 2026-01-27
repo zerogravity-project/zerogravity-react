@@ -40,6 +40,14 @@ button {
 
 .radix-themes {
   --cursor-button: pointer;
+  --cursor-checkbox: pointer;
+  --cursor-disabled: not-allowed;
+  --cursor-link: pointer;
+  --cursor-menu-item: pointer;
+  --cursor-radio: pointer;
+  --cursor-slider-thumb: grab;
+  --cursor-slider-thumb-active: grabbing;
+  --cursor-switch: pointer;
   --default-font-family: 'helvetica-neue-lt-pro', sans-serif;
   --heading-font-family: 'helvetica-neue-lt-pro', sans-serif;
   --code-font-family: 'helvetica-neue-lt-pro', sans-serif;
@@ -115,12 +123,13 @@ a {
 }
 
 /* Accessibility: Focus Visible Styles */
-:focus-visible {
+/* Commented out: Radix Themes handles focus styles internally with --focus-8 */
+/* :focus-visible {
   outline: 2px solid var(--accent-9);
   outline-offset: 2px;
-}
+} */
 
 /* Remove default focus outline (use focus-visible instead) */
-:focus:not(:focus-visible) {
+/* :focus:not(:focus-visible) {
   outline: none;
-}
+} */

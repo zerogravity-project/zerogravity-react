@@ -1,6 +1,6 @@
 import { Text } from '@radix-ui/themes';
 import { Responsive } from '@radix-ui/themes/dist/esm/props/prop-def.js';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { ReactNode } from 'react';
 
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
@@ -45,7 +45,7 @@ export default function GeminiButton({
       <GeminiLogo width={logoSize} />
 
       <Text size={textSize} className="cursor-pointer" color="gray" weight="light">
-        <motion.span
+        <m.span
           className={'inline-block bg-[length:200%_100%] bg-clip-text text-[var(--gray-a7)] hover:underline'}
           style={{
             backgroundImage:
@@ -73,7 +73,7 @@ export default function GeminiButton({
           }}
         >
           {children}
-        </motion.span>
+        </m.span>
       </Text>
     </button>
   );

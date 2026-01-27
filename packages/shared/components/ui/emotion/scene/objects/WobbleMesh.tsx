@@ -45,6 +45,8 @@ interface WobbleMeshProps {
   roughness: number;
   colorA: string;
   colorB: string;
+  /** Pause animation at current state (time accumulation stops) */
+  isPaused?: boolean;
 }
 
 /*
@@ -65,6 +67,7 @@ export function WobbleMesh({
   roughness,
   colorA,
   colorB,
+  isPaused = false,
 }: WobbleMeshProps) {
   /*
    * --------------------------------------------
@@ -76,6 +79,11 @@ export function WobbleMesh({
   /** Target colors for smooth transitions (using refs to avoid creating new objects each frame) */
   const targetColorA = useRef(new THREE.Color(colorA));
   const targetColorB = useRef(new THREE.Color(colorB));
+  /** Accumulated time for shader animation */
+  const accumulatedTime = useRef(0);
+  /** Ref for isPaused to avoid stale closure in useFrame */
+  const isPausedRef = useRef(isPaused);
+  isPausedRef.current = isPaused;
 
   /*
    * --------------------------------------------
@@ -121,8 +129,12 @@ export function WobbleMesh({
   }, [colorA, colorB]);
 
   /** Animate uniforms every frame */
-  useFrame(({ clock }) => {
-    uniforms.uTime.value = clock.getElapsedTime();
+  useFrame((_, delta) => {
+    // Only accumulate time when not paused (use ref to avoid stale closure)
+    if (!isPausedRef.current) {
+      accumulatedTime.current += delta;
+      uniforms.uTime.value = accumulatedTime.current;
+    }
 
     // Lerp speed: lower = smoother/slower (recommended: 0.02 ~ 0.1)
     const lerpSpeed = 0.03;

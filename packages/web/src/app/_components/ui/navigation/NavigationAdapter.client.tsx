@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import * as Sentry from '@sentry/nextjs';
 import { Session } from 'next-auth';
-import { ComponentType, forwardRef, useEffect, useState } from 'react';
+import { ComponentType, forwardRef, useCallback, useEffect, useState } from 'react';
 
 import { Navigation, LinkProps as SharedLinkProps } from '@zerogravity/shared/components/ui/navigation';
 import { cn } from '@zerogravity/shared/utils';
@@ -89,7 +90,20 @@ export function NavigationAdapterClient({ session, className, background, border
 
   /**
    * --------------------------------------------
-   * 4. Effects
+   * 4. Callbacks
+   * --------------------------------------------
+   */
+  /** Open Sentry feedback form */
+  const handleFeedbackClick = useCallback(async () => {
+    const feedback = Sentry.getFeedback();
+    const form = await feedback?.createForm();
+    form?.appendToDom();
+    form?.open();
+  }, []);
+
+  /**
+   * --------------------------------------------
+   * 5. Effects
    * --------------------------------------------
    */
   /** Window scroll detection for shadow effect */
@@ -107,7 +121,7 @@ export function NavigationAdapterClient({ session, className, background, border
 
   /**
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return (
@@ -116,6 +130,7 @@ export function NavigationAdapterClient({ session, className, background, border
       user={user}
       currentPath={pathname}
       LinkComponent={NextLink}
+      onFeedbackClick={handleFeedbackClick}
       background={hasBackground}
       border={border}
       className={cn('fixed top-0', hasBackground && isScrolled && 'shadow-md', className)}

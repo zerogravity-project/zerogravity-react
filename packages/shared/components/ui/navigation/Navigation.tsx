@@ -33,6 +33,9 @@ interface NavigationProps {
   LinkComponent?: ComponentType<LinkProps>;
   menuItems?: MenuItem[];
 
+  /** Callbacks */
+  onFeedbackClick?: () => void;
+
   /** Styling */
   background?: boolean;
   border?: boolean;
@@ -63,6 +66,7 @@ export function Navigation({
   currentPath,
   LinkComponent = DefaultLink,
   menuItems = MENU_ITEMS,
+  onFeedbackClick,
   background,
   border,
   className,
@@ -100,6 +104,13 @@ export function Navigation({
   useEffect(() => {
     setIsMenuOpen(false);
   }, [currentPath]);
+
+  /** Dispatch custom event when menu opens/closes for external listeners */
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('navigation-menu-toggle', { detail: { isOpen: isMenuOpen } }));
+    }
+  }, [isMenuOpen]);
 
   /*
    * --------------------------------------------
@@ -145,6 +156,7 @@ export function Navigation({
                   className="max-mobile:hidden"
                   menuItems={menuItems}
                   LinkComponent={LinkComponent}
+                  onFeedbackClick={onFeedbackClick}
                 />
               )}
               {isSm && (
@@ -165,6 +177,7 @@ export function Navigation({
                       currentPath={currentPath}
                       menuItems={menuItems}
                       LinkComponent={LinkComponent}
+                      onFeedbackClick={onFeedbackClick}
                     />
                   </Suspense>
                 </>

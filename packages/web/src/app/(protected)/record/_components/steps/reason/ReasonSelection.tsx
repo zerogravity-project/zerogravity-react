@@ -56,7 +56,7 @@ export default function ReasonSelection() {
             variant={emotionReason.includes(reason) ? 'solid' : 'soft'}
             size="2"
             radius="full"
-            className="!w-fit !cursor-pointer"
+            className="!w-fit"
             aria-pressed={emotionReason.includes(reason)}
           >
             {reason}

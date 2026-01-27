@@ -3,7 +3,7 @@
 import Link from 'next/link';
 
 import { Badge, Button, Heading, Text } from '@radix-ui/themes';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
 import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
@@ -102,7 +102,7 @@ export default function EmotionDetailDrawer({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -112,7 +112,7 @@ export default function EmotionDetailDrawer({
           />
 
           {/* Drawer */}
-          <motion.aside
+          <m.aside
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
@@ -132,7 +132,7 @@ export default function EmotionDetailDrawer({
                 rightContent={
                   isToday ? (
                     <Link href={`/record/daily?date=${selectedDateString}`}>
-                      <Button variant="soft" radius="full" className="!cursor-pointer">
+                      <Button variant="soft" radius="full">
                         {!isEmpty ? 'Edit' : 'Add'}
                       </Button>
                     </Link>
@@ -170,7 +170,7 @@ export default function EmotionDetailDrawer({
                   </Heading>
                   {isToday && !isEmpty && (
                     <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
-                      <Button variant="soft" radius="full" className="!cursor-pointer">
+                      <Button variant="soft" radius="full">
                         Edit
                       </Button>
                     </Link>
@@ -191,7 +191,7 @@ export default function EmotionDetailDrawer({
                 </div>
               </div>
             </div>
-          </motion.aside>
+          </m.aside>
         </>
       )}
     </AnimatePresence>

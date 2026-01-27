@@ -20,6 +20,7 @@ import { cn } from '@zerogravity/shared/utils';
 interface DailyEmotionSectionProps {
   emotionId?: EmotionId;
   emotionReasons?: EmotionReason[];
+  isOpen?: boolean;
 }
 
 /*
@@ -28,7 +29,7 @@ interface DailyEmotionSectionProps {
  * ============================================
  */
 
-export default function DailyEmotionSection({ emotionId, emotionReasons }: DailyEmotionSectionProps) {
+export default function DailyEmotionSection({ emotionId, emotionReasons, isOpen = true }: DailyEmotionSectionProps) {
   /*
    * --------------------------------------------
    * 1. External Hooks
@@ -64,7 +65,14 @@ export default function DailyEmotionSection({ emotionId, emotionReasons }: Daily
         {/* Data state */}
         {!isEmpty && (
           <>
-            <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />
+            <EmotionPlanetScene
+              emotionId={emotionId}
+              width={240}
+              height={240}
+              isLoadingShowText={false}
+              delay={500}
+              isFreeze={!isOpen}
+            />
             <Text color={emotionColor} size="7" weight="regular">
               {EMOTION_STEPS[emotionId].type}
             </Text>

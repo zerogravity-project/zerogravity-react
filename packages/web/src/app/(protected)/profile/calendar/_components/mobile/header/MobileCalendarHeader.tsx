@@ -1,6 +1,6 @@
 import { Button, Callout, Heading, Text } from '@radix-ui/themes';
 import { format, isAfter } from 'date-fns';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_COLORS, EMOTION_TYPES } from '@zerogravity/shared/entities/emotion';
@@ -60,14 +60,14 @@ export default function MobileCalendarHeader({
   return (
     <header className="mb-6 flex w-full flex-col items-center px-5 pt-6">
       {/* Error Callout */}
-      <motion.div
+      <m.div
         initial={false}
         animate={{ gridTemplateRows: isError ? '1fr' : '0fr' }}
         transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
         className="grid w-full"
       >
         <div className="overflow-hidden">
-          <motion.div
+          <m.div
             initial={false}
             animate={{ opacity: isError ? 1 : 0 }}
             transition={{ duration: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
@@ -80,14 +80,14 @@ export default function MobileCalendarHeader({
                 <Callout.Text>Failed to load emotion data</Callout.Text>
               </div>
               {onRetry && (
-                <Button size="1" variant="soft" color="red" onClick={onRetry} className="!cursor-pointer">
+                <Button size="1" variant="soft" color="red" onClick={onRetry}>
                   Retry
                 </Button>
               )}
             </Callout.Root>
-          </motion.div>
+          </m.div>
         </div>
-      </motion.div>
+      </m.div>
 
       {/* Selected Week & Navigation */}
       <div className="mb-4 flex w-full items-center justify-between">
@@ -103,7 +103,7 @@ export default function MobileCalendarHeader({
               onClick={goToPreviousWeek}
               disabled={isLoading}
               aria-label="Previous week"
-              className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
+              className="!w-8 !rounded-r-none !border-r-0"
             >
               <Icon>chevron_left</Icon>
             </Button>
@@ -114,19 +114,12 @@ export default function MobileCalendarHeader({
               onClick={goToNextWeek}
               disabled={isLoading}
               aria-label="Next week"
-              className="!w-8 !cursor-pointer !rounded-l-none"
+              className="!w-8 !rounded-l-none"
             >
               <Icon>chevron_right</Icon>
             </Button>
           </div>
-          <Button
-            size="2"
-            variant="surface"
-            color="gray"
-            onClick={goToToday}
-            disabled={isLoading}
-            className="!cursor-pointer"
-          >
+          <Button size="2" variant="surface" color="gray" onClick={goToToday} disabled={isLoading}>
             Today
           </Button>
         </div>
@@ -158,7 +151,7 @@ export default function MobileCalendarHeader({
           const ariaLabel = `${dateLabel}${todayLabel}${emotionLabel}`;
 
           return (
-            <motion.div
+            <m.div
               key={date.toISOString()}
               initial={{ opacity: 0, scale: 0.7 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -179,7 +172,7 @@ export default function MobileCalendarHeader({
               >
                 {date.getDate()}
               </Button>
-            </motion.div>
+            </m.div>
           );
         })}
       </div>

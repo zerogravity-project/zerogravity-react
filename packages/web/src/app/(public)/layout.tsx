@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@zerogravity/shared/components/providers';
+import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
 
 import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
 
@@ -14,10 +14,12 @@ interface PublicLayoutProps {
 export default async function PublicLayout({ children }: Readonly<PublicLayoutProps>) {
   return (
     <ThemeProvider>
-      <NavigationAdapter />
-      <main id="main-content" className="relative w-full">
-        {children}
-      </main>
+      <MotionProvider>
+        <NavigationAdapter />
+        <main id="main-content" className="relative w-full">
+          {children}
+        </main>
+      </MotionProvider>
     </ThemeProvider>
   );
 }

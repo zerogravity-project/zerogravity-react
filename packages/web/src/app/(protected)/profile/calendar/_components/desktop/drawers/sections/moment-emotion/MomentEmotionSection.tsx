@@ -1,5 +1,5 @@
 import { Text } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
 
@@ -33,7 +33,7 @@ export default function MomentEmotionSection({ momentEmotionRecords }: MomentEmo
       ) : (
         <ul className="flex w-full flex-col items-center gap-6 pt-5 pr-4.5 pb-6 pl-3">
           {momentEmotionRecords?.map((record, index) => (
-            <motion.div
+            <m.div
               key={record.createdAt}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -41,7 +41,7 @@ export default function MomentEmotionSection({ momentEmotionRecords }: MomentEmo
               className="w-full"
             >
               <MomentEmotionList emotionId={record.emotionId} time={record.createdAt} reasons={record.reasons} />
-            </motion.div>
+            </m.div>
           ))}
         </ul>
       )}

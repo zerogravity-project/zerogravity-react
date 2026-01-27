@@ -152,7 +152,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
         <MotionButton
           onClick={handleReject}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
           color={emotionColor}
           size="4"
           radius="none"
@@ -163,7 +163,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
         <div className="w-full">
           <MotionButton
             onClick={handleAccept}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
             color={emotionColor}
             size="4"
             radius="none"

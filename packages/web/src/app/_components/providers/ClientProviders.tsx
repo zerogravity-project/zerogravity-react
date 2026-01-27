@@ -1,6 +1,6 @@
 'use client';
 
-import { ThemeProvider } from '@zerogravity/shared/components/providers';
+import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
 
 import { ModalProvider } from '../ui/modal/_contexts/ModalContext';
 import { AlertModal } from '../ui/modal/AlertModal';
@@ -37,17 +37,19 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
     <NextAuthSessionProvider>
       <TanstackQueryProvider>
         <ThemeProvider>
-          <ModalProvider>
-            <main id="main-content" className="relative w-full">
-              {children}
-            </main>
-            {/* Global state-based modals */}
-            <AlertModal />
-            <ConfirmModal />
-            <ComponentModal />
-            {/* Global hash-based modals */}
-            <TermsModal />
-          </ModalProvider>
+          <MotionProvider>
+            <ModalProvider>
+              <main id="main-content" className="relative w-full">
+                {children}
+              </main>
+              {/* Global state-based modals */}
+              <AlertModal />
+              <ConfirmModal />
+              <ComponentModal />
+              {/* Global hash-based modals */}
+              <TermsModal />
+            </ModalProvider>
+          </MotionProvider>
         </ThemeProvider>
       </TanstackQueryProvider>
     </NextAuthSessionProvider>
