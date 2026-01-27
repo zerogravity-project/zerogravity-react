@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentType, lazy, Suspense, useEffect, useState } from 'react';
+import { ComponentType, lazy, Suspense, useEffect, useRef, useState } from 'react';
 
 import * as NavigationMenu from '@radix-ui/react-navigation-menu';
 import { Link as RadixLink } from '@radix-ui/themes';
@@ -77,6 +77,7 @@ export function Navigation({
    * --------------------------------------------
    */
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isToggleCloseRef = useRef(false);
 
   /*
    * --------------------------------------------
@@ -164,7 +165,10 @@ export function Navigation({
                   {/* Hamburger Menu */}
                   <button
                     className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-[4px] focus:bg-[var(--gray-a3)] focus:outline-none"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    onClick={() => {
+                      if (isMenuOpen) isToggleCloseRef.current = true;
+                      setIsMenuOpen(!isMenuOpen);
+                    }}
                     aria-label="Toggle menu"
                     type="button"
                   >
@@ -173,11 +177,18 @@ export function Navigation({
                   <Suspense fallback={null}>
                     <LazyMenuDrawer
                       isOpen={isMenuOpen}
+                      isToggleClose={isToggleCloseRef.current}
+                      onExitComplete={() => {
+                        isToggleCloseRef.current = false;
+                      }}
                       user={user}
                       currentPath={currentPath}
                       menuItems={menuItems}
                       LinkComponent={LinkComponent}
-                      onFeedbackClick={onFeedbackClick}
+                      onFeedbackClick={() => {
+                        setIsMenuOpen(false);
+                        setTimeout(() => onFeedbackClick?.(), 150);
+                      }}
                     />
                   </Suspense>
                 </>

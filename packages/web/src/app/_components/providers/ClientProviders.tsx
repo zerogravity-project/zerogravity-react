@@ -6,7 +6,7 @@ import { ModalProvider } from '../ui/modal/_contexts/ModalContext';
 import { AlertModal } from '../ui/modal/AlertModal';
 import { ComponentModal } from '../ui/modal/ComponentModal';
 import { ConfirmModal } from '../ui/modal/ConfirmModal';
-import { TermsModal } from '../ui/modal/TermsModal';
+import { FeedbackModal } from '../ui/modal/FeedbackModal';
 
 import NextAuthSessionProvider from './NextAuthSessionProvider';
 import TanstackQueryProvider from './TanstackQueryProvider';
@@ -47,7 +47,7 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
               <ConfirmModal />
               <ComponentModal />
               {/* Global hash-based modals */}
-              <TermsModal />
+              <FeedbackModal />
             </ModalProvider>
           </MotionProvider>
         </ThemeProvider>
