@@ -1,3 +1,4 @@
+import { withSentryConfig } from '@sentry/nextjs';
 import bundleAnalyzer from '@next/bundle-analyzer';
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
 
@@ -46,6 +47,7 @@ const nextConfig = {
               "frame-src 'self' https://accounts.google.com https://kauth.kakao.com",
               "worker-src 'self' blob:",
               "media-src 'self' https://axp1udgkvclx.objectstorage.ap-chuncheon-1.oci.customer-oci.com",
+              "report-uri https://o4510777101975552.ingest.us.sentry.io/api/4510777103024128/security/?sentry_key=3266c405a313e58b725029a578cbe546",
             ].join('; '),
           },
         ],
@@ -77,14 +79,52 @@ const nextConfig = {
       'three',
     ],
   },
-  webpack: config => {
+  webpack: (config, { webpack }) => {
     /* GLSL Loader */
     config.module.rules.push({
       test: /\.(glsl|vert|frag)$/i,
       type: 'asset/source',
     });
+
+    /* Sentry tree-shaking: remove tracing code from bundle */
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        __SENTRY_TRACING__: false,
+      })
+    );
+
     return config;
   },
 };
 
-export default withBundleAnalyzer(withVanillaExtract(nextConfig));
+export default withSentryConfig(withBundleAnalyzer(withVanillaExtract(nextConfig)), {
+  // For all available options, see:
+  // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+
+  org: "minuk-hwang",
+
+  project: "javascript-nextjs",
+
+  // Only print logs for uploading source maps in CI
+  silent: !process.env.CI,
+
+  // For all available options, see:
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+  // Upload a larger set of source maps for prettier stack traces (increases build time)
+  widenClientFileUpload: true,
+
+  webpack: {
+    // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
+    // See the following for more information:
+    // https://docs.sentry.io/product/crons/
+    // https://vercel.com/docs/cron-jobs
+    automaticVercelMonitors: true,
+
+    // Tree-shaking options for reducing bundle size
+    treeshake: {
+      // Automatically tree-shake Sentry logger statements to reduce bundle size
+      removeDebugLogging: true,
+    },
+  },
+});

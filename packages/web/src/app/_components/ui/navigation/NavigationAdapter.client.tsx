@@ -93,9 +93,30 @@ export function NavigationAdapterClient({ session, className, background, border
    * 4. Callbacks
    * --------------------------------------------
    */
-  /** Open Sentry feedback form */
+  /** Open Sentry feedback form (lazy loads feedbackIntegration on first click) */
   const handleFeedbackClick = useCallback(async () => {
-    const feedback = Sentry.getFeedback();
+    // Check if feedbackIntegration is already loaded
+    let feedback = Sentry.getFeedback();
+
+    // Lazy load feedbackIntegration if not yet loaded (~17kB saved on initial load)
+    if (!feedback) {
+      const feedbackIntegration = await Sentry.lazyLoadIntegration('feedbackIntegration');
+      Sentry.addIntegration(
+        feedbackIntegration({
+          autoInject: false,
+          colorScheme: 'dark',
+          isNameRequired: false,
+          isEmailRequired: false,
+          showBranding: false,
+          formTitle: 'Send Feedback',
+          submitButtonLabel: 'Send',
+          messagePlaceholder: 'What happened? What did you expect?',
+          successMessageText: 'Thank you for your feedback!',
+        })
+      );
+      feedback = Sentry.getFeedback();
+    }
+
     const form = await feedback?.createForm();
     form?.appendToDom();
     form?.open();
