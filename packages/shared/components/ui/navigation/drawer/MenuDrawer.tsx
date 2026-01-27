@@ -1,7 +1,7 @@
 import { ComponentType } from 'react';
 
 import { Theme } from '@radix-ui/themes';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { createPortal } from 'react-dom';
 
 import { cn } from '../../../../utils';
@@ -23,6 +23,7 @@ interface MenuDrawerProps {
   currentPath: string;
   menuItems: MenuItem[];
   LinkComponent: ComponentType<LinkProps>;
+  onFeedbackClick?: () => void;
   className?: string;
 }
 
@@ -32,36 +33,54 @@ interface MenuDrawerProps {
  * ============================================
  */
 
-export function MenuDrawer({ isOpen, user, currentPath, menuItems, LinkComponent, className }: MenuDrawerProps) {
+export function MenuDrawer({
+  isOpen,
+  user,
+  currentPath,
+  menuItems,
+  LinkComponent,
+  onFeedbackClick,
+  className,
+}: MenuDrawerProps) {
   const { accentColor } = useTheme();
 
   // SSR safety check
   if (typeof document === 'undefined') return null;
 
   return createPortal(
-    <AnimatePresence>
-      {isOpen && (
-        <Theme grayColor="slate" accentColor={accentColor} appearance="dark" asChild>
-          <motion.nav
+    <Theme grayColor="slate" accentColor={accentColor} appearance="dark">
+      <AnimatePresence>
+        {isOpen && (
+          <m.nav
+            key="menu-drawer"
             aria-label="Mobile navigation"
             className={cn(
               'top-topnav-height fixed left-0 z-[2000] flex w-[100dvw] flex-col items-center justify-between overflow-hidden bg-[var(--gray-1)] shadow-[0_8px_30px_rgba(0,0,0,0.4)]',
               className
             )}
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 300 }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{
-              opacity: { duration: 0 },
-              height: { duration: 0.3, ease: 'easeInOut' },
+            animate={{
+              opacity: 1,
+              height: 356,
+              transition: { opacity: { duration: 0 }, height: { duration: 0.3, ease: 'easeInOut' } },
+            }}
+            exit={{
+              opacity: 0,
+              height: 0,
+              transition: { opacity: { duration: 0, delay: 0.3 }, height: { duration: 0.3, ease: 'easeInOut' } },
             }}
           >
             <MenuDrawerHeader user={user} />
-            <MenuList menuItems={menuItems} currentPath={currentPath} LinkComponent={LinkComponent} />
-          </motion.nav>
-        </Theme>
-      )}
-    </AnimatePresence>,
+            <MenuList
+              menuItems={menuItems}
+              currentPath={currentPath}
+              LinkComponent={LinkComponent}
+              onFeedbackClick={onFeedbackClick}
+            />
+          </m.nav>
+        )}
+      </AnimatePresence>
+    </Theme>,
     document.body
   );
 }

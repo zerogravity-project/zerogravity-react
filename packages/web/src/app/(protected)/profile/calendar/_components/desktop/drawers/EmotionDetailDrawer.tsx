@@ -1,7 +1,7 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
-import { useEffect, useRef } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 
 import type { EmotionId, EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
@@ -53,6 +53,7 @@ export default function EmotionDetailDrawer({
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isExiting, setIsExiting] = useState(false);
 
   /*
    * --------------------------------------------
@@ -89,6 +90,11 @@ export default function EmotionDetailDrawer({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
+  /** Reset exiting state when drawer opens */
+  useEffect(() => {
+    if (isOpen) setIsExiting(false);
+  }, [isOpen]);
+
   /*
    * --------------------------------------------
    * 5. Derived Values
@@ -103,7 +109,7 @@ export default function EmotionDetailDrawer({
     ? {
         initial: { width: 0 },
         animate: { width: 300 },
-        exit: { width: 0 },
+        exit: { width: 0, transition: { duration: 0.3, ease: [0.4, 0, 1, 1] as const } },
         transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const },
       }
     : {
@@ -125,9 +131,13 @@ export default function EmotionDetailDrawer({
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.aside
-          layout={isOverLargeScreen}
+        <m.aside
           {...wrapperAnimation}
+          onAnimationStart={definition => {
+            if (typeof definition === 'object' && 'width' in definition && definition.width === 0) {
+              setIsExiting(true);
+            }
+          }}
           className={wrapperClassName}
           role="dialog"
           aria-modal="true"
@@ -147,7 +157,11 @@ export default function EmotionDetailDrawer({
                 linkText={isEmpty ? 'Add' : isToday ? 'Edit' : undefined}
                 href={`/record/daily?date=${selectedDateString}`}
               />
-              <DailyEmotionSection emotionId={dailyEmotionId} emotionReasons={dailyEmotionReasons} />
+              <DailyEmotionSection
+                emotionId={dailyEmotionId}
+                emotionReasons={dailyEmotionReasons}
+                isOpen={!isExiting}
+              />
 
               {/* Daily Note */}
               <SectionTitle
@@ -163,7 +177,7 @@ export default function EmotionDetailDrawer({
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
               {isScrollable && !isScrollAtBottom && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -173,7 +187,7 @@ export default function EmotionDetailDrawer({
               )}
             </div>
           </div>
-        </motion.aside>
+        </m.aside>
       )}
     </AnimatePresence>
   );

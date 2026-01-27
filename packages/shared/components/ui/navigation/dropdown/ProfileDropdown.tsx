@@ -17,6 +17,7 @@ interface ProfileDropdownProps {
   profileImage?: string;
   menuItems: MenuItem[];
   LinkComponent: ComponentType<LinkProps>;
+  onFeedbackClick?: () => void;
   className?: string;
 }
 
@@ -35,7 +36,14 @@ interface ProfileDropdownItemProps {
  * ============================================
  */
 
-export function ProfileDropdown({ userName, profileImage, menuItems, LinkComponent, className }: ProfileDropdownProps) {
+export function ProfileDropdown({
+  userName,
+  profileImage,
+  menuItems,
+  LinkComponent,
+  onFeedbackClick,
+  className,
+}: ProfileDropdownProps) {
   return (
     <div className={cn('flex h-8 w-8 flex-shrink-0 items-center justify-center', className)}>
       <DropdownMenu.Root>
@@ -66,10 +74,17 @@ export function ProfileDropdown({ userName, profileImage, menuItems, LinkCompone
               href={item.href}
               icon={item.icon}
               label={item.label}
-              className="!mb-1"
               LinkComponent={LinkComponent}
             />
           ))}
+          {onFeedbackClick && (
+            <>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item className="!mb-1" onClick={onFeedbackClick}>
+                <Icon size={20}>feedback</Icon> Feedback
+              </DropdownMenu.Item>
+            </>
+          )}
         </DropdownMenu.Content>
       </DropdownMenu.Root>
     </div>
@@ -85,7 +100,7 @@ export function ProfileDropdown({ userName, profileImage, menuItems, LinkCompone
 function ProfileDropdownItem({ href, icon, label, onClick, className, LinkComponent }: ProfileDropdownItemProps) {
   return (
     <LinkComponent href={href} onClick={onClick}>
-      <DropdownMenu.Item className={cn('!cursor-pointer', className)}>
+      <DropdownMenu.Item className={className}>
         <Icon size={20}>{icon}</Icon> {label}
       </DropdownMenu.Item>
     </LinkComponent>

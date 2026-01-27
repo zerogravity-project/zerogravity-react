@@ -1,6 +1,6 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
 import { EMOTION_STEPS } from '../../../../entities/emotion';
 
@@ -59,7 +59,7 @@ export function EmotionPlanetGlow({ emotionId, isVisible, width, height }: Emoti
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -81,7 +81,7 @@ export function EmotionPlanetGlow({ emotionId, isVisible, width, height }: Emoti
               `,
             }}
           />
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

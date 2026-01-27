@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { EMOTION_STEPS } from '../../../../entities/emotion';
 import { useSquareResize } from '../../../../hooks/useSquareResize';
@@ -100,7 +100,7 @@ export function EmotionPlanetNull({
       {/* Glow Effect */}
       <EmotionPlanetGlow emotionId={emotionId} isVisible={true} width={displayWidth} height={displayHeight} />
 
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -133,7 +133,7 @@ export function EmotionPlanetNull({
             )}
           </svg>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

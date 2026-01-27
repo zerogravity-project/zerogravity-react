@@ -48,7 +48,7 @@ export function QueryErrorState({
           {description}
         </Text>
       </div>
-      <Button variant="soft" color="gray" onClick={onRetry} className="!cursor-pointer">
+      <Button variant="soft" color="gray" onClick={onRetry}>
         <Icon>refresh</Icon>
         Try again
       </Button>

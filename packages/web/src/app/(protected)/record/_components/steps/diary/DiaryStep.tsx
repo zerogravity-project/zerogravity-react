@@ -149,7 +149,7 @@ export default function DiaryStep() {
         <MotionButton
           onClick={prevStep}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
           color={EMOTION_STEPS[emotionId].color}
           size="4"
           radius="none"
@@ -160,7 +160,7 @@ export default function DiaryStep() {
         <div className="w-full">
           <MotionButton
             onClick={handleSubmit}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
             color={EMOTION_STEPS[emotionId].color}
             size="4"
             radius="none"

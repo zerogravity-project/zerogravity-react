@@ -111,14 +111,14 @@ export default function ReasonStep() {
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
         <GeminiButton className="mobile:!hidden" onClick={nextStep}>
-          Skip and use AI Prediction with Gemini
+          Use AI Prediction with Gemini
         </GeminiButton>
 
         <div className="flex w-full items-center gap-3">
           <MotionButton
             onClick={prevStep}
             variant="surface"
-            className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
             color={EMOTION_STEPS[emotionId].color}
             size="4"
             radius="none"
@@ -129,7 +129,7 @@ export default function ReasonStep() {
           <div className="w-full">
             <MotionButton
               onClick={isFinalStep ? handleSubmit : nextStep}
-              className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+              className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
               color={EMOTION_STEPS[emotionId].color}
               size="4"
               radius="none"
@@ -143,7 +143,7 @@ export default function ReasonStep() {
         </div>
 
         <GeminiButton className="max-mobile:!hidden" onClick={nextStep}>
-          Skip and use AI Prediction with Gemini
+          Use AI Prediction with Gemini
         </GeminiButton>
       </div>
     </>

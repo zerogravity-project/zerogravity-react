@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useEffect, useState } from 'react';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
 import { EMOTION_IMAGE_URLS } from '../../../../entities/emotion';
 import { useMediaQuery } from '../../../../hooks/useMediaQuery';
@@ -40,8 +40,10 @@ interface EmotionPlanetSceneProps {
   isLarge?: boolean;
 
   // Feature toggles
-  /** Freeze animation (default: false) */
+  /** Full freeze: stops GPU rendering and animation (default: false) */
   isFreeze?: boolean;
+  /** Pause animation only: keeps GPU running but stops time (default: false) */
+  isPaused?: boolean;
   /** Show glow effect (default: true) */
   isGlow?: boolean;
   /** Show sparkle particles (default: true) */
@@ -91,6 +93,7 @@ export function EmotionPlanetScene({
   isLarge = false,
   // Feature toggles
   isFreeze = false,
+  isPaused = false,
   isGlow = true,
   isSparkles = true,
   // Loading
@@ -212,6 +215,7 @@ export function EmotionPlanetScene({
             height={resolvedHeight}
             environmentMapUrl={environmentMapUrl}
             isFreeze={isFreeze}
+            isPaused={isPaused}
             isSparkles={isSparkles}
             isLarge={isLarge}
             performanceMode={shouldUsePerformanceMode}
@@ -224,7 +228,7 @@ export function EmotionPlanetScene({
       {/* Static Placeholder Image (prevents layout shift, unmounts after fade) */}
       <AnimatePresence>
         {loadingFallback === 'placeholder' && (!isLoaded || isLoading) && (
-          <motion.div
+          <m.div
             initial={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
@@ -243,7 +247,7 @@ export function EmotionPlanetScene({
               style={{ width: displayWidth, height: displayHeight }}
               draggable={false}
             />
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
 

@@ -1,6 +1,5 @@
 'use client';
 
-import { LayoutGroup } from 'motion/react';
 import { useState } from 'react';
 
 import { AiAnalysisDrawer } from './drawers/AiAnalysisDrawer';
@@ -27,7 +26,7 @@ export function EmotionsCharts() {
    * --------------------------------------------
    */
   return (
-    <LayoutGroup>
+    <>
       <section className="mobile:p-5.5 hide-scrollbar h-full w-full flex-1 overflow-x-hidden bg-[var(--background-dark)]">
         <div className="flex h-full w-full flex-col">
           <EmotionChartsHeader setIsDrawerOpen={setIsDrawerOpen} />
@@ -35,6 +34,6 @@ export function EmotionsCharts() {
         </div>
       </section>
       <AiAnalysisDrawer isOpen={isDrawerOpen} onClose={() => setIsDrawerOpen(false)} />
-    </LayoutGroup>
+    </>
   );
 }

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { Button, Heading, Text } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { formatDateString } from '@zerogravity/shared/utils';
 
@@ -54,7 +54,7 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
           Moment Emotion
         </Heading>
         <Link href={`/record/moment?date=${selectedDateString}`}>
-          <Button variant="soft" radius="full" className="!cursor-pointer">
+          <Button variant="soft" radius="full">
             Add
           </Button>
         </Link>
@@ -69,7 +69,7 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
       ) : (
         <ul className="flex w-full flex-col items-center">
           {emotionRecords?.map((record, index) => (
-            <motion.div
+            <m.div
               key={record.createdAt}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -77,7 +77,7 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
               className="w-full"
             >
               <MomentEmotionList emotionId={record.emotionId} time={record.createdAt} reasons={record.reasons} />
-            </motion.div>
+            </m.div>
           ))}
         </ul>
       )}

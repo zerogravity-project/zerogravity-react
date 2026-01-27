@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useState } from 'react';
 
 import { EmotionPlanetGlow } from '@zerogravity/shared/components/ui/emotion/decorations';
@@ -64,7 +64,7 @@ export function EmotionPlanetImage({
    * --------------------------------------------
    */
   return (
-    <motion.div
+    <m.div
       ref={containerRef}
       className={cn('relative flex flex-shrink-0 items-center justify-center', fill && 'h-full w-full')}
       style={{ width, height }}
@@ -92,6 +92,6 @@ export function EmotionPlanetImage({
           height={fill ? squareSize : height}
         />
       )}
-    </motion.div>
+    </m.div>
   );
 }

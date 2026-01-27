@@ -7,7 +7,7 @@
 import { forwardRef, type ComponentPropsWithoutRef, type ComponentRef } from 'react';
 
 import { Button } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 /**
  * ============================================
@@ -16,7 +16,7 @@ import { motion } from 'motion/react';
  */
 
 /** Motion-enabled Radix Button */
-const MotionRadixButton = motion.create(Button);
+const MotionRadixButton = m.create(Button);
 
 /** Default motion animation settings */
 const DEFAULT_MOTION = {

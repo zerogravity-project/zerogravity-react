@@ -1,7 +1,7 @@
 'use client';
 
 import { ScrollArea, Text } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { EMOTION_REASONS } from '@zerogravity/shared/entities/emotion';
 
@@ -72,7 +72,7 @@ export function EmotionReasonsChart({ isReady = false }: EmotionReasonsChartProp
       isError={isError}
       onRetry={refetch}
     >
-      <motion.div
+      <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: isReady ? 1 : 0 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
@@ -92,7 +92,7 @@ export function EmotionReasonsChart({ isReady = false }: EmotionReasonsChartProp
             ))}
           </div>
         </ScrollArea>
-      </motion.div>
+      </m.div>
     </EmotionChartContainer>
   );
 }

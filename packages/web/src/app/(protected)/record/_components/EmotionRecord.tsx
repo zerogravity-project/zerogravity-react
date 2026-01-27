@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { useRef } from 'react';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
@@ -108,7 +108,7 @@ export default function EmotionRecord() {
          * - onExitComplete syncs displayStep after fade out completes
          */}
         <AnimatePresence mode="wait" onExitComplete={onStepExitComplete}>
-          <motion.div
+          <m.div
             key={currentStep}
             initial={{ opacity: 0 }}
             animate={{ opacity: isExiting ? 0 : 1 }}
@@ -120,7 +120,7 @@ export default function EmotionRecord() {
             {displayStep === 'reason' && <ReasonStep />}
             {displayStep === 'diary' && <DiaryStep />}
             {displayStep === 'ai-prediction' && <AiPredictionStep />}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </div>
     </>

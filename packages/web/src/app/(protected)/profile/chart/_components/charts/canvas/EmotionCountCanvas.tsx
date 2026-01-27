@@ -1,7 +1,7 @@
 'use client';
 
 import type { ActiveElement, ChartEvent, TooltipModel } from 'chart.js';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
@@ -252,13 +252,13 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
    * --------------------------------------------
    */
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
       className="h-full w-full"
     >
       <canvas ref={chartRef} role="img" aria-label="Emotion record count chart by period" className="h-full w-full" />
-    </motion.div>
+    </m.div>
   );
 }

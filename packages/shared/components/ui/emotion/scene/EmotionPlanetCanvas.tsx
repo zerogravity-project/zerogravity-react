@@ -22,7 +22,10 @@ interface EmotionPlanetCanvasProps {
   height: number | string;
 
   environmentMapUrl?: string;
+  /** Full freeze: stops GPU rendering and animation */
   isFreeze?: boolean;
+  /** Pause animation only: keeps GPU running but stops time accumulation */
+  isPaused?: boolean;
   isSparkles?: boolean;
   isLarge?: boolean;
   performanceMode?: boolean;
@@ -47,6 +50,7 @@ export function EmotionPlanetCanvas({
   height,
   environmentMapUrl,
   isFreeze = false,
+  isPaused = false,
   isSparkles = true,
   isLarge = false,
   performanceMode = false,
@@ -123,6 +127,7 @@ export function EmotionPlanetCanvas({
             isSparkles={isSparkles}
             isLarge={isLarge}
             performanceMode={performanceMode}
+            isPaused={isFreeze || isPaused}
           />
         </Suspense>
       </Canvas>

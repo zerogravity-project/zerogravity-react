@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { EMOTION_COLORS, EMOTION_TYPES } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
@@ -77,7 +77,7 @@ export default function DesktopCalendarCell({
         <svg width="100%" height="100%" viewBox="0 0 80 80" className="pointer-events-none">
           {/* Emotion circle background */}
           {!isEmpty && (
-            <motion.circle
+            <m.circle
               key={`${year}-${month}-${day}`}
               cx="40"
               cy="40"

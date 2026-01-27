@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 /*
  * ============================================
@@ -56,7 +56,7 @@ export function PlanetLoading({ size, className = '' }: PlanetLoadingProps) {
       style={size ? { width: size, height: size } : undefined}
     >
       {/* Glowing halo with blob morphing */}
-      <motion.div
+      <m.div
         className="absolute h-full w-full"
         animate={{
           borderRadius: BLOB_BORDER_RADIUS,
@@ -71,7 +71,7 @@ export function PlanetLoading({ size, className = '' }: PlanetLoadingProps) {
         }}
       >
         {/* Spinning conic gradient glow */}
-        <motion.div
+        <m.div
           className="absolute -inset-4 opacity-90 blur-[30px]"
           style={{
             borderRadius: 'inherit',
@@ -84,7 +84,7 @@ export function PlanetLoading({ size, className = '' }: PlanetLoadingProps) {
             repeat: Infinity,
           }}
         />
-      </motion.div>
+      </m.div>
     </div>
   );
 }

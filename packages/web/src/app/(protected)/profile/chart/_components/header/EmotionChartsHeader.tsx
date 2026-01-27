@@ -111,7 +111,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               onClick={goToPreviousPeriod}
               disabled={!canGoPrevious}
               aria-label="Previous period"
-              className="!w-8 !cursor-pointer !rounded-r-none !border-r-0"
+              className="!w-8 !rounded-r-none !border-r-0"
             >
               <Icon>chevron_left</Icon>
             </Button>
@@ -122,7 +122,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               onClick={goToNextPeriod}
               disabled={!canGoNext}
               aria-label="Next period"
-              className="!w-8 !cursor-pointer !rounded-l-none"
+              className="!w-8 !rounded-l-none"
             >
               <Icon>chevron_right</Icon>
             </Button>
@@ -170,7 +170,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               variant="surface"
               color="gray"
               onClick={goToPreviousPeriod}
-              className="!h-7 !w-7 !cursor-pointer !rounded-r-none !border-r-0"
+              className="!h-7 !w-7 !rounded-r-none !border-r-0"
               disabled={!canGoPrevious}
               aria-label="Previous period"
             >
@@ -183,7 +183,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
               variant="surface"
               color="gray"
               onClick={goToNextPeriod}
-              className="!h-7 !w-7 !cursor-pointer !rounded-l-none"
+              className="!h-7 !w-7 !rounded-l-none"
               disabled={!canGoNext}
               aria-label="Next period"
             >

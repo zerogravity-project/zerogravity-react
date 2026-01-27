@@ -147,7 +147,7 @@ export default function AiPredictionInput({
         <MotionButton
           onClick={() => goToStep('emotion')}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
           size="4"
           radius="none"
           aria-label="Go to previous step"
@@ -156,7 +156,7 @@ export default function AiPredictionInput({
         </MotionButton>
         <div className="w-full">
           <MotionButton
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
             size="4"
             radius="none"
             disabled={!isValid}

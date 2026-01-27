@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 
 import { Heading, Text } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -25,7 +25,7 @@ export default function RecordSelectionPage() {
 
   return (
     <div className="flex h-[100dvh] w-full items-center justify-center bg-[var(--color-background)] px-6">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -44,12 +44,7 @@ export default function RecordSelectionPage() {
           <div className="flex w-full flex-col gap-3 sm:gap-4">
             {/* Moment Record Card */}
 
-            <MotionButton
-              size="4"
-              variant="soft"
-              className="!h-auto !w-full !cursor-pointer !p-4 sm:!p-6"
-              onClick={handleMomentRecord}
-            >
+            <MotionButton size="4" variant="soft" className="!h-auto !w-full !p-4 sm:!p-6" onClick={handleMomentRecord}>
               <div className="flex w-full flex-col items-start gap-2 sm:gap-3">
                 <div className="flex items-center gap-2 sm:gap-3">
                   <Icon className="!text-[24px] sm:!text-[32px]">bolt</Icon>
@@ -85,7 +80,7 @@ export default function RecordSelectionPage() {
             <MotionButton
               size="4"
               variant="surface"
-              className="!h-auto !w-full !cursor-pointer !p-4 sm:!p-6"
+              className="!h-auto !w-full !p-4 sm:!p-6"
               onClick={handleDailyRecord}
             >
               <div className="flex w-full flex-col items-start gap-2 sm:gap-3">
@@ -119,7 +114,7 @@ export default function RecordSelectionPage() {
             </MotionButton>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

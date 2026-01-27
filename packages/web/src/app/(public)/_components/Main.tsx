@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { useEffect, useState } from 'react';
+
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Clock } from '@zerogravity/shared/components/ui/clock';
@@ -31,7 +33,29 @@ export default function Main() {
 
   /*
    * --------------------------------------------
-   * 2. Return
+   * 2. States
+   * --------------------------------------------
+   */
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  /*
+   * --------------------------------------------
+   * 3. Effects
+   * --------------------------------------------
+   */
+  /** Listen to navigation menu toggle event to freeze 3D scene */
+  useEffect(() => {
+    const handleMenuToggle = (event: CustomEvent<{ isOpen: boolean }>) => {
+      setIsMenuOpen(event.detail.isOpen);
+    };
+
+    window.addEventListener('navigation-menu-toggle', handleMenuToggle as EventListener);
+    return () => window.removeEventListener('navigation-menu-toggle', handleMenuToggle as EventListener);
+  }, []);
+
+  /*
+   * --------------------------------------------
+   * 4. Return
    * --------------------------------------------
    */
   return (
@@ -47,9 +71,9 @@ export default function Main() {
             isSparkles={true}
             isGlow={true}
             isLarge={true}
+            isPaused={isMenuOpen}
             width={isLg ? 1200 : 1500}
             height={isLg ? 1200 : 1500}
-            showPerf={true}
           />
         </div>
       </div>

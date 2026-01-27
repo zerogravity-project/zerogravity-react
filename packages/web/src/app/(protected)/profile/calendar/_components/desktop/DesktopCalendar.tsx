@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic';
 
 import { Text } from '@radix-ui/themes';
 import { endOfMonth, format, isAfter, startOfMonth } from 'date-fns';
-import { LayoutGroup, motion } from 'motion/react';
 import { useState } from 'react';
 
 import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
@@ -158,51 +157,45 @@ export default function DesktopCalendar() {
    * --------------------------------------------
    */
   return (
-    <LayoutGroup>
-      <div className="flex h-full w-full">
-        <motion.div
-          layout
-          transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-          className="flex h-full flex-1 bg-[var(--background-dark)] p-3"
-        >
-          <div className="flex h-full w-full flex-col overflow-hidden rounded-[4px] border border-[var(--gray-3)] bg-[var(--gray-1)] p-3">
-            {/* Header - Fixed height */}
-            <DesktopCalendarHeader />
+    <div className="flex h-full w-full">
+      <div className="flex h-full flex-1 bg-[var(--background-dark)] p-3">
+        <div className="flex h-full w-full flex-col overflow-hidden rounded-[4px] border border-[var(--gray-3)] bg-[var(--gray-1)] p-3">
+          {/* Header - Fixed height */}
+          <DesktopCalendarHeader />
 
-            {/* Days of week - Fixed height */}
-            <div className="grid shrink-0 grid-cols-7">
-              {DAYS_OF_WEEK.map(day => (
-                <div
-                  key={day}
-                  className="flex items-center justify-center bg-[var(--gray-a2)] p-[4px] outline outline-[0.5px] outline-[var(--gray-3)]"
-                >
-                  <Text size="1" weight="medium" color="gray" className="!text-[11px] !leading-[14px]">
-                    {day}
-                  </Text>
-                </div>
-              ))}
-            </div>
-
-            {/* Calendar grid - Takes remaining height */}
-            <div className="relative grid min-h-0 flex-1 auto-rows-fr grid-cols-7">
-              {emptyCellsBefore}
-              {dayCells}
-              {emptyCellsAfterMonth}
-
-              {/* Current Month Error State - Overlay */}
-              {isCurrentMonthError && <QueryErrorState onRetry={refetchCurrentMonth} overlay />}
-            </div>
+          {/* Days of week - Fixed height */}
+          <div className="grid shrink-0 grid-cols-7">
+            {DAYS_OF_WEEK.map(day => (
+              <div
+                key={day}
+                className="flex items-center justify-center bg-[var(--gray-a2)] p-[4px] outline outline-[0.5px] outline-[var(--gray-3)]"
+              >
+                <Text size="1" weight="medium" color="gray" className="!text-[11px] !leading-[14px]">
+                  {day}
+                </Text>
+              </div>
+            ))}
           </div>
-        </motion.div>
-        <EmotionDetailDrawer
-          isOpen={isDrawerOpen}
-          onClose={() => setIsDrawerOpen(false)}
-          dailyEmotionId={selectedDailyRecord?.emotionId}
-          dailyEmotionReasons={selectedDailyRecord?.reasons}
-          diaryEntry={selectedDailyRecord?.diaryEntry ?? ''}
-          momentEmotionRecords={selectedMomentRecords}
-        />
+
+          {/* Calendar grid - Takes remaining height */}
+          <div className="relative grid min-h-0 flex-1 auto-rows-fr grid-cols-7">
+            {emptyCellsBefore}
+            {dayCells}
+            {emptyCellsAfterMonth}
+
+            {/* Current Month Error State - Overlay */}
+            {isCurrentMonthError && <QueryErrorState onRetry={refetchCurrentMonth} overlay />}
+          </div>
+        </div>
       </div>
-    </LayoutGroup>
+      <EmotionDetailDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        dailyEmotionId={selectedDailyRecord?.emotionId}
+        dailyEmotionReasons={selectedDailyRecord?.reasons}
+        diaryEntry={selectedDailyRecord?.diaryEntry ?? ''}
+        momentEmotionRecords={selectedMomentRecords}
+      />
+    </div>
   );
 }
