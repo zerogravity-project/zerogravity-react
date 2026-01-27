@@ -66,7 +66,6 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: [
-      '@radix-ui/themes',
       '@react-three/drei',
       '@react-three/fiber',
       '@tanstack/react-query',
