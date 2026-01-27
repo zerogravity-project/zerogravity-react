@@ -1,9 +1,11 @@
 'use client';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { m } from 'motion/react';
+
+import { EMOTION_COLORS, EMOTION_TYPES } from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -11,6 +13,8 @@ import { cn } from '@zerogravity/shared/utils';
 
 interface DesktopCalendarCellProps {
   day: number;
+  month: number;
+  year: number;
   isToday: boolean;
   isAfterToday: boolean;
   isLoading?: boolean;
@@ -18,7 +22,7 @@ interface DesktopCalendarCellProps {
   onClick?: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -26,13 +30,15 @@ interface DesktopCalendarCellProps {
 
 export default function DesktopCalendarCell({
   day,
+  month,
+  year,
   isToday,
   isAfterToday,
   isLoading = false,
   dailyEmotionId,
   onClick,
 }: DesktopCalendarCellProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Derived Values
    * --------------------------------------------
@@ -40,16 +46,29 @@ export default function DesktopCalendarCell({
   const isEmpty = dailyEmotionId === undefined;
   const isDisabled = isAfterToday || isLoading;
 
-  /**
+  /** Accessible label for screen readers */
+  const ariaLabel = (() => {
+    const dateStr = `${month}/${day}/${year}`;
+    const todayStr = isToday ? ' (today)' : '';
+    const emotionStr = !isEmpty ? `, ${EMOTION_TYPES[dailyEmotionId]}` : '';
+    return `${dateStr}${todayStr}${emotionStr}`;
+  })();
+
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------
    */
   return (
-    <div
+    <button
+      type="button"
+      data-testid={`calendar-day-${day}`}
+      data-today={isToday ? 'true' : undefined}
       onClick={!isDisabled ? onClick : undefined}
+      disabled={isDisabled}
+      aria-label={ariaLabel}
       className={cn(
-        'relative flex h-full w-full items-center justify-center p-1 outline outline-[0.5px] outline-[var(--gray-3)]',
+        'relative flex h-full w-full items-center justify-center bg-transparent p-1 outline outline-[0.5px] outline-[var(--gray-3)]',
         isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:!bg-[var(--gray-a3)]'
       )}
     >
@@ -57,7 +76,18 @@ export default function DesktopCalendarCell({
       <div className="absolute top-1/2 left-1/2 z-99 flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center">
         <svg width="100%" height="100%" viewBox="0 0 80 80" className="pointer-events-none">
           {/* Emotion circle background */}
-          {!isEmpty && <circle cx="40" cy="40" r="38" fill={`var(--${EMOTION_STEPS[dailyEmotionId].color}-9)`} />}
+          {!isEmpty && (
+            <m.circle
+              key={`${year}-${month}-${day}`}
+              cx="40"
+              cy="40"
+              r="38"
+              fill={`var(--${EMOTION_COLORS[dailyEmotionId]}-9)`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+            />
+          )}
           <text
             x="40"
             y="40"
@@ -65,6 +95,7 @@ export default function DesktopCalendarCell({
             dominantBaseline="central"
             fontSize="36"
             fontWeight="200"
+            className="transition-colors"
             fill={
               isAfterToday
                 ? 'var(--gray-a6)'
@@ -81,6 +112,6 @@ export default function DesktopCalendarCell({
           </text>
         </svg>
       </div>
-    </div>
+    </button>
   );
 }

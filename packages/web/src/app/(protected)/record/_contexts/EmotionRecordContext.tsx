@@ -1,16 +1,21 @@
+/**
+ * [EmotionRecordContext]
+ * State management for emotion recording flow (daily/moment)
+ */
+
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionRecordType } from '@/services/emotion/emotion.dto';
 
 import { valueToStepIndex } from '../_utils/emotionRecordUtils';
 
-/**
+/*
  * ============================================================
  * Type Definitions
  * ============================================================
@@ -20,7 +25,15 @@ export type MainStep = 'emotion' | 'reason' | 'diary';
 export type OptionalStep = 'ai-prediction';
 export type RecordStep = MainStep | OptionalStep;
 
-/**
+/** AI prediction data to apply */
+export interface AiPredictionData {
+  suggestedEmotionId: EmotionId;
+  suggestedReasons: EmotionReason[];
+  refinedDiary: string;
+  analysisId: string;
+}
+
+/*
  * ============================================================
  * Constants: Step Configuration
  * ============================================================
@@ -42,7 +55,7 @@ export const FINAL_STEP: Record<EmotionRecordType, MainStep> = {
   daily: 'diary',
 };
 
-/**
+/*
  * ============================================================
  * Context Type Definition
  * ============================================================
@@ -64,12 +77,14 @@ interface EmotionRecordContextType {
 
   /** Step navigation */
   currentStep: RecordStep;
+  displayStep: RecordStep; // Step for UI rendering (updates after exit animation)
   canGoNext: boolean;
   canGoToStep: (step: RecordStep) => boolean;
   isFinalStep: boolean;
   goToStep: (step: RecordStep) => void;
   nextStep: () => void;
   prevStep: () => void;
+  onStepExitComplete: () => void; // Call when step exit animation completes
 
   /** Setters */
   setEmotionId: (emotionId: EmotionId) => void;
@@ -77,6 +92,9 @@ interface EmotionRecordContextType {
   setEmotionReasons: (emotionReason: EmotionReason[]) => void;
   setDiaryEntry: (diaryEntry: string) => void;
   setAiAnalysisId: (aiAnalysisId: string) => void;
+
+  /** AI prediction */
+  applyAiPrediction: (data: AiPredictionData) => void;
 }
 
 export const EmotionRecordContext = createContext<EmotionRecordContextType | undefined>(undefined);
@@ -101,7 +119,7 @@ interface EmotionRecordProviderProps {
   initialDailyDiaryEntry?: string;
 }
 
-/**
+/*
  * ============================================================
  * Emotion Record Provider
  * ============================================================
@@ -127,7 +145,7 @@ export const EmotionRecordProvider = ({
   initialDailyEmotionReasons,
   initialDailyDiaryEntry,
 }: EmotionRecordProviderProps) => {
-  /**
+  /*
    * ------------------------------------------------------------
    * 1. External Hooks
    * ------------------------------------------------------------
@@ -135,7 +153,7 @@ export const EmotionRecordProvider = ({
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 2. States
    * ------------------------------------------------------------
@@ -160,6 +178,12 @@ export const EmotionRecordProvider = ({
   const [currentStep, setCurrentStep] = useState<RecordStep>(initialStep);
 
   /**
+   * Display step for UI rendering - updates after exit animation completes.
+   * This prevents UI flickering (button text, colors) during step transitions.
+   */
+  const [displayStep, setDisplayStep] = useState<RecordStep>(initialStep);
+
+  /*
    * ------------------------------------------------------------
    * 3. Derived Values
    * ------------------------------------------------------------
@@ -170,15 +194,18 @@ export const EmotionRecordProvider = ({
   const isReasonValid = emotionReasons.length > 0;
   const isDiaryValid = diaryEntry.length <= 300;
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 4. Computed Values
    * ------------------------------------------------------------
    */
 
-  /** Validation for next button */
+  /**
+   * Validation for next button - based on displayStep to prevent flickering.
+   * Uses displayStep so button state doesn't change during exit animation.
+   */
   const canGoNext = useMemo(() => {
-    switch (currentStep) {
+    switch (displayStep) {
       case 'emotion':
         return isEmotionValid;
       case 'reason':
@@ -188,7 +215,7 @@ export const EmotionRecordProvider = ({
       default:
         return false;
     }
-  }, [currentStep, isEmotionValid, isReasonValid, isDiaryValid]);
+  }, [displayStep, isEmotionValid, isReasonValid, isDiaryValid]);
 
   /** Check if can navigate to target step (all previous steps valid) */
   const canGoToStep = useCallback(
@@ -218,12 +245,15 @@ export const EmotionRecordProvider = ({
     [isEmotionValid, isReasonValid, isDiaryValid]
   );
 
-  /** Check if current step is the final step for the current record type */
-  const isFinalStep = useMemo(() => {
-    return currentStep === FINAL_STEP[emotionRecordType];
-  }, [currentStep, emotionRecordType]);
-
   /**
+   * Check if current step is the final step for the current record type.
+   * Uses displayStep to prevent button text flickering during exit animation.
+   */
+  const isFinalStep = useMemo(() => {
+    return displayStep === FINAL_STEP[emotionRecordType];
+  }, [displayStep, emotionRecordType]);
+
+  /*
    * ------------------------------------------------------------
    * 5. Helper Functions (Callbacks)
    * ------------------------------------------------------------
@@ -241,7 +271,7 @@ export const EmotionRecordProvider = ({
     [emotionRecordType, date]
   );
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 6. Step Navigation (Callbacks)
    * ------------------------------------------------------------
@@ -299,7 +329,36 @@ export const EmotionRecordProvider = ({
     }
   }, [currentStep, goToStep]);
 
+  /** Apply AI prediction data and navigate to final step (skips validation) */
+  const applyAiPrediction = useCallback(
+    (data: AiPredictionData) => {
+      // Apply all AI prediction data
+      setEmotionId(data.suggestedEmotionId);
+      setEmotionReasons(data.suggestedReasons);
+      setAiAnalysisId(data.analysisId);
+
+      // Only set diary entry for daily records (moment records don't have diary step)
+      if (emotionRecordType === 'daily') {
+        setDiaryEntry(data.refinedDiary);
+      }
+
+      // Navigate directly to final step (no validation needed - AI data is already valid)
+      const finalStep = FINAL_STEP[emotionRecordType];
+      setCurrentStep(finalStep);
+      router.replace(buildUrl(finalStep), { scroll: false });
+    },
+    [emotionRecordType, router, buildUrl]
+  );
+
   /**
+   * Callback to sync displayStep after exit animation completes.
+   * Called from AnimatePresence onExitComplete in EmotionRecord component.
+   */
+  const onStepExitComplete = useCallback(() => {
+    setDisplayStep(currentStep);
+  }, [currentStep]);
+
+  /*
    * ------------------------------------------------------------
    * 7. useEffect Hooks
    * ------------------------------------------------------------
@@ -326,7 +385,7 @@ export const EmotionRecordProvider = ({
     }
   }, [searchParams, canGoToStep, router, buildUrl]);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 8. Return
    * ------------------------------------------------------------
@@ -344,17 +403,20 @@ export const EmotionRecordProvider = ({
         emotionValueToStepIndex,
         emotionSliderValue,
         currentStep,
+        displayStep,
         canGoNext,
         canGoToStep,
         isFinalStep,
         goToStep,
         nextStep,
         prevStep,
+        onStepExitComplete,
         setEmotionId,
         setEmotionSliderValue,
         setEmotionReasons,
         setDiaryEntry,
         setAiAnalysisId,
+        applyAiPrediction,
       }}
     >
       {children}
@@ -362,7 +424,7 @@ export const EmotionRecordProvider = ({
   );
 };
 
-/**
+/*
  * ============================================================
  * Custom Hook
  * ============================================================

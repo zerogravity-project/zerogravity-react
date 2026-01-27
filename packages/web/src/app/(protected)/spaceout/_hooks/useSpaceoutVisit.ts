@@ -1,8 +1,13 @@
+/**
+ * [useSpaceoutVisit hook]
+ * Track spaceout page visit count for onboarding flow
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -11,14 +16,14 @@ import { useEffect, useState } from 'react';
 const VISIT_COUNT_KEY = 'spaceout_visit_count';
 const MAX_ONBOARDING_VISITS = 3;
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
  */
 
 export function useSpaceoutVisit() {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -26,14 +31,14 @@ export function useSpaceoutVisit() {
   const [visitCount, setVisitCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
    */
   const shouldShowOnboarding = visitCount < MAX_ONBOARDING_VISITS;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
@@ -51,7 +56,7 @@ export function useSpaceoutVisit() {
     setIsLoading(false);
   }, []);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------

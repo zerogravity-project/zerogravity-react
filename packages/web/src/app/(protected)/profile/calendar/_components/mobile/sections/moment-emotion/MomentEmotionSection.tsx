@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Button, Heading, Text } from '@radix-ui/themes';
+import { m } from 'motion/react';
 
 import { formatDateString } from '@zerogravity/shared/utils';
 
@@ -10,7 +11,7 @@ import { useCalendar } from '../../../../_contexts/CalendarContext';
 
 import MomentEmotionList from './MomentEmotionList';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -20,28 +21,28 @@ interface MomentEmotionSectionProps {
   emotionRecords?: EmotionRecordDetail[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSectionProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { selectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
    */
   const selectedDateString = formatDateString(selectedDate);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
@@ -52,8 +53,8 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
         <Heading as="h2" size="4" weight="medium">
           Moment Emotion
         </Heading>
-        <Link href={`/record/daily?date=${selectedDateString}`}>
-          <Button variant="soft" radius="full" className="!cursor-pointer">
+        <Link href={`/record/moment?date=${selectedDateString}`}>
+          <Button variant="soft" radius="full">
             Add
           </Button>
         </Link>
@@ -68,12 +69,15 @@ export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSe
       ) : (
         <ul className="flex w-full flex-col items-center">
           {emotionRecords?.map((record, index) => (
-            <MomentEmotionList
-              key={index}
-              emotionId={record.emotionId}
-              time={record.createdAt}
-              reasons={record.reasons}
-            />
+            <m.div
+              key={record.createdAt}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25, delay: index * 0.05 }}
+              className="w-full"
+            >
+              <MomentEmotionList emotionId={record.emotionId} time={record.createdAt} reasons={record.reasons} />
+            </m.div>
           ))}
         </ul>
       )}

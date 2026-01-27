@@ -3,6 +3,8 @@
  * Request and response types for AI endpoints
  */
 
+import type { EmotionId } from '@zerogravity/shared/entities/emotion';
+
 /**
  * GET /ai/period-analyses
  * Get AI emotion analysis summary for a period
@@ -53,7 +55,7 @@ export interface EmotionPredictionResponse {
   /** Snowflake ID as string */
   analysisId: string;
   /** Suggested emotion ID (0-6), null if user already provided */
-  suggestedEmotionId?: number | null;
+  suggestedEmotionId?: EmotionId | null;
   /** Suggested reasons, null if user already provided */
   suggestedReasons?: string[] | null;
   /** Refined diary entry */

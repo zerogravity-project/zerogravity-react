@@ -1,11 +1,11 @@
 'use client';
 
 import { Heading } from '@radix-ui/themes';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -16,28 +16,28 @@ interface OnboardingMessagesProps {
   messageIndex: number;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function OnboardingMessages({ message, messageIndex }: OnboardingMessagesProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const isSm = useIsSm();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------
    */
   return (
     <AnimatePresence mode="wait">
-      <motion.div
+      <m.div
         key={messageIndex}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -48,7 +48,7 @@ export default function OnboardingMessages({ message, messageIndex }: Onboarding
         <Heading size={isSm ? '7' : '8'} weight="medium">
           {message}
         </Heading>
-      </motion.div>
+      </m.div>
     </AnimatePresence>
   );
 }

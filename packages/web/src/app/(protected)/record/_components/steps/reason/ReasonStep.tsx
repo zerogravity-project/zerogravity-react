@@ -2,13 +2,15 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button, Heading, Text } from '@radix-ui/themes';
+import { Heading, Text } from '@radix-ui/themes';
 import { isToday } from 'date-fns';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { useCreateEmotionRecordMutation } from '@/services/emotion/emotion.query';
 
 import GeminiButton from '../../../../../_components/ui/button/GeminiButton';
@@ -16,43 +18,52 @@ import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext
 
 import ReasonSelection from './ReasonSelection';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function ReasonStep() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const router = useRouter();
+  const { openAlertModal } = useModal();
   const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
    */
-  const { mutate: createEmotionRecord, isPending: isCreatingEmotionRecord } = useCreateEmotionRecordMutation({
+  const {
+    mutate: createEmotionRecord,
+    isPending: isCreatingEmotionRecord,
+    isSuccess: isCreateSuccess,
+  } = useCreateEmotionRecordMutation({
     onSuccess: () => {
       router.push('/profile/calendar');
     },
     onError: error => {
-      console.error('Failed to create emotion record:', error);
+      console.error('[ReasonStep] Failed to create emotion record:', error);
+      openAlertModal({
+        title: 'Save Failed',
+        description: error.response?.data?.message || 'Failed to save your emotion record. Please try again.',
+      });
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
    */
   const isTodayDate = date ? isToday(new Date(date)) : false;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Event Handlers
    * --------------------------------------------
@@ -68,7 +79,7 @@ export default function ReasonStep() {
     });
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Return
    * --------------------------------------------
@@ -100,38 +111,39 @@ export default function ReasonStep() {
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
         <GeminiButton className="mobile:!hidden" onClick={nextStep}>
-          Skip and use AI Prediction with Gemini
+          Use AI Prediction with Gemini
         </GeminiButton>
 
         <div className="flex w-full items-center gap-3">
-          <Button
+          <MotionButton
             onClick={prevStep}
             variant="surface"
-            className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
             color={EMOTION_STEPS[emotionId].color}
             size="4"
             radius="none"
+            aria-label="Go to previous step"
           >
             <Icon>arrow_back</Icon>
-          </Button>
+          </MotionButton>
           <div className="w-full">
-            <Button
+            <MotionButton
               onClick={isFinalStep ? handleSubmit : nextStep}
-              className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+              className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
               color={EMOTION_STEPS[emotionId].color}
               size="4"
               radius="none"
-              disabled={!canGoNext || isCreatingEmotionRecord}
+              disabled={!canGoNext || isCreatingEmotionRecord || isCreateSuccess}
               loading={isCreatingEmotionRecord}
             >
               {isFinalStep ? 'Submit' : 'Next'}
               <Icon>{isFinalStep ? 'check' : 'arrow_forward'}</Icon>
-            </Button>
+            </MotionButton>
           </div>
         </div>
 
         <GeminiButton className="max-mobile:!hidden" onClick={nextStep}>
-          Skip and use AI Prediction with Gemini
+          Use AI Prediction with Gemini
         </GeminiButton>
       </div>
     </>

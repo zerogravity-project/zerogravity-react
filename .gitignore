@@ -11,6 +11,9 @@ node_modules/
 
 # testing
 coverage/
+playwright-report/
+test-results/
+.auth/
 
 # next.js
 .next/
@@ -57,3 +60,9 @@ Thumbs.db
 # claude
 .claude/
 CLAUDE.md
+
+# plan
+docs/*
+
+# Sentry
+.env.sentry-build-plugin

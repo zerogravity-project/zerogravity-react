@@ -2,29 +2,37 @@
 
 import { useState } from 'react';
 
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { usePredictEmotionMutation } from '@/services/ai/ai.query';
 
 import AiPredictionInput from './_components/AiPredictionInput';
 import AiPredictionLoading from './_components/AiPredictionLoading';
 import AiPredictionResult from './_components/AiPredictionResult';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function AiPredictionStep() {
-  /**
+  /*
    * --------------------------------------------
-   * 1. States
+   * 1. External Hooks
+   * --------------------------------------------
+   */
+  const { openAlertModal } = useModal();
+
+  /*
+   * --------------------------------------------
+   * 2. States
    * --------------------------------------------
    */
   const [aiPredictionEntry, setAiPredictionEntry] = useState<string>('');
 
-  /**
+  /*
    * --------------------------------------------
-   * 2. Query Hooks
+   * 3. Query Hooks
    * --------------------------------------------
    */
 
@@ -37,22 +45,26 @@ export default function AiPredictionStep() {
     reset: resetPredictEmotionMutation,
   } = usePredictEmotionMutation({
     onError: error => {
-      console.error(error);
+      console.error('[AiPredictionStep] Failed to predict emotion:', error);
+      openAlertModal({
+        title: 'Prediction Failed',
+        description: error.response?.data?.message || 'Failed to analyze your text. Please try again.',
+      });
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
-   * 3. Derived Values
+   * 4. Derived Values
    * --------------------------------------------
    */
 
   /** Extract prediction data from mutation response */
   const predictionData = predictEmotionData?.data;
 
-  /**
+  /*
    * --------------------------------------------
-   * 4. Return
+   * 5. Return
    * --------------------------------------------
    */
 

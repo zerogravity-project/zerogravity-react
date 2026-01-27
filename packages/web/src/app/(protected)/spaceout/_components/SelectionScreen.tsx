@@ -2,20 +2,21 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Button, Heading, Text } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { Heading, Text } from '@radix-ui/themes';
+import { m } from 'motion/react';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function SelectionScreen() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -23,7 +24,7 @@ export default function SelectionScreen() {
   const router = useRouter();
   const isSm = useIsSm();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Event Handlers
    * --------------------------------------------
@@ -39,13 +40,13 @@ export default function SelectionScreen() {
     router.push('/record');
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
    */
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5 }}
@@ -64,12 +65,7 @@ export default function SelectionScreen() {
         </div>
 
         <div className="flex w-full flex-col gap-3 sm:gap-4">
-          <Button
-            size="4"
-            variant="surface"
-            className="!h-auto !cursor-pointer !py-4 sm:!py-6"
-            onClick={handleWatchVideo}
-          >
+          <MotionButton size="4" variant="surface" className="!h-auto !py-4 sm:!py-6" onClick={handleWatchVideo}>
             <div className="flex flex-col items-center gap-1">
               <div className="flex items-center gap-2">
                 <Icon>play_circle</Icon>
@@ -81,9 +77,9 @@ export default function SelectionScreen() {
                 Clear your mind before recording
               </Text>
             </div>
-          </Button>
+          </MotionButton>
 
-          <Button size="4" variant="soft" className="!h-auto !cursor-pointer !py-4 sm:!py-6" onClick={handleRecordNow}>
+          <MotionButton size="4" variant="soft" className="!h-auto !py-4 sm:!py-6" onClick={handleRecordNow}>
             <div className="flex flex-col items-center gap-1">
               <div className="flex items-center gap-2">
                 <Icon>edit_note</Icon>
@@ -95,9 +91,9 @@ export default function SelectionScreen() {
                 Start tracking your emotions immediately
               </Text>
             </div>
-          </Button>
+          </MotionButton>
         </div>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

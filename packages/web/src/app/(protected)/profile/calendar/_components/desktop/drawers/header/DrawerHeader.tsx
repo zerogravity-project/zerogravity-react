@@ -5,7 +5,7 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useCalendar } from '../../../../_contexts/CalendarContext';
 import { getMonthName } from '../../../../_utils/dateUtils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -15,21 +15,21 @@ interface DrawerHeaderProps {
   onClose: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DrawerHeader({ onClose }: DrawerHeaderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { selectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -38,7 +38,7 @@ export default function DrawerHeader({ onClose }: DrawerHeaderProps) {
   const selectedMonthString = getMonthName(selectedDate);
   const selectedYear = selectedDate.getFullYear();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

@@ -10,7 +10,7 @@ import { useUpdateConsentMutation } from '@/services/user/user.query';
 import { useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -20,22 +20,22 @@ interface AiConsentModalProps {
   onAgree: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function AiConsentModal({ onAgree }: AiConsentModalProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { update: updateSession } = useSession();
-  const { closeModal } = useModal();
+  const { closeModal, openAlertModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
@@ -58,10 +58,15 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
     },
     onError: error => {
       console.error('[AiConsentModal] Failed to update consent:', error);
+      closeModal(); // Close AiConsentModal first
+      openAlertModal({
+        title: 'Update Failed',
+        description: error.response?.data?.message || 'Failed to update consent. Please try again.',
+      });
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

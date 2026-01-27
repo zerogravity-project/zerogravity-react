@@ -13,7 +13,7 @@ import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 import type { VerifyAuthRequest, VerifyAuthResponse } from './auth.dto';
 import { authService } from './auth.service';
 
-/**
+/*
  * ============================================
  * Hooks
  * ============================================

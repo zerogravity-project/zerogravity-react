@@ -60,6 +60,12 @@ declare module 'next-auth' {
     backendJwt?: string;
 
     /**
+     * Refresh token from backend server
+     * Used to refresh expired backend JWT
+     */
+    refreshToken?: string;
+
+    /**
      * Error message if authentication failed
      */
     error?: string;
@@ -102,6 +108,18 @@ declare module 'next-auth/jwt' {
      * Contains userId and other user info
      */
     backendJwt?: string;
+
+    /**
+     * Refresh token from backend server
+     * Used to refresh expired backend JWT
+     */
+    refreshToken?: string;
+
+    /**
+     * Expiration timestamp of backend JWT
+     * Used to determine when to refresh the token
+     */
+    backendJwtExpiresAt?: number;
 
     /**
      * Flag indicating if user is newly created

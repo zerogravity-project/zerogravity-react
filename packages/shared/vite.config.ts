@@ -22,8 +22,15 @@ export default defineConfig({
   build: {
     lib: {
       entry: {
+        'entities/emotion/index': path.resolve(__dirname, 'entities/emotion/index.ts'),
+        'components/ui/button/index': path.resolve(__dirname, 'components/ui/button/index.ts'),
         'components/ui/clock/index': path.resolve(__dirname, 'components/ui/clock/index.ts'),
-        'components/ui/emotion/index': path.resolve(__dirname, 'components/ui/emotion/index.ts'),
+        'components/ui/emotion/scene/index': path.resolve(__dirname, 'components/ui/emotion/scene/index.ts'),
+        'components/ui/emotion/decorations/index': path.resolve(
+          __dirname,
+          'components/ui/emotion/decorations/index.ts'
+        ),
+        'components/ui/emotion/null/index': path.resolve(__dirname, 'components/ui/emotion/null/index.ts'),
         'components/ui/footer/index': path.resolve(__dirname, 'components/ui/footer/index.ts'),
         'components/ui/icon/index': path.resolve(__dirname, 'components/ui/icon/index.ts'),
         'components/ui/logo/index': path.resolve(__dirname, 'components/ui/logo/index.ts'),
@@ -32,6 +39,7 @@ export default defineConfig({
         'components/providers/index': path.resolve(__dirname, 'components/providers/index.ts'),
         'hooks/index': path.resolve(__dirname, 'hooks/index.ts'),
         'utils/index': path.resolve(__dirname, 'utils/index.ts'),
+        'config/index': path.resolve(__dirname, 'config/index.ts'),
       },
       formats: ['es'],
       fileName: (_format, entryName) => `${entryName}.js`,
@@ -56,7 +64,8 @@ export default defineConfig({
         'date-fns',
       ],
       output: {
-        preserveModules: false,
+        preserveModules: true,
+        preserveModulesRoot: '.',
         assetFileNames: '[name].[ext]',
         globals: {
           react: 'React',

@@ -1,8 +1,10 @@
 import { cn } from '@zerogravity/shared/utils';
 
+import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
+
 import { EmotionChartHeader } from '../header/EmotionChartHeader';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -12,15 +14,23 @@ interface EmotionChartContainerProps {
   title: string;
   children: React.ReactNode;
   className?: string;
+  isError?: boolean;
+  onRetry?: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
-export function EmotionChartContainer({ title, children, className }: EmotionChartContainerProps) {
+export function EmotionChartContainer({
+  title,
+  children,
+  className,
+  isError = false,
+  onRetry,
+}: EmotionChartContainerProps) {
   return (
     <div
       className={cn(
@@ -29,7 +39,10 @@ export function EmotionChartContainer({ title, children, className }: EmotionCha
       )}
     >
       <EmotionChartHeader title={title} />
-      {children}
+      {/* Error state */}
+      {isError && onRetry && <QueryErrorState onRetry={onRetry} />}
+      {/* Content */}
+      {!isError && children}
     </div>
   );
 }

@@ -10,8 +10,8 @@ import type { AxiosError } from 'axios';
 
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
-import { AI_QUERY_KEY } from '../ai/ai.query';
-import { CHART_QUERY_KEY } from '../chart/chart.query';
+import { AI_QUERY_KEY } from '../ai/ai.keys';
+import { CHART_QUERY_KEY } from '../chart/chart.keys';
 
 import type {
   CreateEmotionRecordRequest,
@@ -19,18 +19,10 @@ import type {
   GetEmotionRecordsParams,
   UpdateEmotionRecordRequest,
 } from './emotion.dto';
+import { EMOTION_QUERY_KEY } from './emotion.keys';
 import { emotionService } from './emotion.service';
 
-/**
- * ============================================
- * Query Keys
- * ============================================
- */
-export const EMOTION_QUERY_KEY = {
-  RECORDS: 'emotionRecords',
-} as const;
-
-/**
+/*
  * ============================================
  * Hooks
  * ============================================

@@ -1,12 +1,12 @@
 'use client';
 
 import { Text } from '@radix-ui/themes';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { useEffect, useState } from 'react';
 
 import { PlanetLoading } from '@zerogravity/shared/components/ui/loading';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -22,21 +22,21 @@ const LOADING_MESSAGES = [
   'Painting your day with light...',
 ];
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function AiPredictionLoading() {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [messageIndex, setMessageIndex] = useState(0);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Effects
    * --------------------------------------------
@@ -51,7 +51,7 @@ export default function AiPredictionLoading() {
     return () => clearInterval(interval);
   }, []);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
@@ -63,7 +63,7 @@ export default function AiPredictionLoading() {
       {/* Animated text carousel */}
       <div className="relative h-12 overflow-hidden">
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={messageIndex}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -73,7 +73,7 @@ export default function AiPredictionLoading() {
             <Text color="gray" className="mobile:text-base text-md text-center font-light">
               {LOADING_MESSAGES[messageIndex]}
             </Text>
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </div>
     </div>

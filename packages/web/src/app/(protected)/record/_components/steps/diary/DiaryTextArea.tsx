@@ -1,24 +1,24 @@
 import { TextArea } from '@radix-ui/themes';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_COLORS } from '@zerogravity/shared/entities/emotion';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function DiaryTextArea() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { diaryEntry, setDiaryEntry, emotionValueToStepIndex } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------
@@ -31,7 +31,7 @@ export default function DiaryTextArea() {
         placeholder="What made you feel this way? What happened today?"
         size="3"
         radius="full"
-        color={EMOTION_STEPS[emotionValueToStepIndex].color}
+        color={EMOTION_COLORS[emotionValueToStepIndex]}
         className="h-full !min-h-[150px] !w-full !shadow-none [&_textarea]:!px-5 [&_textarea]:!py-3.5"
       />
     </div>

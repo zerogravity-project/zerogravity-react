@@ -2,44 +2,67 @@
 
 import { useRouter } from 'next/navigation';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 import { useRef } from 'react';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
 import { useScroll } from '@/app/_hooks/useScroll';
 
-import { useEmotionRecordContext } from '../_contexts/EmotionRecordContext';
+import { RecordStep, useEmotionRecordContext } from '../_contexts/EmotionRecordContext';
 
 import AiPredictionStep from './steps/ai-prediction/AiPredictionStep';
 import DiaryStep from './steps/diary/DiaryStep';
 import EmotionStep from './steps/emotion/EmotionStep';
 import ReasonStep from './steps/reason/ReasonStep';
 
-/**
+/*
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
+/** Step-specific container class names */
+const STEP_CLASS_NAMES: Record<RecordStep, string> = {
+  emotion: 'flex h-full w-full flex-col items-center',
+  reason: 'flex w-full flex-1 flex-col items-center',
+  diary: 'flex w-full flex-1 flex-col items-center',
+  'ai-prediction': 'flex min-h-0 w-full flex-1 flex-col items-center overflow-hidden',
+};
+
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function EmotionRecord() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const router = useRouter();
-  const { currentStep, prevStep } = useEmotionRecordContext();
+  const { currentStep, displayStep, prevStep, onStepExitComplete } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
-   * 3. Custom Hooks
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+
+  /** Whether exit animation is in progress */
+  const isExiting = currentStep !== displayStep;
+
+  /*
+   * --------------------------------------------
+   * 4. Custom Hooks
    * --------------------------------------------
    */
   const { isScrolling } = useScroll({
@@ -47,9 +70,9 @@ export default function EmotionRecord() {
     enable: true,
   });
 
-  /**
+  /*
    * --------------------------------------------
-   * 4. Event Handlers
+   * 5. Event Handlers
    * --------------------------------------------
    */
 
@@ -62,9 +85,9 @@ export default function EmotionRecord() {
     prevStep();
   };
 
-  /**
+  /*
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return (
@@ -78,57 +101,26 @@ export default function EmotionRecord() {
         shadow={isScrolling}
       />
       <div ref={scrollRef} className="flex h-full w-full flex-col items-center justify-between">
-        {/* Step Content */}
-        <AnimatePresence mode="wait">
-          {currentStep === 'emotion' && (
-            <motion.div
-              key="emotion"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex h-full w-full flex-col items-center"
-            >
-              <EmotionStep />
-            </motion.div>
-          )}
-          {currentStep === 'reason' && (
-            <motion.div
-              key="reason"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex w-full flex-1 flex-col items-center"
-            >
-              <ReasonStep />
-            </motion.div>
-          )}
-          {currentStep === 'diary' && (
-            <motion.div
-              key="diary"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex w-full flex-1 flex-col items-center"
-            >
-              <DiaryStep />
-            </motion.div>
-          )}
-
-          {currentStep === 'ai-prediction' && (
-            <motion.div
-              key="ai-prediction"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="flex min-h-0 w-full flex-1 flex-col items-center overflow-hidden"
-            >
-              <AiPredictionStep />
-            </motion.div>
-          )}
+        {/*
+         * Step Content
+         * - key={currentStep} triggers exit animation when step changes
+         * - displayStep determines which content to render (stays previous during exit)
+         * - onExitComplete syncs displayStep after fade out completes
+         */}
+        <AnimatePresence mode="wait" onExitComplete={onStepExitComplete}>
+          <m.div
+            key={currentStep}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isExiting ? 0 : 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className={STEP_CLASS_NAMES[displayStep]}
+          >
+            {displayStep === 'emotion' && <EmotionStep />}
+            {displayStep === 'reason' && <ReasonStep />}
+            {displayStep === 'diary' && <DiaryStep />}
+            {displayStep === 'ai-prediction' && <AiPredictionStep />}
+          </m.div>
         </AnimatePresence>
       </div>
     </>

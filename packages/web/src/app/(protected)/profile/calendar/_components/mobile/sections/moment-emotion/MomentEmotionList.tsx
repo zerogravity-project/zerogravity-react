@@ -3,13 +3,13 @@
 import { Badge, Text } from '@radix-ui/themes';
 import { useMemo } from 'react';
 
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 
 import { formatTime } from '../../../../_utils/dateUtils';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -17,26 +17,26 @@ import { formatTime } from '../../../../_utils/dateUtils';
 
 const REASON_LISTS = ['Health', 'Fitness', 'Self-care', 'Hobby', 'Identity', 'Religion'];
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
  */
 
 interface MomentEmotionListProps {
-  emotionId: number;
+  emotionId: EmotionId;
   time: string;
   reasons: string[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function MomentEmotionList({ emotionId, time, reasons }: MomentEmotionListProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Computed Values
    * --------------------------------------------
@@ -47,7 +47,7 @@ export default function MomentEmotionList({ emotionId, time, reasons }: MomentEm
     return Math.floor(Math.random() * 7);
   }, []);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -57,7 +57,7 @@ export default function MomentEmotionList({ emotionId, time, reasons }: MomentEm
   const reasonList = reasons ? reasons : REASON_LISTS;
   const formattedTime = time ? formatTime(new Date(time)) : formatTime(new Date());
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

@@ -1,17 +1,17 @@
 import { Badge, Text, Theme } from '@radix-ui/themes';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
+import { EmotionPlanetNull } from '@zerogravity/shared/components/ui/emotion/null';
+import { EmotionPlanetScene } from '@zerogravity/shared/components/ui/emotion/scene';
 import {
   EMOTION_COLORS,
   EMOTION_STEPS,
-  EmotionId,
-  EmotionPlanetNull,
-  EmotionPlanetScene,
-  EmotionReason,
-} from '@zerogravity/shared/components/ui/emotion';
+  type EmotionId,
+  type EmotionReason,
+} from '@zerogravity/shared/entities/emotion';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -20,23 +20,24 @@ import { cn } from '@zerogravity/shared/utils';
 interface DailyEmotionSectionProps {
   emotionId?: EmotionId;
   emotionReasons?: EmotionReason[];
+  isOpen?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
-export default function DailyEmotionSection({ emotionId, emotionReasons }: DailyEmotionSectionProps) {
-  /**
+export default function DailyEmotionSection({ emotionId, emotionReasons, isOpen = true }: DailyEmotionSectionProps) {
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { accentColor } = useTheme();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -45,7 +46,7 @@ export default function DailyEmotionSection({ emotionId, emotionReasons }: Daily
   const accentEmotionId = EMOTION_COLORS.indexOf(accentColor);
   const emotionColor = !isEmpty ? EMOTION_STEPS[emotionId].color : EMOTION_STEPS[accentEmotionId].color;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
@@ -64,7 +65,14 @@ export default function DailyEmotionSection({ emotionId, emotionReasons }: Daily
         {/* Data state */}
         {!isEmpty && (
           <>
-            <EmotionPlanetScene emotionId={emotionId} width={240} height={240} isLoadingShowText={false} delay={500} />
+            <EmotionPlanetScene
+              emotionId={emotionId}
+              width={240}
+              height={240}
+              isLoadingShowText={false}
+              delay={500}
+              isFreeze={!isOpen}
+            />
             <Text color={emotionColor} size="7" weight="regular">
               {EMOTION_STEPS[emotionId].type}
             </Text>

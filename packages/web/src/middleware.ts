@@ -3,7 +3,7 @@
  * Protects routes, checks consent, and redirects appropriately
  */
 
-import type { NextRequest } from 'next/server';
+import type { NextAuthRequest } from 'next-auth';
 
 import { auth } from './lib/auth';
 
@@ -21,7 +21,7 @@ const REQUIRED_CONSENTS = ['termsAgreed', 'privacyAgreed', 'sensitiveDataConsent
  * Auth.js v5 Middleware
  * Protects routes, checks consent, and redirects appropriately
  */
-export default auth((req: NextRequest & { auth: any }) => {
+export default auth((req: NextAuthRequest) => {
   const isLoggedIn = !!req.auth;
   const pathname = req.nextUrl.pathname;
   const isLoginPage = pathname === '/login';
@@ -41,12 +41,18 @@ export default auth((req: NextRequest & { auth: any }) => {
     return Response.redirect(new URL(callbackUrl, req.nextUrl.origin));
   }
 
-  // 3. Logged in user without consent - redirect to consent page
-  if (isLoggedIn && !isConsentPage) {
+  // 3. Consent check for logged in users
+  if (isLoggedIn) {
     const consents = req.auth?.user?.consents;
     const hasAllConsents = REQUIRED_CONSENTS.every(consent => consents?.[consent as keyof typeof consents] === true);
 
-    if (!hasAllConsents) {
+    // 3-1. Already consented user trying to access consent page → redirect to home
+    if (isConsentPage && hasAllConsents) {
+      return Response.redirect(new URL('/', req.nextUrl.origin));
+    }
+
+    // 3-2. User without consent trying to access protected route → redirect to consent
+    if (!isConsentPage && !hasAllConsents) {
       return Response.redirect(new URL('/consent', req.nextUrl.origin));
     }
   }

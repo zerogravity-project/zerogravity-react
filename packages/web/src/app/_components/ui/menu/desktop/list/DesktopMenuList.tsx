@@ -2,7 +2,7 @@ import { MenuItem } from '@zerogravity/shared/components/ui/navigation';
 
 import { DesktopMenuListItem } from './DesktopMenuListItem';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -12,7 +12,7 @@ interface DesktopMenuListProps {
   menuItems: MenuItem[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================

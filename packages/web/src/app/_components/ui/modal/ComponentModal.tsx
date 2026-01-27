@@ -4,7 +4,7 @@ import { Dialog } from '@radix-ui/themes';
 
 import { ComponentModalConfig, useModal } from './_contexts/ModalContext';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -16,7 +16,7 @@ const MODAL_SIZE_MAP = {
   lg: '800px',
 };
 
-/**
+/*
  * ============================================
  * ComponentModal Component
  * ============================================
@@ -26,14 +26,14 @@ const MODAL_SIZE_MAP = {
  */
 
 export function ComponentModal() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { currentStateModal, closeModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -47,7 +47,7 @@ export function ComponentModal() {
   /** Map size to maxWidth */
   const maxWidth = config?.size ? MODAL_SIZE_MAP[config.size] : '500px';
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Event Handlers
    * --------------------------------------------
@@ -60,7 +60,7 @@ export function ComponentModal() {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------
@@ -69,7 +69,9 @@ export function ComponentModal() {
 
   return (
     <Dialog.Root open={isComponentModal} onOpenChange={handleOpenChange}>
-      <Dialog.Content maxWidth={maxWidth}>{config.component}</Dialog.Content>
+      <Dialog.Content maxWidth={maxWidth} className="max-mobile:!px-5">
+        {config.component}
+      </Dialog.Content>
     </Dialog.Root>
   );
 }

@@ -6,21 +6,21 @@ import OnboardingMessages from './_components/OnboardingMessages';
 import SelectionScreen from './_components/SelectionScreen';
 import { useOnboardingProgress } from './_hooks/useOnboardingProgress';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function SpaceoutPage() {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const { isLoading, showOnboarding, showSelection, currentMessage, currentMessageIndex } = useOnboardingProgress();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

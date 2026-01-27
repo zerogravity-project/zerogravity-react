@@ -3,9 +3,9 @@
 import { type ReactNode } from 'react';
 
 import { ThemeProvider } from '@zerogravity/shared/components/providers';
-import { type EmotionColor } from '@zerogravity/shared/components/ui/emotion';
+import { type EmotionColor } from '@zerogravity/shared/entities/emotion';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -13,7 +13,7 @@ import { type EmotionColor } from '@zerogravity/shared/components/ui/emotion';
 
 const WEB_APP_URL = import.meta.env.VITE_WEB_APP_URL || 'http://localhost:3000';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -23,7 +23,7 @@ interface ThemeProviderAdapterProps {
   children: ReactNode;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -35,7 +35,7 @@ interface ThemeProviderAdapterProps {
  * @param children - Child components to wrap
  */
 export function ThemeProviderAdapter({ children }: ThemeProviderAdapterProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Helper Functions
    * --------------------------------------------
@@ -81,7 +81,7 @@ export function ThemeProviderAdapter({ children }: ThemeProviderAdapterProps) {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

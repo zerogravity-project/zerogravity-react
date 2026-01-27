@@ -1,8 +1,8 @@
 'use client';
 
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -23,7 +23,7 @@ const BLOB_SCALE = [1, 1.03, 0.98, 1.02, 1];
 /** Hue rotation keyframes (degrees) */
 const HUE_ROTATE = [0, 45, 90, 45, 0];
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -36,7 +36,7 @@ interface PlanetLoadingProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -56,7 +56,7 @@ export function PlanetLoading({ size, className = '' }: PlanetLoadingProps) {
       style={size ? { width: size, height: size } : undefined}
     >
       {/* Glowing halo with blob morphing */}
-      <motion.div
+      <m.div
         className="absolute h-full w-full"
         animate={{
           borderRadius: BLOB_BORDER_RADIUS,
@@ -71,7 +71,7 @@ export function PlanetLoading({ size, className = '' }: PlanetLoadingProps) {
         }}
       >
         {/* Spinning conic gradient glow */}
-        <motion.div
+        <m.div
           className="absolute -inset-4 opacity-90 blur-[30px]"
           style={{
             borderRadius: 'inherit',
@@ -84,7 +84,7 @@ export function PlanetLoading({ size, className = '' }: PlanetLoadingProps) {
             repeat: Infinity,
           }}
         />
-      </motion.div>
+      </m.div>
     </div>
   );
 }

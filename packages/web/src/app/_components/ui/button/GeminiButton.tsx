@@ -1,12 +1,12 @@
 import { Text } from '@radix-ui/themes';
 import { Responsive } from '@radix-ui/themes/dist/esm/props/prop-def.js';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 import { ReactNode } from 'react';
 
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -21,7 +21,7 @@ interface GeminiButtonProps {
   className?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -36,11 +36,16 @@ export default function GeminiButton({
   className,
 }: GeminiButtonProps) {
   return (
-    <div onClick={onClick} className={cn('flex items-center justify-center gap-2', className)}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn('inline-flex cursor-pointer items-center justify-center gap-2 bg-transparent', className)}
+      aria-label="View AI analysis"
+    >
       <GeminiLogo width={logoSize} />
 
       <Text size={textSize} className="cursor-pointer" color="gray" weight="light">
-        <motion.span
+        <m.span
           className={'inline-block bg-[length:200%_100%] bg-clip-text text-[var(--gray-a7)] hover:underline'}
           style={{
             backgroundImage:
@@ -68,8 +73,8 @@ export default function GeminiButton({
           }}
         >
           {children}
-        </motion.span>
+        </m.span>
       </Text>
-    </div>
+    </button>
   );
 }

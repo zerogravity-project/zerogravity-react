@@ -3,7 +3,7 @@ import { Text } from '@radix-ui/themes';
 import { cn } from '../../../../../utils';
 import { LinkProps } from '../../types/navigation.types';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -16,21 +16,21 @@ interface MenuListItemProps {
   LinkComponent: React.ComponentType<LinkProps>;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function MenuListItem({ href, label, currentPath, LinkComponent }: MenuListItemProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Derived Values
    * --------------------------------------------
    */
   const isActive = currentPath === href;
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

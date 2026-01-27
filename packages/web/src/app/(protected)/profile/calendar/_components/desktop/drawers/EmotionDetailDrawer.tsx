@@ -1,9 +1,9 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
-import { useRef } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { useEffect, useRef, useState } from 'react';
 
-import { EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
+import type { EmotionId, EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn, formatDateString, isSameDay } from '@zerogravity/shared/utils';
 
@@ -18,7 +18,7 @@ import DailyEmotionSection from './sections/daily-emotion/DailyEmotionSection';
 import DiarySection from './sections/diary/DiarySection';
 import MomentEmotionSection from './sections/moment-emotion/MomentEmotionSection';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -33,7 +33,7 @@ interface EmotionDetailDrawerProps {
   momentEmotionRecords?: EmotionRecordDetail[];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -47,14 +47,15 @@ export default function EmotionDetailDrawer({
   diaryEntry,
   momentEmotionRecords,
 }: EmotionDetailDrawerProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [isExiting, setIsExiting] = useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. External Hooks
    * --------------------------------------------
@@ -62,7 +63,7 @@ export default function EmotionDetailDrawer({
   const { selectedDate } = useCalendar();
   const isOverLargeScreen = !useIsLg();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -73,9 +74,30 @@ export default function EmotionDetailDrawer({
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
-  /**
+  /*
    * --------------------------------------------
-   * 4. Derived Values
+   * 4. Effects
+   * --------------------------------------------
+   */
+  /** Close drawer on Escape key press */
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  /** Reset exiting state when drawer opens */
+  useEffect(() => {
+    if (isOpen) setIsExiting(false);
+  }, [isOpen]);
+
+  /*
+   * --------------------------------------------
+   * 5. Derived Values
    * --------------------------------------------
    */
   const selectedDateString = formatDateString(selectedDate);
@@ -87,7 +109,7 @@ export default function EmotionDetailDrawer({
     ? {
         initial: { width: 0 },
         animate: { width: 300 },
-        exit: { width: 0 },
+        exit: { width: 0, transition: { duration: 0.3, ease: [0.4, 0, 1, 1] as const } },
         transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const },
       }
     : {
@@ -99,22 +121,27 @@ export default function EmotionDetailDrawer({
 
   const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
+    : 'top-topnav-height fixed right-0 z-101 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
-  /**
+  /*
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.aside
-          layout={isOverLargeScreen}
+        <m.aside
           {...wrapperAnimation}
+          onAnimationStart={definition => {
+            if (typeof definition === 'object' && 'width' in definition && definition.width === 0) {
+              setIsExiting(true);
+            }
+          }}
           className={wrapperClassName}
           role="dialog"
           aria-modal="true"
+          aria-label="Emotion details"
         >
           <div className="relative flex h-full w-[300px] flex-col border-l border-[var(--gray-3)] bg-[var(--gray-1)]">
             {/* Header - Fixed */}
@@ -130,7 +157,11 @@ export default function EmotionDetailDrawer({
                 linkText={isEmpty ? 'Add' : isToday ? 'Edit' : undefined}
                 href={`/record/daily?date=${selectedDateString}`}
               />
-              <DailyEmotionSection emotionId={dailyEmotionId} emotionReasons={dailyEmotionReasons} />
+              <DailyEmotionSection
+                emotionId={dailyEmotionId}
+                emotionReasons={dailyEmotionReasons}
+                isOpen={!isExiting}
+              />
 
               {/* Daily Note */}
               <SectionTitle
@@ -146,7 +177,7 @@ export default function EmotionDetailDrawer({
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
               {isScrollable && !isScrollAtBottom && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -156,7 +187,7 @@ export default function EmotionDetailDrawer({
               )}
             </div>
           </div>
-        </motion.aside>
+        </m.aside>
       )}
     </AnimatePresence>
   );

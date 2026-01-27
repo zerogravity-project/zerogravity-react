@@ -1,19 +1,29 @@
 import { Text } from '@radix-ui/themes';
 
-import { EMOTION_STEPS, EmotionId } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 
 import { Slider } from '@/app/_components/ui/slider/slider';
 
 import { useEmotionRecordContext } from '../../../_contexts/EmotionRecordContext';
 
-/**
+/*
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+interface EmotionSliderProps {
+  disabled?: boolean;
+}
+
+/*
  * ============================================
  * Component
  * ============================================
  */
 
-export default function EmotionSlider() {
-  /**
+export default function EmotionSlider({ disabled = false }: EmotionSliderProps) {
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
@@ -21,7 +31,7 @@ export default function EmotionSlider() {
   const { setEmotionId, emotionSliderValue, setEmotionSliderValue, emotionValueToStepIndex } =
     useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Event Handlers
    * --------------------------------------------
@@ -35,7 +45,7 @@ export default function EmotionSlider() {
     setEmotionId(emotionValueToStepIndex as EmotionId);
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
@@ -53,6 +63,9 @@ export default function EmotionSlider() {
           ringOffset: EMOTION_STEPS[emotionValueToStepIndex].style.slider.ringOffset,
         }}
         onValueCommit={handleValueCommit}
+        disabled={disabled}
+        aria-label="Emotion level selector"
+        aria-valuetext={EMOTION_STEPS[emotionValueToStepIndex].type}
       />
       <div className="flex w-full items-center justify-between px-2">
         <Text color="gray" size="1">

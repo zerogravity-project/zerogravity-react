@@ -2,7 +2,7 @@ import { Dialog } from '@radix-ui/themes';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -13,21 +13,21 @@ interface ModalHeaderProps {
   description?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function ModalHeader({ title, description }: ModalHeaderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const isMobile = useIsMobile();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

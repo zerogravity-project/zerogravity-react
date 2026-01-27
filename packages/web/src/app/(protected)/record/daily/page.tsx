@@ -1,4 +1,6 @@
-import { endOfDay, format, startOfDay } from 'date-fns';
+import { redirect } from 'next/navigation';
+
+import { endOfDay, format, isToday, parseISO, startOfDay } from 'date-fns';
 
 import { getEmotionRecordsServer } from '@/services/emotion/emotion.service.server';
 
@@ -16,22 +18,24 @@ export default async function DailyRecordPage({ searchParams }: DailyRecordPageP
   const dateValue = date ?? null;
 
   // Fetch initial data on server if date is provided
+  // Throws on error → caught by error.tsx (daily records are one-per-date, empty form would fail)
   let existingRecord = null;
   if (date) {
-    try {
-      const startDateTime = format(startOfDay(date), "yyyy-MM-dd'T'HH:mm:ss");
-      const endDateTime = format(endOfDay(date), "yyyy-MM-dd'T'HH:mm:ss");
+    const startDateTime = format(startOfDay(date), "yyyy-MM-dd'T'HH:mm:ss");
+    const endDateTime = format(endOfDay(date), "yyyy-MM-dd'T'HH:mm:ss");
 
-      const response = await getEmotionRecordsServer({
-        startDateTime,
-        endDateTime,
-      });
+    const response = await getEmotionRecordsServer({
+      startDateTime,
+      endDateTime,
+    });
 
-      // Get existing daily record for this date (should be max 1)
-      existingRecord = response.data.daily[0] || null;
-    } catch (error) {
-      console.error('Failed to fetch emotion records:', error);
-    }
+    // Get existing daily record for this date (should be max 1)
+    existingRecord = response.data.daily[0] || null;
+  }
+
+  // Edit mode (existing record) only allowed for today's date
+  if (existingRecord && date && !isToday(parseISO(date))) {
+    redirect('/profile/calendar');
   }
 
   return (
