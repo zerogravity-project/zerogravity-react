@@ -5,7 +5,7 @@ import { Button, Dialog } from '@radix-ui/themes';
 import { AlertModalConfig, useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
 
-/**
+/*
  * ============================================
  * AlertModal Component
  * ============================================
@@ -14,14 +14,14 @@ import { ModalHeader } from './header/ModalHeader';
  */
 
 export function AlertModal() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { currentStateModal, closeModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -32,7 +32,7 @@ export function AlertModal() {
   /** Alert configuration from current modal */
   const config = isAlertModal ? (currentStateModal.config as AlertModalConfig) : null;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Event Handlers
    * --------------------------------------------
@@ -50,7 +50,7 @@ export function AlertModal() {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------
@@ -59,7 +59,7 @@ export function AlertModal() {
 
   return (
     <Dialog.Root open={isAlertModal} onOpenChange={handleOpenChange}>
-      <Dialog.Content maxWidth="500px">
+      <Dialog.Content maxWidth="500px" className="max-mobile:!px-5">
         <div className="flex flex-col gap-8 py-2">
           <ModalHeader title={config.title} description={config.description} />
 

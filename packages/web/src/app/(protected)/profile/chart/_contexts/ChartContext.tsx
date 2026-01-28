@@ -1,3 +1,8 @@
+/**
+ * [ChartContext]
+ * State management for emotion chart period and navigation
+ */
+
 'use client';
 
 import { format, startOfMonth, startOfWeek, startOfYear } from 'date-fns';
@@ -5,7 +10,7 @@ import { createContext, useCallback, useContext, useMemo, useState } from 'react
 
 import { formatDateRange, navigatePeriod } from '../_utils/dateUtils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -41,7 +46,7 @@ interface ChartProviderProps {
   children: React.ReactNode;
 }
 
-/**
+/*
  * ============================================
  * Context
  * ============================================
@@ -52,7 +57,7 @@ interface ChartProviderProps {
 
 const ChartContext = createContext<ChartContextType | undefined>(undefined);
 
-/**
+/*
  * ============================================
  * Provider
  * ============================================
@@ -64,7 +69,7 @@ const ChartContext = createContext<ChartContextType | undefined>(undefined);
  */
 
 export function ChartProvider({ children }: ChartProviderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -73,7 +78,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [timePeriod, setTimePeriod] = useState<TimePeriod>('week');
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Computed Values
    * --------------------------------------------
@@ -107,7 +112,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
     return prevDate >= twoYearsAgo;
   }, [currentDate, timePeriod, today]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Callbacks - Navigation
    * --------------------------------------------
@@ -132,7 +137,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
     setCurrentDate(today);
   }, [today]);
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Callbacks - Helpers
    * --------------------------------------------
@@ -157,7 +162,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
     }
   }, [timePeriod]);
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Context Value
    * --------------------------------------------
@@ -191,7 +196,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
     ]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------
@@ -199,7 +204,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
   return <ChartContext.Provider value={value}>{children}</ChartContext.Provider>;
 }
 
-/**
+/*
  * ============================================
  * Custom Hook
  * ============================================

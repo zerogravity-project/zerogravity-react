@@ -1,6 +1,11 @@
+/**
+ * [useClock hook]
+ * Real-time clock hook using requestAnimationFrame
+ */
+
 import { useEffect, useState } from 'react';
 
-/**
+/*
  * ============================================
  * Hook
  * ============================================
@@ -12,14 +17,14 @@ import { useEffect, useState } from 'react';
  * - Use with formatting utils (getTimeStringData, getDateStringData) where needed
  */
 export function useClock() {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [now, setNow] = useState<Date | null>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Effects
    * --------------------------------------------
@@ -41,7 +46,7 @@ export function useClock() {
     };
   }, []);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

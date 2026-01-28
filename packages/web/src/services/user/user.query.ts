@@ -11,19 +11,10 @@ import type { AxiosError } from 'axios';
 import type { ApiResponse, ErrorResponse } from '@/types/api.types';
 
 import type { DeleteUserResponse, UpdateConsentRequest, UpdateConsentResponse } from './user.dto';
+import { USER_QUERY_KEY } from './user.keys';
 import { userService } from './user.service';
 
-/**
- * ============================================
- * Query Keys
- * ============================================
- */
-
-export const USER_QUERY_KEY = {
-  PROFILE: 'userProfile',
-} as const;
-
-/**
+/*
  * ============================================
  * Hooks
  * ============================================

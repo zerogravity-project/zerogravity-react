@@ -1,23 +1,22 @@
-'use client';
-
 import { Avatar, Text } from '@radix-ui/themes';
-import { useSession } from 'next-auth/react';
 
-/**
+import { auth } from '@/lib/auth';
+
+/*
  * ============================================
  * Component
  * ============================================
  */
 
-export function DesktopMenuHeader() {
-  /**
+export async function DesktopMenuHeader() {
+  /*
    * --------------------------------------------
-   * 1. External Hooks
+   * 1. Server Data Fetching
    * --------------------------------------------
    */
-  const { data: session } = useSession();
+  const session = await auth();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -26,7 +25,7 @@ export function DesktopMenuHeader() {
   const displayName = session?.user?.name ?? 'ZeroGravity User';
   const email = session?.user?.email;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

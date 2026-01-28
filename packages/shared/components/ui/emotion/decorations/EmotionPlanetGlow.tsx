@@ -1,11 +1,10 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
-import { cn } from '../../../../utils/styleUtils';
-import { EMOTION_STEPS } from '../constants/emotion.constants';
+import { EMOTION_STEPS } from '../../../../entities/emotion';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -16,25 +15,43 @@ interface EmotionPlanetGlowProps {
   isVisible: boolean;
   width?: number | string;
   height?: number | string;
-  isLarge?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
-export function EmotionPlanetGlow({ emotionId, isVisible, width, height, isLarge = false }: EmotionPlanetGlowProps) {
-  /**
+/**
+ * Box-shadow based glow effect
+ * Uses multiple box-shadows for soft glow (more performant than CSS blur filter)
+ */
+export function EmotionPlanetGlow({ emotionId, isVisible, width, height }: EmotionPlanetGlowProps) {
+  /*
    * --------------------------------------------
    * 1. Derived Values
    * --------------------------------------------
    */
-  const resolvedWidth = isLarge && typeof width === 'number' ? width * 0.8 : width || '100%';
-  const resolvedHeight = isLarge && typeof height === 'number' ? height * 0.8 : height || '100%';
+  /** Shrink factor to match planet visual size within canvas */
+  const shrinkFactor = 0.765;
+  const baseWidth = width || '100%';
+  const baseHeight = height || '100%';
 
-  /**
+  /** Apply shrink factor for numeric/pixel values, keep percentage as-is */
+  const applyShrink = (value: number | string): number | string => {
+    if (typeof value === 'number') return value * shrinkFactor;
+    if (typeof value === 'string' && value.endsWith('px')) {
+      return `${parseFloat(value) * shrinkFactor}px`;
+    }
+    return `calc(${value} * ${shrinkFactor})`;
+  };
+
+  const resolvedWidth = applyShrink(baseWidth);
+  const resolvedHeight = applyShrink(baseHeight);
+  const color = EMOTION_STEPS[emotionId].color;
+
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------
@@ -42,23 +59,29 @@ export function EmotionPlanetGlow({ emotionId, isVisible, width, height, isLarge
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.5, ease: 'easeOut' }}
           className="pointer-events-none absolute inset-0 grid place-items-center"
-          style={{ zIndex: 0 }}
+          style={{ zIndex: 0, willChange: 'opacity' }}
         >
           <div
-            className={cn('translate-z-0 rounded-[9999px] blur-[22px]')}
+            className="translate-z-0 rounded-[9999px]"
             style={{
               width: resolvedWidth,
               height: resolvedHeight,
-              background: `radial-gradient(circle, var(--${EMOTION_STEPS[emotionId].color}-a9) 0%, var(--${EMOTION_STEPS[emotionId].color}-a5) 40%, var(--${EMOTION_STEPS[emotionId].color}-a3) 65%, var(--${EMOTION_STEPS[emotionId].color}-a1) 70%)`,
+              backgroundColor: `var(--${color}-a4)`,
+              boxShadow: `
+                0 0 50px 20px var(--${color}-a3),
+                0 0 90px 40px var(--${color}-a2),
+                0 0 135px 60px var(--${color}-a2),
+                0 0 180px 85px var(--${color}-a1)
+              `,
             }}
           />
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

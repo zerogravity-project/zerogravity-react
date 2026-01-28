@@ -3,8 +3,6 @@ import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
 
 import type { Metadata } from 'next';
 
-import ClientProviders from './_components/providers/ClientProviders';
-
 export interface CustomIconDescriptorType extends IconDescriptor {
   precedence?: string;
 }
@@ -15,25 +13,50 @@ const icon: CustomIconDescriptorType = {
   precedence: 'default',
 };
 
+/** OG Image URL on CDN */
+const OG_IMAGE_URL =
+  'https://axp1udgkvclx.objectstorage.ap-chuncheon-1.oci.customer-oci.com/n/axp1udgkvclx/b/zerogravity-static/o/og/og-image.png';
+
+/** App description for SEO */
+const APP_DESCRIPTION =
+  'ZeroGravity is an AI-powered emotion tracking app. Record your daily emotions with AI assistance, get AI-generated insights and period analysis, explore patterns through interactive charts, and visualize your emotional journey with stunning 3D planets.';
+
+/** JSON-LD Structured Data for SEO */
+const JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'ZeroGravity',
+  description: APP_DESCRIPTION,
+  applicationCategory: 'HealthApplication',
+  operatingSystem: 'Web',
+  url: 'https://www.zerogv.com',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD',
+  },
+};
+
 export const metadata: Metadata = {
+  metadataBase: new URL('https://www.zerogv.com'),
   title: {
     default: 'ZeroGravity',
     template: '%s | ZeroGravity',
   },
-  description:
-    'ZeroGravity is an emotion tracking and personal wellness application that helps users monitor their emotional states, visualize patterns, and receive personalized insights.',
+  description: APP_DESCRIPTION,
   keywords: [
     'emotion tracking',
+    'mood tracker',
+    'emotion diary',
+    'mental health app',
+    'AI emotion analysis',
+    'emotion visualization',
+    '3D emotion planets',
     'personal wellness',
-    'mental health',
-    'wellness',
     'mental wellness',
-    'mental health tracking',
-    'mental health tracking app',
-    'mental health tracking app',
-    'mental health tracking app',
+    'daily mood journal',
   ],
-  authors: [{ name: 'ZeroGravity', url: 'https://zerogravity.io' }],
+  authors: [{ name: 'ZeroGravity', url: 'https://www.zerogv.com' }],
   creator: 'ZeroGravity',
   publisher: 'ZeroGravity',
   applicationName: 'ZeroGravity',
@@ -44,8 +67,35 @@ export const metadata: Metadata = {
   icons: {
     other: icon,
   },
+  openGraph: {
+    title: 'ZeroGravity',
+    description: APP_DESCRIPTION,
+    url: 'https://www.zerogv.com',
+    siteName: 'ZeroGravity',
+    images: [
+      {
+        url: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt: 'ZeroGravity - Emotion Tracking',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ZeroGravity',
+    description: APP_DESCRIPTION,
+    images: [OG_IMAGE_URL],
+  },
 };
 
+/**
+ * Root layout
+ * Minimal - only html/body structure
+ * Providers are handled by route group layouts
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -53,8 +103,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head suppressHydrationWarning>
+        {/* Font preconnects */}
+        <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        {/* TypeKit (Helvetica Neue LT Pro) */}
+        <link rel="stylesheet" href="https://use.typekit.net/nrd4ucj.css" />
+      </head>
       <body>
-        <ClientProviders>{children}</ClientProviders>
+        {/* JSON-LD Structured Data */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }} />
+        {/* Skip Link for keyboard accessibility */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[9999] focus:rounded-md focus:bg-[var(--accent-9)] focus:px-4 focus:py-2 focus:text-white focus:outline-none"
+        >
+          Skip to main content
+        </a>
+        {children}
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import { Button, Text } from '@radix-ui/themes';
 
 import { useIsMobile } from '@zerogravity/shared/hooks';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -18,21 +18,21 @@ interface SettingActionProps {
   onClick?: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function SettingAction({ label, buttonText, variant = 'soft', color = 'gray', onClick }: SettingActionProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const isMobile = useIsMobile();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Return
    * --------------------------------------------

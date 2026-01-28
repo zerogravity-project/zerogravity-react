@@ -8,25 +8,27 @@ import { useState } from 'react';
 
 import { Logo } from '@zerogravity/shared/components/ui/logo';
 
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import type { UpdateConsentRequest } from '@/services/user/user.dto';
 import { useUpdateConsentMutation } from '@/services/user/user.query';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function ConsentPage() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const router = useRouter();
   const { update: updateSession } = useSession();
+  const { openAlertModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. States
    * --------------------------------------------
@@ -38,7 +40,7 @@ export default function ConsentPage() {
     aiAnalysisConsent: false,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Query Hooks
    * --------------------------------------------
@@ -55,18 +57,21 @@ export default function ConsentPage() {
     },
     onError: error => {
       console.error('[Consent] Failed to update consent:', error);
-      alert('Failed to save your consent preferences. Please try again.');
+      openAlertModal({
+        title: 'Update Failed',
+        description: error.response?.data?.message || 'Failed to save your consent preferences. Please try again.',
+      });
     },
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
    */
   const allRequiredConsentsChecked = consents.termsAgreed && consents.privacyAgreed && consents.sensitiveDataConsent;
 
-  /**
+  /*
    * --------------------------------------------
    * 5. Event Handlers
    * --------------------------------------------
@@ -76,14 +81,17 @@ export default function ConsentPage() {
   const handleSubmit = () => {
     // Validate required consents
     if (!consents.termsAgreed || !consents.privacyAgreed || !consents.sensitiveDataConsent) {
-      alert('Please agree to all required terms to continue.');
+      openAlertModal({
+        title: 'Required Agreements',
+        description: 'Please agree to all required terms to continue.',
+      });
       return;
     }
 
     updateConsent(consents);
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------

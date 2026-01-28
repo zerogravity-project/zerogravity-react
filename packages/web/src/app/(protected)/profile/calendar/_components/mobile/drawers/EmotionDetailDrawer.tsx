@@ -3,10 +3,10 @@
 import Link from 'next/link';
 
 import { Badge, Button, Heading, Text } from '@radix-ui/themes';
-import { AnimatePresence, motion } from 'motion/react';
-import { useRef } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { useEffect, useRef } from 'react';
 
-import { EMOTION_STEPS, EmotionId, EmotionReason } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 import { formatDateString, isSameDay } from '@zerogravity/shared/utils';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
@@ -15,7 +15,7 @@ import { useScroll } from '@/app/_hooks/useScroll';
 
 import { useCalendar } from '../../../_contexts/CalendarContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -29,7 +29,7 @@ interface EmotionDetailDrawerProps {
   diaryEntry: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -42,21 +42,21 @@ export default function EmotionDetailDrawer({
   reasons,
   diaryEntry,
 }: EmotionDetailDrawerProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. External Hooks
    * --------------------------------------------
    */
   const { selectedDate } = useCalendar();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -67,18 +67,34 @@ export default function EmotionDetailDrawer({
     enablePreventBackgroundScroll: isOpen,
   });
 
-  /**
+  /*
    * --------------------------------------------
-   * 4. Derived Values
+   * 4. Effects
+   * --------------------------------------------
+   */
+  /** Close drawer on Escape key press */
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  /*
+   * --------------------------------------------
+   * 5. Derived Values
    * --------------------------------------------
    */
   const selectedDateString = formatDateString(selectedDate);
   const isToday = isSameDay(selectedDate, new Date());
   const isEmpty = emotionId === undefined;
 
-  /**
+  /*
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return (
@@ -86,7 +102,7 @@ export default function EmotionDetailDrawer({
       {isOpen && (
         <>
           {/* Backdrop */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -96,13 +112,14 @@ export default function EmotionDetailDrawer({
           />
 
           {/* Drawer */}
-          <motion.aside
+          <m.aside
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 180 }}
             role="dialog"
             aria-modal="true"
+            aria-label="Emotion details"
             className="fixed top-0 right-0 z-9999 h-[100dvh] w-[100dvw] bg-[var(--gray-1)]"
           >
             <div className="flex h-full flex-col">
@@ -115,7 +132,7 @@ export default function EmotionDetailDrawer({
                 rightContent={
                   isToday ? (
                     <Link href={`/record/daily?date=${selectedDateString}`}>
-                      <Button variant="soft" radius="full" className="!cursor-pointer">
+                      <Button variant="soft" radius="full">
                         {!isEmpty ? 'Edit' : 'Add'}
                       </Button>
                     </Link>
@@ -153,7 +170,7 @@ export default function EmotionDetailDrawer({
                   </Heading>
                   {isToday && !isEmpty && (
                     <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
-                      <Button variant="soft" radius="full" className="!cursor-pointer">
+                      <Button variant="soft" radius="full">
                         Edit
                       </Button>
                     </Link>
@@ -174,7 +191,7 @@ export default function EmotionDetailDrawer({
                 </div>
               </div>
             </div>
-          </motion.aside>
+          </m.aside>
         </>
       )}
     </AnimatePresence>

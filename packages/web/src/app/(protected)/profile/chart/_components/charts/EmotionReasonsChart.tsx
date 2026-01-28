@@ -1,8 +1,9 @@
 'use client';
 
 import { ScrollArea, Text } from '@radix-ui/themes';
+import { m } from 'motion/react';
 
-import { useIsSm } from '@zerogravity/shared/hooks';
+import { EMOTION_REASONS } from '@zerogravity/shared/entities/emotion';
 
 import { useChartReasonQuery } from '@/services/chart/chart.query';
 
@@ -10,50 +11,88 @@ import { useChart } from '../../_contexts/ChartContext';
 
 import { EmotionChartContainer } from './common/EmotionChartContainer';
 
-/**
+/*
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+interface EmotionReasonsChartProps {
+  isReady?: boolean;
+}
+
+/*
+ * ============================================
+ * Constants
+ * ============================================
+ */
+
+/** Default reason data with count '-' */
+const DEFAULT_REASON_DATA = EMOTION_REASONS.map(label => ({ label, count: '-' }));
+
+/*
  * ============================================
  * Component
  * ============================================
  */
 
-export function EmotionReasonsChart() {
-  /**
+export function EmotionReasonsChart({ isReady = false }: EmotionReasonsChartProps) {
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
-  const isSm = useIsSm();
   const { timePeriod, startDate } = useChart();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Query Hooks
    * --------------------------------------------
    */
-  const { data: reasonData, isFetching: isReasonFetching } = useChartReasonQuery({ period: timePeriod, startDate });
+  const { data: reasonData, isError, refetch } = useChartReasonQuery({ period: timePeriod, startDate });
 
-  /**
+  /*
    * --------------------------------------------
-   * 3. Return
+   * 3. Derived Values
+   * --------------------------------------------
+   */
+
+  /** Use actual data or default (shows '-' counts while loading) */
+  const displayData = reasonData?.data ?? DEFAULT_REASON_DATA;
+
+  /*
+   * --------------------------------------------
+   * 4. Return
    * --------------------------------------------
    */
   return (
-    <EmotionChartContainer title="Emotion Reasons" className="max-mobile:max-h-[200px]">
-      <ScrollArea type="always" scrollbars="vertical" style={{ height: '100%' }}>
-        <div className="flex h-full min-h-0 w-full min-w-0 flex-col gap-3 pr-7">
-          {!isReasonFetching &&
-            reasonData?.data.map(reason => (
+    <EmotionChartContainer
+      title="Emotion Reasons"
+      className="max-mobile:max-h-[200px]"
+      isError={isError}
+      onRetry={refetch}
+    >
+      <m.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isReady ? 1 : 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="h-full min-h-0 overflow-hidden"
+      >
+        <ScrollArea type="always" scrollbars="vertical" style={{ height: '100%' }}>
+          <div className="flex h-full min-h-0 w-full min-w-0 flex-col gap-3 pr-7">
+            {displayData.map(reason => (
               <div key={reason.label} className="flex items-center justify-between">
-                <Text size={isSm ? '2' : '1'} weight="light">
+                <Text size="2" weight="light">
                   {reason.label}
                 </Text>
-                <Text size={isSm ? '2' : '1'} weight="regular" className="text-[var(--accent-9)]">
+                <Text size="2" weight="regular" className="text-[var(--accent-9)]">
                   {reason.count}
                 </Text>
               </div>
             ))}
-        </div>
-      </ScrollArea>
+          </div>
+        </ScrollArea>
+      </m.div>
     </EmotionChartContainer>
   );
 }

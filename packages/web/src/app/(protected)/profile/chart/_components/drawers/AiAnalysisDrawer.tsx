@@ -1,12 +1,13 @@
 import { Blockquote, Text } from '@radix-ui/themes';
 import { format } from 'date-fns';
-import { AnimatePresence, motion } from 'motion/react';
-import { useRef } from 'react';
+import { AnimatePresence, m } from 'motion/react';
+import { useEffect, useRef } from 'react';
 
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsLg } from '@zerogravity/shared/hooks';
 import { cn } from '@zerogravity/shared/utils';
 
+import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
 import { useScroll } from '@/app/_hooks/useScroll';
 import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
 
@@ -14,7 +15,7 @@ import { useChart } from '../../_contexts/ChartContext';
 
 import { ContentSkeleton, HeaderSkeleton } from './_components/AiAnalysisDrawerSkeleton';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -25,7 +26,7 @@ interface AiAnalysisDrawerProps {
   onClose: () => void;
 }
 
-/**
+/*
  * ============================================
  * Helper Functions
  * ============================================
@@ -68,21 +69,21 @@ function parseBoldMarkdown(text: string): (string | React.ReactElement)[] {
   return parts.length > 0 ? parts : [text];
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. External Hooks
    * --------------------------------------------
@@ -90,7 +91,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
   const isOverLargeScreen = !useIsLg();
   const { timePeriod, startDate } = useChart();
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Custom Hooks
    * --------------------------------------------
@@ -101,12 +102,17 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
   });
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Query Hooks
    * --------------------------------------------
    */
-  const { data: periodAnalysisData, isLoading } = usePeriodAnalysisQuery(
+  const {
+    data: periodAnalysisData,
+    isLoading,
+    isError,
+    refetch,
+  } = usePeriodAnalysisQuery(
     {
       period: timePeriod,
       startDate: startDate,
@@ -114,9 +120,25 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     isOpen
   );
 
-  /**
+  /*
    * --------------------------------------------
-   * 5. Derived Values
+   * 5. Effects
+   * --------------------------------------------
+   */
+  /** Close drawer on Escape key press */
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+    }
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  /*
+   * --------------------------------------------
+   * 6. Derived Values
    * --------------------------------------------
    */
 
@@ -137,7 +159,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
   const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'top-topnav-height fixed right-0 z-100 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
+    : 'top-topnav-height fixed right-0 z-101 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
 
   const startDateLabel = periodAnalysisData?.data.startDate
     ? format(new Date(periodAnalysisData.data.startDate), 'MMM d')
@@ -147,20 +169,20 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
     ? format(new Date(periodAnalysisData.data.endDate), 'MMM d, yyyy')
     : '—';
 
-  /**
+  /*
    * --------------------------------------------
-   * 6. Return
+   * 7. Return
    * --------------------------------------------
    */
   return (
     <AnimatePresence>
       {isOpen && (
-        <motion.aside
-          layout={isOverLargeScreen}
+        <m.aside
           {...wrapperAnimation}
           className={wrapperClassName}
           role="dialog"
           aria-modal="true"
+          aria-label="AI analysis"
         >
           <div className="relative flex h-full w-[360px] flex-col border-l border-[var(--gray-3)] bg-[var(--gray-1)]">
             {/* Header - Fixed */}
@@ -185,8 +207,12 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
             {/* Scrollable Content */}
             <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto pb-5">
+              {/* Loading state */}
               {isLoading && <ContentSkeleton />}
-              {!isLoading && (
+              {/* Error state */}
+              {!isLoading && isError && <QueryErrorState onRetry={refetch} />}
+              {/* Content */}
+              {!isLoading && !isError && (
                 <div className="flex flex-col gap-6 p-4">
                   <Blockquote size="2">{periodAnalysisData?.data.summary.overview}</Blockquote>
                   <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
@@ -204,7 +230,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
               {/* Gradient - Only show if content is scrollable and not at bottom */}
               {isScrollable && !isScrollAtBottom && (
-                <motion.div
+                <m.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
@@ -214,7 +240,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
               )}
             </div>
           </div>
-        </motion.aside>
+        </m.aside>
       )}
     </AnimatePresence>
   );

@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { cn } from '@zerogravity/shared/utils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -26,9 +26,13 @@ interface SliderProps extends React.ComponentProps<typeof SliderPrimitive.Root> 
   colors: SliderColorTokens;
   onValueCommit?: (values: number[]) => void;
   className?: string;
+  /** Accessible label for the slider */
+  'aria-label'?: string;
+  /** Human-readable value text (e.g., "Happy" instead of "67") */
+  'aria-valuetext'?: string;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -45,14 +49,14 @@ export function Slider({
   className,
   ...props
 }: SliderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
   const [isFocused, setIsFocused] = React.useState(false);
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Computed Values
    * --------------------------------------------
@@ -62,7 +66,7 @@ export function Slider({
     [value, defaultValue, min, max]
   );
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------
@@ -95,7 +99,7 @@ export function Slider({
           key={index}
           className={cn(
             'ring-offset-background block h-7.5 w-7.5 rounded-[9999px] border-[0.08px] border-[rgba(0,0,0,0.2)] bg-white transition-all disabled:pointer-events-none disabled:opacity-50',
-            'focus-visible:outline-none'
+            'focus-visible:!outline-none'
           )}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}

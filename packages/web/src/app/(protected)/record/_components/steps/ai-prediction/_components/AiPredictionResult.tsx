@@ -1,19 +1,19 @@
 'use client';
 
-import { Badge, Button, Heading, ScrollArea, Text } from '@radix-ui/themes';
+import { Badge, Heading, ScrollArea, Text } from '@radix-ui/themes';
 import { useCallback } from 'react';
 
-import type { EmotionId } from '@zerogravity/shared/components/ui/emotion';
-import { EMOTION_STEPS } from '@zerogravity/shared/components/ui/emotion';
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
+import { EMOTION_STEPS, type EmotionId, type EmotionReason } from '@zerogravity/shared/entities/emotion';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import type { EmotionPredictionResponse } from '@/services/ai/ai.dto';
 
-import { FINAL_STEP, useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
+import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -24,22 +24,21 @@ interface AiPredictionResultProps {
   resetPredictEmotionMutation: () => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export default function AiPredictionResult({ predictionData, resetPredictEmotionMutation }: AiPredictionResultProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
-  const { setEmotionId, setDiaryEntry, setEmotionReasons, setAiAnalysisId, goToStep, emotionRecordType } =
-    useEmotionRecordContext();
+  const { applyAiPrediction } = useEmotionRecordContext();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Callbacks
    * --------------------------------------------
@@ -47,31 +46,25 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
 
   /** Accept AI suggestion and apply to emotion record */
   const handleAccept = useCallback(() => {
-    // Apply AI suggestions to EmotionRecordContext
-    if (predictionData.suggestedEmotionId) {
-      setEmotionId(predictionData.suggestedEmotionId as EmotionId);
-    }
-    if (predictionData.suggestedReasons && predictionData.suggestedReasons.length > 0) {
-      setEmotionReasons(predictionData.suggestedReasons);
+    if (!predictionData.suggestedEmotionId || !predictionData.suggestedReasons) {
+      return;
     }
 
-    if (predictionData.refinedDiary) {
-      setDiaryEntry(predictionData.refinedDiary);
-    }
-    setAiAnalysisId(predictionData.analysisId);
-
-    // Go to Final Step
-    if (predictionData.suggestedEmotionId) {
-      goToStep(FINAL_STEP[emotionRecordType]);
-    }
-  }, [predictionData, setEmotionId, setEmotionReasons, setDiaryEntry, setAiAnalysisId, goToStep, emotionRecordType]);
+    // Apply AI prediction and navigate to final step
+    applyAiPrediction({
+      suggestedEmotionId: predictionData.suggestedEmotionId as EmotionId,
+      suggestedReasons: predictionData.suggestedReasons as EmotionReason[],
+      refinedDiary: predictionData.refinedDiary,
+      analysisId: predictionData.analysisId,
+    });
+  }, [predictionData, applyAiPrediction]);
 
   /** Reject AI suggestion and go back to manual selection */
   const handleReject = useCallback(() => {
     resetPredictEmotionMutation();
   }, [resetPredictEmotionMutation]);
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Derived Values
    * --------------------------------------------
@@ -83,7 +76,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
   /** Emotion color for styling */
   const emotionColor = emotionStep?.color;
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------
@@ -156,27 +149,28 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
 
       {/* Action Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
-        <Button
+        <MotionButton
           onClick={handleReject}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
           color={emotionColor}
           size="4"
           radius="none"
+          aria-label="Reject and go back"
         >
           <Icon>arrow_back</Icon>
-        </Button>
+        </MotionButton>
         <div className="w-full">
-          <Button
+          <MotionButton
             onClick={handleAccept}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
             color={emotionColor}
             size="4"
             radius="none"
           >
             Accept
             <Icon>check</Icon>
-          </Button>
+          </MotionButton>
         </div>
       </div>
     </>

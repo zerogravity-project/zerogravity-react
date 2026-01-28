@@ -1,10 +1,10 @@
 'use client';
 
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, m } from 'motion/react';
 
-import { EMOTION_STEPS } from '../constants/emotion.constants';
+import { EMOTION_STEPS } from '../../../../entities/emotion';
 
-/**
+/*
  * ============================================
  * Constants
  * ============================================
@@ -13,7 +13,7 @@ import { EMOTION_STEPS } from '../constants/emotion.constants';
 const CIRCLE_RADIUS = 45;
 const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS; // ≈ 283
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -27,7 +27,7 @@ interface EmotionPlanetLoadingProps {
   isShowText?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -43,7 +43,7 @@ export function EmotionPlanetLoading({
   return (
     <AnimatePresence>
       {isVisible && (
-        <motion.div
+        <m.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
@@ -61,7 +61,7 @@ export function EmotionPlanetLoading({
                 strokeWidth="1"
               />
               {/* Animated progress circle */}
-              <motion.circle
+              <m.circle
                 cx="50"
                 cy="50"
                 r={CIRCLE_RADIUS}
@@ -97,7 +97,7 @@ export function EmotionPlanetLoading({
               )}
             </svg>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );

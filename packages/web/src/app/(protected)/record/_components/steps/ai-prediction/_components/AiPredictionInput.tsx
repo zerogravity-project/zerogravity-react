@@ -1,9 +1,10 @@
 'use client';
 
-import { Button, Heading, Text, TextArea } from '@radix-ui/themes';
+import { Heading, Text, TextArea } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useCallback, useState } from 'react';
 
+import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
@@ -11,7 +12,7 @@ import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
 
 import { useEmotionRecordContext } from '../../../../_contexts/EmotionRecordContext';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -23,7 +24,7 @@ interface AiPredictionInputProps {
   setAiPredictionEntry: (value: string) => void;
 }
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -34,7 +35,7 @@ export default function AiPredictionInput({
   aiPredictionEntry,
   setAiPredictionEntry,
 }: AiPredictionInputProps) {
-  /**
+  /*
    * ------------------------------------------------------------
    * 1. External Hooks
    * ------------------------------------------------------------
@@ -43,14 +44,14 @@ export default function AiPredictionInput({
   const { openComponentModal } = useModal();
   const { goToStep } = useEmotionRecordContext();
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 2. States
    * ------------------------------------------------------------
    */
   const [isFocused, setIsFocused] = useState(false);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 3. Derived Values
    * ------------------------------------------------------------
@@ -58,7 +59,7 @@ export default function AiPredictionInput({
   const consents = session?.user?.consents;
   const isValid = aiPredictionEntry?.length >= 100 && aiPredictionEntry?.length <= 300;
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 4. Callbacks
    * ------------------------------------------------------------
@@ -94,7 +95,7 @@ export default function AiPredictionInput({
     predictEmotion({ diaryEntry: aiPredictionEntry });
   }, [aiPredictionEntry, isValid, predictEmotion, openComponentModal, consents?.aiAnalysisConsent]);
 
-  /**
+  /*
    * ------------------------------------------------------------
    * 5. Return
    * ------------------------------------------------------------
@@ -122,10 +123,13 @@ export default function AiPredictionInput({
             radius="full"
             className="!h-full !w-full !shadow-none [&_textarea]:!px-5 [&_textarea]:!py-3.5"
             color={!isValid && isFocused ? 'red' : undefined}
+            aria-required="true"
+            aria-describedby="ai-input-hint"
+            aria-invalid={!isValid && isFocused}
           />
 
           {!isValid && isFocused && (
-            <Text color="red" size="1" className="absolute bottom-4.5 left-5 pr-[100px]">
+            <Text id="ai-input-hint" color="red" size="1" className="absolute bottom-4.5 left-5 pr-[100px]">
               &#8251; Text has to be between 100 and 300 characters
             </Text>
           )}
@@ -140,18 +144,19 @@ export default function AiPredictionInput({
 
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
-        <Button
+        <MotionButton
           onClick={() => goToStep('emotion')}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !cursor-pointer"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
           size="4"
           radius="none"
+          aria-label="Go to previous step"
         >
           <Icon>arrow_back</Icon>
-        </Button>
+        </MotionButton>
         <div className="w-full">
-          <Button
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full !cursor-pointer"
+          <MotionButton
+            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
             size="4"
             radius="none"
             disabled={!isValid}
@@ -159,7 +164,7 @@ export default function AiPredictionInput({
           >
             Analyze with AI
             <Icon>auto_awesome</Icon>
-          </Button>
+          </MotionButton>
         </div>
       </div>
     </>

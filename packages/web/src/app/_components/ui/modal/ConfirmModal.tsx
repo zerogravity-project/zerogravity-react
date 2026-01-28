@@ -5,7 +5,7 @@ import { Button, Dialog } from '@radix-ui/themes';
 import { ConfirmModalConfig, useModal } from './_contexts/ModalContext';
 import { ModalHeader } from './header/ModalHeader';
 
-/**
+/*
  * ============================================
  * ConfirmModal Component
  * ============================================
@@ -14,14 +14,14 @@ import { ModalHeader } from './header/ModalHeader';
  */
 
 export function ConfirmModal() {
-  /**
+  /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { currentStateModal, closeModal } = useModal();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -32,7 +32,7 @@ export function ConfirmModal() {
   /** Confirm configuration from current modal */
   const config = isConfirmModal ? (currentStateModal.config as ConfirmModalConfig) : null;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Event Handlers
    * --------------------------------------------
@@ -57,7 +57,7 @@ export function ConfirmModal() {
     }
   };
 
-  /**
+  /*
    * --------------------------------------------
    * 4. Return
    * --------------------------------------------
@@ -66,7 +66,7 @@ export function ConfirmModal() {
 
   return (
     <Dialog.Root open={isConfirmModal} onOpenChange={handleOpenChange}>
-      <Dialog.Content maxWidth="500px">
+      <Dialog.Content maxWidth="500px" className="max-mobile:!px-5">
         <div className="flex flex-col gap-8 py-2">
           <ModalHeader title={config.title} description={config.description} />
 

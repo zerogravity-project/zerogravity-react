@@ -12,17 +12,12 @@ export interface ApiResponse<T> {
   timestamp: string;
 }
 
-/** API error response structure */
+/** API error response structure (matches backend ErrorResponse.java) */
 export interface ErrorResponse {
-  /** Always false for error responses */
-  success: false;
-  /** Error details */
-  error: {
-    /** Error code for identification */
-    code: string;
-    /** Human-readable error message */
-    message: string;
-  };
+  /** Error code for identification (e.g., "DAILY_ALREADY_EXISTS") */
+  error: string;
+  /** Human-readable error message */
+  message: string;
   /** ISO 8601 timestamp */
   timestamp: string;
 }

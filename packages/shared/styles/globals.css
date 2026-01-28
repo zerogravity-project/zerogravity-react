@@ -1,6 +1,6 @@
-/* Import Fonts */
-@import url('https://use.typekit.net/nrd4ucj.css');
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block');
+/* Fonts loaded via HTML <link> tags in each app for better performance */
+/* - Next.js: layout.tsx metadata/head */
+/* - Extension: index.html */
 
 /* Import Tailwind CSS and Radix UI Themes */
 @import 'tailwindcss';
@@ -40,6 +40,14 @@ button {
 
 .radix-themes {
   --cursor-button: pointer;
+  --cursor-checkbox: pointer;
+  --cursor-disabled: not-allowed;
+  --cursor-link: pointer;
+  --cursor-menu-item: pointer;
+  --cursor-radio: pointer;
+  --cursor-slider-thumb: grab;
+  --cursor-slider-thumb-active: grabbing;
+  --cursor-switch: pointer;
   --default-font-family: 'helvetica-neue-lt-pro', sans-serif;
   --heading-font-family: 'helvetica-neue-lt-pro', sans-serif;
   --code-font-family: 'helvetica-neue-lt-pro', sans-serif;
@@ -73,6 +81,19 @@ button {
     'opsz' 24;
 }
 
+/* Screen Reader Only (Tailwind v4 compatible) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* Hide Scrollbar */
 .hide-scrollbar {
   scrollbar-width: none;
@@ -88,3 +109,27 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Accessibility: Focus Visible Styles */
+/* Commented out: Radix Themes handles focus styles internally with --focus-8 */
+/* :focus-visible {
+  outline: 2px solid var(--accent-9);
+  outline-offset: 2px;
+} */
+
+/* Remove default focus outline (use focus-visible instead) */
+/* :focus:not(:focus-visible) {
+  outline: none;
+} */

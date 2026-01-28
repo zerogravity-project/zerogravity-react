@@ -1,13 +1,19 @@
+/**
+ * [CalendarContext]
+ * State management for emotion calendar navigation and selection
+ */
+
 'use client';
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
+import { useMediaQuery } from '@zerogravity/shared/hooks';
 import { isSameDay } from '@zerogravity/shared/utils';
 
 import { MONTH_NAMES } from '../_constants/calendar.constants';
 import { getMonthInfo as getMonthInfoUtil, getWeekOfMonth } from '../_utils/dateUtils';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -52,7 +58,7 @@ interface CalendarProviderProps {
   children: React.ReactNode;
 }
 
-/**
+/*
  * ============================================
  * Context
  * ============================================
@@ -63,7 +69,7 @@ interface CalendarProviderProps {
 
 const CalendarContext = createContext<CalendarContextType | undefined>(undefined);
 
-/**
+/*
  * ============================================
  * Provider
  * ============================================
@@ -74,7 +80,7 @@ const CalendarContext = createContext<CalendarContextType | undefined>(undefined
  * @param children - Child components to wrap
  */
 export function CalendarProvider({ children }: CalendarProviderProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
@@ -83,9 +89,26 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
   const [currentDate, setCurrentDate] = useState<Date>(today);
   const [selectedDate, setSelectedDate] = useState<Date>(today);
 
-  /**
+  const isMobile = useMediaQuery('(max-width: 480px)');
+  const prevIsMobileRef = useRef(isMobile);
+
+  /*
    * --------------------------------------------
-   * 2. Callbacks - Navigation
+   * 2. Effects
+   * --------------------------------------------
+   */
+
+  /** Sync currentDate to selectedDate on viewport change (PC ↔ Mobile) */
+  useEffect(() => {
+    if (prevIsMobileRef.current !== isMobile) {
+      setCurrentDate(selectedDate);
+      prevIsMobileRef.current = isMobile;
+    }
+  }, [isMobile, selectedDate]);
+
+  /*
+   * --------------------------------------------
+   * 3. Callbacks - Navigation
    * --------------------------------------------
    */
 
@@ -131,9 +154,9 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     setSelectedDate(today);
   }, [today]);
 
-  /**
+  /*
    * --------------------------------------------
-   * 3. Callbacks - Helpers
+   * 4. Callbacks - Helpers
    * --------------------------------------------
    */
 
@@ -191,9 +214,9 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     };
   }, [currentDate]);
 
-  /**
+  /*
    * --------------------------------------------
-   * 4. Context Value
+   * 5. Context Value
    * --------------------------------------------
    */
   const value = useMemo(
@@ -236,15 +259,15 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
     ]
   );
 
-  /**
+  /*
    * --------------------------------------------
-   * 5. Return
+   * 6. Return
    * --------------------------------------------
    */
   return <CalendarContext.Provider value={value}>{children}</CalendarContext.Provider>;
 }
 
-/**
+/*
  * ============================================
  * Custom Hook
  * ============================================

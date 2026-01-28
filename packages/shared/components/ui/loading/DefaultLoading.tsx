@@ -1,11 +1,11 @@
 'use client';
 
 import { Text } from '@radix-ui/themes';
-import { motion } from 'motion/react';
+import { m } from 'motion/react';
 
 import { Icon } from '../icon';
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
@@ -13,7 +13,7 @@ import { Icon } from '../icon';
 
 export function DefaultLoading() {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0.3 }}
       animate={{ opacity: [0.3, 1, 0.3] }}
       transition={{ duration: 1.2, ease: 'linear', repeat: Infinity }}
@@ -23,6 +23,6 @@ export function DefaultLoading() {
         <Icon size={24}>rocket_launch</Icon>
         LAUNCHING
       </Text>
-    </motion.div>
+    </m.div>
   );
 }

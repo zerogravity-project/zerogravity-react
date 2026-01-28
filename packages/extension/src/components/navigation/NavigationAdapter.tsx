@@ -6,7 +6,7 @@ import { Navigation, LinkProps as SharedLinkProps } from '@zerogravity/shared/co
 
 import { useAuth } from '../../hooks/useAuth';
 
-/**
+/*
  * ============================================
  * Type Definitions
  * ============================================
@@ -18,7 +18,7 @@ interface NavigationAdapterProps {
   border?: boolean;
 }
 
-/**
+/*
  * ============================================
  * Helper Components
  * ============================================
@@ -53,21 +53,21 @@ const NavigationLink: ComponentType<SharedLinkProps> = forwardRef<HTMLAnchorElem
   }
 );
 
-/**
+/*
  * ============================================
  * Component
  * ============================================
  */
 
 export function NavigationAdapter({ className, background, border }: NavigationAdapterProps) {
-  /**
+  /*
    * --------------------------------------------
    * 1. Custom Hooks
    * --------------------------------------------
    */
   const { isAuthenticated, user: authUser } = useAuth();
 
-  /**
+  /*
    * --------------------------------------------
    * 2. Derived Values
    * --------------------------------------------
@@ -80,7 +80,7 @@ export function NavigationAdapter({ className, background, border }: NavigationA
       }
     : undefined;
 
-  /**
+  /*
    * --------------------------------------------
    * 3. Return
    * --------------------------------------------

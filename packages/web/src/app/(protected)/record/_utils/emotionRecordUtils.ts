@@ -3,7 +3,7 @@
  * Value to emotion step conversion functions
  */
 
-import { EMOTION_STEPS, EmotionStep } from '@zerogravity/shared/components/ui/emotion';
+import { EMOTION_STEPS, type EmotionStep } from '@zerogravity/shared/entities/emotion';
 
 /**
  * Convert a value to a step index
