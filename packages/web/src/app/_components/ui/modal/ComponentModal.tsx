@@ -69,7 +69,9 @@ export function ComponentModal() {
 
   return (
     <Dialog.Root open={isComponentModal} onOpenChange={handleOpenChange}>
-      <Dialog.Content maxWidth={maxWidth}>{config.component}</Dialog.Content>
+      <Dialog.Content maxWidth={maxWidth} className="max-mobile:!px-5">
+        {config.component}
+      </Dialog.Content>
     </Dialog.Root>
   );
 }

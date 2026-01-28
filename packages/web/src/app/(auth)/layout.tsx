@@ -2,6 +2,7 @@ import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/pr
 
 import { ModalProvider } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { AlertModal } from '@/app/_components/ui/modal/AlertModal';
+import { FeedbackModal } from '@/app/_components/ui/modal/FeedbackModal';
 import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
 
 interface AuthLayoutProps {
@@ -23,6 +24,7 @@ export default async function AuthLayout({ children }: Readonly<AuthLayoutProps>
             {children}
           </main>
           <AlertModal />
+          <FeedbackModal />
         </ModalProvider>
       </MotionProvider>
     </ThemeProvider>

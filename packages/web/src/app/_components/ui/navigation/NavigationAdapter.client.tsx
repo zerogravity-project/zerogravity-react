@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import * as Sentry from '@sentry/nextjs';
 import { Session } from 'next-auth';
 import { ComponentType, forwardRef, useCallback, useEffect, useState } from 'react';
 
 import { Navigation, LinkProps as SharedLinkProps } from '@zerogravity/shared/components/ui/navigation';
 import { cn } from '@zerogravity/shared/utils';
+
+import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 
 /**
  * ============================================
@@ -90,41 +91,24 @@ export function NavigationAdapterClient({ session, className, background, border
 
   /**
    * --------------------------------------------
-   * 4. Callbacks
+   * 4. External Hooks (Modal)
    * --------------------------------------------
    */
-  /** Open Sentry feedback form (lazy loads feedbackIntegration on first click) */
-  const handleFeedbackClick = useCallback(async () => {
-    // Check if feedbackIntegration is already loaded
-    let feedback = Sentry.getFeedback();
-
-    // Lazy load feedbackIntegration if not yet loaded (~17kB saved on initial load)
-    if (!feedback) {
-      const feedbackIntegration = await Sentry.lazyLoadIntegration('feedbackIntegration');
-      Sentry.addIntegration(
-        feedbackIntegration({
-          autoInject: false,
-          colorScheme: 'dark',
-          isNameRequired: false,
-          isEmailRequired: false,
-          showBranding: false,
-          formTitle: 'Send Feedback',
-          submitButtonLabel: 'Send',
-          messagePlaceholder: 'What happened? What did you expect?',
-          successMessageText: 'Thank you for your feedback!',
-        })
-      );
-      feedback = Sentry.getFeedback();
-    }
-
-    const form = await feedback?.createForm();
-    form?.appendToDom();
-    form?.open();
-  }, []);
+  const { openHashModal } = useModal();
 
   /**
    * --------------------------------------------
-   * 5. Effects
+   * 5. Callbacks
+   * --------------------------------------------
+   */
+  /** Open feedback modal */
+  const handleFeedbackClick = useCallback(() => {
+    openHashModal('feedback');
+  }, [openHashModal]);
+
+  /**
+   * --------------------------------------------
+   * 6. Effects
    * --------------------------------------------
    */
   /** Window scroll detection for shadow effect */
@@ -142,7 +126,7 @@ export function NavigationAdapterClient({ session, className, background, border
 
   /**
    * --------------------------------------------
-   * 6. Return
+   * 7. Return
    * --------------------------------------------
    */
   return (
