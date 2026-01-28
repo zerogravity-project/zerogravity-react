@@ -162,6 +162,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           } catch {
             console.error('[JWT Callback] Waiting for refresh failed');
             token.error = 'RefreshTokenExpired';
+            // Clear invalid tokens to force re-login
+            token.backendJwt = undefined;
+            token.refreshToken = undefined;
+            token.backendJwtExpiresAt = undefined;
             return token;
           }
         }
@@ -208,6 +212,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         } catch {
           console.error('[JWT Callback] Token refresh error');
           token.error = 'RefreshTokenExpired';
+          // Clear invalid tokens to force re-login
+          token.backendJwt = undefined;
+          token.refreshToken = undefined;
+          token.backendJwtExpiresAt = undefined;
         }
       }
 
@@ -217,6 +225,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     /**
      * Transform JWT into client-accessible session
      * Include consent data, isNewUser flag, and backend JWT
+     * Pass error state for client-side handling (e.g., force sign out)
      */
     session: async ({ session, token }: { session: Session; token: JWT }) => {
       session.accessToken = token.accessToken;
@@ -225,6 +234,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.consents = token.consents;
       session.backendJwt = token.backendJwt;
       session.refreshToken = token.refreshToken;
+      session.error = token.error;
 
       return session;
     },
