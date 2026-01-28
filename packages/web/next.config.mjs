@@ -1,6 +1,11 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 import { withSentryConfig } from '@sentry/nextjs';
 import bundleAnalyzer from '@next/bundle-analyzer';
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
@@ -91,6 +96,17 @@ const nextConfig = {
         __SENTRY_TRACING__: false,
       })
     );
+
+    /**
+     * Force single @radix-ui/themes instance
+     * In pnpm monorepo, Docker COPY resolves symlinks into separate physical copies
+     * under each package's node_modules, causing webpack to create duplicate modules.
+     * This breaks React Context sharing between @radix-ui/themes Theme and Dialog portal.
+     */
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@radix-ui/themes': path.resolve(__dirname, 'node_modules/@radix-ui/themes'),
+    };
 
     return config;
   },
