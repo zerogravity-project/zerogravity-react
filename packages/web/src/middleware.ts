@@ -22,7 +22,10 @@ const REQUIRED_CONSENTS = ['termsAgreed', 'privacyAgreed', 'sensitiveDataConsent
  * Protects routes, checks consent, and redirects appropriately
  */
 export default auth((req: NextAuthRequest) => {
-  const isLoggedIn = !!req.auth;
+  // Check if session is valid (has backendJwt and no error)
+  // Token refresh failure results in cleared backendJwt and error flag
+  const hasValidSession = !!req.auth?.backendJwt && !req.auth?.error;
+  const isLoggedIn = hasValidSession;
   const pathname = req.nextUrl.pathname;
   const isLoginPage = pathname === '/login';
   const isConsentPage = pathname === '/consent';
