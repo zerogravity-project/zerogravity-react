@@ -1,8 +1,8 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { withSentryConfig } from '@sentry/nextjs';
 import bundleAnalyzer from '@next/bundle-analyzer';
+import { withSentryConfig } from '@sentry/nextjs';
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -52,7 +52,7 @@ const nextConfig = {
               "frame-src 'self' https://accounts.google.com https://kauth.kakao.com",
               "worker-src 'self' blob:",
               "media-src 'self' https://axp1udgkvclx.objectstorage.ap-chuncheon-1.oci.customer-oci.com",
-              "report-uri https://o4510777101975552.ingest.us.sentry.io/api/4510777103024128/security/?sentry_key=3266c405a313e58b725029a578cbe546",
+              'report-uri https://o4510777101975552.ingest.us.sentry.io/api/4510777103024128/security/?sentry_key=3266c405a313e58b725029a578cbe546',
             ].join('; '),
           },
         ],
@@ -71,6 +71,7 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: [
+      '@radix-ui/themes',
       '@react-three/drei',
       '@react-three/fiber',
       '@tanstack/react-query',
@@ -116,9 +117,9 @@ export default withSentryConfig(withBundleAnalyzer(withVanillaExtract(nextConfig
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: "minuk-hwang",
+  org: 'minuk-hwang',
 
-  project: "javascript-nextjs",
+  project: 'javascript-nextjs',
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,

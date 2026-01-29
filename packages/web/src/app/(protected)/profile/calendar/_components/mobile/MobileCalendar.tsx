@@ -1,4 +1,4 @@
-import { endOfWeek, format, startOfWeek } from 'date-fns';
+import { endOfWeek, format, isAfter, startOfWeek } from 'date-fns';
 
 import { cn } from '@zerogravity/shared/utils';
 
@@ -30,14 +30,17 @@ export default function MobileCalendar() {
    * 2. Derived Values
    * --------------------------------------------
    */
+  const today = new Date();
 
   /** Current week range (for header display) */
   const currentWeekStart = startOfWeek(currentDate);
   const currentWeekEnd = endOfWeek(currentDate);
+  const isFutureWeek = isAfter(currentWeekStart, today);
 
   /** Selected date's week range (for detail display) */
   const selectedWeekStart = startOfWeek(selectedDate);
   const selectedWeekEnd = endOfWeek(selectedDate);
+  const isSelectedWeekFuture = isAfter(selectedWeekStart, today);
 
   /*
    * --------------------------------------------
@@ -45,26 +48,32 @@ export default function MobileCalendar() {
    * --------------------------------------------
    */
 
-  /** Current week data - for header date display */
+  /** Current week data - for header date display (skip if future week) */
   const {
     data: currentWeekRecords,
     isLoading: isCurrentWeekLoading,
     isError: isCurrentWeekError,
     refetch: refetchCurrentWeek,
-  } = useGetEmotionRecordsQuery({
-    startDateTime: format(currentWeekStart, "yyyy-MM-dd'T'HH:mm:ss"),
-    endDateTime: format(currentWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
-  });
+  } = useGetEmotionRecordsQuery(
+    {
+      startDateTime: format(currentWeekStart, "yyyy-MM-dd'T'HH:mm:ss"),
+      endDateTime: format(currentWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+    },
+    { enabled: !isFutureWeek }
+  );
 
-  /** Selected date's week data - for detail display (uses cache if same week) */
+  /** Selected date's week data - for detail display (skip if future week) */
   const {
     data: selectedWeekRecords,
     isError: isSelectedWeekError,
     refetch: refetchSelectedWeek,
-  } = useGetEmotionRecordsQuery({
-    startDateTime: format(selectedWeekStart, "yyyy-MM-dd'T'HH:mm:ss"),
-    endDateTime: format(selectedWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
-  });
+  } = useGetEmotionRecordsQuery(
+    {
+      startDateTime: format(selectedWeekStart, "yyyy-MM-dd'T'HH:mm:ss"),
+      endDateTime: format(selectedWeekEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+    },
+    { enabled: !isSelectedWeekFuture }
+  );
 
   /*
    * --------------------------------------------

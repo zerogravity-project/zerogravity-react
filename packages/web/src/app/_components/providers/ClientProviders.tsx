@@ -1,13 +1,5 @@
 'use client';
 
-import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
-
-import { ModalProvider } from '../ui/modal/_contexts/ModalContext';
-import { AlertModal } from '../ui/modal/AlertModal';
-import { ComponentModal } from '../ui/modal/ComponentModal';
-import { ConfirmModal } from '../ui/modal/ConfirmModal';
-import { FeedbackModal } from '../ui/modal/FeedbackModal';
-
 import NextAuthSessionProvider from './NextAuthSessionProvider';
 import TanstackQueryProvider from './TanstackQueryProvider';
 
@@ -26,32 +18,16 @@ interface ClientProvidersProps {
  * Component
  * ============================================
  *
- * Root client-side providers composition
- * Wraps app with Session, Query, Theme, and Modal providers
- * Renders global modal components
+ * Protected routes client-side providers
+ * Session and Query providers only
+ * Theme and Modal providers moved to root layout
  *
  * @param children - Child components to wrap
  */
 export default function ClientProviders({ children }: ClientProvidersProps) {
   return (
     <NextAuthSessionProvider>
-      <TanstackQueryProvider>
-        <ThemeProvider>
-          <MotionProvider>
-            <ModalProvider>
-              <main id="main-content" className="relative w-full">
-                {children}
-              </main>
-              {/* Global state-based modals */}
-              <AlertModal />
-              <ConfirmModal />
-              <ComponentModal />
-              {/* Global hash-based modals */}
-              <FeedbackModal />
-            </ModalProvider>
-          </MotionProvider>
-        </ThemeProvider>
-      </TanstackQueryProvider>
+      <TanstackQueryProvider>{children}</TanstackQueryProvider>
     </NextAuthSessionProvider>
   );
 }

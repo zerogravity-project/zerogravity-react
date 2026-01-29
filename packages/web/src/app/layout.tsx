@@ -3,6 +3,14 @@ import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
 
 import type { Metadata } from 'next';
 
+import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
+
+import { ModalProvider } from '@/app/_components/ui/modal/_contexts/ModalContext';
+import { AlertModal } from '@/app/_components/ui/modal/AlertModal';
+import { ComponentModal } from '@/app/_components/ui/modal/ComponentModal';
+import { ConfirmModal } from '@/app/_components/ui/modal/ConfirmModal';
+import { FeedbackModal } from '@/app/_components/ui/modal/FeedbackModal';
+
 export interface CustomIconDescriptorType extends IconDescriptor {
   precedence?: string;
 }
@@ -119,7 +127,17 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        {children}
+        <ThemeProvider>
+          <MotionProvider>
+            <ModalProvider>
+              {children}
+              <AlertModal />
+              <ConfirmModal />
+              <ComponentModal />
+              <FeedbackModal />
+            </ModalProvider>
+          </MotionProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
