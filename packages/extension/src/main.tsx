@@ -3,6 +3,8 @@ import { StrictMode } from 'react';
 
 import { createRoot } from 'react-dom/client';
 
+import { MotionProvider } from '@zerogravity/shared/components/providers';
+
 import App from './App';
 import { ThemeProviderAdapter } from './components/providers/ThemeProviderAdapter';
 import './index.css';
@@ -10,7 +12,9 @@ import './index.css';
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProviderAdapter>
-      <App />
+      <MotionProvider>
+        <App />
+      </MotionProvider>
     </ThemeProviderAdapter>
   </StrictMode>
 );

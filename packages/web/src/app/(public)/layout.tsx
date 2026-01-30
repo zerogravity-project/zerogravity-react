@@ -12,9 +12,7 @@ export default async function PublicLayout({ children }: Readonly<PublicLayoutPr
   return (
     <>
       <NavigationAdapter />
-      <main id="main-content" className="relative w-full">
-        {children}
-      </main>
+      {children}
     </>
   );
 }

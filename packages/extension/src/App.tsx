@@ -41,7 +41,7 @@ function App() {
    * --------------------------------------------
    */
   return (
-    <div className="pt-topnav-height relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
+    <div className="pt-topnav-height animate-fade-in relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
       {/* Navigation */}
       <NavigationAdapter className="fixed top-0" />
 

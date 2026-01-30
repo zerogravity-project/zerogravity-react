@@ -1,8 +1,8 @@
 /**
- * Record layout
- * Wraps the record page and its children
+ * Spaceout layout
+ * Wraps the spaceout page and its children
  */
-export default function RecordLayout({
+export default function SpaceoutLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
