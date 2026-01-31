@@ -59,7 +59,7 @@ export default function Main() {
    * --------------------------------------------
    */
   return (
-    <div className="pt-topnav-height relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
+    <div className="pt-topnav-height animate-fade-in relative h-[100dvh] w-[100dvw] overflow-hidden bg-[var(--background-dark)]">
       {/* Decorative Background */}
       <div
         aria-hidden="true"
@@ -79,7 +79,7 @@ export default function Main() {
       </div>
 
       {/* Main Content */}
-      <main className="contents">
+      <main id="main-content" className="contents">
         <Clock />
 
         <div className="absolute bottom-16 left-[50%] z-5 translate-x-[-50%] max-[1025px]:bottom-28">

@@ -18,6 +18,18 @@
 
   /* Breakpoints */
   --breakpoint-mobile: 480px;
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.3s ease-out;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 /* Font Family */
@@ -57,18 +69,14 @@ button {
 }
 
 /* Theme Colors */
-:root,
-.light,
-.light-theme {
-  --background-dark: #f0f0f3;
-  --text-default: #222222;
-}
-
-:root,
-.dark,
-.dark-theme {
+:root {
   --background-dark: #0b0b0c;
   --text-default: #ffffff;
+}
+
+/* Prevent initial flash - apply background to html */
+html {
+  background-color: var(--background-dark);
 }
 
 /* Material Icons */

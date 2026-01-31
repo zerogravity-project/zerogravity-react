@@ -5,12 +5,12 @@
 
 'use client';
 
+import { addDays, addMonths, format } from 'date-fns';
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useMediaQuery } from '@zerogravity/shared/hooks';
 import { isSameDay } from '@zerogravity/shared/utils';
 
-import { MONTH_NAMES } from '../_constants/calendar.constants';
 import { getMonthInfo as getMonthInfoUtil, getWeekOfMonth } from '../_utils/dateUtils';
 
 /*
@@ -114,38 +114,22 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
 
   /** Navigate to next month */
   const goToNextMonth = useCallback(() => {
-    setCurrentDate(prev => {
-      const next = new Date(prev);
-      next.setMonth(prev.getMonth() + 1);
-      return next;
-    });
+    setCurrentDate(prev => addMonths(prev, 1));
   }, []);
 
   /** Navigate to previous month */
   const goToPreviousMonth = useCallback(() => {
-    setCurrentDate(prev => {
-      const prevDate = new Date(prev);
-      prevDate.setMonth(prev.getMonth() - 1);
-      return prevDate;
-    });
+    setCurrentDate(prev => addMonths(prev, -1));
   }, []);
 
   /** Navigate to next week */
   const goToNextWeek = useCallback(() => {
-    setCurrentDate(prev => {
-      const next = new Date(prev);
-      next.setDate(prev.getDate() + 7);
-      return next;
-    });
+    setCurrentDate(prev => addDays(prev, 7));
   }, []);
 
   /** Navigate to previous week */
   const goToPreviousWeek = useCallback(() => {
-    setCurrentDate(prev => {
-      const prevDate = new Date(prev);
-      prevDate.setDate(prev.getDate() - 7);
-      return prevDate;
-    });
+    setCurrentDate(prev => addDays(prev, -7));
   }, []);
 
   /** Navigate to today and select it */
@@ -178,7 +162,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
 
   /** Get current month name */
   const getMonthName = useCallback(() => {
-    return MONTH_NAMES[currentDate.getMonth()];
+    return format(currentDate, 'MMMM');
   }, [currentDate]);
 
   /** Get current year */
@@ -189,7 +173,7 @@ export function CalendarProvider({ children }: CalendarProviderProps) {
 
   /** Get selected date's month name */
   const getSelectedMonthName = useCallback(() => {
-    return MONTH_NAMES[selectedDate.getMonth()];
+    return format(selectedDate, 'MMMM');
   }, [selectedDate]);
 
   /** Get week info for current date */
