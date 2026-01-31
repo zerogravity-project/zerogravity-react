@@ -32,10 +32,18 @@ import { emotionService } from './emotion.service';
  * GET /emotions/records
  * Get emotion records query with date range
  */
-export const useGetEmotionRecordsQuery = (params: GetEmotionRecordsParams) => {
+interface UseGetEmotionRecordsQueryOptions {
+  enabled?: boolean;
+}
+
+export const useGetEmotionRecordsQuery = (
+  params: GetEmotionRecordsParams,
+  options: UseGetEmotionRecordsQueryOptions = {}
+) => {
   return useQuery({
     queryKey: [EMOTION_QUERY_KEY.RECORDS, params.startDateTime, params.endDateTime],
     queryFn: () => emotionService.getEmotionRecords(params),
+    enabled: options.enabled,
   });
 };
 

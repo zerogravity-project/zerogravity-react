@@ -51,13 +51,18 @@ export default function DesktopCalendar() {
   const { daysInMonth, emptyCellsBefore: emptyBefore, emptyCellsAfter: emptyAfter } = getMonthDaysInfo();
 
   /** Current viewing month range (for calendar grid) */
+  const today = new Date();
   const currentMonthDate = new Date(year, month);
   const currentMonthStart = startOfMonth(currentMonthDate);
   const currentMonthEnd = endOfMonth(currentMonthDate);
 
+  /** Check if current month is in the future (no data to fetch) */
+  const isFutureMonth = isAfter(currentMonthStart, today);
+
   /** Selected date's month range (for drawer detail) */
   const selectedMonthStart = startOfMonth(selectedDate);
   const selectedMonthEnd = endOfMonth(selectedDate);
+  const isSelectedMonthFuture = isAfter(selectedMonthStart, today);
 
   /*
    * --------------------------------------------
@@ -65,22 +70,28 @@ export default function DesktopCalendar() {
    * --------------------------------------------
    */
 
-  /** Current month data - for calendar grid display */
+  /** Current month data - for calendar grid display (skip if future month) */
   const {
     data: currentMonthRecords,
     isLoading: isCurrentMonthLoading,
     isError: isCurrentMonthError,
     refetch: refetchCurrentMonth,
-  } = useGetEmotionRecordsQuery({
-    startDateTime: format(currentMonthStart, "yyyy-MM-dd'T'HH:mm:ss"),
-    endDateTime: format(currentMonthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
-  });
+  } = useGetEmotionRecordsQuery(
+    {
+      startDateTime: format(currentMonthStart, "yyyy-MM-dd'T'HH:mm:ss"),
+      endDateTime: format(currentMonthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+    },
+    { enabled: !isFutureMonth }
+  );
 
-  /** Selected date's month data - for drawer detail (uses cache if same month) */
-  const { data: selectedMonthRecords } = useGetEmotionRecordsQuery({
-    startDateTime: format(selectedMonthStart, "yyyy-MM-dd'T'HH:mm:ss"),
-    endDateTime: format(selectedMonthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
-  });
+  /** Selected date's month data - for drawer detail (skip if future month) */
+  const { data: selectedMonthRecords } = useGetEmotionRecordsQuery(
+    {
+      startDateTime: format(selectedMonthStart, "yyyy-MM-dd'T'HH:mm:ss"),
+      endDateTime: format(selectedMonthEnd, "yyyy-MM-dd'T'HH:mm:ss"),
+    },
+    { enabled: !isSelectedMonthFuture }
+  );
 
   /*
    * --------------------------------------------

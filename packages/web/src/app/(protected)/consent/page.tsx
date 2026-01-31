@@ -6,8 +6,6 @@ import { Button, Callout, Checkbox, Link, Text } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
-import { Logo } from '@zerogravity/shared/components/ui/logo';
-
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import type { UpdateConsentRequest } from '@/services/user/user.dto';
 import { useUpdateConsentMutation } from '@/services/user/user.query';
@@ -97,14 +95,13 @@ export default function ConsentPage() {
    * --------------------------------------------
    */
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--gray-1)] p-8">
+    <main id="main-content" className="flex min-h-screen flex-col items-center justify-center bg-[var(--gray-1)] p-8">
       <div
         className="w-full max-w-[600px] rounded-[var(--radius-4)] bg-[var(--color-background)] p-8"
         style={{ boxShadow: 'var(--shadow-4)' }}
       >
-        {/* Logo and Title */}
+        {/* Title */}
         <div className="mb-6 flex flex-col items-center gap-4">
-          <Logo width={48} />
           <div className="flex flex-col items-center gap-2">
             <Text size="6" weight="bold">
               Welcome to ZeroGravity
@@ -243,6 +240,6 @@ export default function ConsentPage() {
           </Text>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
