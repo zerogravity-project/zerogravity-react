@@ -141,7 +141,7 @@ export function Navigation({
         <div className="flex flex-shrink-0 items-center gap-12">
           {dateData && (
             <div className="hidden h-8 items-center justify-center overflow-hidden sm:flex">
-              <span className="text-sm leading-[0.9] text-[var(--gray-a10)]">
+              <span className="text-sm leading-[0.9] text-[var(--gray-11)]">
                 {dateData.year} · {dateData.month} · {dateData.day} · {dateData.weekday}
               </span>
             </div>

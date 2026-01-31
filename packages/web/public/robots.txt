@@ -4,9 +4,9 @@ Allow: /login
 Allow: /terms/
 
 Disallow: /api/
-Disallow: /record/
-Disallow: /profile/
-Disallow: /spaceout/
-Disallow: /consent/
+Disallow: /record
+Disallow: /profile
+Disallow: /spaceout
+Disallow: /consent
 
 Sitemap: https://www.zerogv.com/sitemap.xml
