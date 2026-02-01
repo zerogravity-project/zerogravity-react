@@ -2,7 +2,7 @@ import { Text } from '@radix-ui/themes';
 
 import { Logo } from '@zerogravity/shared/components/ui/logo';
 
-import LoginButtons from './_components/LoginButtons';
+import { ButtonSection } from './_components/ButtonSection';
 
 /**
  * Login page
@@ -20,7 +20,7 @@ export default function LoginPage() {
               Meditate and record your emotions
             </Text>
           </div>
-          <LoginButtons />
+          <ButtonSection />
         </div>
       </div>
     </section>

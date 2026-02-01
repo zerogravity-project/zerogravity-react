@@ -143,10 +143,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
       }
 
-      // Store OAuth tokens and provider info
+      // Store OAuth tokens, provider info, and user profile
       if (account) {
         token.accessToken = account.access_token;
         token.provider = account.provider;
+      }
+
+      // Store user profile info on initial sign-in
+      if (user) {
+        token.name = user.name;
+        token.email = user.email;
+        token.picture = user.image;
       }
 
       // Check if backend JWT is expired and refresh if needed (with 5-minute buffer)
@@ -224,10 +231,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     /**
      * Transform JWT into client-accessible session
-     * Include consent data, isNewUser flag, and backend JWT
+     * Include user profile, consent data, isNewUser flag, and backend JWT
      * Pass error state for client-side handling (e.g., force sign out)
      */
     session: async ({ session, token }: { session: Session; token: JWT }) => {
+      // User profile
+      session.user.name = token.name as string;
+      session.user.email = token.email as string;
+      session.user.image = token.picture as string;
+
+      // Custom fields
       session.accessToken = token.accessToken;
       session.provider = token.provider;
       session.user.isNewUser = token.isNewUser;
