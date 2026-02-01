@@ -9,6 +9,8 @@ import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 
+import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
+
 /*
  * ============================================
  * Component
@@ -46,54 +48,63 @@ export default function SelectionScreen() {
    * --------------------------------------------
    */
   return (
-    <m.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-md px-6"
-    >
-      <div className="flex flex-col items-center gap-4 sm:gap-6">
-        <div className="flex flex-col items-center gap-2">
-          <Heading size={isSm ? '7' : '8'} weight="medium" align="center">
-            Choose Your Path
-          </Heading>
-          <Text size={isSm ? '2' : '3'} color="gray" align="center">
-            Take a moment to calm your mind,
-            <br />
-            or record your emotions right away
-          </Text>
-        </div>
+    <>
+      <TopAppBar
+        text="Go Back"
+        icon="arrow_back"
+        onClick={() => router.back()}
+        className="mobile:hidden fixed top-0 left-0 flex"
+        background
+      />
+      <m.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md px-6"
+      >
+        <div className="flex flex-col items-center gap-4 sm:gap-6">
+          <div className="flex flex-col items-center gap-2">
+            <Heading size={isSm ? '7' : '8'} weight="medium" align="center">
+              Choose Your Path
+            </Heading>
+            <Text size={isSm ? '2' : '3'} color="gray" align="center">
+              Take a moment to calm your mind,
+              <br />
+              or record your emotions right away
+            </Text>
+          </div>
 
-        <div className="flex w-full flex-col gap-3 sm:gap-4">
-          <MotionButton size="4" variant="surface" className="!h-auto !py-4 sm:!py-6" onClick={handleWatchVideo}>
-            <div className="flex flex-col items-center gap-1">
-              <div className="flex items-center gap-2">
-                <Icon>play_circle</Icon>
-                <Text size={isSm ? '4' : '5'} weight="medium">
-                  Watch Calming Video
+          <div className="flex w-full flex-col gap-3 sm:gap-4">
+            <MotionButton size="4" variant="surface" className="!h-auto !py-4 sm:!py-6" onClick={handleWatchVideo}>
+              <div className="flex flex-col items-center gap-1">
+                <div className="flex items-center gap-2">
+                  <Icon>play_circle</Icon>
+                  <Text size={isSm ? '4' : '5'} weight="medium">
+                    Watch Calming Video
+                  </Text>
+                </div>
+                <Text size={isSm ? '1' : '2'} color="gray">
+                  Clear your mind before recording
                 </Text>
               </div>
-              <Text size={isSm ? '1' : '2'} color="gray">
-                Clear your mind before recording
-              </Text>
-            </div>
-          </MotionButton>
+            </MotionButton>
 
-          <MotionButton size="4" variant="soft" className="!h-auto !py-4 sm:!py-6" onClick={handleRecordNow}>
-            <div className="flex flex-col items-center gap-1">
-              <div className="flex items-center gap-2">
-                <Icon>edit_note</Icon>
-                <Text size={isSm ? '4' : '5'} weight="medium">
-                  Record Now
+            <MotionButton size="4" variant="soft" className="!h-auto !py-4 sm:!py-6" onClick={handleRecordNow}>
+              <div className="flex flex-col items-center gap-1">
+                <div className="flex items-center gap-2">
+                  <Icon>edit_note</Icon>
+                  <Text size={isSm ? '4' : '5'} weight="medium">
+                    Record Now
+                  </Text>
+                </div>
+                <Text size={isSm ? '1' : '2'} color="gray">
+                  Start tracking your emotions immediately
                 </Text>
               </div>
-              <Text size={isSm ? '1' : '2'} color="gray">
-                Start tracking your emotions immediately
-              </Text>
-            </div>
-          </MotionButton>
+            </MotionButton>
+          </div>
         </div>
-      </div>
-    </m.div>
+      </m.div>
+    </>
   );
 }
