@@ -112,6 +112,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head suppressHydrationWarning>
+        {/* Favicon (light/dark mode) */}
+        <link rel="icon" href="/favicon-light.png" media="(prefers-color-scheme: light)" />
+        <link rel="icon" href="/favicon-dark.png" media="(prefers-color-scheme: dark)" />
         {/* Font preconnects */}
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
         {/* TypeKit (Helvetica Neue LT Pro) */}
