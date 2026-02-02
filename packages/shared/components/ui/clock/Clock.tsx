@@ -53,7 +53,7 @@ export const Clock = ({ className }: ClockProps) => {
       )}
     >
       {/* Time Display (hidden from screen readers - aria-label provides accessible name) */}
-      <div aria-hidden="true" className="z-1 flex w-full items-center justify-center overflow-hidden">
+      <div aria-hidden="true" className="z-1 flex w-full items-center justify-center">
         <span className="text-[27.9dvw] leading-[0.9] font-extralight text-[var(--accent-a9)] 2xl:leading-[0.8]">
           {timeData ? timeData.hours : '00'}:{timeData ? timeData.minutes : '00'}:{timeData ? timeData.seconds : '00'}
         </span>
