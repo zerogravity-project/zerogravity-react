@@ -10,6 +10,8 @@ import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { useIsSm } from '@zerogravity/shared/hooks';
 import { getTodayString } from '@zerogravity/shared/utils';
 
+import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
+
 export default function RecordSelectionPage() {
   const router = useRouter();
   const isSm = useIsSm();
@@ -25,6 +27,13 @@ export default function RecordSelectionPage() {
 
   return (
     <div className="flex h-[100dvh] w-full items-center justify-center bg-[var(--color-background)] px-6">
+      <TopAppBar
+        text="Go Back"
+        icon="arrow_back"
+        onClick={() => router.back()}
+        className="mobile:hidden fixed top-0 left-0 flex"
+        background
+      />
       <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -43,7 +52,6 @@ export default function RecordSelectionPage() {
 
           <div className="flex w-full flex-col gap-3 sm:gap-4">
             {/* Moment Record Card */}
-
             <MotionButton size="4" variant="soft" className="!h-auto !w-full !p-4 sm:!p-6" onClick={handleMomentRecord}>
               <div className="flex w-full flex-col items-start gap-2 sm:gap-3">
                 <div className="flex items-center gap-2 sm:gap-3">
@@ -53,21 +61,22 @@ export default function RecordSelectionPage() {
                   </Heading>
                 </div>
                 <Text size={isSm ? '2' : '3'} color="gray" align="left">
-                  Quick emotional check-in. Capture your current emotion and the reason behind it in just 2 simple
-                  steps.
+                  Quick emotional check-in.
+                  <br />
+                  Capture your current emotion and the reason behind it in just 2 simple steps.
                 </Text>
                 <div className="mt-1 flex gap-2 sm:mt-2">
                   <Text
                     size={isSm ? '1' : '2'}
                     weight="medium"
-                    className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    className="rounded-full bg-[var(--accent-a4)] px-2 py-1 sm:px-3"
                   >
                     2 steps
                   </Text>
                   <Text
                     size={isSm ? '1' : '2'}
                     weight="medium"
-                    className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    className="rounded-full bg-[var(--accent-a4)] px-2 py-1 sm:px-3"
                   >
                     ~1 minute
                   </Text>
@@ -76,7 +85,6 @@ export default function RecordSelectionPage() {
             </MotionButton>
 
             {/* Daily Record Card */}
-
             <MotionButton
               size="4"
               variant="surface"
@@ -91,21 +99,22 @@ export default function RecordSelectionPage() {
                   </Heading>
                 </div>
                 <Text size={isSm ? '2' : '3'} color="gray" align="left">
-                  Complete emotional journal entry. Record your emotion, identify the reason, and write detailed notes
-                  about your day.
+                  Complete emotional journal entry.
+                  <br />
+                  Record your emotion, identify the reason, and write detailed notes about your day.
                 </Text>
                 <div className="mt-1 flex gap-2 sm:mt-2">
                   <Text
                     size={isSm ? '1' : '2'}
                     weight="medium"
-                    className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    className="rounded-full bg-[var(--accent-a3)] px-2 py-1 sm:px-3"
                   >
                     3 steps
                   </Text>
                   <Text
                     size={isSm ? '1' : '2'}
                     weight="medium"
-                    className="rounded-full bg-[var(--accent-3)] px-2 py-1 sm:px-3"
+                    className="rounded-full bg-[var(--accent-a3)] px-2 py-1 sm:px-3"
                   >
                     ~3-5 minutes
                   </Text>

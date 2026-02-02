@@ -1,14 +1,16 @@
+/**
+ * [ButtonSection component]
+ * Login button section with auth error handling
+ */
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import { signIn } from 'next-auth/react';
 import { useEffect } from 'react';
 
-import { MotionButton } from '@zerogravity/shared/components/ui/button';
-import { useIsMobile } from '@zerogravity/shared/hooks';
-
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
+
+import { LoginButton } from './LoginButton';
 
 /*
  * ============================================
@@ -26,19 +28,15 @@ const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
  */
 
 /**
- * Login buttons component
- * Separated into Client Component to use useIsMobile hook
- * Uses next-auth/react signIn for client-side authentication
- * Reads callbackUrl from URL params to redirect after login
- * Shows alert modal if backend authentication fails
+ * Login button section
+ * Handles auth errors and renders social login buttons
  */
-export default function LoginButtons() {
+export function ButtonSection() {
   /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
-  const isMobile = useIsMobile();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { openAlertModal } = useModal();
@@ -79,30 +77,9 @@ export default function LoginButtons() {
    * --------------------------------------------
    */
   return (
-    <div className="flex flex-col gap-4">
-      <MotionButton
-        color="amber"
-        size={isMobile ? '4' : '3'}
-        variant="soft"
-        className="w-full"
-        onClick={async () => {
-          await signIn('kakao', { callbackUrl });
-        }}
-      >
-        Login With Kakao
-      </MotionButton>
-
-      <MotionButton
-        color="blue"
-        size={isMobile ? '4' : '3'}
-        variant="soft"
-        className="w-full"
-        onClick={async () => {
-          await signIn('google', { callbackUrl });
-        }}
-      >
-        Login With Google
-      </MotionButton>
+    <div className="flex flex-col gap-3">
+      <LoginButton provider="google" callbackUrl={callbackUrl} />
+      <LoginButton provider="kakao" callbackUrl={callbackUrl} />
     </div>
   );
 }
