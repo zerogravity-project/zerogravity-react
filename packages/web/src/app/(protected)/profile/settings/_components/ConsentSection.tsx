@@ -1,16 +1,18 @@
+/**
+ * [ConsentSection component]
+ * Client component for privacy consent toggles with AI warning dialog
+ * Uses React Query hydration for consent data
+ */
 'use client';
 
 import { Button, Dialog, Text } from '@radix-ui/themes';
-import { signOut, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
-import { useLogoutMutation } from '@/services/auth/auth.query';
-import { useDeleteUserMutation, useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
+import { useUpdateConsentMutation, useUserProfileQuery } from '@/services/user/user.query';
 
 import { ConsentToggle } from './ConsentToggle';
-import { SettingAction } from './SettingAction';
-import { SettingField } from './SettingField';
 import { SettingSection } from './SettingSection';
 
 /*
@@ -19,14 +21,14 @@ import { SettingSection } from './SettingSection';
  * ============================================
  */
 
-export default function SettingsPageClient() {
+export function ConsentSection() {
   /*
    * --------------------------------------------
    * 1. External Hooks
    * --------------------------------------------
    */
   const { data: session, update: updateSession } = useSession();
-  const { openAlertModal, openConfirmModal } = useModal();
+  const { openAlertModal } = useModal();
 
   /*
    * --------------------------------------------
@@ -61,41 +63,12 @@ export default function SettingsPageClient() {
     },
   });
 
-  const { mutate: logout } = useLogoutMutation({
-    onSuccess: () => {
-      signOut({ callbackUrl: '/login' });
-    },
-    onError: error => {
-      console.error('[Settings] Failed to logout:', error);
-      openAlertModal({
-        title: 'Logout Failed',
-        description: error.response?.data?.message || 'Failed to logout. Please try again.',
-      });
-    },
-  });
-
-  const { mutate: deleteUser } = useDeleteUserMutation({
-    onSuccess: () => {
-      signOut({ callbackUrl: '/login' });
-    },
-    onError: error => {
-      console.error('[Settings] Failed to delete user:', error);
-      openAlertModal({
-        title: 'Delete Failed',
-        description: error.response?.data?.message || 'Failed to delete account. Please try again.',
-      });
-    },
-  });
-
   /*
    * --------------------------------------------
    * 4. Derived Values
    * --------------------------------------------
    */
-  const user = session?.user;
-  const displayName = user?.name ?? 'ZeroGravity User';
-  const email = user?.email ?? 'example@example.com';
-  const consents = userProfile?.consents || user?.consents;
+  const consents = userProfile?.consents || session?.user?.consents;
 
   /*
    * --------------------------------------------
@@ -129,32 +102,13 @@ export default function SettingsPageClient() {
     });
   };
 
-  /** Handle delete account with confirmation */
-  const handleDeleteAccount = () => {
-    openConfirmModal({
-      title: 'Delete Account',
-      description:
-        'Are you sure you want to delete your account? All your emotion records and data will be permanently deleted. This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
-      onConfirm: () => deleteUser(),
-    });
-  };
-
   /*
    * --------------------------------------------
    * 6. Return
    * --------------------------------------------
    */
   return (
-    <div className="hide-scrollbar flex h-full w-full flex-1 flex-col gap-7 overflow-y-auto px-6 pt-6 pb-10 md:p-8">
-      {/* Profile Settings Section */}
-      <SettingSection title="Profile">
-        <SettingField label="Display Name" value={displayName} />
-        <SettingField label="Email" value={email} type="email" />
-      </SettingSection>
-
-      {/* Privacy & Consent Section */}
+    <>
       <SettingSection title="Privacy & Consent">
         <ConsentToggle
           label="Terms of Service"
@@ -184,18 +138,6 @@ export default function SettingsPageClient() {
           disabled={isUpdatingConsent}
           onCheckedChange={handleAIConsentToggle}
           viewDetailUrl="/terms/ai-analysis"
-        />
-      </SettingSection>
-
-      {/* Account Actions Section */}
-      <SettingSection title="Account">
-        <SettingAction label="Logout" buttonText="Logout" variant="soft" color="gray" onClick={() => logout()} />
-        <SettingAction
-          label="Delete Account"
-          buttonText="Delete"
-          variant="soft"
-          color="red"
-          onClick={handleDeleteAccount}
         />
       </SettingSection>
 
@@ -229,6 +171,6 @@ export default function SettingsPageClient() {
           </div>
         </Dialog.Content>
       </Dialog.Root>
-    </div>
+    </>
   );
 }
