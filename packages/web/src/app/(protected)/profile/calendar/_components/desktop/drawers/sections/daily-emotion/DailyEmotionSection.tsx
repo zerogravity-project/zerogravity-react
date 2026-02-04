@@ -52,7 +52,7 @@ export default function DailyEmotionSection({ emotionId, emotionReasons, isOpen 
    * --------------------------------------------
    */
   return (
-    <Theme appearance="dark">
+    <Theme appearance="dark" className="w-full">
       <section
         className={cn(
           'flex w-full flex-col items-center bg-[var(--background-dark)] px-5 pt-1',

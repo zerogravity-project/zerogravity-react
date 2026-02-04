@@ -1,19 +1,21 @@
-import { Blockquote, Text } from '@radix-ui/themes';
 import { format } from 'date-fns';
 import { AnimatePresence, m } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
-import { Icon } from '@zerogravity/shared/components/ui/icon';
-import { useIsLg } from '@zerogravity/shared/hooks';
-import { cn } from '@zerogravity/shared/utils';
+import { useIsXl } from '@zerogravity/shared/hooks';
 
+import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
 import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
 import { useScroll } from '@/app/_hooks/useScroll';
 import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
 
 import { useChart } from '../../_contexts/ChartContext';
 
-import { ContentSkeleton, HeaderSkeleton } from './_components/AiAnalysisDrawerSkeleton';
+import AiAnalysisHeader from './_components/header/AiAnalysisHeader';
+import KeyInsightsSection from './_components/sections/KeyInsightsSection';
+import RecommendationsSection from './_components/sections/RecommendationsSection';
+import SummarySection from './_components/sections/SummarySection';
+import TitleSection from './_components/sections/TitleSection';
 
 /*
  * ============================================
@@ -24,49 +26,6 @@ import { ContentSkeleton, HeaderSkeleton } from './_components/AiAnalysisDrawerS
 interface AiAnalysisDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-}
-
-/*
- * ============================================
- * Helper Functions
- * ============================================
- */
-
-/**
- * Parse markdown bold syntax (**text**) into React elements
- * @param text - Text that may contain **bold** markdown syntax
- * @returns Array of React elements (strings and strong elements)
- */
-function parseBoldMarkdown(text: string): (string | React.ReactElement)[] {
-  const parts: (string | React.ReactElement)[] = [];
-  const regex = /\*\*(.+?)\*\*/g;
-  let lastIndex = 0;
-  let match;
-  let key = 0;
-
-  while ((match = regex.exec(text)) !== null) {
-    // Add text before the match
-    if (match.index > lastIndex) {
-      parts.push(text.substring(lastIndex, match.index));
-    }
-
-    // Add the bold text
-    parts.push(
-      <strong key={key++} className="font-semibold">
-        {match[1]}
-      </strong>
-    );
-
-    lastIndex = regex.lastIndex;
-  }
-
-  // Add remaining text after the last match
-  if (lastIndex < text.length) {
-    parts.push(text.substring(lastIndex));
-  }
-
-  // If no matches found, return the original text
-  return parts.length > 0 ? parts : [text];
 }
 
 /*
@@ -88,7 +47,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
    * 2. External Hooks
    * --------------------------------------------
    */
-  const isOverLargeScreen = !useIsLg();
+  const isOverLargeScreen = !useIsXl();
   const { timePeriod, startDate } = useChart();
 
   /*
@@ -96,7 +55,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
    * 3. Custom Hooks
    * --------------------------------------------
    */
-  const { isScrollable, isScrolling, isScrollAtBottom } = useScroll({
+  const { isScrollable, isScrollAtBottom } = useScroll({
     scrollRef,
     enable: isOpen,
     enablePreventBackgroundScroll: isOpen && !isOverLargeScreen,
@@ -146,7 +105,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
   const wrapperAnimation = isOverLargeScreen
     ? {
         initial: { width: 0 },
-        animate: { width: 360 },
+        animate: { width: 400 },
         exit: { width: 0 },
         transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const },
       }
@@ -159,8 +118,9 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
 
   const wrapperClassName = isOverLargeScreen
     ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'top-topnav-height fixed right-0 z-101 h-[calc(100dvh-var(--spacing-topnav-height))] shadow-2xl';
+    : 'fixed top-0 right-0 z-9999 h-[100dvh] w-[100dvw]';
 
+  /** Formatted date range */
   const startDateLabel = periodAnalysisData?.data.startDate
     ? format(new Date(periodAnalysisData.data.startDate), 'MMM d')
     : '—';
@@ -168,6 +128,9 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
   const endDateLabel = periodAnalysisData?.data.endDate
     ? format(new Date(periodAnalysisData.data.endDate), 'MMM d, yyyy')
     : '—';
+
+  /** AI analysis summary data */
+  const summary = periodAnalysisData?.data.summary;
 
   /*
    * --------------------------------------------
@@ -177,70 +140,75 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <m.aside
-          {...wrapperAnimation}
-          className={wrapperClassName}
-          role="dialog"
-          aria-modal="true"
-          aria-label="AI analysis"
-        >
-          <div className="relative flex h-full w-[360px] flex-col border-l border-[var(--gray-3)] bg-[var(--gray-1)]">
-            {/* Header - Fixed */}
-            <div className={cn('z-10 flex-shrink-0', isScrolling && 'border-b border-[var(--gray-3)]')}>
-              <header className="relative flex w-full items-center p-4">
-                {isLoading && <HeaderSkeleton />}
-                {!isLoading && (
-                  <Text size="3">
-                    {startDateLabel} - {endDateLabel}
-                  </Text>
+        <>
+          {/* Backdrop - Mobile only */}
+          {!isOverLargeScreen && (
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={onClose}
+              className="fixed inset-0 z-9998 bg-black/50"
+            />
+          )}
+
+          {/* Drawer */}
+          <m.aside
+            {...wrapperAnimation}
+            className={wrapperClassName}
+            role="dialog"
+            aria-modal="true"
+            aria-label="AI analysis"
+          >
+            <div
+              className={`relative flex h-full flex-col bg-[var(--gray-1)] ${
+                isOverLargeScreen ? 'w-[400px] border-l border-[var(--gray-3)]' : 'w-full'
+              }`}
+            >
+              {/* Header - Fixed */}
+              {isOverLargeScreen ? (
+                <div className="z-10 flex-shrink-0 border-b border-[var(--gray-3)]">
+                  <AiAnalysisHeader onClose={onClose} />
+                </div>
+              ) : (
+                <TopAppBar text="Go Back" icon="arrow_back" onClick={onClose} border />
+              )}
+
+              {/* Scrollable Content */}
+              <div
+                ref={scrollRef}
+                className={`flex min-h-0 flex-1 flex-col overflow-y-auto ${!isOverLargeScreen && 'hide-scrollbar'}`}
+              >
+                {/* Title - Always visible */}
+                <TitleSection period={timePeriod} startDateLabel={startDateLabel} endDateLabel={endDateLabel} />
+
+                {/* Error state */}
+                {!isLoading && isError && <QueryErrorState onRetry={refetch} />}
+
+                {/* Sections - Pass isLoading for internal skeleton handling */}
+                {!isError && (
+                  <>
+                    <SummarySection overview={summary?.overview} isLoading={isLoading} />
+                    <KeyInsightsSection insights={summary?.keyInsights} isLoading={isLoading} />
+                    <RecommendationsSection recommendations={summary?.recommendations} isLoading={isLoading} />
+                  </>
                 )}
 
-                <button
-                  onClick={onClose}
-                  aria-label="Close drawer"
-                  className="absolute right-3 flex h-7 w-7 cursor-pointer items-center justify-center rounded-[4px] hover:bg-[var(--gray-a3)]"
-                >
-                  <Icon size={20}>close</Icon>
-                </button>
-              </header>
+                {/* Gradient - Only show if content is scrollable and not at bottom */}
+                {isScrollable && !isScrollAtBottom && (
+                  <m.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="pointer-events-none absolute bottom-0 left-0 z-9 h-20 w-full bg-gradient-to-t from-[var(--gray-1)] to-transparent"
+                  />
+                )}
+              </div>
             </div>
-
-            {/* Scrollable Content */}
-            <div ref={scrollRef} className="flex min-h-0 flex-1 flex-col items-center overflow-y-auto pb-5">
-              {/* Loading state */}
-              {isLoading && <ContentSkeleton />}
-              {/* Error state */}
-              {!isLoading && isError && <QueryErrorState onRetry={refetch} />}
-              {/* Content */}
-              {!isLoading && !isError && (
-                <div className="flex flex-col gap-6 p-4">
-                  <Blockquote size="2">{periodAnalysisData?.data.summary.overview}</Blockquote>
-                  <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
-                    {periodAnalysisData?.data.summary.keyInsights.map((insight, index) => (
-                      <li key={`insight-${index}`}>{parseBoldMarkdown(insight)}</li>
-                    ))}
-                  </ul>
-                  <ul className="flex list-disc flex-col gap-2 pl-4 text-sm">
-                    {periodAnalysisData?.data.summary.recommendations.map((recommendation, index) => (
-                      <li key={`recommendation-${index}`}>{parseBoldMarkdown(recommendation)}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Gradient - Only show if content is scrollable and not at bottom */}
-              {isScrollable && !isScrollAtBottom && (
-                <m.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className="absolute bottom-0 left-0 z-9 h-20 w-full bg-gradient-to-t from-[var(--black-a9)] to-transparent"
-                />
-              )}
-            </div>
-          </div>
-        </m.aside>
+          </m.aside>
+        </>
       )}
     </AnimatePresence>
   );
