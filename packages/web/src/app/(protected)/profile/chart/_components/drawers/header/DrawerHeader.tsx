@@ -9,7 +9,7 @@ import { GeminiLogo } from '@zerogravity/shared/components/ui/logo';
  * ============================================
  */
 
-interface AiAnalysisHeaderProps {
+interface DrawerHeaderProps {
   onClose: () => void;
 }
 
@@ -19,7 +19,7 @@ interface AiAnalysisHeaderProps {
  * ============================================
  */
 
-export default function AiAnalysisHeader({ onClose }: AiAnalysisHeaderProps) {
+export default function DrawerHeader({ onClose }: DrawerHeaderProps) {
   return (
     <header className="relative flex w-full items-center gap-2 p-4">
       <GeminiLogo width={14} />

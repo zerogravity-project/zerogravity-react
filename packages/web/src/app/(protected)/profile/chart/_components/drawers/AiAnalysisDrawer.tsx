@@ -11,11 +11,11 @@ import { usePeriodAnalysisQuery } from '@/services/ai/ai.query';
 
 import { useChart } from '../../_contexts/ChartContext';
 
-import AiAnalysisHeader from './_components/header/AiAnalysisHeader';
-import KeyInsightsSection from './_components/sections/KeyInsightsSection';
-import RecommendationsSection from './_components/sections/RecommendationsSection';
-import SummarySection from './_components/sections/SummarySection';
-import TitleSection from './_components/sections/TitleSection';
+import DrawerHeader from './header/DrawerHeader';
+import KeyInsightsSection from './sections/key-insights/KeyInsightsSection';
+import RecommendationsSection from './sections/recommendations/RecommendationsSection';
+import SummarySection from './sections/summary/SummarySection';
+import TitleSection from './sections/title/TitleSection';
 
 /*
  * ============================================
@@ -169,7 +169,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
               {/* Header - Fixed */}
               {isOverLargeScreen ? (
                 <div className="z-10 flex-shrink-0 border-b border-[var(--gray-3)]">
-                  <AiAnalysisHeader onClose={onClose} />
+                  <DrawerHeader onClose={onClose} />
                 </div>
               ) : (
                 <TopAppBar text="Go Back" icon="arrow_back" onClick={onClose} border />
