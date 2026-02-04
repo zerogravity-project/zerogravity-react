@@ -5,6 +5,8 @@ import type { Metadata } from 'next';
 
 import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
 
+import NextAuthSessionProvider from '@/app/_components/providers/NextAuthSessionProvider';
+import TanstackQueryProvider from '@/app/_components/providers/TanstackQueryProvider';
 import { ModalProvider } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { AlertModal } from '@/app/_components/ui/modal/AlertModal';
 import { ComponentModal } from '@/app/_components/ui/modal/ComponentModal';
@@ -130,17 +132,21 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <ThemeProvider>
-          <MotionProvider>
-            <ModalProvider>
-              {children}
-              <AlertModal />
-              <ConfirmModal />
-              <ComponentModal />
-              <FeedbackModal />
-            </ModalProvider>
-          </MotionProvider>
-        </ThemeProvider>
+        <NextAuthSessionProvider>
+          <TanstackQueryProvider>
+            <ThemeProvider>
+              <MotionProvider>
+                <ModalProvider>
+                  {children}
+                  <AlertModal />
+                  <ConfirmModal />
+                  <ComponentModal />
+                  <FeedbackModal />
+                </ModalProvider>
+              </MotionProvider>
+            </ThemeProvider>
+          </TanstackQueryProvider>
+        </NextAuthSessionProvider>
       </body>
     </html>
   );
