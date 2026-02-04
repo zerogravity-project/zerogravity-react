@@ -2,6 +2,8 @@
 
 import { Dialog } from '@radix-ui/themes';
 
+import { useIsMobile } from '@zerogravity/shared/hooks';
+
 import { ComponentModalConfig, useModal } from './_contexts/ModalContext';
 
 /*
@@ -31,6 +33,7 @@ export function ComponentModal() {
    * 1. External Hooks
    * --------------------------------------------
    */
+  const isMobile = useIsMobile();
   const { currentStateModal, closeModal } = useModal();
 
   /*
@@ -45,7 +48,7 @@ export function ComponentModal() {
   const config = isComponentModal ? (currentStateModal.config as ComponentModalConfig) : null;
 
   /** Map size to maxWidth */
-  const maxWidth = config?.size ? MODAL_SIZE_MAP[config.size] : '500px';
+  const maxWidth = config?.size ? MODAL_SIZE_MAP[config.size] : '480px';
 
   /*
    * --------------------------------------------
@@ -69,7 +72,11 @@ export function ComponentModal() {
 
   return (
     <Dialog.Root open={isComponentModal} onOpenChange={handleOpenChange}>
-      <Dialog.Content maxWidth={maxWidth} className="max-mobile:!px-5">
+      <Dialog.Content
+        maxWidth={maxWidth}
+        size={isMobile ? '2' : '3'}
+        className="max-mobile:min-h-[200px] max-mobile:!px-5 flex min-h-[220px] flex-col"
+      >
         {config.component}
       </Dialog.Content>
     </Dialog.Root>

@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { Button, Link as RadixLink } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
 
+import { useTheme } from '@zerogravity/shared/components/providers';
+
 import { useUpdateConsentMutation } from '@/services/user/user.query';
 
 import { useModal } from './_contexts/ModalContext';
@@ -32,6 +34,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
    * 1. External Hooks
    * --------------------------------------------
    */
+  const { accentColor } = useTheme();
   const { update: updateSession } = useSession();
   const { closeModal, openAlertModal } = useModal();
 
@@ -43,16 +46,21 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
   const { mutate: updateConsent } = useUpdateConsentMutation({
     onSuccess: async () => {
       // Update next-auth session with new consent data
-      await updateSession({
-        user: {
-          consents: {
-            termsAgreed: true,
-            privacyAgreed: true,
-            sensitiveDataConsent: true,
-            aiAnalysisConsent: true,
+      // Session update failure is non-critical - session syncs later
+      try {
+        await updateSession({
+          user: {
+            consents: {
+              termsAgreed: true,
+              privacyAgreed: true,
+              sensitiveDataConsent: true,
+              aiAnalysisConsent: true,
+            },
           },
-        },
-      });
+        });
+      } catch (error) {
+        console.error('[AiConsentModal] Session update failed:', error);
+      }
       closeModal();
       onAgree();
     },
@@ -72,17 +80,24 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
    * --------------------------------------------
    */
   return (
-    <div className="flex flex-col gap-8 py-2">
-      <ModalHeader title="Use AI for analysis?" description="Do you agree to use AI for analysis?" />
+    <div className="max-mobile:pb-2 max-mobile:pt-3 flex flex-1 flex-col justify-between pt-2">
+      <ModalHeader
+        title="Use AI for analysis?"
+        description={
+          <>
+            Do you agree to use AI for analysis?
+            <br />
+            <RadixLink asChild color={accentColor} className="!whitespace-nowrap">
+              <Link href="/terms/ai-analysis" target="_blank" className="!mt-1">
+                View Terms
+              </Link>
+            </RadixLink>
+          </>
+        }
+      />
 
-      <RadixLink asChild size="2">
-        <Link href="/terms/ai-analysis" target="_blank">
-          View AI Analysis Terms
-        </Link>
-      </RadixLink>
-
-      <div className="flex justify-end gap-3">
-        <Button variant="soft" color="gray" size="3" onClick={() => closeModal()}>
+      <div className="max-mobile:w-full flex justify-end gap-3">
+        <Button variant="soft" color="gray" size="3" onClick={() => closeModal()} className="max-mobile:!flex-1">
           Cancel
         </Button>
         <Button
@@ -95,6 +110,7 @@ export function AiConsentModal({ onAgree }: AiConsentModalProps) {
               aiAnalysisConsent: true,
             });
           }}
+          className="max-mobile:!flex-1"
         >
           Agree
         </Button>

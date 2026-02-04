@@ -210,10 +210,13 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
                 parentRect.width
               );
 
+              // Check if tooltip would overflow top boundary
+              const wouldOverflowTop = yPos - tooltipRect.height - 10 < 0;
+
               tooltipEl.style.opacity = '1';
               tooltipEl.style.left = left + 'px';
-              tooltipEl.style.top = yPos - 10 + 'px';
-              tooltipEl.style.transform = 'translate(-50%, -100%)';
+              tooltipEl.style.top = yPos + (wouldOverflowTop ? 10 : -10) + 'px';
+              tooltipEl.style.transform = wouldOverflowTop ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
             }
           },
         },
@@ -270,9 +273,12 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
                   const tooltipRect = tooltipEl.getBoundingClientRect();
                   const left = calculateTooltipLeftPosition(mouseX, tooltipRect.width, parentRect.width);
 
+                  // Check if tooltip would overflow top boundary
+                  const wouldOverflowTop = yPos - tooltipRect.height - 10 < 0;
+
                   tooltipEl.style.left = left + 'px';
-                  tooltipEl.style.top = yPos - 10 + 'px';
-                  tooltipEl.style.transform = 'translate(-50%, -100%)';
+                  tooltipEl.style.top = yPos + (wouldOverflowTop ? 10 : -10) + 'px';
+                  tooltipEl.style.transform = wouldOverflowTop ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
                   tooltipEl.style.right = 'auto';
                   tooltipEl.style.visibility = 'visible';
                   tooltipEl.style.opacity = '1';
