@@ -4,12 +4,10 @@ import { ReactNode } from 'react';
 
 import { auth } from '@/lib/auth';
 
-import ClientProviders from '../_components/providers/ClientProviders';
-
 /**
  * Protected layout with Auth.js v5
- * Includes all client providers (Session, Query, Theme, Modal)
  * Redirects to login if user is not authenticated
+ * Client providers (Session, Query, Theme, Modal) are now at root layout
  */
 export default async function ProtectedLayout({ children }: { children: ReactNode }) {
   const session = await auth();
@@ -18,5 +16,5 @@ export default async function ProtectedLayout({ children }: { children: ReactNod
     redirect('/login');
   }
 
-  return <ClientProviders>{children}</ClientProviders>;
+  return <>{children}</>;
 }

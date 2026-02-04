@@ -87,10 +87,10 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
           <SegmentedControl.Root
             value={timePeriod}
             onValueChange={setTimePeriod}
-            variant="classic"
+            variant="surface"
             size="2"
             radius="small"
-            className="w-full !border !border-[var(--gray-6)]"
+            className="w-full"
           >
             <SegmentedControl.Item value="week">Week</SegmentedControl.Item>
             <SegmentedControl.Item value="month">Month</SegmentedControl.Item>
@@ -154,7 +154,7 @@ export function EmotionChartsHeader({ setIsDrawerOpen }: EmotionChartsHeaderProp
           <SegmentedControl.Root
             value={timePeriod}
             onValueChange={setTimePeriod}
-            variant="classic"
+            variant="surface"
             size="1"
             radius="small"
             className="!h-7 !border !border-[var(--gray-6)]"
