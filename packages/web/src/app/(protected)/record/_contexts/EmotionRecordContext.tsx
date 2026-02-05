@@ -177,6 +177,9 @@ export const EmotionRecordProvider = ({
   const initialStep = (searchParams.get('step') as RecordStep) || 'emotion';
   const [currentStep, setCurrentStep] = useState<RecordStep>(initialStep);
 
+  /** Track previous main step for returning from optional steps */
+  const [previousMainStep, setPreviousMainStep] = useState<MainStep>('emotion');
+
   /**
    * Display step for UI rendering - updates after exit animation completes.
    * This prevents UI flickering (button text, colors) during step transitions.
@@ -286,10 +289,15 @@ export const EmotionRecordProvider = ({
         return;
       }
 
+      // Track previous main step when navigating to optional step
+      if (!MAIN_SEQUENCE.includes(step as MainStep) && MAIN_SEQUENCE.includes(currentStep as MainStep)) {
+        setPreviousMainStep(currentStep as MainStep);
+      }
+
       setCurrentStep(step);
       router.replace(buildUrl(step), { scroll: false });
     },
-    [canGoToStep, router, buildUrl]
+    [canGoToStep, router, buildUrl, currentStep]
   );
 
   /** Go to the next step */
@@ -321,13 +329,19 @@ export const EmotionRecordProvider = ({
 
   /** Go to the previous step */
   const prevStep = useCallback(() => {
+    // Handle optional steps (like ai-prediction) - return to previous main step
+    if (!MAIN_SEQUENCE.includes(currentStep as MainStep)) {
+      goToStep(previousMainStep);
+      return;
+    }
+
     const currentIndex = MAIN_STEP_ORDER[currentStep as MainStep];
     const prevIndex = currentIndex - 1;
 
     if (prevIndex >= 0) {
       goToStep(MAIN_SEQUENCE[prevIndex]);
     }
-  }, [currentStep, goToStep]);
+  }, [currentStep, goToStep, previousMainStep]);
 
   /** Apply AI prediction data and navigate to final step (skips validation) */
   const applyAiPrediction = useCallback(
