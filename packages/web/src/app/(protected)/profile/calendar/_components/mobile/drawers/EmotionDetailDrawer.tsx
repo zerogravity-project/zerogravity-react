@@ -131,11 +131,9 @@ export default function EmotionDetailDrawer({
                 border
                 rightContent={
                   isToday ? (
-                    <Link href={`/record/daily?date=${selectedDateString}`}>
-                      <Button variant="soft" radius="full">
-                        {!isEmpty ? 'Edit' : 'Add'}
-                      </Button>
-                    </Link>
+                    <Button asChild variant="soft" radius="full">
+                      <Link href={`/record/daily?date=${selectedDateString}`}>{!isEmpty ? 'Edit' : 'Add'}</Link>
+                    </Button>
                   ) : undefined
                 }
               />
@@ -169,11 +167,9 @@ export default function EmotionDetailDrawer({
                     Diary
                   </Heading>
                   {isToday && !isEmpty && (
-                    <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>
-                      <Button variant="soft" radius="full">
-                        Edit
-                      </Button>
-                    </Link>
+                    <Button asChild variant="soft" radius="full">
+                      <Link href={`/record/daily?date=${selectedDateString}&step=diary`}>Edit</Link>
+                    </Button>
                   )}
                 </div>
 

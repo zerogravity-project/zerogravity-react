@@ -7,6 +7,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useTheme } from '@zerogravity/shared/components/providers';
 import { EMOTION_COLORS_MAP, EMOTION_COLORS_MAP_ALPHA } from '@zerogravity/shared/entities/emotion';
+import { useIsLg } from '@zerogravity/shared/hooks';
 
 import type { ChartLevelResponse, ChartPeriod } from '@/services/chart/chart.dto';
 
@@ -59,6 +60,7 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
    * --------------------------------------------
    */
   const { accentColor } = useTheme();
+  const isTouch = useIsLg();
 
   /*
    * --------------------------------------------
@@ -115,12 +117,13 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
               borderWidth: 1,
               pointRadius: 3,
               pointHoverRadius: 6,
+              pointHitRadius: isTouch ? 15 : 5,
               spanGaps: true,
             },
           ]
         : [],
     }),
-    [labels, levelData, barColor, lineColor, isInitialized]
+    [labels, levelData, barColor, lineColor, isInitialized, isTouch]
   );
 
   const chartOptions = useMemo(
@@ -236,8 +239,8 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
             averageHoverArea: {
               type: 'box' as const,
               display: hasAverage,
-              yMin: (levelData.average || 0) - 0.25,
-              yMax: (levelData.average || 0) + 0.25,
+              yMin: (levelData.average || 0) - (isTouch ? 0.5 : 0.25),
+              yMax: (levelData.average || 0) + (isTouch ? 0.5 : 0.25),
               backgroundColor: 'transparent',
               borderWidth: 0,
               enter: (context: EventContext) => {
@@ -310,7 +313,7 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
         },
       },
     }),
-    [labels, levelData, hasAverage, timePeriod, startDate]
+    [labels, levelData, hasAverage, timePeriod, startDate, isTouch]
   );
 
   /*

@@ -31,34 +31,40 @@ export default function KeyInsightsSection({ insights, isLoading }: KeyInsightsS
         </div>
 
         {/* Content */}
-        <div className="flex flex-col px-4 pt-5 pb-8">
-          {isLoading
-            ? Array.from({ length: 3 }).map((_, i) => (
-                <div key={i}>
-                  <div className="flex items-start gap-3 px-1">
-                    <Skeleton height="16px" width="16px" className="flex-shrink-0" />
-                    <div className="flex flex-1 flex-col gap-2">
-                      <Skeleton height="13px" width="100%" />
-                      <Skeleton height="13px" width="100%" />
-                      <Skeleton height="13px" width="80%" />
-                    </div>
+        <div className={`flex flex-col px-4 pt-5 ${insights && insights.length > 0 ? 'pb-8' : 'pb-5'}`}>
+          {isLoading ? (
+            Array.from({ length: 3 }).map((_, i) => (
+              <div key={i}>
+                <div className="flex items-start gap-3 px-1">
+                  <Skeleton height="16px" width="16px" className="flex-shrink-0" />
+                  <div className="flex flex-1 flex-col gap-2">
+                    <Skeleton height="13px" width="100%" />
+                    <Skeleton height="13px" width="100%" />
+                    <Skeleton height="13px" width="80%" />
                   </div>
-                  {i !== 2 && <div className="my-4 h-px bg-[var(--gray-4)]" />}
                 </div>
-              ))
-            : insights?.map((insight, index) => (
-                <div key={`insight-${index}`}>
-                  <div className="flex items-start gap-3 px-1">
-                    <Text size="2" className="leading-relaxed text-[var(--accent-9)]">
-                      {index + 1}.
-                    </Text>
-                    <Text size="2" weight="light" className="!text-[13px] leading-relaxed">
-                      {parseBoldMarkdown(insight)}
-                    </Text>
-                  </div>
-                  {index !== insights.length - 1 && <div className="my-4 h-px bg-[var(--gray-4)]" />}
+                {i !== 2 && <div className="my-4 h-px bg-[var(--gray-4)]" />}
+              </div>
+            ))
+          ) : insights && insights.length > 0 ? (
+            insights.map((insight, index) => (
+              <div key={`insight-${index}`}>
+                <div className="flex items-start gap-3 px-1">
+                  <Text size="2" className="leading-relaxed text-[var(--accent-9)]">
+                    {index + 1}.
+                  </Text>
+                  <Text size="2" weight="light" className="!text-[13px] leading-relaxed">
+                    {parseBoldMarkdown(insight)}
+                  </Text>
                 </div>
-              ))}
+                {index !== insights.length - 1 && <div className="my-4 h-px bg-[var(--gray-4)]" />}
+              </div>
+            ))
+          ) : (
+            <Text size="2" weight="light" className="px-1 !text-[13px] leading-relaxed">
+              Record more emotions to get insights
+            </Text>
+          )}
         </div>
       </div>
     </section>
