@@ -2,7 +2,7 @@
 
 import { Heading, Text, TextArea } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -42,35 +42,21 @@ export default function AiPredictionInput({
    */
   const { data: session } = useSession();
   const { openComponentModal } = useModal();
-  const { goToStep } = useEmotionRecordContext();
+  const { prevStep } = useEmotionRecordContext();
 
   /*
    * ------------------------------------------------------------
-   * 2. States
+   * 2. Refs
+   * ------------------------------------------------------------
+   */
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  /*
+   * ------------------------------------------------------------
+   * 3. States
    * ------------------------------------------------------------
    */
   const [isFocused, setIsFocused] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  /*
-   * ------------------------------------------------------------
-   * 3. Effects
-   * ------------------------------------------------------------
-   */
-
-  /** Track keyboard height using visualViewport API */
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
-
-    const handleResize = () => {
-      const kbHeight = window.innerHeight - viewport.height;
-      setKeyboardHeight(kbHeight > 100 ? kbHeight : 0);
-    };
-
-    viewport.addEventListener('resize', handleResize);
-    return () => viewport.removeEventListener('resize', handleResize);
-  }, []);
 
   /*
    * ------------------------------------------------------------
@@ -116,17 +102,23 @@ export default function AiPredictionInput({
 
   /*
    * ------------------------------------------------------------
-   * 6. Return
+   * 6. Effects
+   * ------------------------------------------------------------
+   */
+
+  /** Focus textarea on mount */
+  useEffect(() => {
+    const textarea = containerRef.current?.querySelector('textarea');
+    textarea?.focus();
+  }, []);
+
+  /*
+   * ------------------------------------------------------------
+   * 7. Return
    * ------------------------------------------------------------
    */
   return (
-    <div
-      className="flex w-full flex-1 flex-col items-center overflow-hidden"
-      style={{
-        paddingBottom: keyboardHeight > 0 ? keyboardHeight : undefined,
-        transition: 'padding-bottom 0.3s ease-out',
-      }}
-    >
+    <>
       {/* Title */}
       <Heading as="h1" className="mobile:!text-xl !text-center !text-lg !font-light">
         AI Prediction
@@ -137,7 +129,7 @@ export default function AiPredictionInput({
 
       {/* Input Area */}
       <div className="mobile:pb-12 max-mobile:px-2 flex h-full w-full max-w-[480px] flex-1 flex-col gap-3 pt-10 pb-3">
-        <div className="relative h-full min-h-[150px] w-full">
+        <div ref={containerRef} className="relative h-full min-h-[150px] w-full">
           <TextArea
             value={aiPredictionEntry}
             onFocus={() => setIsFocused(true)}
@@ -167,7 +159,7 @@ export default function AiPredictionInput({
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
         <MotionButton
-          onClick={() => goToStep('emotion')}
+          onClick={prevStep}
           variant="surface"
           className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
           size="4"
@@ -189,6 +181,6 @@ export default function AiPredictionInput({
           </MotionButton>
         </div>
       </div>
-    </div>
+    </>
   );
 }
