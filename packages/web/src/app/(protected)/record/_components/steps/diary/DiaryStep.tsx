@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 
 import { Badge, Heading, Text } from '@radix-ui/themes';
 import { isToday } from 'date-fns';
-import { useEffect, useState } from 'react';
 
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -75,41 +74,14 @@ export default function DiaryStep() {
 
   /*
    * --------------------------------------------
-   * 3. States
-   * --------------------------------------------
-   */
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-  /*
-   * --------------------------------------------
-   * 4. Effects
-   * --------------------------------------------
-   */
-
-  /** Track keyboard height using visualViewport API */
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
-
-    const handleResize = () => {
-      const kbHeight = window.innerHeight - viewport.height;
-      setKeyboardHeight(kbHeight > 100 ? kbHeight : 0);
-    };
-
-    viewport.addEventListener('resize', handleResize);
-    return () => viewport.removeEventListener('resize', handleResize);
-  }, []);
-
-  /*
-   * --------------------------------------------
-   * 5. Derived Values
+   * 3. Derived Values
    * --------------------------------------------
    */
   const isTodayDate = date ? isToday(new Date(date)) : false;
 
   /*
    * --------------------------------------------
-   * 6. Event Handlers
+   * 4. Event Handlers
    * --------------------------------------------
    */
 
@@ -138,17 +110,11 @@ export default function DiaryStep() {
 
   /*
    * --------------------------------------------
-   * 7. Return
+   * 5. Return
    * --------------------------------------------
    */
   return (
-    <div
-      className="flex w-full flex-1 flex-col items-center overflow-hidden"
-      style={{
-        paddingBottom: keyboardHeight > 0 ? keyboardHeight : undefined,
-        transition: 'padding-bottom 0.3s ease-out',
-      }}
-    >
+    <>
       {/* Title */}
       <Heading as="h1" className="mobile:!text-xl !text-center !text-lg !font-light">
         Tell us more about your day
@@ -206,6 +172,6 @@ export default function DiaryStep() {
           </MotionButton>
         </div>
       </div>
-    </div>
+    </>
   );
 }

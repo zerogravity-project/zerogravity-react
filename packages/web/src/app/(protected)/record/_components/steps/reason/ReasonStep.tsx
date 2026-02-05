@@ -32,7 +32,8 @@ export default function ReasonStep() {
    */
   const router = useRouter();
   const { openAlertModal } = useModal();
-  const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep } = useEmotionRecordContext();
+  const { date, emotionId, emotionReasons, nextStep, prevStep, canGoNext, isFinalStep, goToStep } =
+    useEmotionRecordContext();
 
   /*
    * --------------------------------------------
@@ -110,7 +111,7 @@ export default function ReasonStep() {
 
       {/* Navigation Buttons */}
       <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
-        <GeminiButton className="mobile:!hidden" onClick={nextStep}>
+        <GeminiButton className="mobile:!hidden" onClick={() => goToStep('ai-prediction')}>
           Use AI Prediction with Gemini
         </GeminiButton>
 
@@ -142,7 +143,7 @@ export default function ReasonStep() {
           </div>
         </div>
 
-        <GeminiButton className="max-mobile:!hidden" onClick={nextStep}>
+        <GeminiButton className="max-mobile:!hidden" onClick={() => goToStep('ai-prediction')}>
           Use AI Prediction with Gemini
         </GeminiButton>
       </div>
