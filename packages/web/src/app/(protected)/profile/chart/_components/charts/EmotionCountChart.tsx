@@ -63,7 +63,7 @@ export function EmotionCountChart({ onReady }: EmotionCountChartProps) {
       isError={isError}
       onRetry={refetch}
     >
-      <div className="relative h-full min-h-0 w-full min-w-0">
+      <div className="relative h-full min-h-0 w-full min-w-0 overflow-hidden">
         <EmotionCountCanvas
           countData={countData?.data ?? []}
           timePeriod={timePeriod}
