@@ -2,7 +2,7 @@ import { format } from 'date-fns';
 import { AnimatePresence, m } from 'motion/react';
 import { useEffect, useRef } from 'react';
 
-import { useIsXl } from '@zerogravity/shared/hooks';
+import { useIsMobile, useIsXl } from '@zerogravity/shared/hooks';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
 import { QueryErrorState } from '@/app/_components/ui/error/QueryErrorState';
@@ -47,6 +47,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
    * 2. External Hooks
    * --------------------------------------------
    */
+  const isMobile = useIsMobile();
   const isOverLargeScreen = !useIsXl();
   const { timePeriod, startDate } = useChart();
 
@@ -102,23 +103,40 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
    */
 
   /** Animation variants based on screen size */
-  const wrapperAnimation = isOverLargeScreen
-    ? {
+  const getWrapperAnimation = () => {
+    if (isOverLargeScreen) {
+      // xl+: Side panel with width animation
+      return {
         initial: { width: 0 },
         animate: { width: 400 },
         exit: { width: 0 },
         transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] as const },
-      }
-    : {
-        initial: { x: '100%' },
-        animate: { x: 0 },
-        exit: { x: '100%' },
-        transition: { type: 'spring' as const, damping: 25, stiffness: 180 },
       };
+    }
+    // mobile ~ xl: Slide from right
+    return {
+      initial: { x: '100%' },
+      animate: { x: 0 },
+      exit: { x: '100%' },
+      transition: { type: 'spring' as const, damping: 25, stiffness: 180 },
+    };
+  };
 
-  const wrapperClassName = isOverLargeScreen
-    ? 'h-full flex-shrink-0 overflow-hidden'
-    : 'fixed top-0 right-0 z-9999 h-[100dvh] w-[100dvw]';
+  const getWrapperClassName = () => {
+    if (isOverLargeScreen) {
+      // xl+: Side panel
+      return 'h-full flex-shrink-0 overflow-hidden';
+    }
+    if (isMobile) {
+      // mobile: Full screen
+      return 'fixed top-0 right-0 z-9999 h-[100dvh] w-[100dvw]';
+    }
+    // mobile ~ xl: Slide from right, fixed 400px width, below nav
+    return 'fixed top-topnav-height right-0 z-101 h-[calc(100dvh-var(--spacing-topnav-height))] w-[400px] shadow-2xl';
+  };
+
+  const wrapperAnimation = getWrapperAnimation();
+  const wrapperClassName = getWrapperClassName();
 
   /** Formatted date range */
   const startDateLabel = periodAnalysisData?.data.startDate
@@ -142,7 +160,7 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
       {isOpen && (
         <>
           {/* Backdrop - Mobile only */}
-          {!isOverLargeScreen && (
+          {isMobile && (
             <m.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -163,25 +181,34 @@ export function AiAnalysisDrawer({ isOpen, onClose }: AiAnalysisDrawerProps) {
           >
             <div
               className={`relative flex h-full flex-col bg-[var(--gray-1)] ${
-                isOverLargeScreen ? 'w-[400px] border-l border-[var(--gray-3)]' : 'w-full'
+                isOverLargeScreen
+                  ? 'w-[400px] border-l border-[var(--gray-3)]'
+                  : isMobile
+                    ? 'w-full'
+                    : 'w-[400px] border-l border-[var(--gray-3)]'
               }`}
             >
               {/* Header - Fixed */}
-              {isOverLargeScreen ? (
+              {isMobile ? (
+                <TopAppBar text="Go Back" icon="arrow_back" onClick={onClose} border />
+              ) : (
                 <div className="z-10 flex-shrink-0 border-b border-[var(--gray-3)]">
                   <DrawerHeader onClose={onClose} />
                 </div>
-              ) : (
-                <TopAppBar text="Go Back" icon="arrow_back" onClick={onClose} border />
               )}
 
               {/* Scrollable Content */}
               <div
                 ref={scrollRef}
-                className={`flex min-h-0 flex-1 flex-col overflow-y-auto ${!isOverLargeScreen && 'hide-scrollbar'}`}
+                className={`flex min-h-0 flex-1 flex-col overflow-y-auto ${isMobile && 'hide-scrollbar'}`}
               >
                 {/* Title - Always visible */}
-                <TitleSection period={timePeriod} startDateLabel={startDateLabel} endDateLabel={endDateLabel} />
+                <TitleSection
+                  period={timePeriod}
+                  startDateLabel={startDateLabel}
+                  endDateLabel={endDateLabel}
+                  isLoading={isLoading}
+                />
 
                 {/* Error state */}
                 {!isLoading && isError && <QueryErrorState onRetry={refetch} />}

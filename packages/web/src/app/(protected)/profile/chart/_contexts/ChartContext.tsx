@@ -76,7 +76,16 @@ export function ChartProvider({ children }: ChartProviderProps) {
    */
   const today = useMemo(() => new Date(), []);
   const [currentDate, setCurrentDate] = useState<Date>(today);
-  const [timePeriod, setTimePeriod] = useState<TimePeriod>('week');
+  const [timePeriod, setTimePeriodState] = useState<TimePeriod>('week');
+
+  /** Set time period and reset to today */
+  const setTimePeriod = useCallback(
+    (period: TimePeriod) => {
+      setTimePeriodState(period);
+      setCurrentDate(today);
+    },
+    [today]
+  );
 
   /*
    * --------------------------------------------
@@ -189,6 +198,7 @@ export function ChartProvider({ children }: ChartProviderProps) {
       goToNextPeriod,
       goToPreviousPeriod,
       goToToday,
+      setTimePeriod,
       canGoNext,
       canGoPrevious,
       getFormattedDateRange,

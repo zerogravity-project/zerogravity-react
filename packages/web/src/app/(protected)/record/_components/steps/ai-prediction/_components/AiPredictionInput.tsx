@@ -57,6 +57,7 @@ export default function AiPredictionInput({
    * ------------------------------------------------------------
    */
   const [isFocused, setIsFocused] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   /*
    * ------------------------------------------------------------
@@ -106,6 +107,20 @@ export default function AiPredictionInput({
    * ------------------------------------------------------------
    */
 
+  /** Track keyboard height using visualViewport API */
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const handleResize = () => {
+      const kbHeight = window.innerHeight - viewport.height;
+      setKeyboardHeight(kbHeight > 100 ? kbHeight : 0);
+    };
+
+    viewport.addEventListener('resize', handleResize);
+    return () => viewport.removeEventListener('resize', handleResize);
+  }, []);
+
   /** Focus textarea on mount */
   useEffect(() => {
     const textarea = containerRef.current?.querySelector('textarea');
@@ -118,7 +133,10 @@ export default function AiPredictionInput({
    * ------------------------------------------------------------
    */
   return (
-    <>
+    <div
+      className="flex w-full flex-1 flex-col items-center overflow-hidden"
+      style={{ paddingBottom: keyboardHeight > 0 ? keyboardHeight : undefined }}
+    >
       {/* Title */}
       <Heading as="h1" className="mobile:!text-xl !text-center !text-lg !font-light">
         AI Prediction
@@ -181,6 +199,6 @@ export default function AiPredictionInput({
           </MotionButton>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -11,6 +11,7 @@ import {
   type EmotionId,
   type EmotionType,
 } from '@zerogravity/shared/entities/emotion';
+import { useIsLg } from '@zerogravity/shared/hooks';
 
 import type { ChartCountData, ChartPeriod } from '@/services/chart/chart.dto';
 
@@ -56,7 +57,14 @@ interface EmotionCountDataPoint {
 export default function EmotionCountCanvas({ countData, timePeriod, startDate, onReady }: EmotionCountCanvasProps) {
   /*
    * --------------------------------------------
-   * 1. States
+   * 1. External Hooks
+   * --------------------------------------------
+   */
+  const isTouch = useIsLg();
+
+  /*
+   * --------------------------------------------
+   * 2. States
    * --------------------------------------------
    */
   const chartRef = useRef<HTMLCanvasElement>(null);
@@ -104,9 +112,10 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
         borderWidth: 1,
         pointRadius: 4,
         pointHoverRadius: 6,
+        pointHitRadius: isTouch ? 15 : 5,
       };
     });
-  }, [countData]);
+  }, [countData, isTouch]);
 
   /** Chart data configuration (empty on first render for animation) */
   const chartData = useMemo(
