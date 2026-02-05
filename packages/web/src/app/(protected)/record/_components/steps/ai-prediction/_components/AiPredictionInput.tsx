@@ -2,7 +2,7 @@
 
 import { Heading, Text, TextArea } from '@radix-ui/themes';
 import { useSession } from 'next-auth/react';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
@@ -50,29 +50,48 @@ export default function AiPredictionInput({
    * ------------------------------------------------------------
    */
   const [isFocused, setIsFocused] = useState(false);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   /*
    * ------------------------------------------------------------
-   * 3. Derived Values
+   * 3. Effects
+   * ------------------------------------------------------------
+   */
+
+  /** Track keyboard height using visualViewport API */
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+
+    const handleResize = () => {
+      const kbHeight = window.innerHeight - viewport.height;
+      setKeyboardHeight(kbHeight > 100 ? kbHeight : 0);
+    };
+
+    viewport.addEventListener('resize', handleResize);
+    return () => viewport.removeEventListener('resize', handleResize);
+  }, []);
+
+  /*
+   * ------------------------------------------------------------
+   * 4. Derived Values
    * ------------------------------------------------------------
    */
   const consents = session?.user?.consents;
   const isValid = aiPredictionEntry?.length >= 100 && aiPredictionEntry?.length <= 300;
+  const showError = aiPredictionEntry?.length > 0 && !isValid && isFocused;
 
   /*
    * ------------------------------------------------------------
-   * 4. Callbacks
+   * 5. Callbacks
    * ------------------------------------------------------------
    */
 
   /** Handle textarea input change */
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (e.target.value.length > 300) {
-        return;
-      }
-
-      setAiPredictionEntry(e.target.value);
+      const value = e.target.value.slice(0, 300);
+      setAiPredictionEntry(value);
     },
     [setAiPredictionEntry]
   );
@@ -97,11 +116,17 @@ export default function AiPredictionInput({
 
   /*
    * ------------------------------------------------------------
-   * 5. Return
+   * 6. Return
    * ------------------------------------------------------------
    */
   return (
-    <>
+    <div
+      className="flex w-full flex-1 flex-col items-center overflow-hidden"
+      style={{
+        paddingBottom: keyboardHeight > 0 ? keyboardHeight : undefined,
+        transition: 'padding-bottom 0.3s ease-out',
+      }}
+    >
       {/* Title */}
       <Heading as="h1" className="mobile:!text-xl !text-center !text-lg !font-light">
         AI Prediction
@@ -122,21 +147,18 @@ export default function AiPredictionInput({
             size="3"
             radius="full"
             className="!h-full !w-full !shadow-none [&_textarea]:!px-5 [&_textarea]:!py-3.5"
-            color={!isValid && isFocused ? 'red' : undefined}
+            color={showError ? 'red' : undefined}
             aria-required="true"
             aria-describedby="ai-input-hint"
-            aria-invalid={!isValid && isFocused}
+            aria-invalid={showError}
           />
 
-          {!isValid && isFocused && (
+          {showError && (
             <Text id="ai-input-hint" color="red" size="1" className="absolute bottom-4.5 left-5 pr-[100px]">
               &#8251; Text has to be between 100 and 300 characters
             </Text>
           )}
-          <Text
-            color={!isValid && isFocused ? 'red' : 'gray'}
-            className="absolute right-5 bottom-3.5 whitespace-nowrap"
-          >
+          <Text color={showError ? 'red' : 'gray'} className="absolute right-5 bottom-3.5 whitespace-nowrap">
             {aiPredictionEntry?.length ?? 0} / 300
           </Text>
         </div>
@@ -167,6 +189,6 @@ export default function AiPredictionInput({
           </MotionButton>
         </div>
       </div>
-    </>
+    </div>
   );
 }

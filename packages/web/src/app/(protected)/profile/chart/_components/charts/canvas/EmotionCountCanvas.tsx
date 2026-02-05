@@ -193,10 +193,13 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
                 parentRect.width
               );
 
+              // Check if tooltip would overflow top boundary
+              const wouldOverflowTop = tooltip.caretY - tooltipRect.height - 10 < 0;
+
               tooltipEl.style.opacity = '1';
               tooltipEl.style.left = left + 'px';
-              tooltipEl.style.top = positionY + tooltip.caretY - 10 + 'px';
-              tooltipEl.style.transform = 'translate(-50%, -100%)';
+              tooltipEl.style.top = positionY + tooltip.caretY + (wouldOverflowTop ? 10 : -10) + 'px';
+              tooltipEl.style.transform = wouldOverflowTop ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
             }
           },
         },

@@ -1,7 +1,5 @@
 import { Dialog } from '@radix-ui/themes';
 
-import { useIsMobile } from '@zerogravity/shared/hooks';
-
 /*
  * ============================================
  * Type Definitions
@@ -10,7 +8,7 @@ import { useIsMobile } from '@zerogravity/shared/hooks';
 
 interface ModalHeaderProps {
   title: string;
-  description?: string;
+  description?: React.ReactNode;
 }
 
 /*
@@ -22,21 +20,16 @@ interface ModalHeaderProps {
 export function ModalHeader({ title, description }: ModalHeaderProps) {
   /*
    * --------------------------------------------
-   * 1. External Hooks
-   * --------------------------------------------
-   */
-  const isMobile = useIsMobile();
-
-  /*
-   * --------------------------------------------
-   * 2. Return
+   * 1. Return
    * --------------------------------------------
    */
   return (
     <header className="flex w-full flex-col">
-      <Dialog.Title size={isMobile ? '6' : '5'}>{title}</Dialog.Title>
+      <Dialog.Title weight="medium" size="5" className="!mb-2">
+        {title}
+      </Dialog.Title>
       {description && (
-        <Dialog.Description size={isMobile ? '3' : '2'} color="gray">
+        <Dialog.Description size="2" color="gray" className="!leading-normal">
           {description}
         </Dialog.Description>
       )}

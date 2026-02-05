@@ -70,7 +70,7 @@ export function EmotionLevelChart() {
       isError={isError}
       onRetry={refetch}
     >
-      <div className="relative h-full min-h-0 w-full min-w-0 overflow-hidden">
+      <div className="relative h-full min-h-0 w-full min-w-0">
         <EmotionLevelCanvas
           levelData={levelData ?? { data: [], average: null }}
           timePeriod={timePeriod}
