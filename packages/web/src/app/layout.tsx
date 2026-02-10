@@ -121,6 +121,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
         {/* TypeKit (Helvetica Neue LT Pro) */}
         <link rel="stylesheet" href="https://use.typekit.net/nrd4ucj.css" />
+        {/* PWA */}
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body>
         {/* JSON-LD Structured Data */}
