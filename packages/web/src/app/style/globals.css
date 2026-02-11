@@ -4,4 +4,7 @@
 /* Tailwind v4 Source Paths - Scan web package files */
 @source '../../**/*.{ts,tsx}';
 
-/* Web-specific styles (if needed) can be added below */
+/* Prevent layout collapse on narrow PWA viewports (Z Fold 2+ cover: 320px) */
+body {
+  min-width: 320px;
+}
