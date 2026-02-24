@@ -79,9 +79,16 @@ html {
   background-color: var(--background-dark);
 }
 
-/* Material Icons */
+/* Material Icons - prevent FOUT */
 .material-symbols-outlined {
   font-family: 'Material Symbols Outlined';
+  font-display: block;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
   font-variation-settings:
     'FILL' 0,
     'wght' 400,
