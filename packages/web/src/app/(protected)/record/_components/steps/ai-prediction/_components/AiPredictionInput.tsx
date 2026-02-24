@@ -179,7 +179,7 @@ export default function AiPredictionInput({
         <MotionButton
           onClick={prevStep}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !p-0"
           size="4"
           radius="none"
           aria-label="Go to previous step"
