@@ -19,7 +19,7 @@ export interface CustomIconDescriptorType extends IconDescriptor {
 
 const icon: CustomIconDescriptorType = {
   rel: 'stylesheet',
-  url: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block',
+  url: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=block&icon_names=add,analytics,arrow_back,arrow_forward,attach_file,auto_awesome,bolt,calendar_today,check,check_box,chevron_left,chevron_right,close,edit_note,error,feedback,image,ios_share,lightbulb,menu,play_circle,refresh,rocket_launch,settings,sticky_note_2,warning',
   precedence: 'default',
 };
 
@@ -106,6 +106,7 @@ export const metadata: Metadata = {
  * Minimal - only html/body structure
  * Providers are handled by route group layouts
  */
+/* eslint-disable @next/next/no-page-custom-font, @next/next/google-font-display */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -118,7 +119,10 @@ export default function RootLayout({
         <link rel="icon" href="/favicon-light.png" media="(prefers-color-scheme: light)" />
         <link rel="icon" href="/favicon-dark.png" media="(prefers-color-scheme: dark)" />
         {/* Font preconnects */}
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://use.typekit.net" crossOrigin="anonymous" />
+        {/* Material Symbols preload */}
+        <link rel="preload" href={icon.url as string} as="style" />
         {/* TypeKit (Helvetica Neue LT Pro) */}
         <link rel="stylesheet" href="https://use.typekit.net/nrd4ucj.css" />
         {/* PWA */}
