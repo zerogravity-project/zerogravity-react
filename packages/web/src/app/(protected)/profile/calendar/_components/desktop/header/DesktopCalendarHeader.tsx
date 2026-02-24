@@ -46,7 +46,7 @@ export default function DesktopCalendarHeader() {
             color="gray"
             onClick={goToPreviousMonth}
             aria-label="Previous month"
-            className="!h-7 !w-7 !rounded-r-none !border-r-0"
+            className="!h-7 !w-7 !rounded-r-none !border-r-0 !p-0"
           >
             <Icon size={20}>chevron_left</Icon>
           </Button>
@@ -58,7 +58,7 @@ export default function DesktopCalendarHeader() {
             color="gray"
             onClick={goToNextMonth}
             aria-label="Next month"
-            className="!h-7 !w-7 !rounded-l-none"
+            className="!-ml-px !h-7 !w-7 !rounded-l-none !p-0"
           >
             <Icon size={20}>chevron_right</Icon>
           </Button>

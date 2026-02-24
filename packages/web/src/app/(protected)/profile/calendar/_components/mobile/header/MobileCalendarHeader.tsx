@@ -103,7 +103,7 @@ export default function MobileCalendarHeader({
               onClick={goToPreviousWeek}
               disabled={isLoading}
               aria-label="Previous week"
-              className="!w-8 !rounded-r-none !border-r-0"
+              className="!w-8 !rounded-r-none !border-r-0 !p-0"
             >
               <Icon>chevron_left</Icon>
             </Button>
@@ -114,7 +114,7 @@ export default function MobileCalendarHeader({
               onClick={goToNextWeek}
               disabled={isLoading}
               aria-label="Next week"
-              className="!w-8 !rounded-l-none"
+              className="!-ml-px !w-8 !rounded-l-none !p-0"
             >
               <Icon>chevron_right</Icon>
             </Button>

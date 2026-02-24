@@ -149,7 +149,7 @@ export default function DiaryStep() {
         <MotionButton
           onClick={prevStep}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !p-0"
           color={EMOTION_STEPS[emotionId].color}
           size="4"
           radius="none"
