@@ -70,6 +70,7 @@ export const metadata: Metadata = {
   creator: 'ZeroGravity',
   publisher: 'ZeroGravity',
   applicationName: 'ZeroGravity',
+  themeColor: '#0b0b0c',
   appleWebApp: {
     title: 'ZeroGravity',
     statusBarStyle: 'black-translucent',

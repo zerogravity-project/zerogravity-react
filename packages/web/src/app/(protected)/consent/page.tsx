@@ -95,7 +95,10 @@ export default function ConsentPage() {
    * --------------------------------------------
    */
   return (
-    <main id="main-content" className="flex min-h-screen flex-col items-center justify-center bg-[var(--gray-1)] p-8">
+    <main
+      id="main-content"
+      className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-background)] p-8"
+    >
       <div
         className="w-full max-w-[600px] rounded-[var(--radius-4)] bg-[var(--color-background)] p-8"
         style={{ boxShadow: 'var(--shadow-4)' }}
