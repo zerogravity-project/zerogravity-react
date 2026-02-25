@@ -68,7 +68,7 @@ export function EmotionReasonsChart({ isReady = false }: EmotionReasonsChartProp
   return (
     <EmotionChartContainer
       title="Emotion Reasons"
-      className="max-mobile:max-h-[200px]"
+      className="max-mobile:!min-h-[200px] max-mobile:max-h-[200px]"
       isError={isError}
       onRetry={refetch}
     >

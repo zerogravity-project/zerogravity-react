@@ -1,7 +1,7 @@
 import '@zerogravity/shared/styles';
 import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
 
@@ -45,6 +45,10 @@ const JSON_LD = {
     price: '0',
     priceCurrency: 'USD',
   },
+};
+
+export const viewport: Viewport = {
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {

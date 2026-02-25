@@ -42,8 +42,8 @@ export function Footer({ className, LinkComponent = DefaultLink }: FooterProps) 
   return (
     <footer
       className={cn(
-        'absolute bottom-0 left-0 z-5 flex w-full items-center justify-between px-8 py-5',
-        'max-sm:flex-col max-sm:items-start max-sm:gap-2 max-sm:px-6 max-sm:py-6',
+        'absolute bottom-0 left-0 z-5 flex w-full items-center justify-between px-8 pt-5 pb-[calc(1.25rem+var(--safe-area-bottom))]',
+        'max-sm:flex-col max-sm:items-start max-sm:gap-2 max-sm:px-6 max-sm:pt-6 max-sm:pb-[calc(1.5rem+var(--safe-area-bottom))]',
         className
       )}
     >
