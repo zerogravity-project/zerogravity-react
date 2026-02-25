@@ -124,7 +124,7 @@ export function Navigation({
         className={cn(
           'h-topnav-height relative z-[2000] flex w-full flex-1 items-center justify-between px-5 sm:px-6',
           background && `bg-[var(--gray-1)]`,
-          border && 'border-b border-[var(--gray-3)]',
+          border && 'after:absolute after:bottom-0 after:left-0 after:h-px after:w-full after:bg-[var(--gray-3)]',
           className
         )}
       >

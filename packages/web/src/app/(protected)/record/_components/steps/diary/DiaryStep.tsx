@@ -8,6 +8,8 @@ import { isToday } from 'date-fns';
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
 import { EMOTION_STEPS } from '@zerogravity/shared/entities/emotion';
+import { useKeyboardHeight } from '@zerogravity/shared/hooks';
+import { cn } from '@zerogravity/shared/utils';
 
 import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
@@ -32,6 +34,7 @@ export default function DiaryStep() {
   const router = useRouter();
   const { openAlertModal } = useModal();
   const { date, emotionId, emotionReasons, diaryEntry, prevStep, emotionRecordId } = useEmotionRecordContext();
+  const keyboardHeight = useKeyboardHeight();
 
   /*
    * --------------------------------------------
@@ -78,6 +81,7 @@ export default function DiaryStep() {
    * --------------------------------------------
    */
   const isTodayDate = date ? isToday(new Date(date)) : false;
+  const isKeyboardOpen = keyboardHeight > 0;
 
   /*
    * --------------------------------------------
@@ -145,11 +149,16 @@ export default function DiaryStep() {
       <DiaryTextArea />
 
       {/* Navigation Buttons */}
-      <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
+      <div
+        className={cn(
+          'mobile:pb-20 flex w-full max-w-[480px] gap-3',
+          !isKeyboardOpen && 'standalone:max-mobile:px-5 standalone:max-mobile:pb-safe'
+        )}
+      >
         <MotionButton
           onClick={prevStep}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !p-0"
           color={EMOTION_STEPS[emotionId].color}
           size="4"
           radius="none"
@@ -160,10 +169,14 @@ export default function DiaryStep() {
         <div className="w-full">
           <MotionButton
             onClick={handleSubmit}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
+            className={cn(
+              'mobile:!rounded-[9999px] max-mobile:!rounded-none !w-full',
+              isKeyboardOpen
+                ? 'max-mobile:!h-14'
+                : 'max-mobile:!h-[var(--mobile-bottom-btn-height)] standalone:max-mobile:!rounded-[var(--radius-4)]'
+            )}
             color={EMOTION_STEPS[emotionId].color}
             size="4"
-            radius="none"
             loading={isCreatingEmotionRecord || isUpdatingEmotionRecord}
             disabled={isCreatingEmotionRecord || isUpdatingEmotionRecord || isCreateSuccess || isUpdateSuccess}
           >

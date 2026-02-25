@@ -1,7 +1,7 @@
 import '@zerogravity/shared/styles';
 import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
 
@@ -47,6 +47,10 @@ const JSON_LD = {
   },
 };
 
+export const viewport: Viewport = {
+  viewportFit: 'cover',
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.zerogv.com'),
   title: {
@@ -70,6 +74,7 @@ export const metadata: Metadata = {
   creator: 'ZeroGravity',
   publisher: 'ZeroGravity',
   applicationName: 'ZeroGravity',
+  themeColor: '#0b0b0c',
   appleWebApp: {
     title: 'ZeroGravity',
     statusBarStyle: 'black-translucent',

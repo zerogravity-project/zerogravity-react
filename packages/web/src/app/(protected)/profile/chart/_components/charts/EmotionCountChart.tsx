@@ -59,7 +59,7 @@ export function EmotionCountChart({ onReady }: EmotionCountChartProps) {
   return (
     <EmotionChartContainer
       title="Emotion Count Chart"
-      className="max-mobile:h-[320px] sm:col-span-2"
+      className="max-mobile:!min-h-[340px] sm:col-span-2"
       isError={isError}
       onRetry={refetch}
     >

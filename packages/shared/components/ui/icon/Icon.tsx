@@ -27,6 +27,8 @@ export function Icon({ children, size, color, className }: IconProps) {
       style={{
         fontSize: size,
         color: color ? `var(--${color}-9)` : undefined,
+        willChange: 'transform',
+        transform: 'translateZ(0)',
       }}
     >
       {children}

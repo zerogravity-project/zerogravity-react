@@ -148,11 +148,11 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
       </div>
 
       {/* Action Buttons */}
-      <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
+      <div className="mobile:pb-20 standalone:max-mobile:px-5 standalone:max-mobile:pb-safe flex w-full max-w-[480px] gap-3">
         <MotionButton
           onClick={handleReject}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !p-0"
           color={emotionColor}
           size="4"
           radius="none"
@@ -163,10 +163,9 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
         <div className="w-full">
           <MotionButton
             onClick={handleAccept}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
+            className="mobile:!rounded-[9999px] max-mobile:!h-[var(--mobile-bottom-btn-height)] max-mobile:!rounded-none standalone:max-mobile:!rounded-[var(--radius-4)] !w-full"
             color={emotionColor}
             size="4"
-            radius="none"
           >
             Accept
             <Icon>check</Icon>

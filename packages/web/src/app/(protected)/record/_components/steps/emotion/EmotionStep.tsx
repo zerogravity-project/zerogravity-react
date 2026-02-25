@@ -69,17 +69,16 @@ export default function EmotionStep() {
       <EmotionSlider disabled={!isSceneLoaded} />
 
       {/* Next Button */}
-      <div className="mobile:pb-20 flex w-full max-w-[480px] flex-col gap-6">
+      <div className="mobile:pb-20 standalone:max-mobile:px-5 standalone:max-mobile:pb-safe flex w-full max-w-[480px] flex-col gap-6">
         <GeminiButton isLoaded={isSceneLoaded} className="mobile:!hidden" onClick={() => goToStep('ai-prediction')}>
           Use AI Prediction with Gemini
         </GeminiButton>
         <div className="w-full">
           <MotionButton
             onClick={nextStep}
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
+            className="mobile:!rounded-[9999px] max-mobile:!h-[var(--mobile-bottom-btn-height)] max-mobile:!rounded-none standalone:max-mobile:!rounded-[var(--radius-4)] !w-full"
             color={EMOTION_STEPS[emotionValueToStepIndex].color}
             size="4"
-            radius="none"
           >
             Next
             <Icon>arrow_forward</Icon>

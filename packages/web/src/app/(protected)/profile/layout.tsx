@@ -1,7 +1,12 @@
+import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 
 import { DesktopMenu } from '@/app/_components/ui/menu/desktop/DesktopMenu';
 import { NavigationAdapter } from '@/app/_components/ui/navigation/NavigationAdapter';
+
+export const metadata: Metadata = {
+  themeColor: '#111113',
+};
 
 /**
  * Profile layout
