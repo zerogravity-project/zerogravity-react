@@ -18,9 +18,9 @@ describe('chartUtils', () => {
     it('returns correct label for each emotion value (0-6)', () => {
       expect(emotionValueToLabel(0)).toBe('VERY NEGATIVE');
       expect(emotionValueToLabel(1)).toBe('NEGATIVE');
-      expect(emotionValueToLabel(2)).toBe('MID NEGATIVE');
+      expect(emotionValueToLabel(2)).toBe('SLIGHTLY NEGATIVE');
       expect(emotionValueToLabel(3)).toBe('NORMAL');
-      expect(emotionValueToLabel(4)).toBe('MID POSITIVE');
+      expect(emotionValueToLabel(4)).toBe('SLIGHTLY POSITIVE');
       expect(emotionValueToLabel(5)).toBe('POSITIVE');
       expect(emotionValueToLabel(6)).toBe('VERY POSITIVE');
     });
@@ -51,7 +51,7 @@ describe('chartUtils', () => {
     /** Returns range span for fractional values */
     it('returns range span for fractional values', () => {
       const result = generateEmotionRangeHtml(2.5);
-      expect(result).toContain('MID NEGATIVE');
+      expect(result).toContain('SLIGHTLY NEGATIVE');
       expect(result).toContain('NORMAL');
       expect(result).toContain(' - ');
     });
