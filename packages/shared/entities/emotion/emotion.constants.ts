@@ -32,9 +32,9 @@ export const EMOTION_IMAGE_URLS = {
 export const EMOTION_KEYS = [
   'very_negative',
   'negative',
-  'mid_negative',
+  'slightly_negative',
   'normal',
-  'mid_positive',
+  'slightly_positive',
   'positive',
   'very_positive',
 ] as const;
@@ -43,9 +43,9 @@ export const EMOTION_KEYS = [
 export const EMOTION_TYPES = [
   'VERY NEGATIVE',
   'NEGATIVE',
-  'MID NEGATIVE',
+  'SLIGHTLY NEGATIVE',
   'NORMAL',
-  'MID POSITIVE',
+  'SLIGHTLY POSITIVE',
   'POSITIVE',
   'VERY POSITIVE',
 ] as const;
