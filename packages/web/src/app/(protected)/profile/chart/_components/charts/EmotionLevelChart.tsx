@@ -66,7 +66,7 @@ export function EmotionLevelChart() {
   return (
     <EmotionChartContainer
       title="Emotion Level Chart"
-      className="max-mobile:h-[320px] max-mobile:pb-10"
+      className="max-mobile:!min-h-[calc(340px+var(--safe-area-bottom))] max-mobile:pb-[calc(2.5rem+var(--safe-area-bottom))]"
       isError={isError}
       onRetry={refetch}
     >
