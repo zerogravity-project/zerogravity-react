@@ -663,7 +663,7 @@ test.describe('Mobile Calendar', () => {
               {
                 emotionRecordId: 'moment-2',
                 emotionId: 2,
-                emotionType: 'MID NEGATIVE',
+                emotionType: 'SLIGHTLY NEGATIVE',
                 reasons: ['Weather'],
                 diaryEntry: 'Rainy day',
                 recordedAt: today,
