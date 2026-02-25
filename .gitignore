@@ -64,5 +64,8 @@ CLAUDE.md
 # plan
 docs/*
 
+# CDN local sync folder
+cdn/
+
 # Sentry
 .env.sentry-build-plugin

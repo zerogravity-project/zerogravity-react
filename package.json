@@ -37,7 +37,10 @@
     "test:e2e:headed": "pnpm --filter web test:e2e:headed",
     "start:web": "pnpm --filter web start",
     "start:extension": "pnpm --filter extension start",
-    "start:all": "pnpm -r start"
+    "start:all": "pnpm -r start",
+    "cdn:sync": "bash scripts/cdn-video.sh sync",
+    "cdn:list": "bash scripts/cdn-video.sh list",
+    "cdn:show": "bash scripts/cdn-video.sh show"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
