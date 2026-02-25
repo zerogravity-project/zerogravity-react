@@ -22,7 +22,10 @@ interface TermsLayoutProps {
  */
 export function TermsLayout({ title, lastUpdated, children }: TermsLayoutProps) {
   return (
-    <main id="main-content" className="pt-topnav-height mobile:pb-8 min-h-screen bg-[var(--gray-1)] pb-10">
+    <main
+      id="main-content"
+      className="pt-topnav-height mobile:pb-[calc(2rem+var(--safe-area-bottom))] min-h-screen bg-[var(--color-background)] pb-[calc(2.5rem+var(--safe-area-bottom))]"
+    >
       <div className="mobile:mt-10 mx-auto mt-10 max-w-3xl px-5">
         {/* Header */}
         <header className="mobile:mb-10 mb-8 flex flex-col items-center gap-2 text-center">

@@ -6,6 +6,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { useKeyboardHeight } from '@zerogravity/shared/hooks';
+import { cn } from '@zerogravity/shared/utils';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
 import { AiConsentModal } from '@/app/_components/ui/modal/AiConsentModal';
@@ -43,6 +45,7 @@ export default function AiPredictionInput({
   const { data: session } = useSession();
   const { openComponentModal } = useModal();
   const { prevStep } = useEmotionRecordContext();
+  const keyboardHeight = useKeyboardHeight();
 
   /*
    * ------------------------------------------------------------
@@ -57,7 +60,6 @@ export default function AiPredictionInput({
    * ------------------------------------------------------------
    */
   const [isFocused, setIsFocused] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   /*
    * ------------------------------------------------------------
@@ -67,6 +69,7 @@ export default function AiPredictionInput({
   const consents = session?.user?.consents;
   const isValid = aiPredictionEntry?.length >= 100 && aiPredictionEntry?.length <= 300;
   const showError = aiPredictionEntry?.length > 0 && !isValid && isFocused;
+  const isKeyboardOpen = keyboardHeight > 0;
 
   /*
    * ------------------------------------------------------------
@@ -106,20 +109,6 @@ export default function AiPredictionInput({
    * 6. Effects
    * ------------------------------------------------------------
    */
-
-  /** Track keyboard height using visualViewport API */
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
-
-    const handleResize = () => {
-      const kbHeight = window.innerHeight - viewport.height;
-      setKeyboardHeight(kbHeight > 100 ? kbHeight : 0);
-    };
-
-    viewport.addEventListener('resize', handleResize);
-    return () => viewport.removeEventListener('resize', handleResize);
-  }, []);
 
   /** Focus textarea on mount */
   useEffect(() => {
@@ -175,11 +164,16 @@ export default function AiPredictionInput({
       </div>
 
       {/* Navigation Buttons */}
-      <div className="mobile:pb-20 flex w-full max-w-[480px] gap-3">
+      <div
+        className={cn(
+          'mobile:pb-20 flex w-full max-w-[480px] gap-3',
+          !isKeyboardOpen && 'standalone:max-mobile:px-5 standalone:max-mobile:pb-safe'
+        )}
+      >
         <MotionButton
           onClick={prevStep}
           variant="surface"
-          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12"
+          className="mobile:!rounded-[9999px] max-mobile:!hidden !w-12 !p-0"
           size="4"
           radius="none"
           aria-label="Go to previous step"
@@ -188,9 +182,13 @@ export default function AiPredictionInput({
         </MotionButton>
         <div className="w-full">
           <MotionButton
-            className="mobile:!rounded-[9999px] max-mobile:!h-14 !w-full"
+            className={cn(
+              'mobile:!rounded-[9999px] max-mobile:!rounded-none !w-full',
+              isKeyboardOpen
+                ? 'max-mobile:!h-14'
+                : 'max-mobile:!h-[var(--mobile-bottom-btn-height)] standalone:max-mobile:!rounded-[var(--radius-4)]'
+            )}
             size="4"
-            radius="none"
             disabled={!isValid}
             onClick={handleSubmit}
           >

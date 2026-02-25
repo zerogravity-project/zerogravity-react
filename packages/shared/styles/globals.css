@@ -72,7 +72,31 @@ button {
 :root {
   --background-dark: #0b0b0c;
   --text-default: #ffffff;
+  --safe-area-bottom: 0px;
+  --mobile-bottom-btn-height: 3.5rem;
 }
+
+/* PWA Standalone overrides */
+@media (display-mode: standalone) {
+  :root {
+    --mobile-bottom-btn-height: 3rem;
+  }
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  @media (display-mode: standalone) {
+    :root {
+      --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    }
+  }
+}
+
+@utility pb-safe {
+  padding-bottom: var(--safe-area-bottom);
+}
+
+/* PWA Standalone variant for Tailwind v4 */
+@variant standalone (@media (display-mode: standalone));
 
 /* Prevent initial flash - apply background to html */
 html {

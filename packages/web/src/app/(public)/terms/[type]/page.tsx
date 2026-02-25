@@ -5,11 +5,17 @@
 
 import { notFound } from 'next/navigation';
 
+import type { Metadata } from 'next';
+
 import { AIAnalysisContent } from './_components/AIAnalysisContent';
 import { PrivacyPolicyContent } from './_components/PrivacyPolicyContent';
 import { SensitiveDataContent } from './_components/SensitiveDataContent';
 import { ServiceTermsContent } from './_components/ServiceTermsContent';
 import { TermsLayout } from './_components/TermsLayout';
+
+export const metadata: Metadata = {
+  themeColor: '#111113',
+};
 
 /*
  * ============================================

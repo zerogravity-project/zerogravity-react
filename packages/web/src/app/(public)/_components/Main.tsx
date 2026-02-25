@@ -88,7 +88,7 @@ export default function Main() {
         <main id="main-content" className="contents">
           <Clock />
 
-          <div className="absolute bottom-16 left-[50%] z-5 translate-x-[-50%] max-[1025px]:bottom-28">
+          <div className="absolute bottom-[calc(4rem+var(--safe-area-bottom))] left-[50%] z-5 translate-x-[-50%] max-[1025px]:bottom-[calc(7rem+var(--safe-area-bottom))]">
             <MotionButton
               size="4"
               variant="surface"
