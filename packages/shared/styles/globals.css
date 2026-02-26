@@ -72,6 +72,7 @@ button {
 :root {
   --background-dark: #0b0b0c;
   --text-default: #ffffff;
+  --safe-area-top: 0px;
   --safe-area-bottom: 0px;
   --mobile-bottom-btn-height: 3.5rem;
 }
@@ -83,12 +84,25 @@ button {
   }
 }
 
+@supports (padding-top: env(safe-area-inset-top)) {
+  @media (display-mode: standalone) {
+    :root {
+      --safe-area-top: env(safe-area-inset-top, 0px);
+      --spacing-topnav-height: calc(3.5rem + env(safe-area-inset-top, 0px));
+    }
+  }
+}
+
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   @media (display-mode: standalone) {
     :root {
       --safe-area-bottom: env(safe-area-inset-bottom, 0px);
     }
   }
+}
+
+@utility pt-safe {
+  padding-top: var(--safe-area-top);
 }
 
 @utility pb-safe {
