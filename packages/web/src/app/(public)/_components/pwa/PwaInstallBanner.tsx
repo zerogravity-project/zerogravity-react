@@ -36,12 +36,12 @@ export function PwaInstallBanner({ isIOS, onInstall, onDismiss }: PwaInstallBann
     <div className="border-t border-[var(--gray-3)] bg-[var(--gray-1)] px-4 py-3">
       <div className="mx-auto flex max-w-[600px] items-center gap-3">
         {/* App Icon */}
-        <Image src="/icon-192.png" alt="ZeroGravity" width={40} height={40} className="flex-shrink-0 rounded-[10px]" />
+        <Image src="/icon-192.png" alt="Zero Gravity" width={40} height={40} className="flex-shrink-0 rounded-[10px]" />
 
         {/* Text Content */}
         <div className="flex flex-1 flex-col gap-0.5">
           <Text size="2" weight="medium">
-            Install ZeroGravity
+            Install Zero Gravity
           </Text>
           {isIOS ? (
             <Text size="1" weight="light" color="gray">

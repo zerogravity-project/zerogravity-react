@@ -20,8 +20,8 @@ test.describe('Login Page Display', () => {
     await page.waitForLoadState('load');
     await page.waitForLoadState('networkidle');
 
-    // Check if the page title contains "ZeroGravity"
-    await expect(page).toHaveTitle(/ZeroGravity/);
+    // Check if the page title contains "Zero Gravity"
+    await expect(page).toHaveTitle(/Zero Gravity/);
 
     // Wait for client-side hydration (LoginButtons is a client component)
     await page.waitForTimeout(2000);
