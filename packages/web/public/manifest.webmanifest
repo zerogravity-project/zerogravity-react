@@ -1,6 +1,6 @@
 {
-  "name": "ZeroGravity",
-  "short_name": "ZeroGravity",
+  "name": "Zero Gravity",
+  "short_name": "Zero Gravity",
   "description": "AI-powered emotion tracking app",
   "start_url": "/",
   "display": "standalone",
