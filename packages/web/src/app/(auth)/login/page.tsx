@@ -9,9 +9,9 @@ import { ButtonSection } from './_components/ButtonSection';
  */
 export default function LoginPage() {
   return (
-    <section className="flex h-[100dvh] w-[100dvw] items-center justify-center bg-[var(--background-dark)] pt-8">
+    <section className="flex h-[100dvh] w-[100dvw] items-center justify-center bg-[var(--background-dark)]">
       <div className="flex h-full w-full items-center justify-center px-5">
-        <div className="max-mobile:border-none max-mobile:bg-transparent max-mobile:p-0 flex h-[50dvh] w-full max-w-[480px] flex-col items-center justify-between gap-4 rounded-[4px] border border-[var(--gray-3)] bg-[var(--gray-1)] px-5 pt-18 pb-8">
+        <div className="max-mobile:border-none max-mobile:bg-transparent max-mobile:p-0 flex h-[50dvh] w-full max-w-[420px] flex-col items-center justify-between gap-4 rounded-[4px] border border-[var(--gray-3)] bg-[var(--gray-1)] px-5 pt-18 pb-8">
           <Logo version="v2" width={280} />
           <ButtonSection />
         </div>
