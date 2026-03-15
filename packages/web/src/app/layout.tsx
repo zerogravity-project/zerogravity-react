@@ -35,7 +35,7 @@ const APP_DESCRIPTION =
 const JSON_LD = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'ZeroGravity',
+  name: 'Zero Gravity',
   description: APP_DESCRIPTION,
   applicationCategory: 'HealthApplication',
   operatingSystem: 'Web',
@@ -54,8 +54,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.zerogv.com'),
   title: {
-    default: 'ZeroGravity',
-    template: '%s | ZeroGravity',
+    default: 'Zero Gravity',
+    template: '%s | Zero Gravity',
   },
   description: APP_DESCRIPTION,
   keywords: [
@@ -70,29 +70,29 @@ export const metadata: Metadata = {
     'mental wellness',
     'daily mood journal',
   ],
-  authors: [{ name: 'ZeroGravity', url: 'https://www.zerogv.com' }],
-  creator: 'ZeroGravity',
-  publisher: 'ZeroGravity',
-  applicationName: 'ZeroGravity',
+  authors: [{ name: 'Zero Gravity', url: 'https://www.zerogv.com' }],
+  creator: 'Zero Gravity',
+  publisher: 'Zero Gravity',
+  applicationName: 'Zero Gravity',
   themeColor: '#0b0b0c',
   appleWebApp: {
-    title: 'ZeroGravity',
+    title: 'Zero Gravity',
     statusBarStyle: 'black-translucent',
   },
   icons: {
     other: icon,
   },
   openGraph: {
-    title: 'ZeroGravity',
+    title: 'Zero Gravity',
     description: APP_DESCRIPTION,
     url: 'https://www.zerogv.com',
-    siteName: 'ZeroGravity',
+    siteName: 'Zero Gravity',
     images: [
       {
         url: OG_IMAGE_URL,
         width: 1200,
         height: 630,
-        alt: 'ZeroGravity - Emotion Tracking',
+        alt: 'Zero Gravity - Emotion Tracking',
       },
     ],
     locale: 'en_US',
@@ -100,7 +100,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'ZeroGravity',
+    title: 'Zero Gravity',
     description: APP_DESCRIPTION,
     images: [OG_IMAGE_URL],
   },
