@@ -6,7 +6,7 @@
 
 <br/>
 
-![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&pause=1000&color=6366F1&center=true&vCenter=true&width=500&lines=Emotion+Tracking+App;3D+Visualization;Built+with+Next.js+15)
+![Typing SVG](https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=600&size=24&duration=3000&pause=1000&color=6366F1&center=true&vCenter=true&width=435&lines=Record+·+Analyze+·+Visualize;AI-Powered+Emotion+Tracking;Built+with+Next.js+15+%2B+Three.js)
 
 **3D Emotion Visualization & Personal Wellness Tracking Platform**
 
@@ -42,13 +42,13 @@
 ZeroGravity is a personal wellness application that helps users track and visualize their emotions through an immersive 3D experience. The platform transforms emotional data into beautiful, interactive 3D planets that morph and change based on your emotional state.
 
 > 📌 Rebuilt from an incomplete collaborative Vue project into a full-featured solo full-stack application.
-> [Original Vue version](https://github.com/zerogravity-project/zerogravity-frontend/tree/main) | [Backend Repository](https://github.com/zerogravity-project/zerogravity-backend)
+> [Backend Repository](https://github.com/zerogravity-project/zerogravity-backend)
 
 ### Why ZeroGravity?
 
 - 🎨 **Visual Emotion Tracking** - Transform abstract emotions into tangible 3D visualizations
 - 📊 **Data-Driven Insights** - Analyze emotional patterns over time with interactive charts
-- 🤖 **AI-Powered Insights** - Emotion prediction from diary entries and period-based trend analysis
+- 🤖 **AI-Powered Insights** - Google Gemini API for emotion prediction and period analysis
 - 🧩 **Cross-Platform** - Seamlessly sync between web app and Chrome extension
 
 ---
@@ -61,7 +61,7 @@ ZeroGravity is a personal wellness application that helps users track and visual
 | 📝 **3-Step Recording**    | Emotion Level → Reason → Diary with URL-based navigation        | React Context, Next.js |
 | 📅 **Responsive Calendar** | Desktop/mobile calendar with emotion detail drawer              | date-fns, Radix UI     |
 | 📊 **Chart Analytics**     | Time period navigation (week/month/year) with statistics        | Chart.js               |
-| 🤖 **AI Insights**         | Emotion prediction from diary + period-based trend analysis     | Google Gemini API      |
+| 🤖 **AI Predictions**      | Emotion prediction, period analysis & insights                  | Google Gemini API      |
 | 🧩 **Chrome Extension**    | New tab override synced with web app (auth & theme)             | Vite, Manifest V3      |
 | 🔐 **OAuth Auth**          | Google & Kakao social login with secure session                 | NextAuth v5            |
 | 🧘 **Spaceout Mode**       | Meditation feature with sequential video playback               | Next.js                |
@@ -355,7 +355,6 @@ NEXT_PUBLIC_API_BASE_URL=https://api.zerogv.com
 ## 🔗 Related
 
 - [Backend (Spring Boot)](https://github.com/zerogravity-project/zerogravity-backend)
-- [Original Vue Version](https://github.com/zerogravity-project/zerogravity-frontend/tree/main)
 
 ---
 
@@ -363,6 +362,6 @@ NEXT_PUBLIC_API_BASE_URL=https://api.zerogv.com
 
 **Minuk Hwang** - Fullstack Developer
 
-- 📧 [minuk.lucas.hwang@gmail.com](mailto:minuk.lucas.hwang@gmail.com)
-- 💼 [LinkedIn](https://linkedin.com/in/minuk-hwang-934999157)
 - 🌐 [Portfolio](https://www.minukhwang.com)
+- 💼 [LinkedIn](https://linkedin.com/in/minuk-hwang-934999157)
+- 📧 [minuk.lucas.hwang@gmail.com](mailto:minuk.lucas.hwang@gmail.com)
