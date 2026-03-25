@@ -4,6 +4,7 @@
  */
 
 import { auth } from '@/lib/auth';
+import { getTimezone } from '@/lib/timezone';
 import type { ApiResponse } from '@/types/api.types';
 
 import type { ChartCountResponse, ChartLevelResponse, ChartQueryParams, ChartReasonResponse } from './chart.dto';
@@ -21,6 +22,8 @@ async function fetchWithAuth<T>(endpoint: string, params: ChartQueryParams): Pro
     throw new Error('Unauthorized: No backend JWT available');
   }
 
+  const timezone = await getTimezone();
+
   const url = new URL(endpoint, API_BASE_URL);
   url.searchParams.append('period', params.period);
   url.searchParams.append('startDate', params.startDate);
@@ -30,7 +33,7 @@ async function fetchWithAuth<T>(endpoint: string, params: ChartQueryParams): Pro
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${session.backendJwt}`,
-      'X-Timezone': 'Asia/Seoul',
+      'X-Timezone': timezone,
     },
     cache: 'no-store',
   });

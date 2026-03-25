@@ -4,6 +4,7 @@
  */
 
 import { auth } from '@/lib/auth';
+import { getTimezone } from '@/lib/timezone';
 import type { ApiResponse } from '@/types/api.types';
 
 import type { GetEmotionRecordsParams, GetEmotionRecordsResponse } from './emotion.dto';
@@ -24,6 +25,8 @@ export async function getEmotionRecordsServer(
     throw new Error('Unauthorized: No backend JWT available');
   }
 
+  const timezone = await getTimezone();
+
   const url = new URL('/emotions/records', API_BASE_URL);
   url.searchParams.append('startDateTime', params.startDateTime);
   url.searchParams.append('endDateTime', params.endDateTime);
@@ -33,7 +36,7 @@ export async function getEmotionRecordsServer(
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${session.backendJwt}`,
-      'X-Timezone': 'Asia/Seoul',
+      'X-Timezone': timezone,
     },
     cache: 'no-store', // Always fetch fresh data for emotion records
   });
