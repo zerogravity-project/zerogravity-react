@@ -73,7 +73,7 @@ export default function DailyEmotionSection({ emotionId, emotionReasons, isOpen 
               delay={500}
               isFreeze={!isOpen}
             />
-            <Text color={emotionColor} size="7" weight="regular">
+            <Text color={emotionColor} size="6" weight="regular" className="whitespace-nowrap">
               {EMOTION_STEPS[emotionId].type}
             </Text>
             <div className="mt-3 flex flex-wrap justify-center gap-1.5">
