@@ -85,7 +85,7 @@ export default function DailyEmotionSection({ emotionRecords }: DailyEmotionSect
       {!isEmpty && (
         <>
           <EmotionPlanetScene emotionId={emotionId} />
-          <Text color={emotionColor} className="!text-center !text-3xl transition-all duration-400">
+          <Text color={emotionColor} className="!text-center !text-3xl whitespace-nowrap transition-all duration-400">
             {EMOTION_STEPS[emotionId].type}
           </Text>
           <div className="mt-5 flex flex-wrap justify-center gap-2">
