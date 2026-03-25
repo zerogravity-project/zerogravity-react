@@ -88,6 +88,7 @@ export default function DesktopCalendarCell({
               transition={{ duration: 0.2, ease: 'easeInOut' }}
             />
           )}
+          {/* Base text — always visible with default color */}
           <text
             x="40"
             y="40"
@@ -95,21 +96,29 @@ export default function DesktopCalendarCell({
             dominantBaseline="central"
             fontSize="36"
             fontWeight="200"
-            className="transition-colors"
-            fill={
-              isAfterToday
-                ? 'var(--gray-a6)'
-                : dailyEmotionId === 3
-                  ? 'var(--black-a12)'
-                  : !isEmpty
-                    ? 'var(--white-a12)'
-                    : isToday
-                      ? 'var(--accent-a9)'
-                      : 'var(--gray-11)'
-            }
+            fill={isAfterToday ? 'var(--gray-a6)' : isToday ? 'var(--accent-a9)' : 'var(--gray-11)'}
           >
             {day}
           </text>
+
+          {/* Emotion text overlay — fades in with circle to prevent color flash */}
+          {!isEmpty && (
+            <m.text
+              key={`text-${year}-${month}-${day}`}
+              x="40"
+              y="40"
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize="36"
+              fontWeight="200"
+              fill={dailyEmotionId === 3 ? 'var(--black-a12)' : 'var(--white-a12)'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2, ease: 'easeInOut' }}
+            >
+              {day}
+            </m.text>
+          )}
         </svg>
       </div>
     </button>

@@ -93,13 +93,13 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
   /** Load theme from cookie on mount */
   useEffect(() => {
     async function loadTheme() {
-      setMounted(true);
       try {
         // Use custom getter if provided (for Extension), otherwise use document.cookie
         const stored = getColor ? await getColor() : getCookie('accentColor');
 
         if (stored && (EMOTION_COLORS as readonly string[]).includes(stored)) {
           setAccentColor(stored as EmotionColor);
+          setMounted(true);
           return;
         }
         const random = EMOTION_COLORS[Math.floor(Math.random() * EMOTION_COLORS.length)];
@@ -115,6 +115,7 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
         const fallback = EMOTION_COLORS[Math.floor(Math.random() * EMOTION_COLORS.length)];
         setAccentColor(fallback);
       }
+      setMounted(true);
     }
 
     loadTheme();

@@ -69,7 +69,7 @@ export default function MomentEmotionList({ emotionId, time, reasons }: MomentEm
 
       <div className="flex w-full flex-col gap-2">
         <div className="flex items-center justify-between">
-          <Text size="2" color={emotionColor} className="!text-[13px] !leading-[17px]">
+          <Text size="2" color={emotionColor} className="!text-[13px] !leading-[17px] whitespace-nowrap">
             {emotionName}
           </Text>
           <Text size="1" color="gray" className="!text-[11px] !leading-[14px]">
