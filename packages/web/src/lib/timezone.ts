@@ -17,3 +17,12 @@ export async function getTimezone(): Promise<string> {
   const cookieStore = await cookies();
   return cookieStore.get('tz')?.value ?? DEFAULT_TIMEZONE;
 }
+
+/**
+ * Get current Date adjusted to user's timezone
+ * @returns Date object with date/time components matching the user's local time
+ */
+export async function getUserLocalNow(): Promise<Date> {
+  const tz = await getTimezone();
+  return new Date(new Date().toLocaleString('en-US', { timeZone: tz }));
+}

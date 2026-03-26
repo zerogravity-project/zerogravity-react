@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { endOfMonth, endOfWeek, format, startOfMonth, startOfWeek } from 'date-fns';
 
+import { getUserLocalNow } from '@/lib/timezone';
 import { EMOTION_QUERY_KEY } from '@/services/emotion/emotion.keys';
 import { getEmotionRecordsServer } from '@/services/emotion/emotion.service.server';
 
@@ -14,7 +15,7 @@ import Calendar from './_components/EmotionCalendar';
 
 export default async function ProfileCalendarPage() {
   const queryClient = new QueryClient();
-  const today = new Date();
+  const today = await getUserLocalNow();
 
   // Desktop: current month range
   const monthStart = startOfMonth(today);
