@@ -7,20 +7,37 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Heading, Text } from '@radix-ui/themes';
+import { Badge, Heading, Text } from '@radix-ui/themes';
+import { endOfDay, format, startOfDay } from 'date-fns';
 import { m } from 'motion/react';
+import { useMemo } from 'react';
 
 import { MotionButton } from '@zerogravity/shared/components/ui/button';
 import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { EMOTION_COLORS, type EmotionId } from '@zerogravity/shared/entities/emotion';
 import { useIsSm } from '@zerogravity/shared/hooks';
 import { getTodayString } from '@zerogravity/shared/utils';
 
 import { TopAppBar } from '@/app/_components/ui/appbar/TopAppBar';
+import { EmotionPlanetImage } from '@/app/_components/ui/emotion/EmotionPlanetImage';
+import { useGetEmotionRecordsQuery } from '@/services/emotion/emotion.query';
 
 export default function RecordSelection() {
   const router = useRouter();
   const isSm = useIsSm();
   const today = getTodayString();
+
+  /** Today's date range for checking existing daily record */
+  const todayStart = useMemo(() => format(startOfDay(new Date()), "yyyy-MM-dd'T'HH:mm:ss"), []);
+  const todayEnd = useMemo(() => format(endOfDay(new Date()), "yyyy-MM-dd'T'HH:mm:ss"), []);
+
+  const { data: todayRecords } = useGetEmotionRecordsQuery({
+    startDateTime: todayStart,
+    endDateTime: todayEnd,
+  });
+
+  const dailyRecord = todayRecords?.data?.daily?.[0];
+  const hasDailyRecord = !!dailyRecord;
 
   const handleMomentRecord = () => {
     router.push(`/record/moment?date=${today}`);
@@ -97,11 +114,31 @@ export default function RecordSelection() {
               onClick={handleDailyRecord}
             >
               <div className="flex w-full flex-col items-start gap-2 sm:gap-3">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <Icon className="!text-[24px] sm:!text-[32px]">edit_note</Icon>
-                  <Heading size={isSm ? '5' : '6'} weight="medium">
-                    Daily Record
-                  </Heading>
+                <div className="flex w-full items-center justify-between">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <Icon className="!text-[24px] sm:!text-[32px]">edit_note</Icon>
+                    <Heading size={isSm ? '5' : '6'} weight="medium">
+                      Daily Record
+                    </Heading>
+                  </div>
+                  {hasDailyRecord && dailyRecord && (
+                    <Badge
+                      size={isSm ? '2' : '3'}
+                      variant="soft"
+                      radius="full"
+                      color={EMOTION_COLORS[dailyRecord.emotionId]}
+                      className="gap-1.5 pl-1"
+                    >
+                      <EmotionPlanetImage
+                        emotionId={dailyRecord.emotionId as EmotionId}
+                        width={isSm ? 16 : 18}
+                        height={isSm ? 16 : 18}
+                        isGlow={false}
+                        isResize={false}
+                      />
+                      Recorded
+                    </Badge>
+                  )}
                 </div>
                 <Text size={isSm ? '2' : '3'} color="gray" align="left">
                   Complete emotional journal entry.
