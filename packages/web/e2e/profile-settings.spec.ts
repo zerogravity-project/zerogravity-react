@@ -22,7 +22,7 @@ test.describe('Profile Display', () => {
     await page.waitForLoadState('networkidle');
 
     // Navigate to settings if it's a separate tab/page
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
       await page.waitForLoadState('networkidle');
@@ -74,7 +74,7 @@ test.describe('AI Consent Toggle', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
@@ -133,7 +133,7 @@ test.describe('Account Deletion', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
@@ -141,14 +141,14 @@ test.describe('Account Deletion', () => {
 
   /** Should have delete account button */
   test('should have delete button', async ({ page }) => {
-    const deleteButton = page.getByRole('button', { name: /삭제|delete|탈퇴/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i });
 
     await expect(deleteButton).toBeVisible();
   });
 
   /** Should show confirmation modal */
   test('should show confirmation modal', async ({ page }) => {
-    const deleteButton = page.getByRole('button', { name: /삭제|delete|탈퇴/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i });
     await deleteButton.click();
 
     // Confirmation modal should appear
@@ -156,8 +156,8 @@ test.describe('Account Deletion', () => {
     await expect(modal).toBeVisible();
 
     // Should have confirm/cancel buttons
-    const confirmButton = page.getByRole('button', { name: /확인|confirm|삭제/i });
-    const cancelButton = page.getByRole('button', { name: /취소|cancel/i });
+    const confirmButton = page.getByRole('button', { name: /confirm/i });
+    const cancelButton = page.getByRole('button', { name: /cancel/i });
 
     await expect(confirmButton).toBeVisible();
     await expect(cancelButton).toBeVisible();
@@ -165,10 +165,10 @@ test.describe('Account Deletion', () => {
 
   /** Should close modal on cancel */
   test('should close modal on cancel', async ({ page }) => {
-    const deleteButton = page.getByRole('button', { name: /삭제|delete/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i });
     await deleteButton.click();
 
-    const cancelButton = page.getByRole('button', { name: /취소|cancel/i });
+    const cancelButton = page.getByRole('button', { name: /cancel/i });
     await cancelButton.click();
 
     // Modal should close
@@ -180,10 +180,10 @@ test.describe('Account Deletion', () => {
   test.skip('should delete account', async ({ page }) => {
     // WARNING: This test actually deletes the account!
     // Only run manually with test account
-    const deleteButton = page.getByRole('button', { name: /삭제|delete/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i });
     await deleteButton.click();
 
-    const confirmButton = page.getByRole('button', { name: /확인|confirm/i });
+    const confirmButton = page.getByRole('button', { name: /confirm/i });
     await confirmButton.click();
 
     // Should redirect to login after deletion
@@ -203,14 +203,14 @@ test.describe('Account Deletion', () => {
       }
     });
 
-    const deleteButton = page.getByRole('button', { name: /삭제|delete|탈퇴/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i });
     await deleteButton.click();
 
-    const confirmButton = page.getByRole('button', { name: /확인|confirm/i });
+    const confirmButton = page.getByRole('button', { name: /confirm/i });
     await confirmButton.click();
 
     // Should show error message
-    const errorMsg = page.locator('text=/실패|error|오류|failed/i');
+    const errorMsg = page.locator('text=/error|failed/i');
     await expect(errorMsg.first()).toBeVisible({ timeout: 5000 });
 
     // Should NOT redirect to login (still on profile)
@@ -230,7 +230,7 @@ test.describe('Logout', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
@@ -238,7 +238,7 @@ test.describe('Logout', () => {
 
   /** Should have logout button */
   test('should have logout button', async ({ page }) => {
-    const logoutButton = page.getByRole('button', { name: /로그아웃|logout/i });
+    const logoutButton = page.getByRole('button', { name: /logout/i });
 
     await expect(logoutButton).toBeVisible();
   });
@@ -246,7 +246,7 @@ test.describe('Logout', () => {
   /** Should logout and redirect */
   test.skip('should logout successfully', async ({ page }) => {
     // WARNING: This logs out the test session!
-    const logoutButton = page.getByRole('button', { name: /로그아웃|logout/i });
+    const logoutButton = page.getByRole('button', { name: /logout/i });
     await logoutButton.click();
 
     // Should redirect to login
@@ -286,7 +286,7 @@ test.describe('Settings Loading States', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
@@ -315,15 +315,15 @@ test.describe('Settings Loading States', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
 
-    const deleteButton = page.getByRole('button', { name: /삭제|delete|탈퇴/i });
+    const deleteButton = page.getByRole('button', { name: /delete/i });
     await deleteButton.click();
 
-    const confirmButton = page.getByRole('button', { name: /확인|confirm/i });
+    const confirmButton = page.getByRole('button', { name: /confirm/i });
     await confirmButton.click();
 
     // Should show loading indicator
@@ -341,12 +341,12 @@ test.describe('Settings Loading States', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
 
-    const logoutButton = page.getByRole('button', { name: /로그아웃|logout/i });
+    const logoutButton = page.getByRole('button', { name: /logout/i });
     await logoutButton.click();
 
     // Should show loading indicator
@@ -363,16 +363,16 @@ test.describe('Settings Loading States', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
 
-    const logoutButton = page.getByRole('button', { name: /로그아웃|logout/i });
+    const logoutButton = page.getByRole('button', { name: /logout/i });
     await logoutButton.click();
 
     // Should show error message
-    const error = page.locator('text=/실패|error|오류|failed/i');
+    const error = page.locator('text=/error|failed/i');
     await expect(error.first()).toBeVisible({ timeout: 5000 });
   });
 });
@@ -393,7 +393,7 @@ test.describe('Settings Error Handling', () => {
     await page.goto('/profile/settings');
 
     // Should show error
-    const error = page.locator('text=/error|에러/i');
+    const error = page.locator('text=/error/i');
     await expect(error).toBeVisible();
   });
 
@@ -409,7 +409,7 @@ test.describe('Settings Error Handling', () => {
     await toggle.click();
 
     // Should show error toast/message
-    const error = page.locator('text=/error|에러|실패/i');
+    const error = page.locator('text=/error/i');
     await expect(error).toBeVisible();
   });
 });
@@ -428,7 +428,7 @@ test.describe('Settings Desktop', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
@@ -446,7 +446,7 @@ test.describe('Settings Tablet', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }
@@ -464,7 +464,7 @@ test.describe('Settings Mobile', () => {
     await page.goto('/profile/settings');
     await page.waitForLoadState('networkidle');
 
-    const settingsTab = page.getByRole('tab', { name: /settings|설정/i });
+    const settingsTab = page.getByRole('tab', { name: /settings/i });
     if (await settingsTab.isVisible()) {
       await settingsTab.click();
     }

@@ -39,7 +39,10 @@ export default function GeminiButton({
     <button
       type="button"
       onClick={onClick}
-      className={cn('inline-flex cursor-pointer items-center justify-center gap-2 bg-transparent', className)}
+      className={cn(
+        'mx-auto inline-flex w-fit cursor-pointer items-center justify-center gap-2 bg-transparent',
+        className
+      )}
       aria-label="View AI analysis"
     >
       <GeminiLogo width={logoSize} />

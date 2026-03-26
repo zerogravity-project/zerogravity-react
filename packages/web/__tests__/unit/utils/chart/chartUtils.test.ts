@@ -76,50 +76,44 @@ describe('chartUtils', () => {
   });
 
   describe('calculateTooltipLeftPosition', () => {
-    const containerWidth = 400;
     const tooltipWidth = 100;
+    const canvasLeft = 0;
+    const canvasRight = 400;
 
     /** Returns centered position when tooltip fits */
     it('returns centered position when tooltip fits', () => {
-      const result = calculateTooltipLeftPosition(200, tooltipWidth, containerWidth);
+      const result = calculateTooltipLeftPosition(200, tooltipWidth, canvasLeft, canvasRight);
       expect(result).toBe(200);
     });
 
     /** Clamps to left boundary when tooltip would overflow left */
     it('clamps to left boundary when tooltip would overflow left', () => {
       // caretX = 30, tooltipHalfWidth = 50, so 30 - 50 = -20 (overflow)
-      const result = calculateTooltipLeftPosition(30, tooltipWidth, containerWidth);
-      expect(result).toBe(50); // tooltipHalfWidth
+      const result = calculateTooltipLeftPosition(30, tooltipWidth, canvasLeft, canvasRight);
+      expect(result).toBe(50); // canvasLeft + tooltipHalfWidth
     });
 
     /** Clamps to right boundary when tooltip would overflow right */
     it('clamps to right boundary when tooltip would overflow right', () => {
       // caretX = 380, tooltipHalfWidth = 50, so 380 + 50 = 430 > 400 (overflow)
-      const result = calculateTooltipLeftPosition(380, tooltipWidth, containerWidth);
-      expect(result).toBe(350); // containerWidth - tooltipHalfWidth
+      const result = calculateTooltipLeftPosition(380, tooltipWidth, canvasLeft, canvasRight);
+      expect(result).toBe(350); // canvasRight - tooltipHalfWidth
     });
 
     it('handles edge case where caret is exactly at left edge', () => {
-      const result = calculateTooltipLeftPosition(0, tooltipWidth, containerWidth);
+      const result = calculateTooltipLeftPosition(0, tooltipWidth, canvasLeft, canvasRight);
       expect(result).toBe(50);
     });
 
     it('handles edge case where caret is exactly at right edge', () => {
-      const result = calculateTooltipLeftPosition(400, tooltipWidth, containerWidth);
+      const result = calculateTooltipLeftPosition(400, tooltipWidth, canvasLeft, canvasRight);
       expect(result).toBe(350);
     });
 
     it('handles very wide tooltip', () => {
       const wideTooltip = 300;
-      const result = calculateTooltipLeftPosition(200, wideTooltip, containerWidth);
+      const result = calculateTooltipLeftPosition(200, wideTooltip, canvasLeft, canvasRight);
       expect(result).toBe(200);
-    });
-
-    it('handles zero width container', () => {
-      // When container width is 0, right boundary check fails: 100 + 50 > 0
-      // So it clamps to containerWidth - tooltipHalfWidth = 0 - 50 = -50
-      const result = calculateTooltipLeftPosition(100, tooltipWidth, 0);
-      expect(result).toBe(-50);
     });
   });
 

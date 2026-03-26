@@ -130,7 +130,7 @@ test.describe('Navigation Bar Profile', () => {
 
     // Should show profile avatar (not login button)
     const avatar = page.locator('[data-testid="user-avatar"], img[alt*="profile" i], img[alt*="avatar" i]').first();
-    const loginButton = page.getByRole('button', { name: /로그인|login/i });
+    const loginButton = page.getByRole('button', { name: /login/i });
 
     const hasAvatar = await avatar.isVisible().catch(() => false);
     const hasLoginButton = await loginButton.isVisible().catch(() => false);

@@ -61,7 +61,7 @@ test.describe('Calendar Navigation', () => {
 
   /** Should navigate to previous month */
   test('should navigate to previous month', async ({ page }) => {
-    const prevButton = page.getByRole('button', { name: /이전|prev|</i });
+    const prevButton = page.getByRole('button', { name: /prev|</i });
 
     if (await prevButton.isVisible()) {
       await prevButton.click();
@@ -74,7 +74,7 @@ test.describe('Calendar Navigation', () => {
 
   /** Should navigate to next month (with restriction) */
   test('should restrict future navigation', async ({ page }) => {
-    const nextButton = page.getByRole('button', { name: /다음|next|>/i }).first();
+    const nextButton = page.getByRole('button', { name: /next|>/i }).first();
 
     if (await nextButton.isVisible()) {
       // Try clicking next - should be restricted at current month
@@ -89,7 +89,7 @@ test.describe('Calendar Navigation', () => {
   /** Should not allow navigation beyond today */
   test('should not navigate past today', async ({ page }) => {
     // Find next month/week button
-    const nextButton = page.getByRole('button', { name: /다음|next|>/i }).first();
+    const nextButton = page.getByRole('button', { name: /next|>/i }).first();
 
     if (await nextButton.isVisible()) {
       // Either button is disabled or clicking doesn't change to future
@@ -417,7 +417,7 @@ test.describe('Desktop Calendar', () => {
     await page.waitForLoadState('networkidle');
 
     // Navigate to previous week/month to find yesterday
-    const prevButton = page.getByRole('button', { name: /이전|prev|</i });
+    const prevButton = page.getByRole('button', { name: /prev|</i });
     if (await prevButton.isVisible()) {
       await prevButton.click();
       await page.waitForTimeout(300);
@@ -607,7 +607,7 @@ test.describe('Mobile Calendar', () => {
 
   /** Should navigate weeks */
   test('should navigate weeks', async ({ page }) => {
-    const prevButton = page.getByRole('button', { name: /이전|prev|</i });
+    const prevButton = page.getByRole('button', { name: /prev|</i });
 
     // Should have week navigation
     if (await prevButton.isVisible()) {
@@ -856,7 +856,7 @@ test.describe('Mobile Calendar', () => {
                 emotionId: 3,
                 emotionType: 'NORMAL',
                 reasons: ['Work'],
-                diaryEntry: null, // Daily 있고 Diary 없음
+                diaryEntry: null, // Daily exists, no Diary
                 recordedAt: today,
                 createdAt: new Date().toISOString(),
               },
@@ -897,7 +897,7 @@ test.describe('Mobile Calendar', () => {
 
   /** Should show Diary Edit button when Daily exists but Diary is empty */
   test('should show diary edit when daily exists without diary', async ({ page }) => {
-    // Mock today's data - Daily 있고 Diary 없음
+    // Mock today's data - Daily exists, no Diary
     const today = new Date().toISOString().split('T')[0];
     await page.route('**/emotions/records*', route => {
       route.fulfill({
@@ -912,7 +912,7 @@ test.describe('Mobile Calendar', () => {
                 emotionId: 3,
                 emotionType: 'NORMAL',
                 reasons: ['Work'],
-                diaryEntry: null, // Diary 없음
+                diaryEntry: null, // No Diary
                 recordedAt: today,
                 createdAt: new Date().toISOString(),
               },
@@ -943,7 +943,7 @@ test.describe('Mobile Calendar', () => {
 
   /** Should show Diary Edit button when Diary exists */
   test('should show diary edit when diary exists', async ({ page }) => {
-    // Mock today's data - Daily 있고 Diary 있음
+    // Mock today's data - Daily exists, Diary exists
     const today = new Date().toISOString().split('T')[0];
     await page.route('**/emotions/records*', route => {
       route.fulfill({
@@ -958,7 +958,7 @@ test.describe('Mobile Calendar', () => {
                 emotionId: 3,
                 emotionType: 'NORMAL',
                 reasons: ['Work'],
-                diaryEntry: 'Today was a good day', // Diary 있음
+                diaryEntry: 'Today was a good day', // Diary exists
                 recordedAt: today,
                 createdAt: new Date().toISOString(),
               },
@@ -1379,7 +1379,7 @@ test.describe('Calendar Loading States', () => {
       route.continue();
     });
 
-    const prevButton = page.getByRole('button', { name: /이전|prev|</i });
+    const prevButton = page.getByRole('button', { name: /prev|</i });
     if (await prevButton.isVisible()) {
       await prevButton.click();
 
@@ -1405,7 +1405,7 @@ test.describe('Calendar Loading States', () => {
     await page.waitForLoadState('networkidle');
 
     // Submit edit
-    const submitButton = page.getByRole('button', { name: /수정|제출|submit/i });
+    const submitButton = page.getByRole('button', { name: /submit/i });
     if (await submitButton.isVisible()) {
       await submitButton.click();
 
@@ -1433,14 +1433,14 @@ test.describe('Calendar Error Handling', () => {
     await page.goto('/profile/calendar');
 
     // Should show error message
-    const error = page.locator('text=/error|에러|오류/i');
+    const error = page.locator('text=/error/i');
     await expect(error).toBeVisible();
   });
 
   /** Should allow retry on error - needs retry button in error state */
   test('should allow retry', async ({ page }) => {
     // After error, should show retry button
-    const retryButton = page.getByRole('button', { name: /retry|다시|재시도/i });
+    const retryButton = page.getByRole('button', { name: /retry/i });
     await expect(retryButton).toBeVisible();
   });
 });
