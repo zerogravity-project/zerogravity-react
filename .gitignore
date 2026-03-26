@@ -67,5 +67,8 @@ docs/*
 # CDN local sync folder
 cdn/
 
+# MP4 source files (GIFs are committed instead)
+.github/assets/*/mp4/
+
 # Sentry
 .env.sentry-build-plugin
