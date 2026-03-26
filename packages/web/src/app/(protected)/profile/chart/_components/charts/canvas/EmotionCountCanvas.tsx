@@ -23,6 +23,7 @@ import {
   formatTooltipDate,
   getChartConfig,
   getOrCreateTooltip,
+  removeTooltip,
 } from '../../../_utils/chartUtils';
 
 /*
@@ -164,8 +165,7 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
           enabled: false,
           external: (context: { chart: Chart; tooltip: TooltipModel<'scatter'> }) => {
             const { chart, tooltip } = context;
-            const parentNode = chart.canvas.parentNode as HTMLElement;
-            const tooltipEl = getOrCreateTooltip(parentNode, 'count-tooltip');
+            const tooltipEl = getOrCreateTooltip('count-tooltip');
 
             if (tooltip.opacity === 0) {
               tooltipEl.style.opacity = '0';
@@ -193,22 +193,27 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
                 </div>
               `;
 
-              const { offsetLeft: positionX, offsetTop: positionY } = chart.canvas;
-              const parentRect = parentNode.getBoundingClientRect();
+              const canvasRect = chart.canvas.getBoundingClientRect();
               const tooltipRect = tooltipEl.getBoundingClientRect();
               const left = calculateTooltipLeftPosition(
-                positionX + tooltip.caretX,
+                canvasRect.left + tooltip.caretX,
                 tooltipRect.width,
-                parentRect.width
+                canvasRect.left,
+                canvasRect.right
               );
+              const top = canvasRect.top + tooltip.caretY;
 
-              // Check if tooltip would overflow top boundary
-              const wouldOverflowTop = tooltip.caretY - tooltipRect.height - 10 < 0;
+              // Determine tooltip placement: prefer above, fallback below, then wider side
+              const spaceAbove = top - canvasRect.top;
+              const spaceBelow = canvasRect.bottom - top;
+              const tooltipH = tooltipRect.height + 10;
+              const showBelow =
+                spaceAbove >= tooltipH ? false : spaceBelow >= tooltipH ? true : spaceAbove < spaceBelow;
 
               tooltipEl.style.opacity = '1';
               tooltipEl.style.left = left + 'px';
-              tooltipEl.style.top = positionY + tooltip.caretY + (wouldOverflowTop ? 10 : -10) + 'px';
-              tooltipEl.style.transform = wouldOverflowTop ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
+              tooltipEl.style.top = top + (showBelow ? 10 : -10) + 'px';
+              tooltipEl.style.transform = showBelow ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
             }
           },
         },
@@ -241,6 +246,7 @@ export default function EmotionCountCanvas({ countData, timePeriod, startDate, o
 
     return () => {
       clearTimeout(timer);
+      removeTooltip('count-tooltip');
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
         chartInstanceRef.current = null;

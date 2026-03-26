@@ -1,9 +1,11 @@
 import '@zerogravity/shared/styles';
 import { IconDescriptor } from 'next/dist/lib/metadata/types/metadata-types';
+import { cookies } from 'next/headers';
 
 import type { Metadata, Viewport } from 'next';
 
 import { MotionProvider, ThemeProvider } from '@zerogravity/shared/components/providers';
+import { EMOTION_COLORS, type EmotionColor } from '@zerogravity/shared/entities/emotion';
 
 import NextAuthSessionProvider from '@/app/_components/providers/NextAuthSessionProvider';
 import TanstackQueryProvider from '@/app/_components/providers/TanstackQueryProvider';
@@ -112,11 +114,17 @@ export const metadata: Metadata = {
  * Providers are handled by route group layouts
  */
 /* eslint-disable @next/next/no-page-custom-font, @next/next/google-font-display */
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const storedColor = cookieStore.get('accentColor')?.value;
+  const initialColor =
+    storedColor && (EMOTION_COLORS as readonly string[]).includes(storedColor)
+      ? (storedColor as EmotionColor)
+      : undefined;
   return (
     <html lang="ko">
       <head suppressHydrationWarning>
@@ -146,7 +154,7 @@ export default function RootLayout({
         </a>
         <NextAuthSessionProvider>
           <TanstackQueryProvider>
-            <ThemeProvider>
+            <ThemeProvider initialColor={initialColor}>
               <MotionProvider>
                 <ModalProvider>
                   {children}
