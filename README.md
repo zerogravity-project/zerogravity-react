@@ -6,7 +6,7 @@
 
 <br/>
 
-![Typing SVG](https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=600&size=24&duration=3000&pause=1000&color=6366F1&center=true&vCenter=true&width=435&lines=Record+·+Analyze+·+Visualize;AI-Powered+Emotion+Tracking;Built+with+Next.js+15+%2B+Three.js)
+![Typing SVG](https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=600&size=20&duration=3000&pause=1000&color=FF6A00&center=true&vCenter=true&width=435&lines=Record+·+Analyze+·+Visualize;AI-Powered+Emotion+Tracking;Built+with+Next.js+15+%2B+Three.js)
 
 **3D Emotion Visualization & Personal Wellness Tracking Platform**
 
@@ -29,8 +29,8 @@
 3. [🛠 Tech Stack](#-tech-stack)
 4. [🏗 Architecture](#-architecture)
 5. [🔧 Technical Challenges & Solutions](#-technical-challenges--solutions)
-6. [📸 Screenshots](#-screenshots)
-7. [🚀 Getting Started](#-getting-started)
+6. [🚀 Getting Started](#-getting-started)
+7. [📸 Screenshots](#-screenshots)
 8. [🗓 Roadmap](#-roadmap)
 9. [🔗 Related](#-related)
 10. [👤 Author](#-author)
@@ -240,53 +240,6 @@ projects: [
 
 ---
 
-## 📸 Screenshots
-
-> Responsive design across all pages: Desktop and Mobile views
-
-### 🏠 Home & Login
-
-|           |                        Desktop                         |                        Mobile                        |
-| :-------: | :----------------------------------------------------: | :--------------------------------------------------: |
-| **Home**  |  ![Home Desktop](.github/assets/desktop/gif/home.gif)  |  ![Home Mobile](.github/assets/mobile/gif/home.gif)  |
-| **Login** | ![Login Desktop](.github/assets/desktop/png/login.png) | ![Login Mobile](.github/assets/mobile/png/login.png) |
-
-### 📝 Emotion Recording
-
-|                   |                                Desktop                                 |                                Mobile                                |
-| :---------------: | :--------------------------------------------------------------------: | :------------------------------------------------------------------: |
-| **Record Daily**  |  ![Record Daily Desktop](.github/assets/desktop/gif/record-daily.gif)  |  ![Record Daily Mobile](.github/assets/mobile/gif/record-daily.gif)  |
-| **Record Moment** | ![Record Moment Desktop](.github/assets/desktop/gif/record-moment.gif) | ![Record Moment Mobile](.github/assets/mobile/gif/record-moment.gif) |
-
-### 🤖 AI Features
-
-|                        |                                Desktop                                 |                                Mobile                                |
-| :--------------------: | :--------------------------------------------------------------------: | :------------------------------------------------------------------: |
-| **Emotion Prediction** | ![AI Prediction Desktop](.github/assets/desktop/gif/ai-prediction.gif) | ![AI Prediction Mobile](.github/assets/mobile/gif/ai-prediction.gif) |
-|  **Period Analysis**   |    ![AI Analysis Desktop](.github/assets/desktop/gif/chart-ai.gif)     |    ![AI Analysis Mobile](.github/assets/mobile/gif/chart-ai.gif)     |
-
-### 📊 Analytics
-
-|              |                           Desktop                            |                           Mobile                           |
-| :----------: | :----------------------------------------------------------: | :--------------------------------------------------------: |
-| **Calendar** | ![Calendar Desktop](.github/assets/desktop/gif/calendar.gif) | ![Calendar Mobile](.github/assets/mobile/gif/calendar.gif) |
-|  **Chart**   |    ![Chart Desktop](.github/assets/desktop/gif/chart.gif)    |    ![Chart Mobile](.github/assets/mobile/gif/chart.gif)    |
-
-### 🧘 Spaceout & Settings
-
-|              |                           Desktop                            |                           Mobile                           |
-| :----------: | :----------------------------------------------------------: | :--------------------------------------------------------: |
-| **Spaceout** | ![Spaceout Desktop](.github/assets/desktop/gif/spaceout.gif) | ![Spaceout Mobile](.github/assets/mobile/gif/spaceout.gif) |
-| **Settings** | ![Settings Desktop](.github/assets/desktop/png/settings.png) | ![Settings Mobile](.github/assets/mobile/png/settings.png) |
-
-### 🧩 Chrome Extension
-
-|                       New Tab Override                        |
-| :-----------------------------------------------------------: |
-| ![Chrome Extension](.github/assets/desktop/png/extension.png) |
-
----
-
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -341,6 +294,149 @@ AUTH_KAKAO_SECRET=your-kakao-client-secret
 # Backend API
 NEXT_PUBLIC_API_BASE_URL=https://api.zerogv.com
 ```
+
+---
+
+## 📸 Screenshots
+
+> Responsive design across all pages - Desktop and Mobile views
+
+### 🏠 Home & Login
+
+Main landing page with interactive 3D emotion planet and OAuth login.
+
+<table>
+  <colgroup>
+    <col width="10%">
+    <col width="69%">
+    <col width="21%">
+  </colgroup>
+  <tr>
+    <th></th>
+    <th align="center">Desktop</th>
+    <th align="center">Mobile</th>
+  </tr>
+  <tr>
+    <td align="center"><b>Home</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/home-desktop.gif" alt="Home Desktop" width="100%"></td>
+    <td align="center"><img src=".github/assets/mobile/gif/home-mobile.gif" alt="Home Mobile" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Login</b></td>
+    <td align="center"><img src=".github/assets/desktop/png/login-desktop.png" alt="Login Desktop"></td>
+    <td align="center"><img src=".github/assets/mobile/png/login-mobile.png" alt="Login Mobile"></td>
+  </tr>
+</table>
+
+- **Home**: Interactive 3D planet visualization with real-time emotion color mapping
+- **Login**: Google & Kakao OAuth social login
+
+### 🧘 Onboarding (Spaceout)
+
+Optional meditation flow before emotion recording - helps users relax and reflect.
+
+<table>
+  <colgroup>
+    <col width="10%">
+    <col width="90%">
+  </colgroup>
+  <tr>
+    <th></th>
+    <th align="center">Desktop</th>
+  </tr>
+  <tr>
+    <td align="center"><b>Spaceout</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/spaceout-desktop.gif" alt="Spaceout Desktop" width="100%"></td>
+  </tr>
+</table>
+
+- **Spaceout**: Choose to enter spaceout mode or skip to recording, with sequential meditation videos
+
+### 📝 Emotion Recording
+
+3-step emotion recording flow with AI-powered suggestions.
+
+<table>
+  <colgroup>
+    <col width="10%">
+    <col width="69%">
+    <col width="21%">
+  </colgroup>
+  <tr>
+    <th></th>
+    <th align="center">Desktop</th>
+    <th align="center">Mobile</th>
+  </tr>
+  <tr>
+    <td align="center"><b>Record</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/recording-desktop.gif" alt="Recording Desktop" width="100%"></td>
+    <td align="center"><img src=".github/assets/mobile/gif/recording-mobile.gif" alt="Recording Mobile" width="100%"></td>
+  </tr>
+</table>
+
+- **Step 1**: Select emotion level (1-7) with real-time 3D planet preview
+- **Step 2**: Choose reasons for your emotion from predefined categories
+- **Step 3**: Write diary entry with optional AI emotion prediction
+
+### 📊 Analytics
+
+Track and analyze emotional patterns over time.
+
+<table>
+  <colgroup>
+    <col width="10%">
+    <col width="69%">
+    <col width="21%">
+  </colgroup>
+  <tr>
+    <th></th>
+    <th align="center">Desktop</th>
+    <th align="center">Mobile</th>
+  </tr>
+  <tr>
+    <td align="center"><b>Calendar</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/calendar-desktop.gif" alt="Calendar Desktop" width="100%"></td>
+    <td align="center"><img src=".github/assets/mobile/gif/calendar-mobile.gif" alt="Calendar Mobile" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Chart</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/chart-desktop.gif" alt="Chart Desktop" width="100%"></td>
+    <td align="center"><img src=".github/assets/mobile/gif/chart-mobile.gif" alt="Chart Mobile" width="100%"></td>
+  </tr>
+</table>
+
+- **Calendar**: Monthly view with emotion indicators, detail drawer on date selection
+- **Chart**: Week/month/year statistics with emotion counts, levels, and reasons
+
+### 🤖 AI Features
+
+Gemini-powered intelligent emotion analysis.
+
+<table>
+  <colgroup>
+    <col width="10%">
+    <col width="69%">
+    <col width="21%">
+  </colgroup>
+  <tr>
+    <th></th>
+    <th align="center">Desktop</th>
+    <th align="center">Mobile</th>
+  </tr>
+  <tr>
+    <td align="center"><b>Emotion Prediction</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/ai-prediction-desktop.gif" alt="AI Prediction Desktop" width="100%"></td>
+    <td align="center"><img src=".github/assets/mobile/gif/ai-prediction-mobile.gif" alt="AI Prediction Mobile" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Period Analysis</b></td>
+    <td align="center"><img src=".github/assets/desktop/gif/ai-insights-desktop.gif" alt="AI Insights Desktop" width="100%"></td>
+    <td align="center"><img src=".github/assets/mobile/gif/ai-insights-mobile.gif" alt="AI Insights Mobile" width="100%"></td>
+  </tr>
+</table>
+
+- **Emotion Prediction**: AI suggests emotions based on diary content
+- **Period Analysis**: Weekly/monthly/yearly emotion pattern insights
 
 ---
 
