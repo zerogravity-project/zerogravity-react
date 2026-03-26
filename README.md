@@ -306,26 +306,21 @@ NEXT_PUBLIC_API_BASE_URL=https://api.zerogv.com
 Main landing page with interactive 3D emotion planet and OAuth login.
 
 <table>
-  <colgroup>
-    <col width="10%">
-    <col width="69%">
-    <col width="21%">
-  </colgroup>
-  <tr>
-    <th></th>
-    <th align="center">Desktop</th>
-    <th align="center">Mobile</th>
-  </tr>
-  <tr>
-    <td align="center"><b>Home</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/home-desktop.gif" alt="Home Desktop" width="100%"></td>
-    <td align="center"><img src=".github/assets/mobile/gif/home-mobile.gif" alt="Home Mobile" width="100%"></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Login</b></td>
-    <td align="center"><img src=".github/assets/desktop/png/login-desktop.png" alt="Login Desktop"></td>
-    <td align="center"><img src=".github/assets/mobile/png/login-mobile.png" alt="Login Mobile"></td>
-  </tr>
+<tr>
+<th width="10%"></th>
+<th width="69%" align="center">Desktop</th>
+<th width="21%" align="center">Mobile</th>
+</tr>
+<tr>
+<td align="center"><b>Home</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/home-desktop.gif" alt="Home Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/gif/home-mobile.gif" alt="Home Mobile" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><b>Login</b></td>
+<td align="center"><img src=".github/assets/desktop/png/login-desktop.png" alt="Login Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/png/login-mobile.png" alt="Login Mobile" width="100%"></td>
+</tr>
 </table>
 
 - **Home**: Interactive 3D planet visualization with real-time emotion color mapping
@@ -336,18 +331,14 @@ Main landing page with interactive 3D emotion planet and OAuth login.
 Optional meditation flow before emotion recording - helps users relax and reflect.
 
 <table>
-  <colgroup>
-    <col width="10%">
-    <col width="90%">
-  </colgroup>
-  <tr>
-    <th></th>
-    <th align="center">Desktop</th>
-  </tr>
-  <tr>
-    <td align="center"><b>Spaceout</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/spaceout-desktop.gif" alt="Spaceout Desktop" width="100%"></td>
-  </tr>
+<tr>
+<th width="10%"></th>
+<th width="90%" align="center">Desktop</th>
+</tr>
+<tr>
+<td align="center"><b>Spaceout</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/spaceout-desktop.gif" alt="Spaceout Desktop" width="100%"></td>
+</tr>
 </table>
 
 - **Spaceout**: Choose to enter spaceout mode or skip to recording, with sequential meditation videos
@@ -357,21 +348,16 @@ Optional meditation flow before emotion recording - helps users relax and reflec
 3-step emotion recording flow with AI-powered suggestions.
 
 <table>
-  <colgroup>
-    <col width="10%">
-    <col width="69%">
-    <col width="21%">
-  </colgroup>
-  <tr>
-    <th></th>
-    <th align="center">Desktop</th>
-    <th align="center">Mobile</th>
-  </tr>
-  <tr>
-    <td align="center"><b>Record</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/recording-desktop.gif" alt="Recording Desktop" width="100%"></td>
-    <td align="center"><img src=".github/assets/mobile/gif/recording-mobile.gif" alt="Recording Mobile" width="100%"></td>
-  </tr>
+<tr>
+<th width="10%"></th>
+<th width="69%" align="center">Desktop</th>
+<th width="21%" align="center">Mobile</th>
+</tr>
+<tr>
+<td align="center"><b>Record</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/recording-desktop.gif" alt="Recording Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/gif/recording-mobile.gif" alt="Recording Mobile" width="100%"></td>
+</tr>
 </table>
 
 - **Step 1**: Select emotion level (1-7) with real-time 3D planet preview
@@ -383,26 +369,21 @@ Optional meditation flow before emotion recording - helps users relax and reflec
 Track and analyze emotional patterns over time.
 
 <table>
-  <colgroup>
-    <col width="10%">
-    <col width="69%">
-    <col width="21%">
-  </colgroup>
-  <tr>
-    <th></th>
-    <th align="center">Desktop</th>
-    <th align="center">Mobile</th>
-  </tr>
-  <tr>
-    <td align="center"><b>Calendar</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/calendar-desktop.gif" alt="Calendar Desktop" width="100%"></td>
-    <td align="center"><img src=".github/assets/mobile/gif/calendar-mobile.gif" alt="Calendar Mobile" width="100%"></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Chart</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/chart-desktop.gif" alt="Chart Desktop" width="100%"></td>
-    <td align="center"><img src=".github/assets/mobile/gif/chart-mobile.gif" alt="Chart Mobile" width="100%"></td>
-  </tr>
+<tr>
+<th width="10%"></th>
+<th width="69%" align="center">Desktop</th>
+<th width="21%" align="center">Mobile</th>
+</tr>
+<tr>
+<td align="center"><b>Calendar</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/calendar-desktop.gif" alt="Calendar Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/gif/calendar-mobile.gif" alt="Calendar Mobile" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><b>Chart</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/chart-desktop.gif" alt="Chart Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/gif/chart-mobile.gif" alt="Chart Mobile" width="100%"></td>
+</tr>
 </table>
 
 - **Calendar**: Monthly view with emotion indicators, detail drawer on date selection
@@ -413,26 +394,21 @@ Track and analyze emotional patterns over time.
 Gemini-powered intelligent emotion analysis.
 
 <table>
-  <colgroup>
-    <col width="10%">
-    <col width="69%">
-    <col width="21%">
-  </colgroup>
-  <tr>
-    <th></th>
-    <th align="center">Desktop</th>
-    <th align="center">Mobile</th>
-  </tr>
-  <tr>
-    <td align="center"><b>Emotion Prediction</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/ai-prediction-desktop.gif" alt="AI Prediction Desktop" width="100%"></td>
-    <td align="center"><img src=".github/assets/mobile/gif/ai-prediction-mobile.gif" alt="AI Prediction Mobile" width="100%"></td>
-  </tr>
-  <tr>
-    <td align="center"><b>Period Analysis</b></td>
-    <td align="center"><img src=".github/assets/desktop/gif/ai-insights-desktop.gif" alt="AI Insights Desktop" width="100%"></td>
-    <td align="center"><img src=".github/assets/mobile/gif/ai-insights-mobile.gif" alt="AI Insights Mobile" width="100%"></td>
-  </tr>
+<tr>
+<th width="10%"></th>
+<th width="69%" align="center">Desktop</th>
+<th width="21%" align="center">Mobile</th>
+</tr>
+<tr>
+<td align="center"><b>Emotion Prediction</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/ai-prediction-desktop.gif" alt="AI Prediction Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/gif/ai-prediction-mobile.gif" alt="AI Prediction Mobile" width="100%"></td>
+</tr>
+<tr>
+<td align="center"><b>Period Analysis</b></td>
+<td align="center"><img src=".github/assets/desktop/gif/ai-insights-desktop.gif" alt="AI Insights Desktop" width="100%"></td>
+<td align="center"><img src=".github/assets/mobile/gif/ai-insights-mobile.gif" alt="AI Insights Mobile" width="100%"></td>
+</tr>
 </table>
 
 - **Emotion Prediction**: AI suggests emotions based on diary content
