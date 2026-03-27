@@ -132,20 +132,23 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Clean up stale release branch from previous failed runs
+          git push origin --delete "$BRANCH" 2>/dev/null || true
+
           # Create release branch, commit, push
           git checkout -b "$BRANCH"
           git add package.json packages/web/package.json packages/shared/package.json
           git commit -m "🔖 release: v${NEW_VERSION}"
           git push origin "$BRANCH"
 
-          # Create PR and merge with squash (commit message = PR title)
+          # Create PR and merge (commit message = PR title)
           PR_URL=$(gh pr create \
             --title "🔖 release: v${NEW_VERSION}" \
             --body "Automated version bump: v${NEW_VERSION}" \
             --base main \
             --head "$BRANCH")
 
-          gh pr merge "$PR_URL" --squash --admin --delete-branch
+          gh pr merge "$PR_URL" --merge --admin --delete-branch
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
