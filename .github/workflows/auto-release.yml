@@ -58,8 +58,10 @@ jobs:
               echo "ℹ️ No manual bump, proceeding with auto bump"
             fi
           else
-            echo "manual=false" >> $GITHUB_OUTPUT
-            echo "ℹ️ No previous tag found, proceeding with auto bump"
+            # No tag exists — treat current version as initial release (tag only)
+            echo "manual=true" >> $GITHUB_OUTPUT
+            echo "version=$CURRENT" >> $GITHUB_OUTPUT
+            echo "✅ No previous tag found, creating initial tag: v$CURRENT"
           fi
 
       - name: Determine version bump
