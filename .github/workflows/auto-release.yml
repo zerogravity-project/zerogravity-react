@@ -1,0 +1,149 @@
+name: Auto Release
+
+on:
+  workflow_run:
+    workflows: ["Deploy Frontend to OCI"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  release:
+    # Only run if deploy succeeded AND triggered by a PR merge (not a release commit)
+    if: >
+      github.event.workflow_run.conclusion == 'success' &&
+      !startsWith(github.event.workflow_run.head_commit.message, '🔖 release:')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Get current version
+        id: current
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Determine version bump
+        id: bump
+        run: |
+          # Get all commit messages since last tag (or last 50 if no tag)
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s" --no-merges)
+          else
+            COMMITS=$(git log --pretty=format:"%s" --no-merges -50)
+          fi
+
+          echo "Recent commits:"
+          echo "$COMMITS"
+
+          # Check for features
+          if echo "$COMMITS" | grep -qiE '^(✨|:sparkles:)?\s*(feat|feature)'; then
+            echo "type=minor" >> $GITHUB_OUTPUT
+            echo "Detected: MINOR (new feature)"
+          # Default to patch (fix, docs, style, refactor, perf, test, build, ci, chore)
+          else
+            echo "type=patch" >> $GITHUB_OUTPUT
+            echo "Detected: PATCH (fix/improvement)"
+          fi
+
+      - name: Calculate new version
+        id: new
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          BUMP="${{ steps.bump.outputs.type }}"
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT"
+
+          if [ "$BUMP" = "minor" ]; then
+            MINOR=$((MINOR + 1))
+            PATCH=0
+          else
+            PATCH=$((PATCH + 1))
+          fi
+
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Version bump: $CURRENT → $NEW_VERSION ($BUMP)"
+
+      - name: Update package.json versions
+        run: |
+          NEW_VERSION="${{ steps.new.outputs.version }}"
+
+          # Update root package.json
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.version = '$NEW_VERSION';
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+          # Update packages/web/package.json
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('packages/web/package.json', 'utf8'));
+            pkg.version = '$NEW_VERSION';
+            fs.writeFileSync('packages/web/package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+          # Update packages/shared/package.json
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('packages/shared/package.json', 'utf8'));
+            pkg.version = '$NEW_VERSION';
+            fs.writeFileSync('packages/shared/package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+          echo "Updated all package.json files to v$NEW_VERSION"
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add package.json packages/web/package.json packages/shared/package.json
+          git commit -m "🔖 release: v${{ steps.new.outputs.version }}"
+          git push origin main
+
+      - name: Create git tag
+        run: |
+          git tag "v${{ steps.new.outputs.version }}"
+          git push origin "v${{ steps.new.outputs.version }}"
+
+      - name: Generate release notes
+        run: |
+          # Get commits since last tag
+          LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+
+          if [ -n "$LAST_TAG" ]; then
+            COMMITS=$(git log ${LAST_TAG}..HEAD~1 --pretty=format:"- %s" --no-merges)
+          else
+            COMMITS=$(git log --pretty=format:"- %s" --no-merges -20)
+          fi
+
+          # Write release notes to file
+          cat > /tmp/release-notes.md << 'NOTES_EOF'
+          ## What's Changed
+
+          NOTES_EOF
+
+          echo "$COMMITS" >> /tmp/release-notes.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.new.outputs.version }}"
+          name: "v${{ steps.new.outputs.version }}"
+          body_path: /tmp/release-notes.md
+          generate_release_notes: false

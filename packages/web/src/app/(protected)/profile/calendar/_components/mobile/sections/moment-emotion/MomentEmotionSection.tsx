@@ -1,0 +1,86 @@
+import Link from 'next/link';
+
+import { Button, Heading, Text } from '@radix-ui/themes';
+import { m } from 'motion/react';
+
+import { formatDateString } from '@zerogravity/shared/utils';
+
+import { EmotionRecordDetail } from '@/services/emotion/emotion.dto';
+
+import { useCalendar } from '../../../../_contexts/CalendarContext';
+
+import MomentEmotionList from './MomentEmotionList';
+
+/*
+ * ============================================
+ * Type Definitions
+ * ============================================
+ */
+
+interface MomentEmotionSectionProps {
+  emotionRecords?: EmotionRecordDetail[];
+}
+
+/*
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+export default function MomentEmotionSection({ emotionRecords }: MomentEmotionSectionProps) {
+  /*
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
+  const { selectedDate } = useCalendar();
+
+  /*
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
+  const selectedDateString = formatDateString(selectedDate);
+
+  /*
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
+  return (
+    <section className="flex min-h-[320px] w-full flex-shrink-0 flex-col items-center border-t border-[var(--gray-3)] px-5 pt-6 pb-[calc(2rem+var(--safe-area-bottom))]">
+      <div className="mb-4 flex w-full items-center justify-between">
+        <Heading as="h2" size="4" weight="medium">
+          Moment Emotion
+        </Heading>
+        <Link href={`/record/moment?date=${selectedDateString}`}>
+          <Button variant="soft" radius="full">
+            Add
+          </Button>
+        </Link>
+      </div>
+
+      {emotionRecords?.length === 0 ? (
+        <div className="flex w-full flex-col items-center justify-center py-14">
+          <Text as="p" className="!text-[var(--gray-a7)]" align="center">
+            A quiet day so far
+          </Text>
+        </div>
+      ) : (
+        <ul className="flex w-full flex-col items-center">
+          {emotionRecords?.map((record, index) => (
+            <m.div
+              key={record.createdAt}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'spring', stiffness: 400, damping: 25, delay: index * 0.05 }}
+              className="w-full"
+            >
+              <MomentEmotionList emotionId={record.emotionId} time={record.createdAt} reasons={record.reasons} />
+            </m.div>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}

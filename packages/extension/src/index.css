@@ -1,0 +1,4 @@
+/* Import shared styles - includes fonts, Tailwind, Radix UI, theme tokens, and global styles */
+@import '@zerogravity/shared/styles';
+
+/* Extension-specific styles (if needed) can be added below */

@@ -1,0 +1,117 @@
+{
+  "name": "@zerogravity/shared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/components/ui/clock/index.js",
+  "types": "./dist/components/ui/clock/index.d.ts",
+  "exports": {
+    "./entities/emotion": {
+      "types": "./dist/entities/emotion/index.d.ts",
+      "import": "./dist/entities/emotion/index.js"
+    },
+    "./components/ui/button": {
+      "types": "./dist/components/ui/button/index.d.ts",
+      "import": "./dist/components/ui/button/index.js"
+    },
+    "./components/ui/clock": {
+      "types": "./dist/components/ui/clock/index.d.ts",
+      "import": "./dist/components/ui/clock/index.js"
+    },
+    "./components/ui/emotion/scene": {
+      "types": "./dist/components/ui/emotion/scene/index.d.ts",
+      "import": "./dist/components/ui/emotion/scene/index.js"
+    },
+    "./components/ui/emotion/decorations": {
+      "types": "./dist/components/ui/emotion/decorations/index.d.ts",
+      "import": "./dist/components/ui/emotion/decorations/index.js"
+    },
+    "./components/ui/emotion/null": {
+      "types": "./dist/components/ui/emotion/null/index.d.ts",
+      "import": "./dist/components/ui/emotion/null/index.js"
+    },
+    "./components/ui/footer": {
+      "types": "./dist/components/ui/footer/index.d.ts",
+      "import": "./dist/components/ui/footer/index.js"
+    },
+    "./components/ui/icon": {
+      "types": "./dist/components/ui/icon/index.d.ts",
+      "import": "./dist/components/ui/icon/index.js"
+    },
+    "./components/ui/logo": {
+      "types": "./dist/components/ui/logo/index.d.ts",
+      "import": "./dist/components/ui/logo/index.js"
+    },
+    "./components/ui/loading": {
+      "types": "./dist/components/ui/loading/index.d.ts",
+      "import": "./dist/components/ui/loading/index.js"
+    },
+    "./components/ui/navigation": {
+      "types": "./dist/components/ui/navigation/index.d.ts",
+      "import": "./dist/components/ui/navigation/index.js"
+    },
+    "./components/providers": {
+      "types": "./dist/components/providers/index.d.ts",
+      "import": "./dist/components/providers/index.js"
+    },
+    "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks/index.js"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.ts",
+      "import": "./dist/utils/index.js"
+    },
+    "./config": {
+      "types": "./dist/config/index.d.ts",
+      "import": "./dist/config/index.js"
+    },
+    "./styles": "./styles/globals.css"
+  },
+  "scripts": {
+    "build": "tsc && vite build",
+    "dev": "tsc && vite build --watch",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css}\"",
+    "type-check": "tsc --noEmit",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "peerDependencies": {
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@radix-ui/themes": "^3.2.1",
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.3.0",
+    "motion": "^12.23.22",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "tailwindcss": "^4.1.8",
+    "three": "^0.180.0",
+    "three-custom-shader-material": "^6.3.7"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "lodash": "^4.17.23",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@radix-ui/react-navigation-menu": "^1.2.14",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/lodash": "^4.17.20",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.180.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/coverage-v8": "^4.0.17",
+    "jsdom": "^27.4.0",
+    "r3f-perf": "^7.2.3",
+    "typescript": "^5",
+    "vite": "^6.0.11",
+    "vite-plugin-glsl": "^1.5.4",
+    "vitest": "^4.0.17"
+  }
+}
