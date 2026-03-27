@@ -10,13 +10,14 @@ on:
 
 jobs:
   release:
-    # Only run if deploy succeeded AND triggered by a PR merge (not a release commit)
+    # Only run if deploy succeeded AND not triggered by a release commit
     if: >
       github.event.workflow_run.conclusion == 'success' &&
       !startsWith(github.event.workflow_run.head_commit.message, '🔖 release:')
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
 
     steps:
       - name: Checkout code
@@ -82,63 +83,67 @@ jobs:
         run: |
           NEW_VERSION="${{ steps.new.outputs.version }}"
 
-          # Update root package.json
           node -e "
             const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
-            pkg.version = '$NEW_VERSION';
-            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
-          "
-
-          # Update packages/web/package.json
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('packages/web/package.json', 'utf8'));
-            pkg.version = '$NEW_VERSION';
-            fs.writeFileSync('packages/web/package.json', JSON.stringify(pkg, null, 2) + '\n');
-          "
-
-          # Update packages/shared/package.json
-          node -e "
-            const fs = require('fs');
-            const pkg = JSON.parse(fs.readFileSync('packages/shared/package.json', 'utf8'));
-            pkg.version = '$NEW_VERSION';
-            fs.writeFileSync('packages/shared/package.json', JSON.stringify(pkg, null, 2) + '\n');
+            ['package.json', 'packages/web/package.json', 'packages/shared/package.json'].forEach(f => {
+              const pkg = JSON.parse(fs.readFileSync(f, 'utf8'));
+              pkg.version = '$NEW_VERSION';
+              fs.writeFileSync(f, JSON.stringify(pkg, null, 2) + '\n');
+            });
           "
 
           echo "Updated all package.json files to v$NEW_VERSION"
 
-      - name: Commit version bump
+      - name: Create release branch and PR
         run: |
+          NEW_VERSION="${{ steps.new.outputs.version }}"
+          BRANCH="release/v${NEW_VERSION}"
+
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Create release branch, commit, push
+          git checkout -b "$BRANCH"
           git add package.json packages/web/package.json packages/shared/package.json
-          git commit -m "🔖 release: v${{ steps.new.outputs.version }}"
-          git push origin main
+          git commit -m "🔖 release: v${NEW_VERSION}"
+          git push origin "$BRANCH"
 
-      - name: Create git tag
-        run: |
-          git tag "v${{ steps.new.outputs.version }}"
-          git push origin "v${{ steps.new.outputs.version }}"
+          # Create PR and merge with squash (commit message = PR title)
+          PR_URL=$(gh pr create \
+            --title "🔖 release: v${NEW_VERSION}" \
+            --body "Automated version bump: v${NEW_VERSION}" \
+            --base main \
+            --head "$BRANCH")
 
-      - name: Generate release notes
+          gh pr merge "$PR_URL" --squash --admin --delete-branch
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create tag and release
         run: |
-          # Get commits since last tag
+          NEW_VERSION="${{ steps.new.outputs.version }}"
+
+          # Pull latest main (now includes version bump)
+          git checkout main
+          git pull origin main
+
+          # Create tag
+          git tag "v${NEW_VERSION}"
+          git push origin "v${NEW_VERSION}"
+
+          # Generate release notes
           LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
-
           if [ -n "$LAST_TAG" ]; then
             COMMITS=$(git log ${LAST_TAG}..HEAD~1 --pretty=format:"- %s" --no-merges)
           else
             COMMITS=$(git log --pretty=format:"- %s" --no-merges -20)
           fi
 
-          # Write release notes to file
-          cat > /tmp/release-notes.md << 'NOTES_EOF'
+          cat > /tmp/release-notes.md << NOTES_EOF
           ## What's Changed
 
+          ${COMMITS}
           NOTES_EOF
-
-          echo "$COMMITS" >> /tmp/release-notes.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
