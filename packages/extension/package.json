@@ -1,0 +1,35 @@
+{
+  "name": "@zerogravity/extension",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:dev": "tsc && vite build --mode development",
+    "preview": "vite preview",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@radix-ui/themes": "^3.2.1",
+    "@react-three/drei": "^10.7.6",
+    "@react-three/fiber": "^9.3.0",
+    "@zerogravity/shared": "workspace:*",
+    "motion": "^12.23.22",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "three": "^0.180.0",
+    "three-custom-shader-material": "^6.3.7"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.277",
+    "@types/react": "^19.1.11",
+    "@types/react-dom": "^19.1.11",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "^5",
+    "vite": "^6.0.11",
+    "vite-plugin-glsl": "^1.5.4"
+  }
+}

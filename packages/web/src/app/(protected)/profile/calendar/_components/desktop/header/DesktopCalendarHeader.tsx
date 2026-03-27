@@ -1,0 +1,100 @@
+import Link from 'next/link';
+
+import { Button, DropdownMenu, Heading } from '@radix-ui/themes';
+
+import { Icon } from '@zerogravity/shared/components/ui/icon';
+import { getTodayString } from '@zerogravity/shared/utils';
+
+import { useCalendar } from '../../../_contexts/CalendarContext';
+
+/*
+ * ============================================
+ * Component
+ * ============================================
+ */
+
+export default function DesktopCalendarHeader() {
+  /*
+   * --------------------------------------------
+   * 1. External Hooks
+   * --------------------------------------------
+   */
+  const { goToNextMonth, goToPreviousMonth, goToToday, getMonthName, getYear } = useCalendar();
+
+  /*
+   * --------------------------------------------
+   * 2. Derived Values
+   * --------------------------------------------
+   */
+  const monthName = getMonthName();
+  const year = getYear();
+  const today = getTodayString();
+
+  /*
+   * --------------------------------------------
+   * 3. Return
+   * --------------------------------------------
+   */
+  return (
+    <header className="mb-5 flex shrink-0 flex-row items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
+        <div className="flex items-center">
+          {/* Previous Month Button */}
+          <Button
+            size="2"
+            variant="surface"
+            color="gray"
+            onClick={goToPreviousMonth}
+            aria-label="Previous month"
+            className="!h-7 !w-7 !rounded-r-none !border-r-0 !p-0"
+          >
+            <Icon size={20}>chevron_left</Icon>
+          </Button>
+
+          {/* Next Month Button */}
+          <Button
+            size="2"
+            variant="surface"
+            color="gray"
+            onClick={goToNextMonth}
+            aria-label="Next month"
+            className="!-ml-px !h-7 !w-7 !rounded-l-none !p-0"
+          >
+            <Icon size={20}>chevron_right</Icon>
+          </Button>
+        </div>
+
+        {/* Today Button */}
+        <Button size="2" variant="surface" color="gray" onClick={goToToday} className="!h-7 !px-[10px] !text-[13px]">
+          Today
+        </Button>
+      </div>
+
+      <Heading size="5" weight="medium">
+        {monthName}, {year}
+      </Heading>
+
+      {/* Add Daily Emotion Button */}
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger>
+          <Button size="2" onClick={goToToday} className="!h-7 !gap-[3px] !pr-[10px] !pl-[6px]">
+            <Icon size={18}>add</Icon>
+            Today
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content>
+          <Link href={`/record/daily?date=${today}`}>
+            <DropdownMenu.Item color="gray" className="!text-[13px]">
+              Add Daily Emotion
+            </DropdownMenu.Item>
+          </Link>
+          <Link href={`/record/moment?date=${today}`}>
+            <DropdownMenu.Item color="gray" className="!text-[13px]">
+              Add Moment Emotion
+            </DropdownMenu.Item>
+          </Link>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </header>
+  );
+}

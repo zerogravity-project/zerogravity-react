@@ -1,0 +1,233 @@
+name: Deploy Frontend to OCI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.github/workflows/build-extension.yml'
+
+jobs:
+  deploy:
+    # Skip deploy for auto-release version bump commits
+    if: "!startsWith(github.event.head_commit.message, '🔖 release:')"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set environment variables
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            echo "ENV=prod" >> $GITHUB_ENV
+            echo "FRONTEND_PORT=3000" >> $GITHUB_ENV
+            echo "DOMAIN=zerogv.com" >> $GITHUB_ENV
+          else
+            echo "ENV=dev" >> $GITHUB_ENV
+            echo "FRONTEND_PORT=3001" >> $GITHUB_ENV
+            echo "DOMAIN=dev.zerogv.com" >> $GITHUB_ENV
+          fi
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: ENV,FRONTEND_PORT,DOMAIN
+          script: |
+            set -e
+
+            # Navigate to project directory (create if doesn't exist)
+            mkdir -p /home/ubuntu/frontend
+            cd /home/ubuntu/frontend
+
+            # Clone repo if not exists, otherwise pull latest code
+            if [ ! -d ".git" ]; then
+              echo "Git repository not found. Cloning from GitHub..."
+              git clone https://github.com/zerogravity-project/zerogravity-react.git .
+              git checkout ${{ github.ref_name }}
+            else
+              echo "Pulling latest code from ${{ github.ref }}..."
+              git fetch origin
+              git reset --hard origin/${{ github.ref_name }}
+            fi
+
+            # Verify current commit
+            echo "✅ Deployment commit: $(git log -1 --format='%h %s')"
+
+            # Clean up old .env files to prevent stale config accumulation
+            echo "🧹 Cleaning up old .env files..."
+            rm -f packages/web/.env packages/web/.env.* || true
+
+            # Create .env.production file from secrets
+            # Next.js always builds with NODE_ENV=production, so we always use .env.production
+            # The content differs between dev and prod deployments
+            echo "Creating packages/web/.env.production file..."
+            cat > packages/web/.env.production << EOF
+            NEXT_PUBLIC_API_BASE_URL=${{ secrets[format('NEXT_PUBLIC_API_BASE_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            AUTH_SECRET=${{ secrets[format('AUTH_SECRET_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            AUTH_URL=${{ secrets[format('AUTH_URL_{0}', env.ENV == 'prod' && 'PROD' || 'DEV')] }}
+            AUTH_TRUST_HOST=true
+            AUTH_GOOGLE_ID=${{ secrets.AUTH_GOOGLE_ID }}
+            AUTH_GOOGLE_SECRET=${{ secrets.AUTH_GOOGLE_SECRET }}
+            AUTH_KAKAO_ID=${{ secrets.AUTH_KAKAO_ID }}
+            AUTH_KAKAO_SECRET=${{ secrets.AUTH_KAKAO_SECRET }}
+            SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+            NEXT_PUBLIC_SENTRY_ENVIRONMENT=${{ env.ENV }}
+            EOF
+
+            # Export environment variables for docker-compose
+            export ENV=$ENV
+            export FRONTEND_PORT=$FRONTEND_PORT
+
+            # ============================================================
+            # Build-First Deployment Strategy (Zero-Downtime)
+            # - Build new image FIRST (old container keeps running)
+            # - Only swap containers after build succeeds
+            # - Rollback uses backup image (no rebuild needed)
+            # ============================================================
+
+            # Step 1: Build new image (without stopping old container)
+            echo "🔨 Building new image (old container still running)..."
+            if ! docker build -t zerogv-frontend:${ENV}-new .; then
+              echo "❌ Build failed! Old container still running - no downtime."
+              exit 1
+            fi
+            echo "✅ Build successful!"
+
+            # Step 2: Backup current image (if container exists)
+            echo "🔄 Backing up current image..."
+            if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "zerogv-frontend:${ENV}$"; then
+              docker tag zerogv-frontend:${ENV} zerogv-frontend:${ENV}-backup
+              echo "✅ Backup created: zerogv-frontend:${ENV}-backup"
+            else
+              echo "ℹ️  No existing image to backup (first deployment)"
+            fi
+
+            # Step 3: Tag new image as current
+            docker tag zerogv-frontend:${ENV}-new zerogv-frontend:${ENV}
+
+            # Step 4: Swap containers (stop old, start new)
+            echo "🚀 Swapping containers..."
+            docker compose -p zerogv-frontend-${ENV} down || true
+            docker compose -p zerogv-frontend-${ENV} up -d
+
+            # Step 5: Health check with validation
+            echo "⏳ Waiting for frontend to be healthy (max 150 seconds)..."
+            HEALTH_CHECK_PASSED=false
+            for i in {1..30}; do
+              # Check if container is running first
+              if ! docker ps --filter "name=zerogv-frontend-$ENV" --format "{{.Names}}" | grep -q "zerogv-frontend-$ENV"; then
+                echo "❌ Container is not running! Deployment failed."
+                break
+              fi
+
+              # Check health status (using jq for reliable JSON parsing)
+              HEALTH_STATUS=$(docker inspect zerogv-frontend-$ENV 2>/dev/null | jq -r '.[0].State.Health.Status // "starting"')
+
+              if [ "$HEALTH_STATUS" = "healthy" ]; then
+                echo "✅ Frontend is healthy! Deployment successful."
+                HEALTH_CHECK_PASSED=true
+                break
+              elif [ "$HEALTH_STATUS" = "unhealthy" ]; then
+                echo "❌ Frontend is unhealthy! Deployment failed."
+                break
+              fi
+
+              echo "Attempt $i/30: Frontend status: ${HEALTH_STATUS:-starting}, waiting..."
+              sleep 5
+            done
+
+            # Step 6: Rollback if health check failed (using backup image, no rebuild)
+            if [ "$HEALTH_CHECK_PASSED" = false ]; then
+              echo "❌ DEPLOYMENT FAILED: Health check did not pass"
+              echo "🔄 Rolling back to previous version (using backup image)..."
+
+              # Stop failed containers
+              docker compose -p zerogv-frontend-${ENV} down
+
+              # Check if backup exists and restore
+              if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "zerogv-frontend:${ENV}-backup"; then
+                echo "📦 Restoring backup image..."
+                docker tag zerogv-frontend:${ENV}-backup zerogv-frontend:${ENV}
+                docker compose -p zerogv-frontend-${ENV} up -d
+                echo "✅ Rollback completed. Previous version restored."
+                exit 1
+              else
+                echo "⚠️  ERROR: No backup image found for rollback!"
+                echo "This may be the first deployment. Manual intervention required."
+                exit 1
+              fi
+            fi
+
+            # Step 7: Cleanup old images
+            echo "🧹 Cleaning up old images..."
+            docker rmi zerogv-frontend:${ENV}-new 2>/dev/null || true
+            docker rmi zerogv-frontend:${ENV}-backup 2>/dev/null || true
+            docker image prune -f || true
+            docker builder prune -f --filter "until=24h" || true
+            echo "✅ Cleanup completed"
+
+            # Step 8: Deploy Nginx configuration
+            echo "Deploying nginx configuration..."
+            sudo ./scripts/deploy-nginx.sh
+
+            # Step 9: Show container status
+            docker ps | grep zerogv
+
+      - name: Verify deployment
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          ENV: ${{ env.ENV }}
+          FRONTEND_PORT: ${{ env.FRONTEND_PORT }}
+          DOMAIN: ${{ env.DOMAIN }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: ENV,FRONTEND_PORT,DOMAIN
+          script: |
+            # Check health endpoint (localhost - container direct)
+            echo "Checking localhost health endpoint..."
+            curl -f http://localhost:$FRONTEND_PORT/api/health || exit 1
+            echo "✅ Localhost health check passed!"
+
+            # Check health endpoint (HTTPS - full stack via load balancer)
+            echo "Checking HTTPS health endpoint via load balancer..."
+
+            # Wait for DNS/SSL to be ready (max 30 seconds)
+            for i in {1..6}; do
+              if curl -f --connect-timeout 5 https://$DOMAIN 2>/dev/null; then
+                echo "✅ HTTPS health check passed!"
+                break
+              fi
+
+              if [ $i -eq 6 ]; then
+                echo "⚠️  WARNING: HTTPS health check failed after 30 seconds"
+                echo "This may be a DNS/SSL propagation issue. Container is healthy on localhost."
+                echo "Load balancer health checks will continue to verify full stack health."
+              else
+                echo "Attempt $i/6: Waiting for HTTPS endpoint..."
+                sleep 5
+              fi
+            done
+
+            # Warm-up: Precompile critical Next.js pages
+            echo "Warming up application..."
+            sleep 2
+            curl -s http://localhost:$FRONTEND_PORT/ > /dev/null || true
+            curl -s http://localhost:$FRONTEND_PORT/login > /dev/null || true
+            curl -s http://localhost:$FRONTEND_PORT/record/daily > /dev/null || true
+            echo "✅ Application warmed up and ready!"
+
+      - name: Deployment summary
+        run: |
+          echo "✅ Deployment completed successfully!"
+          echo "Environment: ${{ env.ENV }}"
+          echo "Domain: ${{ env.DOMAIN }}"
+          echo "Frontend Port: ${{ env.FRONTEND_PORT }}"

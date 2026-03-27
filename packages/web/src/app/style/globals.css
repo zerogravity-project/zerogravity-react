@@ -1,0 +1,10 @@
+/* Import shared styles - includes fonts, Tailwind, Radix UI, theme tokens, and global styles */
+@import '@zerogravity/shared/styles';
+
+/* Tailwind v4 Source Paths - Scan web package files */
+@source '../../**/*.{ts,tsx}';
+
+/* Prevent layout collapse on narrow PWA viewports (Z Fold 2+ cover: 320px) */
+body {
+  min-width: 320px;
+}
