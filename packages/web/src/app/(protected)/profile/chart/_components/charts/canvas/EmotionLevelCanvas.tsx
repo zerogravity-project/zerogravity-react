@@ -20,6 +20,7 @@ import {
   generateEmotionRangeHtml,
   getChartConfig,
   getOrCreateTooltip,
+  removeTooltip,
 } from '../../../_utils/chartUtils';
 
 /*
@@ -163,10 +164,9 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
           enabled: false,
           external: (context: { chart: Chart; tooltip: TooltipModel<'bar'> }) => {
             const { chart, tooltip } = context;
-            const parentNode = chart.canvas.parentNode as HTMLElement;
-            const tooltipEl = getOrCreateTooltip(parentNode, 'level-tooltip');
+            const tooltipEl = getOrCreateTooltip('level-tooltip');
 
-            const averageTooltipEl = parentNode.querySelector<HTMLElement>('.average-tooltip');
+            const averageTooltipEl = document.body.querySelector<HTMLElement>('.average-tooltip');
             if (averageTooltipEl) {
               averageTooltipEl.style.visibility = 'hidden';
               averageTooltipEl.style.opacity = '0';
@@ -203,23 +203,28 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
                 </div>
               `;
 
-              const { offsetLeft: positionX } = chart.canvas;
-              const parentRect = parentNode.getBoundingClientRect();
+              const canvasRect = chart.canvas.getBoundingClientRect();
               const tooltipRect = tooltipEl.getBoundingClientRect();
               const yPos = chart.scales.y.getPixelForValue(value);
               const left = calculateTooltipLeftPosition(
-                positionX + tooltip.caretX,
+                canvasRect.left + tooltip.caretX,
                 tooltipRect.width,
-                parentRect.width
+                canvasRect.left,
+                canvasRect.right
               );
+              const top = canvasRect.top + yPos;
 
-              // Check if tooltip would overflow top boundary
-              const wouldOverflowTop = yPos - tooltipRect.height - 10 < 0;
+              // Determine tooltip placement: prefer above, fallback below, then wider side
+              const spaceAbove = top - canvasRect.top;
+              const spaceBelow = canvasRect.bottom - top;
+              const tooltipH = tooltipRect.height + 10;
+              const showBelow =
+                spaceAbove >= tooltipH ? false : spaceBelow >= tooltipH ? true : spaceAbove < spaceBelow;
 
               tooltipEl.style.opacity = '1';
               tooltipEl.style.left = left + 'px';
-              tooltipEl.style.top = yPos + (wouldOverflowTop ? 10 : -10) + 'px';
-              tooltipEl.style.transform = wouldOverflowTop ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
+              tooltipEl.style.top = top + (showBelow ? 10 : -10) + 'px';
+              tooltipEl.style.transform = showBelow ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
             }
           },
         },
@@ -245,18 +250,17 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
               borderWidth: 0,
               enter: (context: EventContext) => {
                 const chart = context.chart;
-                const parentNode = chart.canvas.parentNode as HTMLElement;
                 const average = levelData.average || 0;
 
                 chart.canvas.dataset.hoveringAverage = 'true';
                 chart.canvas.style.cursor = 'pointer';
 
-                const levelTooltipEl = parentNode.querySelector('.level-tooltip') as HTMLElement;
+                const levelTooltipEl = document.body.querySelector('.level-tooltip') as HTMLElement;
                 if (levelTooltipEl?.style.opacity === '1') {
                   return;
                 }
 
-                const tooltipEl = getOrCreateTooltip(parentNode, 'average-tooltip');
+                const tooltipEl = getOrCreateTooltip('average-tooltip');
                 const emotionHtml = generateEmotionRangeHtml(average);
 
                 tooltipEl.innerHTML = `
@@ -268,20 +272,27 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
                   </div>
                 `;
 
-                const yPos = chart.scales.y.getPixelForValue(average);
-
                 const updateTooltipPosition = (e: MouseEvent) => {
-                  const parentRect = parentNode.getBoundingClientRect();
-                  const mouseX = e.clientX - parentRect.left;
+                  const canvasRect = chart.canvas.getBoundingClientRect();
+                  const yPos = canvasRect.top + chart.scales.y.getPixelForValue(average);
                   const tooltipRect = tooltipEl.getBoundingClientRect();
-                  const left = calculateTooltipLeftPosition(mouseX, tooltipRect.width, parentRect.width);
+                  const left = calculateTooltipLeftPosition(
+                    e.clientX,
+                    tooltipRect.width,
+                    canvasRect.left,
+                    canvasRect.right
+                  );
 
-                  // Check if tooltip would overflow top boundary
-                  const wouldOverflowTop = yPos - tooltipRect.height - 10 < 0;
+                  // Determine tooltip placement: prefer above, fallback below, then wider side
+                  const spaceAbove = yPos - canvasRect.top;
+                  const spaceBelow = canvasRect.bottom - yPos;
+                  const tooltipH = tooltipRect.height + 10;
+                  const showBelow =
+                    spaceAbove >= tooltipH ? false : spaceBelow >= tooltipH ? true : spaceAbove < spaceBelow;
 
                   tooltipEl.style.left = left + 'px';
-                  tooltipEl.style.top = yPos + (wouldOverflowTop ? 10 : -10) + 'px';
-                  tooltipEl.style.transform = wouldOverflowTop ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
+                  tooltipEl.style.top = yPos + (showBelow ? 10 : -10) + 'px';
+                  tooltipEl.style.transform = showBelow ? 'translate(-50%, 0)' : 'translate(-50%, -100%)';
                   tooltipEl.style.right = 'auto';
                   tooltipEl.style.visibility = 'visible';
                   tooltipEl.style.opacity = '1';
@@ -292,7 +303,6 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
               },
               leave: (context: EventContext) => {
                 const chart = context.chart;
-                const parentNode = chart.canvas.parentNode as HTMLElement | null;
 
                 if (chart.canvas._averageTooltipHandler) {
                   chart.canvas.removeEventListener('mousemove', chart.canvas._averageTooltipHandler);
@@ -302,7 +312,7 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
                 delete chart.canvas.dataset.hoveringAverage;
                 chart.canvas.style.cursor = 'default';
 
-                const tooltipEl = parentNode?.querySelector<HTMLElement>('.average-tooltip');
+                const tooltipEl = document.body.querySelector<HTMLElement>('.average-tooltip');
                 if (tooltipEl) {
                   tooltipEl.style.visibility = 'hidden';
                   tooltipEl.style.opacity = '0';
@@ -337,6 +347,8 @@ export default function EmotionLevelCanvas({ levelData, timePeriod, startDate }:
 
     return () => {
       clearTimeout(timer);
+      removeTooltip('level-tooltip');
+      removeTooltip('average-tooltip');
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
         chartInstanceRef.current = null;

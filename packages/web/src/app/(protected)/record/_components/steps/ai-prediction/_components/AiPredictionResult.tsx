@@ -95,7 +95,7 @@ export default function AiPredictionResult({ predictionData, resetPredictEmotion
       </div>
 
       {/* AI Analysis Results */}
-      <div className="mobile:pb-12 flex min-h-0 w-full max-w-[480px] flex-1 flex-col gap-10 overflow-hidden py-10">
+      <div className="mobile:pb-12 flex min-h-0 w-full max-w-[480px] flex-1 flex-col gap-10 py-10">
         {/* Emotion Visual */}
         <div className="flex flex-col items-center justify-center">
           {emotionStep && (

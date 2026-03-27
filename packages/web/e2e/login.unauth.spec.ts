@@ -51,7 +51,7 @@ test.describe('Login Failure', () => {
 
     // Trigger OAuth (this depends on implementation)
     // Should show error message
-    const errorMessage = page.locator('text=/실패|error|오류|failed/i');
+    const errorMessage = page.locator('text=/error|failed/i');
     await expect(errorMessage).toBeVisible();
   });
 

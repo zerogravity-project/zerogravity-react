@@ -84,7 +84,7 @@ test.describe('Daily Step 1: Emotion Selection', () => {
   /** Should have next button enabled (default emotion is Neutral) */
   test('should have next button enabled by default', async ({ page }) => {
     // App starts with emotionId=3 (Neutral) as default, so button is already enabled
-    const nextButton = page.getByRole('button', { name: /다음|next/i }).first();
+    const nextButton = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton).toBeEnabled();
   });
 });
@@ -114,7 +114,7 @@ test.describe('Daily Step 2: Reason Selection', () => {
     await expect(slider).toBeVisible({ timeout: 5000 });
 
     // App has default emotionId=3 (Neutral), so just click Next
-    const nextButton = page.getByRole('button', { name: /다음|next/i }).first();
+    const nextButton = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton).toBeEnabled({ timeout: 5000 });
     await nextButton.click();
 
@@ -146,8 +146,8 @@ test.describe('Daily Step 2: Reason Selection', () => {
 
   /** Should have Next button (NOT Submit - goes to diary) */
   test('should have next button for diary step', async ({ page }) => {
-    // Daily Step 2 has "다음" button, not "제출"
-    const nextButton = page.getByRole('button', { name: /다음|next/i }).first();
+    // Daily Step 2 has "Next" button, not "Submit"
+    const nextButton = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton).toBeVisible();
   });
 });
@@ -174,7 +174,7 @@ test.describe('Daily Step 3: Diary Entry', () => {
     await expect(slider).toBeVisible({ timeout: 5000 });
 
     // Step 1 - app has default emotionId=3 (Neutral), just click Next
-    const nextButton1 = page.getByRole('button', { name: /다음|next/i }).first();
+    const nextButton1 = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton1).toBeEnabled({ timeout: 5000 });
     await nextButton1.click();
 
@@ -183,7 +183,7 @@ test.describe('Daily Step 3: Diary Entry', () => {
 
     // Step 2 - select a reason, wait for Next to be enabled, then click
     await page.getByRole('button', { name: 'Health' }).click();
-    const nextButton2 = page.getByRole('button', { name: /다음|next/i }).first();
+    const nextButton2 = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton2).toBeEnabled({ timeout: 5000 });
     await nextButton2.click();
 
@@ -200,7 +200,7 @@ test.describe('Daily Step 3: Diary Entry', () => {
   /** Should allow empty diary submission */
   test('should enable submit with empty diary', async ({ page }) => {
     // Diary is optional - submit should be enabled even without text
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
+    const submitButton = page.getByRole('button', { name: /submit|done/i });
     await expect(submitButton).toBeEnabled();
   });
 
@@ -714,7 +714,7 @@ test.describe('Daily Edge Cases', () => {
 
     if (isStillOnRecordPage) {
       // If accessible, should at least show a restriction message
-      const restriction = page.getByText(/cannot|restricted|not allowed|expired|과거|수정/i);
+      const restriction = page.getByText(/cannot|restricted|not allowed|expired/i);
       await expect(restriction).toBeVisible({ timeout: 5000 });
     } else {
       // Should have redirected (this is the expected behavior)
@@ -823,7 +823,7 @@ test.describe('Record Daily Mobile', () => {
     await expect(slider).toBeVisible({ timeout: 5000 });
 
     // Step 1 - app has default emotionId=3 (Neutral), just click Next
-    const nextButton1 = page.getByRole('button', { name: /다음|next/i }).first();
+    const nextButton1 = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton1).toBeEnabled({ timeout: 5000 });
     await nextButton1.click();
 
@@ -834,7 +834,7 @@ test.describe('Record Daily Mobile', () => {
     await page.getByRole('button', { name: 'Health' }).click();
 
     // Wait for Next button to be enabled after reason selection
-    const nextButton2 = page.getByRole('button', { name: /다음|next/i }).first();
+    const nextButton2 = page.getByRole('button', { name: /next/i }).first();
     await expect(nextButton2).toBeEnabled({ timeout: 5000 });
     await nextButton2.click();
 

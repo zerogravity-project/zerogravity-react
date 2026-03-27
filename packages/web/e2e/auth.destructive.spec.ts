@@ -102,7 +102,7 @@ test.describe('Session Expiration', () => {
   test.skip('should show session expired message on 401', async ({ page }) => {
     // TODO: Enable when session expired UX is implemented
     // Currently: 401 → redirect to /login (no user-facing message)
-    // Expected: 401 → Toast/Modal "세션이 만료되었습니다" → redirect to /login
+    // Expected: 401 → Toast/Modal "Session expired" → redirect to /login
 
     // Mock 401 response from API (api-dev.zerogv.com)
     await page.route('**/api-dev.zerogv.com/**', route => {
@@ -114,7 +114,7 @@ test.describe('Session Expiration', () => {
     await page.waitForTimeout(2000);
 
     // Check for session expired toast or message (if implemented)
-    const expiredMessage = page.locator('text=/만료|expired|세션|unauthorized/i');
+    const expiredMessage = page.locator('text=/expired|unauthorized/i');
     await expect(expiredMessage).toBeVisible({ timeout: 5000 });
   });
 });
