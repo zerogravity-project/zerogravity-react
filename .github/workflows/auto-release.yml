@@ -36,7 +36,34 @@ jobs:
         id: current
         run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
 
+      - name: Check for manual version bump
+        id: check
+        run: |
+          CURRENT="${{ steps.current.outputs.version }}"
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -n "$LAST_TAG" ]; then
+            TAG_VERSION="${LAST_TAG#v}"
+            echo "Current package.json: $CURRENT"
+            echo "Latest tag: $LAST_TAG ($TAG_VERSION)"
+
+            # Compare versions using sort -V
+            HIGHER=$(printf '%s\n%s' "$TAG_VERSION" "$CURRENT" | sort -V | tail -1)
+            if [ "$CURRENT" != "$TAG_VERSION" ] && [ "$HIGHER" = "$CURRENT" ]; then
+              echo "manual=true" >> $GITHUB_OUTPUT
+              echo "version=$CURRENT" >> $GITHUB_OUTPUT
+              echo "✅ Manual version bump detected: $TAG_VERSION → $CURRENT (tag only)"
+            else
+              echo "manual=false" >> $GITHUB_OUTPUT
+              echo "ℹ️ No manual bump, proceeding with auto bump"
+            fi
+          else
+            echo "manual=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No previous tag found, proceeding with auto bump"
+          fi
+
       - name: Determine version bump
+        if: steps.check.outputs.manual != 'true'
         id: bump
         run: |
           # Get all commit messages since last tag (or last 50 if no tag)
@@ -61,6 +88,7 @@ jobs:
           fi
 
       - name: Calculate new version
+        if: steps.check.outputs.manual != 'true'
         id: new
         run: |
           CURRENT="${{ steps.current.outputs.version }}"
@@ -80,6 +108,7 @@ jobs:
           echo "Version bump: $CURRENT → $NEW_VERSION ($BUMP)"
 
       - name: Update package.json versions
+        if: steps.check.outputs.manual != 'true'
         run: |
           NEW_VERSION="${{ steps.new.outputs.version }}"
 
@@ -95,6 +124,7 @@ jobs:
           echo "Updated all package.json files to v$NEW_VERSION"
 
       - name: Create release branch and PR
+        if: steps.check.outputs.manual != 'true'
         run: |
           NEW_VERSION="${{ steps.new.outputs.version }}"
           BRANCH="release/v${NEW_VERSION}"
@@ -119,22 +149,43 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Resolve version for tagging
+        id: resolve
+        run: |
+          if [ "${{ steps.check.outputs.manual }}" = "true" ]; then
+            echo "version=${{ steps.check.outputs.version }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ steps.new.outputs.version }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create tag and release
         run: |
-          NEW_VERSION="${{ steps.new.outputs.version }}"
+          VERSION="${{ steps.resolve.outputs.version }}"
+          MANUAL="${{ steps.check.outputs.manual }}"
 
-          # Pull latest main (now includes version bump)
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Pull latest main (includes version bump PR if auto bump)
           git checkout main
           git pull origin main
 
           # Create tag
-          git tag "v${NEW_VERSION}"
-          git push origin "v${NEW_VERSION}"
+          git tag "v${VERSION}"
+          git push origin "v${VERSION}"
 
           # Generate release notes
           LAST_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ "$MANUAL" = "true" ]; then
+            # For manual bump, include all commits since last tag
+            RANGE_END="HEAD"
+          else
+            # For auto bump, exclude the release commit itself
+            RANGE_END="HEAD~1"
+          fi
+
           if [ -n "$LAST_TAG" ]; then
-            COMMITS=$(git log ${LAST_TAG}..HEAD~1 --pretty=format:"- %s" --no-merges)
+            COMMITS=$(git log ${LAST_TAG}..${RANGE_END} --pretty=format:"- %s" --no-merges)
           else
             COMMITS=$(git log --pretty=format:"- %s" --no-merges -20)
           fi
@@ -148,7 +199,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: "v${{ steps.new.outputs.version }}"
-          name: "v${{ steps.new.outputs.version }}"
+          tag_name: "v${{ steps.resolve.outputs.version }}"
+          name: "v${{ steps.resolve.outputs.version }}"
           body_path: /tmp/release-notes.md
           generate_release_notes: false
