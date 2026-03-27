@@ -51,7 +51,7 @@ test.describe('Desktop Navigation', () => {
       await menuTrigger.click();
 
       // Click a navigation item
-      const profileLink = page.getByRole('menuitem', { name: /profile|프로필/i });
+      const profileLink = page.getByRole('menuitem', { name: /profile/i });
       if (await profileLink.isVisible()) {
         await profileLink.click();
         await expect(page).toHaveURL(/\/profile/);
@@ -66,7 +66,7 @@ test.describe('Desktop Navigation', () => {
     if (await menuTrigger.isVisible()) {
       await menuTrigger.click();
 
-      const profileLink = page.getByRole('menuitem', { name: /profile|프로필/i });
+      const profileLink = page.getByRole('menuitem', { name: /profile/i });
       if (await profileLink.isVisible()) {
         await profileLink.click();
 
@@ -118,7 +118,7 @@ test.describe('Mobile Navigation', () => {
     if (await menuButton.isVisible()) {
       await menuButton.click();
 
-      const recordLink = page.getByRole('link', { name: /record|기록/i });
+      const recordLink = page.getByRole('link', { name: /record/i });
       if (await recordLink.isVisible()) {
         await recordLink.click();
         await expect(page).toHaveURL(/\/record/);
@@ -133,7 +133,7 @@ test.describe('Mobile Navigation', () => {
     if (await menuButton.isVisible()) {
       await menuButton.click();
 
-      const recordLink = page.getByRole('link', { name: /record|기록/i });
+      const recordLink = page.getByRole('link', { name: /record/i });
       if (await recordLink.isVisible()) {
         await recordLink.click();
 
@@ -185,7 +185,7 @@ test.describe('Nav Profile Display', () => {
     // Run with chromium-unauth project
     await page.goto('/');
 
-    const loginButton = page.getByRole('button', { name: /로그인|login/i });
+    const loginButton = page.getByRole('button', { name: /login/i });
     await expect(loginButton).toBeVisible();
   });
 

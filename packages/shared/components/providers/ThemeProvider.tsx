@@ -19,6 +19,7 @@ interface ThemeContextValue {
 
 interface ThemeProviderProps {
   children: ReactNode;
+  initialColor?: EmotionColor;
   getColor?: () => Promise<EmotionColor | null>;
   setColor?: (color: EmotionColor) => void;
 }
@@ -68,15 +69,14 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
  * @param getColor - Custom async color getter (optional)
  * @param setColor - Custom color setter (optional)
  */
-export function ThemeProvider({ children, getColor, setColor }: ThemeProviderProps) {
+export function ThemeProvider({ children, initialColor, getColor, setColor }: ThemeProviderProps) {
   /*
    * --------------------------------------------
    * 1. States
    * --------------------------------------------
    */
-  // Use a stable default for SSR/first client render to avoid hydration mismatch
-  const [accentColor, setAccentColor] = useState<EmotionColor>('green');
-  const [mounted, setMounted] = useState(false);
+  const [accentColor, setAccentColor] = useState<EmotionColor>(initialColor ?? 'green');
+  const [mounted, setMounted] = useState(!!initialColor);
 
   /*
    * --------------------------------------------
@@ -90,8 +90,10 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
    * 3. Effects
    * --------------------------------------------
    */
-  /** Load theme from cookie on mount */
+  /** Load theme from cookie on mount (skip if initialColor provided) */
   useEffect(() => {
+    if (initialColor) return;
+
     async function loadTheme() {
       try {
         // Use custom getter if provided (for Extension), otherwise use document.cookie
@@ -119,7 +121,7 @@ export function ThemeProvider({ children, getColor, setColor }: ThemeProviderPro
     }
 
     loadTheme();
-  }, [getColor, setColor]);
+  }, [initialColor, getColor, setColor]);
 
   /** Persist changes to cookie */
   useEffect(() => {

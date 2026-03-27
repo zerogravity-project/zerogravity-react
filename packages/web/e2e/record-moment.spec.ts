@@ -157,7 +157,7 @@ test.describe('Moment Step 1: Emotion Selection', () => {
   /** Should have next button enabled (default emotion is Neutral) */
   test('should have next button enabled by default', async ({ page }) => {
     // App starts with emotionId=3 (Neutral) as default, so button is already enabled
-    const nextButton = page.getByRole('button', { name: /다음|next|continue/i }).first();
+    const nextButton = page.getByRole('button', { name: /next|continue/i }).first();
     await expect(nextButton).toBeEnabled();
   });
 });
@@ -187,7 +187,7 @@ test.describe('Moment Step 2: Reason Selection', () => {
     await expect(slider).toBeVisible({ timeout: 5000 });
 
     // App has default emotionId=3 (Neutral), so just click Next
-    const nextButton = page.getByRole('button', { name: /다음|next|continue/i }).first();
+    const nextButton = page.getByRole('button', { name: /next|continue/i }).first();
     await expect(nextButton).toBeEnabled({ timeout: 5000 });
     await nextButton.click();
 
@@ -220,13 +220,13 @@ test.describe('Moment Step 2: Reason Selection', () => {
   /** Should have Submit button (not Next, no diary for Moment) */
   test('should have submit button', async ({ page }) => {
     // Moment has only 2 steps - Step 2 should have Submit button
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
+    const submitButton = page.getByRole('button', { name: /submit|done/i });
     await expect(submitButton).toBeVisible();
   });
 
   /** Should disable submit when no reason selected */
   test('should disable submit without reason', async ({ page }) => {
-    const submitButton = page.getByRole('button', { name: /제출|submit|완료|done/i });
+    const submitButton = page.getByRole('button', { name: /submit|done/i });
 
     // Should be disabled initially
     const isDisabled = await submitButton.isDisabled().catch(() => true);

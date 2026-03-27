@@ -42,7 +42,7 @@ test.describe('Chart Load', () => {
   /** Should handle empty data */
   test('should show empty state', async ({ page }) => {
     // If no data, should show empty message
-    const emptyState = page.locator('text=/데이터.*없|no.*data|empty/i');
+    const emptyState = page.locator('text=/no.*data|empty/i');
 
     // Either chart or empty state should be visible
     const chart = page.locator('canvas, [data-testid="chart"]');
@@ -97,7 +97,7 @@ test.describe('Chart Period Filter', () => {
   /** Should restrict future date navigation */
   test('should restrict future dates', async ({ page }) => {
     // Next period button should be disabled if at current period
-    const nextButton = page.getByRole('button', { name: /다음|next|>/i }).first();
+    const nextButton = page.getByRole('button', { name: /next|>/i }).first();
 
     if (await nextButton.isVisible()) {
       // Should be disabled or restricted
@@ -117,7 +117,7 @@ test.describe('Chart Interactions', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -157,7 +157,7 @@ test.describe('AI Analysis Drawer', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -257,7 +257,7 @@ test.describe('AI Analysis Drawer', () => {
     await aiButton.click();
 
     // Should show error message in drawer - needs error UI
-    const errorMsg = page.locator('text=/실패|error|오류|failed/i');
+    const errorMsg = page.locator('text=/error|failed/i');
     await expect(errorMsg.first()).toBeVisible({ timeout: 5000 });
   });
 });
@@ -279,7 +279,7 @@ test.describe('Chart Loading States', () => {
 
     await page.goto('/profile/chart');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -294,7 +294,7 @@ test.describe('Chart Loading States', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -331,13 +331,13 @@ test.describe('Chart Error Handling', () => {
 
     await page.goto('/profile/chart');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
 
     // Should show error message
-    const error = page.locator('text=/error|에러|오류/i');
+    const error = page.locator('text=/error/i');
     await expect(error).toBeVisible();
   });
 });
@@ -356,7 +356,7 @@ test.describe('Chart Desktop', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -375,7 +375,7 @@ test.describe('Chart Tablet', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -394,7 +394,7 @@ test.describe('Chart Mobile', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }
@@ -409,7 +409,7 @@ test.describe('Chart Mobile', () => {
     await page.goto('/profile/chart');
     await page.waitForLoadState('networkidle');
 
-    const chartTab = page.getByRole('tab', { name: /chart|차트/i });
+    const chartTab = page.getByRole('tab', { name: /chart/i });
     if (await chartTab.isVisible()) {
       await chartTab.click();
     }

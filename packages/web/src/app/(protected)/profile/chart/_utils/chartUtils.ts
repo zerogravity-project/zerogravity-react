@@ -58,37 +58,50 @@ export function generateEmotionRangeHtml(value: number): string {
  */
 
 /**
- * Get or create tooltip element
- * @param parentNode - Parent DOM node
+ * Get or create tooltip element (appended to document.body to escape overflow containers)
  * @param className - Tooltip CSS class name
  * @returns Tooltip element
  */
-export function getOrCreateTooltip(parentNode: HTMLElement, className: string): HTMLDivElement {
-  let tooltipEl = parentNode.querySelector<HTMLDivElement>(`.${className}`);
+export function getOrCreateTooltip(className: string): HTMLDivElement {
+  let tooltipEl = document.body.querySelector<HTMLDivElement>(`.${className}`);
   if (!tooltipEl) {
     tooltipEl = document.createElement('div');
     tooltipEl.className = className;
     tooltipEl.style.cssText = TOOLTIP_STYLES;
-    parentNode.appendChild(tooltipEl);
+    document.body.appendChild(tooltipEl);
   }
   return tooltipEl;
 }
 
 /**
- * Calculate tooltip left position with horizontal boundary checking
- * @param caretX - Tooltip caret X position
+ * Remove tooltip element from document.body
+ * @param className - Tooltip CSS class name
+ */
+export function removeTooltip(className: string): void {
+  document.body.querySelector(`.${className}`)?.remove();
+}
+
+/**
+ * Calculate tooltip left position with canvas boundary checking
+ * @param caretX - Tooltip caret X position (viewport-relative)
  * @param tooltipWidth - Tooltip element width
- * @param containerWidth - Container element width
+ * @param canvasLeft - Canvas left edge (viewport-relative)
+ * @param canvasRight - Canvas right edge (viewport-relative)
  * @returns Bounded left position
  */
-export function calculateTooltipLeftPosition(caretX: number, tooltipWidth: number, containerWidth: number): number {
+export function calculateTooltipLeftPosition(
+  caretX: number,
+  tooltipWidth: number,
+  canvasLeft: number,
+  canvasRight: number
+): number {
   const tooltipHalfWidth = tooltipWidth / 2;
   let left = caretX;
 
-  if (left - tooltipHalfWidth < 0) {
-    left = tooltipHalfWidth;
-  } else if (left + tooltipHalfWidth > containerWidth) {
-    left = containerWidth - tooltipHalfWidth;
+  if (left - tooltipHalfWidth < canvasLeft) {
+    left = canvasLeft + tooltipHalfWidth;
+  } else if (left + tooltipHalfWidth > canvasRight) {
+    left = canvasRight - tooltipHalfWidth;
   }
 
   return left;
