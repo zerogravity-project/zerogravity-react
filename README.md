@@ -2,8 +2,6 @@
 
 # 🌌 ZeroGravity
 
-> ⚠️ _This project is currently in development. Official release coming soon!_
-
 <br/>
 
 ![Typing SVG](https://readme-typing-svg.demolab.com?font=Plus+Jakarta+Sans&weight=600&size=20&duration=3000&pause=1000&color=FF6A00&center=true&vCenter=true&width=435&lines=Record+·+Analyze+·+Visualize;AI-Powered+Emotion+Tracking;Built+with+Next.js+15+%2B+Three.js)
