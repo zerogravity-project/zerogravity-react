@@ -12,6 +12,8 @@ on:
 
 jobs:
   deploy:
+    # Skip deploy for auto-release version bump commits
+    if: "!startsWith(github.event.head_commit.message, '🔖 release:')"
     runs-on: ubuntu-latest
 
     steps:
