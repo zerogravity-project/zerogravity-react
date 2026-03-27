@@ -1,6 +1,7 @@
 import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query';
 import { format, startOfWeek } from 'date-fns';
 
+import { getUserLocalNow } from '@/lib/timezone';
 import { CHART_QUERY_KEY } from '@/services/chart/chart.keys';
 import { getChartCountServer, getChartLevelServer, getChartReasonServer } from '@/services/chart/chart.service.server';
 
@@ -18,7 +19,7 @@ export default async function ProfileChartPage() {
 
   // Default: week period, starting from this week (Sunday)
   const defaultPeriod = 'week';
-  const defaultStartDate = format(startOfWeek(new Date(), { weekStartsOn: 0 }), 'yyyy-MM-dd');
+  const defaultStartDate = format(startOfWeek(await getUserLocalNow(), { weekStartsOn: 0 }), 'yyyy-MM-dd');
 
   // Parallel prefetch all 3 chart queries
   await Promise.all([
