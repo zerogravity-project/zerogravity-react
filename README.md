@@ -130,7 +130,7 @@ zerogravity-react/
 
 ## 🔧 Technical Challenges & Solutions
 
-### 1. 3D Rendering Optimization (29fps → 60fps)
+### 1. 3D Rendering Optimization (29fps → 61fps)
 
 **🔍 Problem**: Emotion planet rendered at 29fps with 408,040 triangles. The landing page felt heavy on every visit
 
@@ -141,7 +141,7 @@ zerogravity-react/
   - Large Planet (Home): 100→48 (desktop), 32 (mobile)
   - Normal Planet (Record, Calendar): 50→32 (desktop), 28 (mobile)
 
-**✅ Outcome**: ~610K → ~48K noise calls per frame (**-92%**), 408K → 96K triangles (**-76%**), **29fps → 60fps**
+**✅ Outcome**: ~610K → ~48K noise calls per frame (**-92%**), 408K → 48K triangles (**-88%**), **29fps → 61fps**
 
 ```glsl
 // Before — 6 noise calls per vertex (vertex displacement + normal recalculation)
