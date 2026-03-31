@@ -53,8 +53,11 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
+const isProduction = process.env.AUTH_URL === 'https://zerogv.com';
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://www.zerogv.com'),
+  robots: isProduction ? { index: true, follow: true } : { index: false, follow: false },
   title: {
     default: 'Zero Gravity',
     template: '%s | Zero Gravity',
