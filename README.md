@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌌 ZeroGravity
+# 🪐 ZeroGravity
 
 <br/>
 
@@ -424,7 +424,8 @@ Gemini-powered intelligent emotion analysis.
 
 ## 🔗 Related
 
-- [Backend (Spring Boot)](https://github.com/zerogravity-project/zerogravity-backend)
+- 🌐 [Read more on my portfolio →](https://minukhwang.com/projects/zerogravity-frontend)
+- 🚀 [Backend (Spring Boot)](https://github.com/zerogravity-project/zerogravity-backend)
 
 ---
 
