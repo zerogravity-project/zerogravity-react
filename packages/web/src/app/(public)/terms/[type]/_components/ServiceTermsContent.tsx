@@ -14,7 +14,7 @@ export function ServiceTermsContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">1. Acceptance of Terms</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          By accessing and using ZeroGravity (&quot;Service&quot;), you accept and agree to be bound by these Terms of
+          By accessing and using Zero Gravity (&quot;Service&quot;), you accept and agree to be bound by these Terms of
           Service. If you do not agree to these terms, please do not use the Service.
         </Text>
       </section>
@@ -23,7 +23,7 @@ export function ServiceTermsContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">2. Service Description</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          ZeroGravity is an emotion tracking and personal wellness application that helps users monitor their emotional
+          Zero Gravity is an emotion tracking and personal wellness application that helps users monitor their emotional
           states, visualize patterns, and receive personalized insights. The Service includes web and browser extension
           platforms.
         </Text>
@@ -78,7 +78,7 @@ export function ServiceTermsContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">6. Intellectual Property</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          The Service and its original content, features, and functionality are owned by ZeroGravity and are protected
+          The Service and its original content, features, and functionality are owned by Zero Gravity and are protected
           by international copyright, trademark, and other intellectual property laws. You retain ownership of the
           content you create through the Service.
         </Text>
@@ -107,8 +107,8 @@ export function ServiceTermsContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">9. Limitation of Liability</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          TO THE MAXIMUM EXTENT PERMITTED BY LAW, ZEROGRAVITY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL,
-          CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW, ZERO GRAVITY SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
+          SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR ANY LOSS OF PROFITS OR REVENUES, WHETHER INCURRED DIRECTLY OR
           INDIRECTLY, OR ANY LOSS OF DATA, USE, OR OTHER INTANGIBLE LOSSES.
         </Text>
       </section>
@@ -127,8 +127,8 @@ export function ServiceTermsContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">11. Governing Law</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which
-          ZeroGravity operates, without regard to its conflict of law provisions.
+          These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which Zero
+          Gravity operates, without regard to its conflict of law provisions.
         </Text>
       </section>
 

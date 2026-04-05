@@ -112,14 +112,14 @@ export function ConsentSection() {
       <SettingSection title="Privacy & Consent">
         <ConsentToggle
           label="Terms of Service"
-          description="Required to use ZeroGravity"
+          description="Required to use Zero Gravity"
           checked={consents?.termsAgreed ?? false}
           disabled
           viewDetailUrl="/terms/service"
         />
         <ConsentToggle
           label="Privacy Policy"
-          description="Required to use ZeroGravity"
+          description="Required to use Zero Gravity"
           checked={consents?.privacyAgreed ?? false}
           disabled
           viewDetailUrl="/terms/privacy"

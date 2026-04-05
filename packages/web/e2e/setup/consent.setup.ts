@@ -53,7 +53,7 @@ setup('complete-consent', async ({ page }) => {
   console.log('📝 Completing consent form...');
 
   // Wait for consent form to load
-  await expect(page.getByText('Welcome to ZeroGravity')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('Welcome to Zero Gravity')).toBeVisible({ timeout: 10000 });
 
   // Check all required consent checkboxes
   // Terms of Service

@@ -27,7 +27,7 @@ export function MenuDrawerHeader({ user }: MenuDrawerHeaderProps) {
    * --------------------------------------------
    */
   const profileImage = user?.image;
-  const displayName = user?.name ?? 'ZeroGravity User';
+  const displayName = user?.name ?? 'Zero Gravity User';
   const email = user?.email;
 
   /*

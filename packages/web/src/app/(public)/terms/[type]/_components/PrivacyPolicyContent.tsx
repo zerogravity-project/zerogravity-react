@@ -14,8 +14,8 @@ export function PrivacyPolicyContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">1. Introduction</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          ZeroGravity (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) is committed to protecting your privacy. This
-          Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our
+          Zero Gravity (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) is committed to protecting your privacy.
+          This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our
           Service. Please read this policy carefully.
         </Text>
       </section>

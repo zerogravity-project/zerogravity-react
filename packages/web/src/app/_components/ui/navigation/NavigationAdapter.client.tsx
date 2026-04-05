@@ -83,7 +83,7 @@ export function NavigationAdapterClient({ session, className, background, border
   const isAuthenticated = !!session;
   const user = session?.user
     ? {
-        name: session.user.name ?? 'ZeroGravity User',
+        name: session.user.name ?? 'Zero Gravity User',
         email: session.user.email ?? undefined,
         image: session.user.image ?? undefined,
       }

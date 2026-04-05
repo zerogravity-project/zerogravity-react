@@ -27,11 +27,11 @@ const icon: CustomIconDescriptorType = {
 
 /** OG Image URL on CDN */
 const OG_IMAGE_URL =
-  'https://axp1udgkvclx.objectstorage.ap-chuncheon-1.oci.customer-oci.com/n/axp1udgkvclx/b/zerogravity-static/o/og/og-image.png';
+  'https://objectstorage.ap-chuncheon-1.oraclecloud.com/n/axp1udgkvclx/b/zerogravity-static/o/og%2Fog.webp';
 
 /** App description for SEO */
 const APP_DESCRIPTION =
-  'ZeroGravity is an AI-powered emotion tracking app. Record your daily emotions with AI assistance, get AI-generated insights and period analysis, explore patterns through interactive charts, and visualize your emotional journey with stunning 3D planets.';
+  'Zero Gravity is an AI-powered emotion tracking app. Record your daily emotions with AI assistance, get AI-generated insights and period analysis, explore patterns through interactive charts, and visualize your emotional journey with stunning 3D planets.';
 
 /** JSON-LD Structured Data for SEO */
 const JSON_LD = {

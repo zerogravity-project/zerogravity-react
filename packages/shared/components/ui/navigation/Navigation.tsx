@@ -93,7 +93,7 @@ export function Navigation({
    * --------------------------------------------
    */
   const dateData = now ? getDateStringData(now) : null;
-  const userName = user?.name ?? 'ZeroGravity User';
+  const userName = user?.name ?? 'Zero Gravity User';
   const profileImage = user?.image;
 
   /*
@@ -131,7 +131,7 @@ export function Navigation({
         <div className="flex items-center gap-4">
           {/* Logo */}
           <RadixLink asChild>
-            <LinkComponent href="/" aria-label="ZeroGravity Home">
+            <LinkComponent href="/" aria-label="Zero Gravity Home">
               <Logo />
             </LinkComponent>
           </RadixLink>

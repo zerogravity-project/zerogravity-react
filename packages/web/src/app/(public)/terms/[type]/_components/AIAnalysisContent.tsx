@@ -33,12 +33,12 @@ export function AIAnalysisContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">1. Overview of AI-Powered Analysis</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          ZeroGravity offers optional AI-powered analysis to provide personalized insights based on your emotion
+          Zero Gravity offers optional AI-powered analysis to provide personalized insights based on your emotion
           tracking data. This feature uses Google Gemini AI, a third-party artificial intelligence service, to analyze
           patterns in your emotional data and generate meaningful insights.
         </Text>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          <strong>This feature is completely optional.</strong> You can use ZeroGravity&apos;s core emotion tracking,
+          <strong>This feature is completely optional.</strong> You can use Zero Gravity&apos;s core emotion tracking,
           visualization, and statistics features without enabling AI analysis.
         </Text>
       </section>
@@ -99,7 +99,7 @@ export function AIAnalysisContent() {
             <Text size="3">3. The AI processes your data and generates personalized insights</Text>
           </li>
           <li>
-            <Text size="3">4. The insights are returned to ZeroGravity and displayed to you</Text>
+            <Text size="3">4. The insights are returned to Zero Gravity and displayed to you</Text>
           </li>
           <li>
             <Text size="3">5. The insights are stored on our servers for your future reference</Text>
@@ -190,7 +190,7 @@ export function AIAnalysisContent() {
             <Text size="3">• Google&apos;s data retention and deletion policies apply to your transmitted data</Text>
           </li>
           <li>
-            <Text size="3">• ZeroGravity has no control over how Google stores, uses, or deletes your data</Text>
+            <Text size="3">• Zero Gravity has no control over how Google stores, uses, or deletes your data</Text>
           </li>
         </ul>
         <Text size="3" style={{ lineHeight: '1.6', marginTop: '1rem' }}>
@@ -219,7 +219,7 @@ export function AIAnalysisContent() {
             </Text>
             <Text size="3">
               Once your emotion data is transmitted to Google Gemini AI, it cannot be retrieved, deleted, or controlled
-              by ZeroGravity or by you. This is a permanent action with the following implications:
+              by Zero Gravity or by you. This is a permanent action with the following implications:
             </Text>
             <ul className="ml-4 flex flex-col gap-2">
               <li>
@@ -227,7 +227,7 @@ export function AIAnalysisContent() {
               </li>
               <li>
                 <Text size="3">
-                  • ZeroGravity cannot retrieve or remove your data from Google&apos;s infrastructure
+                  • Zero Gravity cannot retrieve or remove your data from Google&apos;s infrastructure
                 </Text>
               </li>
               <li>
@@ -235,7 +235,7 @@ export function AIAnalysisContent() {
               </li>
               <li>
                 <Text size="3">
-                  • Deleting your ZeroGravity account does not delete data in Google&apos;s AI systems
+                  • Deleting your Zero Gravity account does not delete data in Google&apos;s AI systems
                 </Text>
               </li>
               <li>
@@ -310,7 +310,7 @@ export function AIAnalysisContent() {
                 <Text size="3">• AI may produce inaccurate, biased, or misleading insights</Text>
               </li>
               <li>
-                <Text size="3">• ZeroGravity does not validate or guarantee the accuracy of AI-generated content</Text>
+                <Text size="3">• Zero Gravity does not validate or guarantee the accuracy of AI-generated content</Text>
               </li>
               <li>
                 <Text size="3">• For mental health concerns, always consult qualified professionals</Text>
@@ -346,11 +346,11 @@ export function AIAnalysisContent() {
             <Text size="3">• You accept the risks associated with third-party AI data processing</Text>
           </li>
           <li>
-            <Text size="3">• You agree that ZeroGravity is not liable for how Google processes your data</Text>
+            <Text size="3">• You agree that Zero Gravity is not liable for how Google processes your data</Text>
           </li>
         </ul>
         <Text size="3" style={{ lineHeight: '1.6', marginTop: '1rem', fontWeight: 'bold' }}>
-          This consent is optional. You can fully use ZeroGravity without enabling AI analysis.
+          This consent is optional. You can fully use Zero Gravity without enabling AI analysis.
         </Text>
       </section>
 

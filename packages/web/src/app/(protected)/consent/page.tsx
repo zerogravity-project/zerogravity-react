@@ -107,7 +107,7 @@ export default function ConsentPage() {
         <div className="mb-6 flex flex-col items-center gap-4">
           <div className="flex flex-col items-center gap-2">
             <Text size="6" weight="bold">
-              Welcome to ZeroGravity
+              Welcome to Zero Gravity
             </Text>
             <Text size="3" color="gray" style={{ textAlign: 'center' }}>
               Before you begin, please review and accept our terms
@@ -239,7 +239,7 @@ export default function ConsentPage() {
             {isUpdatingConsent ? 'Saving...' : 'Accept and Continue'}
           </Button>
           <Text size="2" color="gray" style={{ textAlign: 'center' }}>
-            <Text color="red">*</Text> Required to use ZeroGravity
+            <Text color="red">*</Text> Required to use Zero Gravity
           </Text>
         </div>
       </div>

@@ -36,7 +36,7 @@ setup('authenticate', async ({ page }) => {
 
   // Navigate to login page
   await page.goto('/login');
-  await expect(page).toHaveTitle(/ZeroGravity/);
+  await expect(page).toHaveTitle(/Zero Gravity/);
 
   // Click Google login button
   const googleButton = page.getByRole('button', { name: /login with google/i });

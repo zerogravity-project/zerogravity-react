@@ -26,7 +26,7 @@ test.describe('Consent Page Display', () => {
 
   /** Should display consent page with title */
   test('should display consent page', async ({ page }) => {
-    await expect(page.getByText('Welcome to ZeroGravity')).toBeVisible();
+    await expect(page.getByText('Welcome to Zero Gravity')).toBeVisible();
     await expect(page.getByText('Before you begin, please review and accept our terms')).toBeVisible();
   });
 

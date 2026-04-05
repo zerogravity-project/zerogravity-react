@@ -22,7 +22,7 @@ export async function DesktopMenuHeader() {
    * --------------------------------------------
    */
   const profileImage = session?.user?.image ?? undefined;
-  const displayName = session?.user?.name ?? 'ZeroGravity User';
+  const displayName = session?.user?.name ?? 'Zero Gravity User';
   const email = session?.user?.email;
 
   /*
