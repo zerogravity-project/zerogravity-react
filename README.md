@@ -213,7 +213,7 @@ const session = await response.json();
 
 ### 4. E2E Testing for 3D Apps (Playwright)
 
-**🔍 Problem**: Running 256 E2E tests in parallel caused GPU resource contention from WebGL/Canvas tests, making them flaky. Had to fall back to fully sequential execution, significantly increasing total run time
+**🔍 Problem**: Running 246 E2E tests in parallel caused GPU resource contention from WebGL/Canvas tests, making them flaky. Had to fall back to fully sequential execution, significantly increasing total run time
 
 **💡 Solution**: Isolate WebGL tests into `chromium-3d` (sequential) to prevent GPU contention, while `chromium` (non-WebGL) runs in parallel
 
