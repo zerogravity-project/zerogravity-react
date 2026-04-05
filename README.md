@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🪐 ZeroGravity
+# 🪐 Zero Gravity
 
 <br/>
 
@@ -37,12 +37,12 @@
 
 ## 📖 Overview
 
-ZeroGravity is a personal wellness application that helps users track and visualize their emotions through an immersive 3D experience. The platform transforms emotional data into beautiful, interactive 3D planets that morph and change based on your emotional state.
+Zero Gravity is a personal wellness application that helps users track and visualize their emotions through an immersive 3D experience. The platform transforms emotional data into beautiful, interactive 3D planets that morph and change based on your emotional state.
 
 > 📌 Rebuilt from an incomplete collaborative Vue project into a full-featured solo full-stack application.
 > [Backend Repository](https://github.com/zerogravity-project/zerogravity-backend)
 
-### Why ZeroGravity?
+### Why Zero Gravity?
 
 - 🎨 **Visual Emotion Tracking** - Transform abstract emotions into tangible 3D visualizations
 - 📊 **Data-Driven Insights** - Analyze emotional patterns over time with interactive charts

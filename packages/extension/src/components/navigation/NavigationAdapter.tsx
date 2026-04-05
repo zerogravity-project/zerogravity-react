@@ -74,7 +74,7 @@ export function NavigationAdapter({ className, background, border }: NavigationA
    */
   const user = authUser
     ? {
-        name: authUser.name ?? 'ZeroGravity User',
+        name: authUser.name ?? 'Zero Gravity User',
         email: authUser.email ?? undefined,
         image: authUser.image ?? undefined,
       }

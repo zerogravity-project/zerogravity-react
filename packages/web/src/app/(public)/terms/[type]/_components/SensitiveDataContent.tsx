@@ -32,7 +32,7 @@ export function SensitiveDataContent() {
         <Heading size="5">1. What is Sensitive Personal Data?</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
           Sensitive personal data refers to information that reveals intimate details about your mental and emotional
-          state. In the context of ZeroGravity, this includes:
+          state. In the context of Zero Gravity, this includes:
         </Text>
         <ul className="ml-4 flex flex-col gap-2">
           <li>
@@ -67,7 +67,7 @@ export function SensitiveDataContent() {
       <section className="flex flex-col gap-3">
         <Heading size="5">2. Why We Collect Sensitive Data</Heading>
         <Text size="3" style={{ lineHeight: '1.6' }}>
-          We collect this sensitive information solely to provide you with the core functionality of ZeroGravity:
+          We collect this sensitive information solely to provide you with the core functionality of Zero Gravity:
         </Text>
         <ul className="ml-4 flex flex-col gap-2">
           <li>
@@ -264,7 +264,7 @@ export function SensitiveDataContent() {
           </Callout.Icon>
           <div className="flex flex-col gap-2">
             <Text size="3" weight="bold">
-              ZeroGravity is NOT a medical device or mental health treatment service.
+              Zero Gravity is NOT a medical device or mental health treatment service.
             </Text>
             <ul className="flex flex-col gap-1">
               <li>
@@ -342,7 +342,7 @@ export function SensitiveDataContent() {
           </li>
         </ul>
         <Text size="3" style={{ lineHeight: '1.6', marginTop: '1rem', fontWeight: 'bold' }}>
-          This consent is required to use ZeroGravity. Without it, we cannot provide the emotion tracking and wellness
+          This consent is required to use Zero Gravity. Without it, we cannot provide the emotion tracking and wellness
           features that are core to the Service.
         </Text>
       </section>
