@@ -121,8 +121,13 @@ export async function proxyToBackend(
    */
   try {
     const response = await fetch(url.toString(), fetchOptions);
-    const data = await response.json();
 
+    // Handle empty responses (e.g., 204 No Content)
+    if (response.status === 204 || response.headers.get('content-length') === '0') {
+      return new NextResponse(null, { status: response.status });
+    }
+
+    const data = await response.json();
     return NextResponse.json(data, { status: response.status });
   } catch {
     console.error('[API Proxy] Request failed');
