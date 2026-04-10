@@ -59,10 +59,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      checks: ['state'],
     }),
     Kakao({
       clientId: process.env.AUTH_KAKAO_ID,
       clientSecret: process.env.AUTH_KAKAO_SECRET,
+      checks: ['state'],
       /**
        * Use thumbnail_image as default profile image
        * Fallback to profile_image if thumbnail_image is not available
