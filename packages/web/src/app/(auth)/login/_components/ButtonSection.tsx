@@ -21,6 +21,9 @@ import { LoginButton } from './LoginButton';
 /** Backend connection error types from NextAuth */
 const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
 
+/** Deactivated user error type from custom AuthError */
+const DEACTIVATED_ERROR_TYPE = 'UserDeactivated';
+
 /*
  * ============================================
  * Component
@@ -56,19 +59,29 @@ export function ButtonSection() {
    */
   /** Check for authentication errors from NextAuth */
   useEffect(() => {
-    if (authError && BACKEND_ERROR_TYPES.includes(authError)) {
-      // Show error modal
+    if (!authError) return;
+
+    if (authError === DEACTIVATED_ERROR_TYPE) {
+      openAlertModal({
+        id: 'user-deactivated-error',
+        title: '탈퇴한 계정',
+        description: '탈퇴한 계정입니다. 계정 복구를 원하시면 고객센터에 문의해주세요.',
+        confirmText: '확인',
+      });
+    } else if (BACKEND_ERROR_TYPES.includes(authError)) {
       openAlertModal({
         id: 'backend-auth-error',
         title: 'Authentication Error',
         description: 'Failed to connect to the server. Please try again later.',
         confirmText: 'OK',
       });
-
-      // Clear error from URL while preserving callbackUrl
-      const newUrl = callbackUrl !== '/' ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login';
-      router.replace(newUrl);
+    } else {
+      return;
     }
+
+    // Clear error from URL while preserving callbackUrl
+    const newUrl = callbackUrl !== '/' ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login';
+    router.replace(newUrl);
   }, [authError, openAlertModal, router, callbackUrl]);
 
   /*

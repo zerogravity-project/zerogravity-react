@@ -7,10 +7,15 @@
  * Session: strategy, maxAge, updateAge
  */
 
-import NextAuth, { Account, Session, User } from 'next-auth';
+import NextAuth, { Account, AuthError, Session, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import Google from 'next-auth/providers/google';
 import Kakao from 'next-auth/providers/kakao';
+
+/** Custom Auth.js error for deactivated user accounts */
+class UserDeactivatedError extends AuthError {
+  static type = 'UserDeactivated' as const;
+}
 
 /*
  * ============================================
@@ -134,14 +139,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.refreshToken = data.data.refreshToken;
             // Set expiration time (15 minutes from now)
             token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
+          } else if (response.status === 409) {
+            throw new UserDeactivatedError();
           } else {
             console.error('[JWT Callback] Backend verification failed:', response.status);
-            // Throw error to prevent login - NextAuth will redirect to login with error
             throw new Error('BackendVerificationFailed');
           }
-        } catch {
+        } catch (error) {
+          if (error instanceof UserDeactivatedError) throw error;
           console.error('[JWT Callback] Backend connection error');
-          // Throw error to prevent login
           throw new Error('BackendConnectionError');
         }
       }
