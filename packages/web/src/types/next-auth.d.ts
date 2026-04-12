@@ -66,9 +66,19 @@ declare module 'next-auth' {
     refreshToken?: string;
 
     /**
-     * Error message if authentication failed
+     * Error message if token refresh failed
      */
     error?: string;
+
+    /**
+     * Backend auth error code (e.g., USER_DEACTIVATED, INTERNAL_SERVER_ERROR)
+     */
+    authError?: string;
+
+    /**
+     * Backend auth error message
+     */
+    authErrorMessage?: string;
 
     user: {
       id: string;
@@ -132,8 +142,18 @@ declare module 'next-auth/jwt' {
     consents?: ConsentData;
 
     /**
-     * Error message if authentication failed
+     * Error message if token refresh failed
      */
     error?: string;
+
+    /**
+     * Backend auth error code (e.g., USER_DEACTIVATED, INTERNAL_SERVER_ERROR)
+     */
+    authError?: string;
+
+    /**
+     * Backend auth error message
+     */
+    authErrorMessage?: string;
   }
 }

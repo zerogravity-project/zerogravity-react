@@ -7,15 +7,10 @@
  * Session: strategy, maxAge, updateAge
  */
 
-import NextAuth, { Account, AuthError, Session, User } from 'next-auth';
+import NextAuth, { Account, Session, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import Google from 'next-auth/providers/google';
 import Kakao from 'next-auth/providers/kakao';
-
-/** Custom Auth.js error for deactivated user accounts */
-class UserDeactivatedError extends AuthError {
-  static type = 'UserDeactivated' as const;
-}
 
 /*
  * ============================================
@@ -139,16 +134,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.refreshToken = data.data.refreshToken;
             // Set expiration time (15 minutes from now)
             token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
-          } else if (response.status === 409) {
-            throw new UserDeactivatedError();
           } else {
-            console.error('[JWT Callback] Backend verification failed:', response.status);
-            throw new Error('BackendVerificationFailed');
+            const errorData = await response.json().catch(() => null);
+            token.authError = errorData?.error || 'UNKNOWN_ERROR';
+            token.authErrorMessage = errorData?.message || 'Authentication failed';
           }
-        } catch (error) {
-          if (error instanceof UserDeactivatedError) throw error;
-          console.error('[JWT Callback] Backend connection error');
-          throw new Error('BackendConnectionError');
+        } catch {
+          token.authError = 'BACKEND_CONNECTION_ERROR';
+          token.authErrorMessage = 'Failed to connect to the server. Please try again later.';
         }
       }
 
@@ -257,6 +250,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.backendJwt = token.backendJwt;
       session.refreshToken = token.refreshToken;
       session.error = token.error;
+      session.authError = token.authError;
+      session.authErrorMessage = token.authErrorMessage;
 
       return session;
     },
