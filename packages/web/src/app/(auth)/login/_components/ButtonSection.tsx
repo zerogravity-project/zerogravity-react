@@ -6,7 +6,6 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { signOut, useSession } from 'next-auth/react';
 import { useEffect } from 'react';
 
 import { useModal } from '@/app/_components/ui/modal/_contexts/ModalContext';
@@ -19,7 +18,7 @@ import { LoginButton } from './LoginButton';
  * ============================================
  */
 
-/** Error messages by backend error code */
+/** Error modal config by backend error code */
 const ERROR_MODAL_MAP: Record<string, { title: string; description: string }> = {
   USER_DEACTIVATED: {
     title: 'Deactivated Account',
@@ -29,6 +28,14 @@ const ERROR_MODAL_MAP: Record<string, { title: string; description: string }> = 
     title: 'Server Connection Error',
     description: 'Unable to connect to the server. Please try again later.',
   },
+  INVALID_ARGUMENT: {
+    title: 'Invalid Request',
+    description: 'The login request was invalid. Please try again.',
+  },
+  INTERNAL_SERVER_ERROR: {
+    title: 'Server Error',
+    description: 'An unexpected server error occurred. Please try again later.',
+  },
 };
 
 /** Default error modal for unknown error codes */
@@ -36,6 +43,9 @@ const DEFAULT_ERROR_MODAL = {
   title: 'Login Error',
   description: 'An error occurred during login. Please try again later.',
 };
+
+/** Cookie name for auth error details */
+const AUTH_ERROR_COOKIE = 'auth-error';
 
 /*
  * ============================================
@@ -54,7 +64,6 @@ export function ButtonSection() {
    * --------------------------------------------
    */
   const searchParams = useSearchParams();
-  const { data: session } = useSession();
   const { openAlertModal } = useModal();
 
   /*
@@ -63,33 +72,45 @@ export function ButtonSection() {
    * --------------------------------------------
    */
   const callbackUrl = searchParams.get('callbackUrl') || '/';
-  const authError = session?.authError;
-  const authErrorMessage = session?.authErrorMessage;
 
   /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
    */
-  /** Check for authentication errors from session */
+  /** Check for authentication errors from cookie */
   useEffect(() => {
-    if (!authError) return;
+    const cookieValue = document.cookie
+      .split('; ')
+      .find(row => row.startsWith(`${AUTH_ERROR_COOKIE}=`))
+      ?.split('=')
+      .slice(1)
+      .join('=');
 
-    const modal = ERROR_MODAL_MAP[authError] || {
-      ...DEFAULT_ERROR_MODAL,
-      description: authErrorMessage || DEFAULT_ERROR_MODAL.description,
-    };
+    if (!cookieValue) return;
 
-    openAlertModal({
-      id: 'auth-error',
-      title: modal.title,
-      description: authErrorMessage || modal.description,
-      confirmText: 'OK',
-      onConfirm: () => {
-        signOut({ redirect: false });
-      },
-    });
-  }, [authError, authErrorMessage, openAlertModal]);
+    // Clear cookie immediately
+    document.cookie = `${AUTH_ERROR_COOKIE}=; path=/; max-age=0`;
+
+    try {
+      const { error, message } = JSON.parse(decodeURIComponent(cookieValue));
+      const modal = ERROR_MODAL_MAP[error] || DEFAULT_ERROR_MODAL;
+
+      openAlertModal({
+        id: 'auth-error',
+        title: modal.title,
+        description: message || modal.description,
+        confirmText: 'OK',
+      });
+    } catch {
+      openAlertModal({
+        id: 'auth-error',
+        title: DEFAULT_ERROR_MODAL.title,
+        description: DEFAULT_ERROR_MODAL.description,
+        confirmText: 'OK',
+      });
+    }
+  }, [openAlertModal]);
 
   /*
    * --------------------------------------------

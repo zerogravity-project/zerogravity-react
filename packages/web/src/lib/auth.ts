@@ -7,6 +7,8 @@
  * Session: strategy, maxAge, updateAge
  */
 
+import { cookies } from 'next/headers';
+
 import NextAuth, { Account, Session, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import Google from 'next-auth/providers/google';
@@ -136,12 +138,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
           } else {
             const errorData = await response.json().catch(() => null);
-            token.authError = errorData?.error || 'UNKNOWN_ERROR';
-            token.authErrorMessage = errorData?.message || 'Authentication failed';
+            const errorCode = errorData?.error || 'UNKNOWN_ERROR';
+            const errorMessage = errorData?.message || 'Authentication failed';
+            (await cookies()).set('auth-error', JSON.stringify({ error: errorCode, message: errorMessage }), {
+              path: '/',
+              maxAge: 60,
+              httpOnly: false,
+            });
+            throw new Error(errorCode);
           }
-        } catch {
-          token.authError = 'BACKEND_CONNECTION_ERROR';
-          token.authErrorMessage = 'Failed to connect to the server. Please try again later.';
+        } catch (error) {
+          if (error instanceof Error && error.message !== 'BACKEND_CONNECTION_ERROR') throw error;
+          (await cookies()).set(
+            'auth-error',
+            JSON.stringify({
+              error: 'BACKEND_CONNECTION_ERROR',
+              message: 'Failed to connect to the server. Please try again later.',
+            }),
+            { path: '/', maxAge: 60, httpOnly: false }
+          );
+          throw new Error('BACKEND_CONNECTION_ERROR');
         }
       }
 
@@ -250,8 +266,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.backendJwt = token.backendJwt;
       session.refreshToken = token.refreshToken;
       session.error = token.error;
-      session.authError = token.authError;
-      session.authErrorMessage = token.authErrorMessage;
 
       return session;
     },
