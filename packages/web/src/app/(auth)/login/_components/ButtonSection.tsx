@@ -4,7 +4,7 @@
  */
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 import { useEffect } from 'react';
 
@@ -18,8 +18,34 @@ import { LoginButton } from './LoginButton';
  * ============================================
  */
 
-/** Backend connection error types from NextAuth */
-const BACKEND_ERROR_TYPES = ['Configuration', 'CallbackRouteError', 'Default'];
+/** Error modal config by backend error code */
+const ERROR_MODAL_MAP: Record<string, { title: string; description: string }> = {
+  USER_DEACTIVATED: {
+    title: 'Deactivated Account',
+    description: 'This account has been deactivated. Please contact support to restore your account.',
+  },
+  BACKEND_CONNECTION_ERROR: {
+    title: 'Server Connection Error',
+    description: 'Unable to connect to the server. Please try again later.',
+  },
+  INVALID_ARGUMENT: {
+    title: 'Invalid Request',
+    description: 'The login request was invalid. Please try again.',
+  },
+  INTERNAL_SERVER_ERROR: {
+    title: 'Server Error',
+    description: 'An unexpected server error occurred. Please try again later.',
+  },
+};
+
+/** Default error modal for unknown error codes */
+const DEFAULT_ERROR_MODAL = {
+  title: 'Login Error',
+  description: 'An error occurred during login. Please try again later.',
+};
+
+/** Cookie name for auth error details */
+const AUTH_ERROR_COOKIE = 'auth-error';
 
 /*
  * ============================================
@@ -37,7 +63,6 @@ export function ButtonSection() {
    * 1. External Hooks
    * --------------------------------------------
    */
-  const router = useRouter();
   const searchParams = useSearchParams();
   const { openAlertModal } = useModal();
 
@@ -47,29 +72,45 @@ export function ButtonSection() {
    * --------------------------------------------
    */
   const callbackUrl = searchParams.get('callbackUrl') || '/';
-  const authError = searchParams.get('error');
 
   /*
    * --------------------------------------------
    * 3. Effects
    * --------------------------------------------
    */
-  /** Check for authentication errors from NextAuth */
+  /** Check for authentication errors from cookie */
   useEffect(() => {
-    if (authError && BACKEND_ERROR_TYPES.includes(authError)) {
-      // Show error modal
+    const cookieValue = document.cookie
+      .split('; ')
+      .find(row => row.startsWith(`${AUTH_ERROR_COOKIE}=`))
+      ?.split('=')
+      .slice(1)
+      .join('=');
+
+    if (!cookieValue) return;
+
+    // Clear cookie immediately
+    document.cookie = `${AUTH_ERROR_COOKIE}=; path=/; max-age=0`;
+
+    try {
+      const { error, message } = JSON.parse(decodeURIComponent(cookieValue));
+      const modal = ERROR_MODAL_MAP[error] || DEFAULT_ERROR_MODAL;
+
       openAlertModal({
-        id: 'backend-auth-error',
-        title: 'Authentication Error',
-        description: 'Failed to connect to the server. Please try again later.',
+        id: 'auth-error',
+        title: modal.title,
+        description: message || modal.description,
         confirmText: 'OK',
       });
-
-      // Clear error from URL while preserving callbackUrl
-      const newUrl = callbackUrl !== '/' ? `/login?callbackUrl=${encodeURIComponent(callbackUrl)}` : '/login';
-      router.replace(newUrl);
+    } catch {
+      openAlertModal({
+        id: 'auth-error',
+        title: DEFAULT_ERROR_MODAL.title,
+        description: DEFAULT_ERROR_MODAL.description,
+        confirmText: 'OK',
+      });
     }
-  }, [authError, openAlertModal, router, callbackUrl]);
+  }, [openAlertModal]);
 
   /*
    * --------------------------------------------

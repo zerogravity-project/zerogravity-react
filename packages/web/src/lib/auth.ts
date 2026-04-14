@@ -7,6 +7,8 @@
  * Session: strategy, maxAge, updateAge
  */
 
+import { cookies } from 'next/headers';
+
 import NextAuth, { Account, Session, User } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 import Google from 'next-auth/providers/google';
@@ -59,12 +61,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      checks: ['state'],
     }),
     Kakao({
       clientId: process.env.AUTH_KAKAO_ID,
       clientSecret: process.env.AUTH_KAKAO_SECRET,
-      checks: ['state'],
+      // Kakao (type: "oauth") has cookie encryption issues in Auth.js beta
+      // Google (type: "oidc") works fine with default PKCE checks
+      checks: ['none'],
       /**
        * Use thumbnail_image as default profile image
        * Fallback to profile_image if thumbnail_image is not available
@@ -134,14 +137,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             // Set expiration time (15 minutes from now)
             token.backendJwtExpiresAt = Date.now() + 15 * 60 * 1000;
           } else {
-            console.error('[JWT Callback] Backend verification failed:', response.status);
-            // Throw error to prevent login - NextAuth will redirect to login with error
-            throw new Error('BackendVerificationFailed');
+            const errorData = await response.json().catch(() => null);
+            const errorCode = errorData?.error || 'UNKNOWN_ERROR';
+            const errorMessage = errorData?.message || 'Authentication failed';
+            (await cookies()).set('auth-error', JSON.stringify({ error: errorCode, message: errorMessage }), {
+              path: '/',
+              maxAge: 60,
+              httpOnly: false,
+            });
+            throw new Error(errorCode);
           }
-        } catch {
-          console.error('[JWT Callback] Backend connection error');
-          // Throw error to prevent login
-          throw new Error('BackendConnectionError');
+        } catch (error) {
+          if (error instanceof Error && error.message !== 'BACKEND_CONNECTION_ERROR') throw error;
+          (await cookies()).set(
+            'auth-error',
+            JSON.stringify({
+              error: 'BACKEND_CONNECTION_ERROR',
+              message: 'Failed to connect to the server. Please try again later.',
+            }),
+            { path: '/', maxAge: 60, httpOnly: false }
+          );
+          throw new Error('BACKEND_CONNECTION_ERROR');
         }
       }
 
