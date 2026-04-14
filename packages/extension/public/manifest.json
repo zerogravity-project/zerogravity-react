@@ -7,5 +7,5 @@
     "newtab": "index.html"
   },
   "permissions": ["storage", "cookies"],
-  "host_permissions": ["https://www.zerogv.com/*", "https://dev.zerogv.com/*"]
+  "host_permissions": ["https://zerogv.com/*", "https://dev.zerogv.com/*"]
 }
