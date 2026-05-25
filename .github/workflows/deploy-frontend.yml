@@ -9,6 +9,7 @@ on:
       - '**.md'
       - 'docs/**'
       - '.github/workflows/build-extension.yml'
+  workflow_dispatch:
 
 jobs:
   deploy:
